@@ -3,7 +3,11 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform") version "1.3.21"
+    id("maven-publish")
 }
+
+group = "com.zegreatrob.testmints"
+version = "0.0.1"
 
 repositories {
     mavenCentral()

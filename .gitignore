@@ -5,7 +5,6 @@ data
 .DS_Store
 
 .gradle
-build
 
 # The following is based on https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 
