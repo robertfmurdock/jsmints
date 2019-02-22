@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="async-jvm">
+    <output-path>$PROJECT_DIR$/async/build/libs</output-path>
+    <root id="archive" name="async-jvm.jar">
+      <element id="module-output" name="testmints.async.jvmMain" />
+    </root>
+  </artifact>
+</component>
