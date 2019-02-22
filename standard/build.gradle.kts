@@ -1,16 +1,10 @@
-import com.jfrog.bintray.gradle.BintrayExtension
-import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
+
 import com.zegreatrob.testmints.build.BuildConstants
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.21"
-    id("maven-publish")
-    id("com.jfrog.bintray") version ("1.8.4")
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.20"
 }
-
-group = "com.zegreatrob.testmints"
-version = "0.0.3"
 
 repositories {
     mavenCentral()
@@ -62,44 +56,7 @@ tasks {
         kotlinOptions.sourceMap = true
         kotlinOptions.sourceMapEmbedSources = "always"
     }
-
-    val bintrayUpload by getting(BintrayUploadTask::class) {
-        doFirst {
-            val publications = project.publishing.publications
-                    .filterNot {
-                        it.name.contains("-test")
-                    }
-                    .map {
-                        it.name.also(::println)
-                    }
-            setPublications(*publications.toTypedArray())
-        }
-
-        dependsOn("publishToMavenLocal")
-    }
 }
 
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
-    override = true
 
-    pkg(closureOf<BintrayExtension.PackageConfig> {
-        repo = "zegreatrob"
-        name = "testmints"
-
-        version(closureOf<BintrayExtension.VersionConfig> {
-        })
-    })
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "com.zegreatrob.testmints"
-            artifactId = "standard"
-            version = "${project.version}"
-        }
-    }
-}
 
