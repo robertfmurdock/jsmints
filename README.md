@@ -10,7 +10,7 @@ Don't like the flavor? Submit a PR, or just don't use em. :-D
 
 ## Requirements
 
-All sugar here is multiplatform compliant and works great in combination with the (standard kotlin.test library)[https://kotlinlang.org/api/latest/kotlin.test/index.html]. The intention is to also minimize its dependencies as much as possible, to maximize portability.
+All sugar here is multiplatform compliant and works great in combination with the [standard kotlin.test library](https://kotlinlang.org/api/latest/kotlin.test/index.html). The intention is to also minimize its dependencies as much as possible, to maximize portability.
 
 ## Standard
 
