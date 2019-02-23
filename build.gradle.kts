@@ -19,7 +19,7 @@ subprojects {
     apply(plugin = "com.jfrog.bintray")
 
     group = "com.zegreatrob.testmints"
-    version = "0.1.1"
+    version = "0.1.2"
 
     extensions.configure(BintrayExtension::class.java) {
         user = System.getenv("BINTRAY_USER")
@@ -39,6 +39,8 @@ subprojects {
 
     tasks {
         val bintrayUpload by getting(BintrayUploadTask::class) {
+            publish = true
+
             doFirst {
                 val publications = publishing.publications
                         .filterNot {
