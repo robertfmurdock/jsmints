@@ -16,6 +16,7 @@ kotlin {
         add(presets["js"].createTarget("js"))
         macosX64()
         linuxX64()
+        mingwX64()
     }
 
     sourceSets {
@@ -40,6 +41,8 @@ kotlin {
         val macosX64Main by getting { dependsOn(nativeCommonMain) }
 
         val linuxX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val mingwX64Main by getting { dependsOn(nativeCommonMain) }
 
         getByName("jsMain") {
             dependencies {

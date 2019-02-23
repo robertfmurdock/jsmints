@@ -1,0 +1,7 @@
+matrix:
+  include:
+    - os: windows
+      env: KBUILD=windows
+      language: shell
+      script:
+        - powershell -Command "cmd /c travis_win.bat"
