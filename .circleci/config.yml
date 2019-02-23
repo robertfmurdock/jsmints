@@ -13,7 +13,6 @@ jobs:
           paths:
             - "~/.gradle"
             - ".gradle"
-            - "client/.gradle"
       - store_artifacts:
           path: build/test-output
       - store_test_results:
