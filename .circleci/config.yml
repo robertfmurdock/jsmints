@@ -23,6 +23,7 @@ jobs:
             - "*"
   build-mac:
     macos:
+      xcode: "10.1.0"
     steps:
       - checkout
       - restore_cache:
