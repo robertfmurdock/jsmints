@@ -6,11 +6,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: testmints-linux-cache-1-{{ .Branch }}
+          key: testmints-cache-2-{{ .Branch }}
       - run: "./gradlew check publishToMavenLocal"
       - save_cache:
-          key: testmints-linux-cache-1-{{ .Branch }}
+          key: testmints-cache-2-{{ .Branch }}
           paths:
+            - buildSrc/build
             - "~/.gradle"
             - ".gradle"
       - store_artifacts:
