@@ -11,6 +11,7 @@ class TestMintsTest {
     fun verifyShouldThrowErrorWhenFailureOccurs() {
         try {
             simulatedTestThatFailsInVerify()
+            fail("This line should never be hit, because testmints should report when verify has a failure.")
         } catch (expectedFailure: AssertionError) {
             assertEquals("LOL", expectedFailure.message)
         }
@@ -61,14 +62,12 @@ class TestMintsTest {
         assertEquals(expectedValue, valueCollector.actualValue)
     }
 
-    private fun ValueCollector.simulateTestAndCollectSetupValueDuringVerify(expectedValue: Int?) {
-        setup(object {
-            @Suppress("UnnecessaryVariable")
-            val value = expectedValue
-        }) exercise {
-        } verify {
-            actualValue = value
-        }
+    private fun ValueCollector.simulateTestAndCollectSetupValueDuringVerify(expectedValue: Int?) = setup(object {
+        @Suppress("UnnecessaryVariable")
+        val value = expectedValue
+    }) exercise {
+    } verify {
+        actualValue = value
     }
 
 }
