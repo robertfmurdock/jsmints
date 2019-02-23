@@ -13,8 +13,9 @@ repositories {
 kotlin {
     targets {
         jvm()
-        add(presets["js"].createTarget("js"))
+        js()
         macosX64()
+        iosX64()
         linuxX64()
         mingwX64()
     }
@@ -39,6 +40,8 @@ kotlin {
         }
 
         val macosX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val iosX64Main by getting { dependsOn(nativeCommonMain) }
 
         val linuxX64Main by getting { dependsOn(nativeCommonMain) }
 
