@@ -1,15 +1,35 @@
 version: 2
 jobs:
-  build:
+  build-linux:
     docker:
       - image: openjdk:8-jdk-slim
     steps:
       - checkout
       - restore_cache:
-          key: testmints-cache-1-{{ .Branch }}
+          key: testmints-linux-cache-1-{{ .Branch }}
       - run: "./gradlew check publishToMavenLocal"
       - save_cache:
-          key: testmints-cache-1-{{ .Branch }}
+          key: testmints-linux-cache-1-{{ .Branch }}
+          paths:
+            - "~/.gradle"
+            - ".gradle"
+      - store_artifacts:
+          path: build/test-output
+      - store_test_results:
+          path: build/test-output
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - "*"
+  build-mac:
+    macos:
+    steps:
+      - checkout
+      - restore_cache:
+          key: testmints-mac-cache-1-{{ .Branch }}
+      - run: "./gradlew check publishToMavenLocal"
+      - save_cache:
+          key: testmints-mac-cache-1-{{ .Branch }}
           paths:
             - "~/.gradle"
             - ".gradle"
@@ -25,4 +45,5 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - build-linux
+      - build-mac
