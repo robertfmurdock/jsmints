@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="minassert-js-0.1.1">
-    <output-path>$PROJECT_DIR$/minassert/build/libs</output-path>
-    <root id="archive" name="minassert-js-0.1.1.jar" />
-  </artifact>
-</component>

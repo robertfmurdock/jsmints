@@ -29,6 +29,7 @@ data
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+.idea/artifacts/**
 
 # Gradle
 .idea/**/gradle.xml
