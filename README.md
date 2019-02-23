@@ -29,7 +29,7 @@ Lots of people attempt to organize their tests in a setup, exercise, verify styl
 
 This works alright, but the comments are a little smelly. Some people might simply delete these comments, and use blank lines to indicate a section break. The trouble is though, that the comments are actually communicating something valuable to the reader - the name and intent of the section! And if you use blank lines to divide using these meaningful sections, then you can't use them again to break things up for any other reason.
 
-As tests get bigger, this can be confusing, and programmers reading the test may find it difficult to identify what is exactly being tested. And if they can't figure the structure of the test out correctly, it'll be more difficult for them to maintain and understand the original intent behind the test as things change.
+As tests get more complex, this can be confusing, and programmers reading the test may find it difficult to identify what is exactly being tested. And if they can't figure the structure of the test out correctly, it'll be more difficult for them to maintain and understand the original intent behind the test as things change.
 
 Lets chew on the standard mints and see what we can do!
 
