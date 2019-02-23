@@ -19,7 +19,7 @@ subprojects {
     apply(plugin = "com.jfrog.bintray")
 
     group = "com.zegreatrob.testmints"
-    version = "0.0.5"
+    version = "0.1.0"
 
     extensions.configure(BintrayExtension::class.java) {
         user = System.getenv("BINTRAY_USER")
