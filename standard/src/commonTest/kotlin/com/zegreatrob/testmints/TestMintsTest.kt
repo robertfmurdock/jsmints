@@ -9,47 +9,59 @@ class TestMintsTest {
 
     @Test
     fun verifyShouldThrowErrorWhenFailureOccurs() {
-        val exercisedContext = setup(object {
-        }) exercise {
-        }
-
         try {
-            exercisedContext verify { fail("LOL") }
+            simulatedTestThatFailsInVerify()
         } catch (expectedFailure: AssertionError) {
             assertEquals("LOL", expectedFailure.message)
         }
     }
 
+    private fun simulatedTestThatFailsInVerify(): Unit = setup<Any>(object {
+    }) exercise {
+    } verify { fail("LOL") }
+
+    class ValueCollector(var actualValue: Int? = null)
+
     @Test
     fun exerciseShouldHaveAccessToScopeOfSetupObject() {
         val expectedValue: Int? = Random.nextInt()
-        var actualValue: Int? = null
-        setup(object {
-            @Suppress("UnnecessaryVariable")
-            val value = expectedValue
-        }) exercise {
-            actualValue = value
-        }
-        assertEquals(expectedValue, actualValue)
+        val valueCollector = ValueCollector()
+        valueCollector.simulateTestAndCollectsSetupValueDuringExercise(expectedValue)
+        assertEquals(expectedValue, valueCollector.actualValue)
+    }
+
+    private fun ValueCollector.simulateTestAndCollectsSetupValueDuringExercise(expectedValue: Int?) = setup(object {
+        @Suppress("UnnecessaryVariable")
+        val value = expectedValue
+    }) exercise {
+        actualValue = value
+    } verify {
     }
 
     @Test
     fun verifyShouldReceiveTheResultOfExerciseAsParameter() {
         val expectedValue = Random.nextInt()
-        var actualValue: Int? = null
-        setup(object {
-        }) exercise {
-            expectedValue
-        } verify { result ->
-            actualValue = result
-        }
-        assertEquals(expectedValue, actualValue)
+        val valueCollector = ValueCollector()
+        valueCollector.simulateTestAndCollectResultValueDuringVerify(expectedValue)
+        assertEquals(expectedValue, valueCollector.actualValue)
+    }
+
+    private fun ValueCollector.simulateTestAndCollectResultValueDuringVerify(expectedValue: Int) = setup(object {
+    }) exercise {
+        expectedValue
+    } verify { result ->
+        actualValue = result
     }
 
     @Test
     fun verifyShouldHaveAccessToScopeOfSetupObject() {
         val expectedValue: Int? = Random.nextInt()
-        var actualValue: Int? = null
+        val valueCollector = ValueCollector()
+        valueCollector.simulateTestAndCollectSetupValueDuringVerify(expectedValue)
+        assertEquals(expectedValue, valueCollector.actualValue)
+    }
+
+    private fun ValueCollector.simulateTestAndCollectSetupValueDuringVerify(expectedValue: Int?) {
         setup(object {
             @Suppress("UnnecessaryVariable")
             val value = expectedValue
@@ -57,7 +69,6 @@ class TestMintsTest {
         } verify {
             actualValue = value
         }
-        assertEquals(expectedValue, actualValue)
     }
 
 }
