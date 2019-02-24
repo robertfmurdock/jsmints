@@ -46,3 +46,6 @@ Lets chew on the standard mints and see what we can do!
 Whoa whoa whoa. So, we've replaced the comments with functions! This forces us to organize the test into sections. We store the data required for the setup on an anonymous kotlin object, to which the exercise and verify sections have "this" access. The return value from the exercise section is passed onto the verify section as a parameter.
 
 By using this style, we've retained all the benefits of the comments, and formalized them, and, *hopefully*, made the test more expressive as a result in about the same amount of space (about 9 - 10 lines).
+
+If you're an IntelliJ user (like me), you can download live templates for setting up these tests faster [here](https://github.com/robertfmurdock/testmints/raw/master/live-templates.zip).
+After you download the file, you can import it using File | Import Settings. If you don't see import settings, you're probably sharing your IDE settings and you'll have to disable sync for a moment in order to do the import. 
