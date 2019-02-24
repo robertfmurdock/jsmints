@@ -18,6 +18,7 @@ kotlin {
         iosX64()
         linuxX64()
         mingwX64()
+        linuxArm32Hfp()
     }
 
     sourceSets {
@@ -46,6 +47,8 @@ kotlin {
         val linuxX64Main by getting { dependsOn(nativeCommonMain) }
 
         val mingwX64Main by getting { dependsOn(nativeCommonMain) }
+        
+        val linuxArm32HfpMain by getting { dependsOn(nativeCommonMain) }
 
         getByName("jsMain") {
             dependencies {
