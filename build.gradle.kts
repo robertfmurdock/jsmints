@@ -37,6 +37,14 @@ semanticRelease {
     })
 }
 
+tasks {
+    if(isMacRelease()) {
+        val updateGithubRelease by getting {
+            enabled = false
+        }
+    }
+}
+
 subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "com.jfrog.bintray")
@@ -68,8 +76,6 @@ subprojects {
             "ios_x64"
     )
 
-    println("heh ${project.property("release-target")}")
-
     tasks {
         val bintrayUpload by getting(BintrayUploadTask::class) {
 
@@ -80,7 +86,7 @@ subprojects {
                         }
                         .map { it.name }
                         .filter {
-                            if (project.property("release-target") == "mac") {
+                            if (isMacRelease()) {
                                 macTargets.contains(it)
                             } else true
                         }
@@ -131,3 +137,5 @@ fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
 }
 
 fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
+
+fun Project.isMacRelease() = property("release-target") == "mac"
