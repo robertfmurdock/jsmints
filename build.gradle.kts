@@ -1,6 +1,6 @@
-
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
+import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
 
@@ -20,6 +20,10 @@ plugins {
 
 semanticRelease {
     changeLog(closureOf<SemanticReleaseChangeLogService> {
+
+        repo(closureOf<GithubRepo> {
+            setGhToken(System.getenv("GH_TOKEN"))
+        })
 
         changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
             val version = extractVersion()
@@ -98,10 +102,10 @@ subprojects {
 }
 
 fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
-    val open = fullMessage.indexOf('[')
-    val close = fullMessage.indexOf(']')
+    val open = fullMessage.indexOf("[")
+    val close = fullMessage.indexOf("]")
 
-    if(open < 0 || close < 0) {
+    if (open < 0 || close < 0) {
         return null
     }
 
