@@ -1,4 +1,3 @@
-
 import com.zegreatrob.testmints.build.BuildConstants
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
@@ -47,7 +46,7 @@ kotlin {
         val linuxX64Main by getting { dependsOn(nativeCommonMain) }
 
         val mingwX64Main by getting { dependsOn(nativeCommonMain) }
-        
+
         val linuxArm32HfpMain by getting { dependsOn(nativeCommonMain) }
 
         getByName("jsMain") {
