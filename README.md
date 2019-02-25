@@ -24,7 +24,6 @@ Just want to dive right in? Here's the gradle snippets to get going. Basically, 
             val commonTest by getting {
                 dependencies {
                     implementation("com.zegreatrob.testmints:standard:+")
-                    implementation("com.zegreatrob.testmints:minassert:+")
                 }
         }
      }
