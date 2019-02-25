@@ -48,6 +48,8 @@ subprojects {
         key = System.getenv("BINTRAY_KEY")
         override = true
 
+        publish = true
+
         pkg(closureOf<BintrayExtension.PackageConfig> {
             repo = "zegreatrob"
             name = "testmints"
@@ -61,7 +63,6 @@ subprojects {
 
     tasks {
         val bintrayUpload by getting(BintrayUploadTask::class) {
-            publish = true
 
             doFirst {
                 val publications = publishing.publications
