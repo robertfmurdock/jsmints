@@ -93,7 +93,7 @@ subprojects {
                         .map { it.name }
                         .filter {
                             if (isMacRelease()) {
-                                macTargets.contains("$it-main")
+                                macTargets.contains(it)
                             } else true
                         }
 
