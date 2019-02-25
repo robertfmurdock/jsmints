@@ -2,7 +2,7 @@ version: 2
 jobs:
   build-linux:
     docker:
-      - image: openjdk:8-jdk-slim
+      - image: circleci/openjdk:8
     steps:
       - checkout
       - restore_cache:
