@@ -12,6 +12,24 @@ Don't like the flavor? Submit a PR, or just don't use em. :-D
 
 All sugar here is multiplatform compliant and works great in combination with the [standard kotlin.test library](https://kotlinlang.org/api/latest/kotlin.test/index.html). The intention is to also minimize its dependencies as much as possible, to maximize portability.
 
+## Installation
+Just want to dive right in? Here's the gradle snippets to get going. Basically, drop in the bintray repository and then reference the library. I don't recommend using the gradle plus setting unless you like to *live on the edge*.
+
+    repositories {
+        maven { url = uri("https://dl.bintray.com/robertfmurdock/zegreatrob") }
+    }
+    
+    kotlin {
+        sourceSets {
+            val commonTest by getting {
+                dependencies {
+                    implementation("com.zegreatrob.testmints:standard:+")
+                    implementation("com.zegreatrob.testmints:minassert:+")
+                }
+        }
+     }
+
+
 ## Standard
 
 Lots of people attempt to organize their tests in a setup, exercise, verify style, sometimes using the language given, when, then. You'll frequently see these tests written as such:
