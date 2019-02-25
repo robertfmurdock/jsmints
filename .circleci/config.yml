@@ -7,7 +7,7 @@ jobs:
       - checkout
       - restore_cache:
           key: testmints-cache-2-{{ .Branch }}
-      - run: "./gradlew check publishToMavenLocal"
+      - run: "./gradlew check release"
       - save_cache:
           key: testmints-cache-2-{{ .Branch }}
           paths:

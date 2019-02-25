@@ -95,7 +95,6 @@ subprojects {
         }
     }
 
-
 }
 
 fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
