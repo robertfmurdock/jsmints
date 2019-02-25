@@ -7,7 +7,7 @@ jobs:
       - checkout
       - restore_cache:
           key: testmints-cache-3-{{ .Branch }}
-      - run: "./gradlew check release -Dorg.ajoberstar.grgit.auth.username=${GH_TOKEN} -Dorg.ajoberstar.grgit.auth.password"
+      - run: "./gradlew --info check release -Dorg.ajoberstar.grgit.auth.username=${GH_TOKEN} -Dorg.ajoberstar.grgit.auth.password"
       - save_cache:
           key: testmints-cache-3-{{ .Branch }}
           paths:
