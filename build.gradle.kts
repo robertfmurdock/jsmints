@@ -106,6 +106,9 @@ subprojects {
                             it.artifact(file("build/publications/${it.name}/module.json")) {
                                 extension = "module"
                             }
+                            it.artifact(file("build/classes/kotlin/${it.name}/main/${project.name}.klib")) {
+                                extension = "klib"
+                            }
                         }
 
                 publishing.publications.filterIsInstance(MavenPublication::class.java)
