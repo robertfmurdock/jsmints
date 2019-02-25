@@ -96,7 +96,9 @@ subprojects {
         }
 
         val publish by getting {
-            dependsOn(bintrayUpload)
+            if (!isSnapshot()) {
+                dependsOn(bintrayUpload)
+            }
         }
     }
 
@@ -112,3 +114,5 @@ fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
 
     return fullMessage.subSequence(open + 1, close).toString()
 }
+
+fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
