@@ -1,5 +1,8 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
+import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
+import de.gliderpilot.gradle.semanticrelease.SemanticReleasePluginExtension
+import org.ajoberstar.gradle.git.release.semver.ChangeScope
 
 buildscript {
     repositories {
@@ -12,14 +15,15 @@ buildscript {
 
 plugins {
     id("com.github.ben-manes.versions") version "0.20.0"
+    id("de.gliderpilot.semantic-release") version "1.4.0" apply false
 }
 
 subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "com.jfrog.bintray")
+    apply(plugin = "de.gliderpilot.semantic-release")
 
     group = "com.zegreatrob.testmints"
-    version = "0.1.2"
 
     extensions.configure(BintrayExtension::class.java) {
         user = System.getenv("BINTRAY_USER")
@@ -31,6 +35,21 @@ subprojects {
             name = "testmints"
 
             version(closureOf<BintrayExtension.VersionConfig> {
+            })
+        })
+    }
+
+    extensions.configure(SemanticReleasePluginExtension::class.java) {
+        changeLog(closureOf<SemanticReleaseChangeLogService> {
+
+            changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
+                val version = extractVersion()
+                when (version?.toUpperCase()) {
+                    "MAJOR" -> ChangeScope.MAJOR
+                    "MINOR" -> ChangeScope.MINOR
+                    "PATCH" -> ChangeScope.PATCH
+                    else -> null
+                }
             })
         })
     }
@@ -71,5 +90,22 @@ subprojects {
 
             dependsOn("publishToMavenLocal")
         }
+
+        val publish by getting {
+            dependsOn(bintrayUpload)
+        }
     }
+
+
+}
+
+fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
+    val open = fullMessage.indexOf('[')
+    val close = fullMessage.indexOf(']')
+
+    if(open < 0 || close < 0) {
+        return null
+    }
+
+    return fullMessage.subSequence(open + 1, close).toString()
 }
