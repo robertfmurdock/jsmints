@@ -36,7 +36,6 @@ semanticRelease {
 subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "com.jfrog.bintray")
-    apply(plugin = "de.gliderpilot.semantic-release")
 
     group = "com.zegreatrob.testmints"
 
