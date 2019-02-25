@@ -61,6 +61,15 @@ subprojects {
 
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
+    val macTargets = listOf(
+            "macos_x64",
+            "ios_arm32",
+            "ios_arm64",
+            "ios_x64"
+    )
+
+    println("heh ${project.property("release-target")}")
+
     tasks {
         val bintrayUpload by getting(BintrayUploadTask::class) {
 
@@ -70,6 +79,12 @@ subprojects {
                             it.name.contains("-test")
                         }
                         .map { it.name }
+                        .filter {
+                            if (project.property("release-target") == "mac") {
+                                macTargets.contains(it)
+                            } else true
+                        }
+
 
                 publishing.publications.getByName<MavenPublication>("kotlinMultiplatform") {
                     groupId = "com.zegreatrob.testmints"
