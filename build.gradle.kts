@@ -38,8 +38,11 @@ semanticRelease {
 }
 
 tasks {
-    if(isMacRelease()) {
+    if (isMacRelease()) {
         val updateGithubRelease by getting {
+            enabled = false
+        }
+        val prepare by getting {
             enabled = false
         }
         val release by getting {
@@ -73,10 +76,10 @@ subprojects {
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
     val macTargets = listOf(
-            "macos_x64",
-            "ios_arm32",
-            "ios_arm64",
-            "ios_x64"
+            "macosX64",
+            "iosX64",
+            "iosArm32",
+            "iosArm64"
     )
 
     tasks {
@@ -90,10 +93,9 @@ subprojects {
                         .map { it.name }
                         .filter {
                             if (isMacRelease()) {
-                                macTargets.contains(it)
+                                macTargets.contains("$it-main")
                             } else true
                         }
-
 
                 publishing.publications.getByName<MavenPublication>("kotlinMultiplatform") {
                     groupId = "com.zegreatrob.testmints"
@@ -116,7 +118,7 @@ subprojects {
                         .flatten()
                         .forEach { println("${it.file}") }
 
-                setPublications(*publications.toTypedArray())
+                setPublications(* publications.toTypedArray())
             }
 
             dependsOn("publishToMavenLocal")
