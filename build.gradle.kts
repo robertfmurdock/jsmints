@@ -42,6 +42,9 @@ tasks {
         val updateGithubRelease by getting {
             enabled = false
         }
+        val release by getting {
+            enabled = false
+        }
     }
 }
 
