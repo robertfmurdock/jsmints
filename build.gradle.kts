@@ -138,4 +138,4 @@ fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
 
 fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
 
-fun Project.isMacRelease() = property("release-target") == "mac"
+fun Project.isMacRelease() = findProperty("release-target") == "mac"
