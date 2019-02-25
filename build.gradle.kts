@@ -1,7 +1,7 @@
+
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
-import de.gliderpilot.gradle.semanticrelease.SemanticReleasePluginExtension
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
 
 buildscript {
@@ -15,7 +15,22 @@ buildscript {
 
 plugins {
     id("com.github.ben-manes.versions") version "0.20.0"
-    id("de.gliderpilot.semantic-release") version "1.4.0" apply false
+    id("de.gliderpilot.semantic-release") version "1.4.0"
+}
+
+semanticRelease {
+    changeLog(closureOf<SemanticReleaseChangeLogService> {
+
+        changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
+            val version = extractVersion()
+            when (version?.toUpperCase()) {
+                "MAJOR" -> ChangeScope.MAJOR
+                "MINOR" -> ChangeScope.MINOR
+                "PATCH" -> ChangeScope.PATCH
+                else -> null
+            }
+        })
+    })
 }
 
 subprojects {
@@ -35,21 +50,6 @@ subprojects {
             name = "testmints"
 
             version(closureOf<BintrayExtension.VersionConfig> {
-            })
-        })
-    }
-
-    extensions.configure(SemanticReleasePluginExtension::class.java) {
-        changeLog(closureOf<SemanticReleaseChangeLogService> {
-
-            changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
-                val version = extractVersion()
-                when (version?.toUpperCase()) {
-                    "MAJOR" -> ChangeScope.MAJOR
-                    "MINOR" -> ChangeScope.MINOR
-                    "PATCH" -> ChangeScope.PATCH
-                    else -> null
-                }
             })
         })
     }
