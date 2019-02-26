@@ -10,6 +10,43 @@ import kotlin.test.fail
 
 @Suppress("unused")
 class TestStyleAsyncTest {
+
+    class ExampleUsage {
+
+        private fun Int.plusOne() = this + 1
+
+        @Test
+        fun simpleCase() = testAsync {
+            setupAsync(object {
+                val input: Int = Random.nextInt()
+                val expected = input + 1
+            }) exerciseAsync {
+                input.plusOne()
+            } verifyAsync { result ->
+                assertEquals(expected, result)
+            }
+        }
+
+        @Test
+        fun caseWithAsyncInsideTheSetupClosure() = testAsync {
+            setupAsync(object {
+                val input: Int = Random.nextInt()
+                val expected = input + 1
+                var databaseSetupCounter = 0
+            }) {
+                withContext(Dispatchers.Default) {
+                    delay(4)
+                    databaseSetupCounter++
+                }
+            } exerciseAsync {
+                input + databaseSetupCounter
+            } verifyAsync { result ->
+                assertEquals(expected, result)
+            }
+        }
+
+    }
+
     class Features {
         @Test
         fun canFailAsync() {
@@ -107,39 +144,4 @@ class TestStyleAsyncTest {
         }
     }
 
-    class NormalUsage {
-
-        private fun Int.plusOne() = this + 1
-
-        @Test
-        fun simpleCase() = testAsync {
-            setupAsync(object {
-                val input: Int = Random.nextInt()
-                val expected = input + 1
-            }) exerciseAsync {
-                input.plusOne()
-            } verifyAsync { result ->
-                assertEquals(expected, result)
-            }
-        }
-
-        @Test
-        fun caseWithAsyncInsideTheSetupClosure() = testAsync {
-            setupAsync(object {
-                val input: Int = Random.nextInt()
-                val expected = input + 1
-                var databaseSetupCounter = 0
-            }) {
-                withContext(Dispatchers.Default) {
-                    delay(4)
-                    databaseSetupCounter++
-                }
-            } exerciseAsync {
-                input + databaseSetupCounter
-            } verifyAsync { result ->
-                assertEquals(expected, result)
-            }
-        }
-
-    }
 }
