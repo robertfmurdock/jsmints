@@ -88,5 +88,41 @@ class TestMintsTest {
             actualValue = value
         }
 
+        class ReporterFeatures {
+
+            enum class Call {
+                ExerciseStart, ExerciseFinish, VerifyStart, VerifyFinish
+            }
+
+            @Test
+            fun willReportTestEventInOrderToReporter() {
+                val reporter = object : MintReporter {
+                    val calls = mutableListOf<Call>()
+                    override fun exerciseStart() = record(Call.ExerciseStart)
+                    override fun exerciseFinish() = record(Call.ExerciseFinish)
+                    override fun verifyStart() = record(Call.VerifyStart)
+                    override fun verifyFinish() = record(Call.VerifyFinish)
+                    private fun record(call: Call) = calls.add(call).let { Unit }
+                }
+
+                object : StandardMintDispatcher {
+                    override val reporter = reporter
+                }.run {
+                    setup(object {}) exercise {} verify {}
+                }
+
+                assertEquals(
+                        expected = listOf(
+                                Call.ExerciseStart,
+                                Call.ExerciseFinish,
+                                Call.VerifyStart,
+                                Call.VerifyFinish
+                        ),
+                        actual = reporter.calls
+                )
+            }
+
+        }
     }
 }
+
