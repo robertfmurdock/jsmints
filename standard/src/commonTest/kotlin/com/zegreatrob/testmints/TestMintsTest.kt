@@ -98,9 +98,9 @@ class TestMintsTest {
             fun willReportTestEventInOrderToReporter() {
                 val reporter = object : MintReporter {
                     val calls = mutableListOf<Call>()
-                    override fun exerciseStart() = record(Call.ExerciseStart)
+                    override fun exerciseStart(context: Any) = record(Call.ExerciseStart)
                     override fun exerciseFinish() = record(Call.ExerciseFinish)
-                    override fun verifyStart() = record(Call.VerifyStart)
+                    override fun verifyStart(payload: Any?) = record(Call.VerifyStart)
                     override fun verifyFinish() = record(Call.VerifyFinish)
                     private fun record(call: Call) = calls.add(call).let { Unit }
                 }
@@ -122,6 +122,45 @@ class TestMintsTest {
                 )
             }
 
+            @Test
+            fun exerciseStartWillLogContext() {
+                val reporter = object : MintReporter {
+                    var exerciseStartPayload: Any? = null
+                    override fun exerciseStart(context: Any) {
+                        exerciseStartPayload = context
+                    }
+                }
+
+                val expectedObject = object {}
+
+                object : StandardMintDispatcher {
+                    override val reporter = reporter
+                }.run {
+                    setup(expectedObject) exercise { } verify {}
+                }
+
+                assertEquals(expectedObject, reporter.exerciseStartPayload)
+            }
+
+            @Test
+            fun verifyStartWillLogThePayload() {
+                val reporter = object : MintReporter {
+                    var verifyStartPayload: Any? = null
+                    override fun verifyStart(payload: Any?) {
+                        verifyStartPayload = payload
+                    }
+                }
+
+                val expectedObject = object {}
+
+                object : StandardMintDispatcher {
+                    override val reporter = reporter
+                }.run {
+                    setup(object {}) exercise { expectedObject } verify {}
+                }
+
+                assertEquals(expectedObject, reporter.verifyStartPayload)
+            }
         }
     }
 }

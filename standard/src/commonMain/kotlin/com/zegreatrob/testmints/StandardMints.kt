@@ -4,4 +4,4 @@ object StandardMints : StandardMintDispatcher {
     override var reporter: MintReporter = object : MintReporter {}
 }
 
-fun <C> setup(context: C) = StandardMints.setup(context)
+fun <C : Any> setup(context: C) = StandardMints.setup(context)

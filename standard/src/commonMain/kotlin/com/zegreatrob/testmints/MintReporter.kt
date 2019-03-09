@@ -1,8 +1,8 @@
 package com.zegreatrob.testmints
 
 interface MintReporter {
-    fun exerciseStart() = Unit
+    fun exerciseStart(context: Any) = Unit
     fun exerciseFinish() = Unit
-    fun verifyStart() = Unit
+    fun verifyStart(payload: Any?) = Unit
     fun verifyFinish() = Unit
 }
