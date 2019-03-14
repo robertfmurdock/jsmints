@@ -1,4 +1,4 @@
-# <img src="test-mint-small.png" alt="Logo" width="100"> testmints [![CircleCI](https://circleci.com/gh/robertfmurdock/testmints.svg?style=svg)](https://circleci.com/gh/robertfmurdock/testmints)
+# <img src="test-mint-2.png" alt="Logo" width="100"> testmints [![CircleCI](https://circleci.com/gh/robertfmurdock/testmints.svg?style=svg)](https://circleci.com/gh/robertfmurdock/testmints)
 
 Do your tests have a great personality but have bad breath? Just looking for a way to freshen up your tests after a big meal of refactoring?
 
