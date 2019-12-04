@@ -1,4 +1,3 @@
-
 import com.zegreatrob.testmints.build.BuildConstants
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 

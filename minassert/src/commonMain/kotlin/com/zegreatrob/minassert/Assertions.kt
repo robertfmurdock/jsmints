@@ -7,6 +7,6 @@ fun <T> T?.assertIsEqualTo(expected: T, message: String? = null) = assertEquals(
 
 fun <T> T?.assertIsNotEqualTo(expected: T, message: String? = null) = assertNotEquals(expected, this, message)
 
-fun <T> MutableList<T>.assertContains(item: T) = contains(item)
+fun <T> List<T>.assertContains(item: T) = contains(item)
         .assertIsEqualTo(true, "${this.map { "$item" }} did not contain $item")
         .let { this }
