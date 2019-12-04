@@ -2,7 +2,7 @@ import com.zegreatrob.testmints.build.BuildConstants
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.21"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.61"
 }
 
 repositories {
@@ -11,7 +11,7 @@ repositories {
 
 kotlin {
     targets {
-        add(presets["js"].createTarget("js"))
+        js()
     }
 
     sourceSets {
