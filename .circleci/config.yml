@@ -2,12 +2,12 @@ version: 2
 jobs:
   build-linux:
     docker:
-      - image: circleci/openjdk:8
+      - image: circleci/openjdk:jdk
     steps:
       - checkout
       - restore_cache:
           key: testmints-cache-4-{{ .Branch }}
-      - run: "./gradlew check release"
+      - run: "./gradlew check release --stacktrace"
       - save_cache:
           key: testmints-cache-4-{{ .Branch }}
           paths:
