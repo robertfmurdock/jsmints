@@ -14,4 +14,4 @@ matrix:
         - git config url.https://.insteadOf git://
         - git checkout -qf $TRAVIS_BRANCH
       script:
-        - ./gradlew check release --stacktrace --info
+        - ./gradlew check release
