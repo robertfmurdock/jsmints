@@ -13,4 +13,4 @@ matrix:
         - git config user.name "Travis-CI-In-A-RoB-Suit"
         - git checkout -qf $TRAVIS_BRANCH
       script:
-        - ./gradlew check release
+        - ./gradlew check release --stack-trace --info
