@@ -8,4 +8,4 @@ matrix:
     - os: linux
       language: java
       script:
-        - ./gradlew check release
+        - ./gradlew check release --info --stacktrace
