@@ -5,3 +5,7 @@ matrix:
       language: shell
       script:
         - powershell -Command "cmd /c travis_win.bat"
+    - os: linux
+      language: java
+      script:
+        - ./gradlew check release
