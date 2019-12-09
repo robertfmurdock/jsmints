@@ -7,11 +7,12 @@ plugins {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 kotlin {
     targets {
-        js()
+        js { nodejs {} }
     }
 
     sourceSets {
@@ -24,7 +25,7 @@ kotlin {
             }
         }
 
-        getByName("jsMain") {
+        val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-js")

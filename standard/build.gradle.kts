@@ -12,7 +12,7 @@ repositories {
 kotlin {
     targets {
         jvm()
-        js()
+        js { nodejs {} }
         macosX64()
         iosX64()
         linuxX64()
