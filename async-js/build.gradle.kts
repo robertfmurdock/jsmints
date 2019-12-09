@@ -12,7 +12,9 @@ repositories {
 
 kotlin {
     targets {
-        js { nodejs {} }
+        js {
+//            nodejs {}
+        }
     }
 
     sourceSets {
