@@ -84,6 +84,10 @@ subprojects {
     )
 
     tasks {
+        val publish by getting {
+            enabled = false
+        }
+
         val bintrayUpload by getting(BintrayUploadTask::class) {
 
             doFirst {
