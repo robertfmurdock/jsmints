@@ -5,13 +5,3 @@ matrix:
       language: shell
       script:
         - powershell -Command "cmd /c travis_win.bat"
-    - os: linux
-      language: java
-      before_install:
-        - git fetch --unshallow
-        - git config user.email "robert.f.murdock@gmail.com"
-        - git config user.name "Travis-CI-In-A-RoB-Suit"
-        - git config url.https://.insteadOf git://
-        - git checkout -qf $TRAVIS_BRANCH
-      script:
-        - ./gradlew check release
