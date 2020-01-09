@@ -6,10 +6,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: testmints-cache-4-{{ .Branch }}
+          key: testmints-cache-5-{{ .Branch }}
       - run: "./gradlew check release --stacktrace"
       - save_cache:
-          key: testmints-cache-4-{{ .Branch }}
+          key: testmints-cache-5-{{ .Branch }}
           paths:
             - buildSrc/build
             - "~/.gradle"
