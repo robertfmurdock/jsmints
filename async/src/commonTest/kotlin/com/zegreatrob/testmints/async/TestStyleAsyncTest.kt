@@ -56,7 +56,7 @@ class TestStyleAsyncTest {
                     }) exerciseAsync {
                     }
 
-                    exercisedContext verifyAsync { fail("LOL") }
+                    exercisedContext.verifyAsync<Nothing> { fail("LOL") }
                 }
             } catch (expectedFailure: AssertionError) {
                 assertEquals("LOL", expectedFailure.message)
@@ -71,7 +71,7 @@ class TestStyleAsyncTest {
                     }) exerciseAsync {
                     }
 
-                    exercisedContext verifyAsync {
+                    exercisedContext.verifyAsync<Nothing> {
                         withContext(Dispatchers.Default) {
                             delay(3)
                             fail("LOL")
@@ -90,7 +90,7 @@ class TestStyleAsyncTest {
                     val exercisedContext = setupAsync(object {
                     }) exerciseAsync {
                     }
-                    exercisedContext verifyAsync { fail("LOL") }
+                    exercisedContext.verifyAsync<Nothing> { fail("LOL") }
                 }
             } catch (expectedFailure: AssertionError) {
                 assertEquals("LOL", expectedFailure.message)
