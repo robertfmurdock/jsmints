@@ -12,18 +12,10 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <bytecodeTargetLevel>
-      <module name="com.zegreatrob.testmints.async.jvmMain" target="1.6" />
-      <module name="com.zegreatrob.testmints.async.jvmTest" target="1.6" />
       <module name="com.zegreatrob.testmints.buildSrc.main" target="1.8" />
       <module name="com.zegreatrob.testmints.buildSrc.test" target="1.8" />
-      <module name="com.zegreatrob.testmints.minassert.jvmMain" target="1.6" />
-      <module name="com.zegreatrob.testmints.minassert.jvmTest" target="1.6" />
-      <module name="com.zegreatrob.testmints.standard.jvmMain" target="1.6" />
-      <module name="com.zegreatrob.testmints.standard.jvmTest" target="1.6" />
       <module name="testmints.async.jvmMain" target="1.6" />
       <module name="testmints.async.jvmTest" target="1.6" />
-      <module name="testmints.buildSrc.main" target="1.8" />
-      <module name="testmints.buildSrc.test" target="1.8" />
       <module name="testmints.standard.jvmMain" target="1.6" />
       <module name="testmints.standard.jvmTest" target="1.6" />
     </bytecodeTargetLevel>
