@@ -8,7 +8,7 @@ interface Spy<I, O> {
 
     val spyReturnWhenGivenValues: MutableMap<I, O>
 
-    fun spyFunction(input: I): O = spyReturnWhenGivenValues.getOrElse(input) {
+    fun spyFunction(input: I): O = spyReturnWhenGivenValues.fixedGetOrElse(input) {
         safePop(input)
     }.also { spyReceivedValues.add(input) }
 
@@ -30,6 +30,12 @@ interface Spy<I, O> {
     }
 
     fun cancel(): Nothing = throw NotImplementedError("Will not implement unused collaborator")
+}
+
+private fun <K, V> Map<K, V>.fixedGetOrElse(input: K, function: () -> V) = if (containsKey(input)) {
+    getValue(input)
+} else {
+    function()
 }
 
 class SpyData<I, O> : Spy<I, O> {
