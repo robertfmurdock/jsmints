@@ -8,9 +8,8 @@ interface Spy<I, O> {
 
     val spyReturnWhenGivenValues: MutableMap<I, O>
 
-    fun spyFunction(input: I): O = when (val value = spyReturnWhenGivenValues[input]) {
-        null -> safePop(input)
-        else -> value
+    fun spyFunction(input: I): O = spyReturnWhenGivenValues.getOrElse(input) {
+        safePop(input)
     }.also { spyReceivedValues.add(input) }
 
     private fun safePop(input: I): O = if (spyReturnValues.size > 0)
