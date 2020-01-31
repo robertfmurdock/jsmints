@@ -13,14 +13,10 @@ interface Spy<I, O> {
         else -> value
     }.also { spyReceivedValues.add(input) }
 
-    private fun safePop(input: I): O {
-        val value = spyReturnValues.popValue()
-        if (value == null) {
-            fail("No values remaining given input $input")
-        } else {
-            return value
-        }
-    }
+    private fun safePop(input: I): O = if (spyReturnValues.size > 0)
+        spyReturnValues[0].also { spyReturnValues.removeAt(0) }
+    else
+        fail("No values remaining given input $input")
 
     infix fun spyWillReturn(values: Collection<O>) {
         spyReturnValues += values
@@ -43,4 +39,3 @@ class SpyData<I, O> : Spy<I, O> {
     override val spyReturnValues = mutableListOf<O>()
 }
 
-fun <T> MutableList<T>.popValue() = getOrNull(0)?.also { removeAt(0) }
