@@ -22,9 +22,16 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":mindiff"))
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-common:${BuildConstants.kotlinVersion}")
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                implementation(project(":standard"))
+                implementation(project(":minassert"))
+                implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:${BuildConstants.kotlinVersion}")
             }
         }
 
@@ -42,7 +49,7 @@ kotlin {
 
         val linuxX64Main by getting { dependsOn(nativeCommonMain) }
 
-        getByName("jsMain") {
+        val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
