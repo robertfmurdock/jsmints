@@ -27,7 +27,7 @@ class StringDiffTest {
             stringDiff(l, r)
         } verify { result ->
             result.split("\n")[0]
-                    .assertIsEqualTo("Difference starts at index 3.")
+                    .assertIsEqualTo("Difference at index 3.")
         }
 
         @Test
@@ -56,7 +56,7 @@ class StringDiffTest {
             stringDiff(l, r)
         } verify { result ->
             result.split("\n")[0]
-                    .assertIsEqualTo("Difference starts at index 4.")
+                    .assertIsEqualTo("Difference at index 4.")
         }
 
         @Test
@@ -72,6 +72,45 @@ class StringDiffTest {
                             )
                     )
         }
+    }
+
+    class WhenThereAreTwoDiscreetDifferences {
+        object Setup {
+            const val l = "The man dances well and is best at the jig."
+            const val r = "The lady dances well and is best at the salsa."
+        }
+
+        @Test
+        fun willIndicateFirstDifference() = setup(Setup) exercise {
+            stringDiff(l, r)
+        } verify { result ->
+            val lines = result.split("\n")
+            lines[0].assertIsEqualTo("Difference at index 4.")
+            lines.slice(1..2)
+                    .assertIsEqualTo(
+                            listOf(
+                                    "E: man",
+                                    "A: lady"
+                            )
+                    )
+        }
+
+        @Test
+        fun willIndicateSecondDifference() = setup(Setup) exercise {
+            stringDiff(l, r)
+        } verify { result ->
+            val lines = result.split("\n")
+            lines[3].assertIsEqualTo("Difference at index 39.")
+            lines.slice(4..5)
+                    .assertIsEqualTo(
+                            listOf(
+                                    "E: jig",
+                                    "A: salsa"
+                            )
+                    )
+
+        }
+
     }
 
 
