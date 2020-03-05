@@ -2,7 +2,7 @@
 import com.zegreatrob.testmints.build.BuildConstants
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.61"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.70"
 }
 
 repositories {
@@ -23,21 +23,21 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.3-1.3.70-eap-42")
             }
         }
 
         val jvmMain by getting {
             dependencies  {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3-1.3.70-eap-42")
             }
         }
 
         val nativeCommonMain by creating {
             dependsOn(commonMain)
             dependencies  {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.3-1.3.70-eap-42")
             }
         }
 
