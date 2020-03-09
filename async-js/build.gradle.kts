@@ -23,7 +23,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.3-1.3.70-eap-42")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.4")
             }
         }
 
@@ -31,7 +31,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.3-1.3.70-eap-42")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.4")
             }
         }
 
