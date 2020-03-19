@@ -106,4 +106,28 @@ class Async2Test {
         assertEquals(expected, result)
     }
 
+    @Test
+    fun willSupportSuspendObjectInitializationWhichIsUsefulForHelperMethods() = setupAsync2({
+        val asyncProducedValue = CompletableDeferred(Random.nextInt()).await()
+        object {
+            val asyncProducedValue = asyncProducedValue
+        }
+    }) exercise {
+        asyncProducedValue
+    } verify { result ->
+        assertEquals(asyncProducedValue, result)
+    }
+
+    @Test
+    fun willSupportAfterObjectAsyncSetup() = setupAsync2(object {
+        val coolString = "${Random.nextDouble()}"
+        var list = mutableListOf<String>()
+    }) {
+        val asyncProducedValue = CompletableDeferred("$coolString And ${Random.nextInt()}").await()
+        list.add(asyncProducedValue)
+    } exercise {
+        list.apply { shuffle() }
+    } verify { result ->
+        assertEquals(1, result.size)
+    }
 }
