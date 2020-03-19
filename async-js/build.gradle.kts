@@ -13,7 +13,7 @@ repositories {
 kotlin {
     targets {
         js {
-//            nodejs {}
+            nodejs {}
         }
     }
 
