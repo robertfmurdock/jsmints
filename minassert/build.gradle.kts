@@ -2,11 +2,13 @@ import com.zegreatrob.testmints.build.BuildConstants
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.71"
+    id("org.jetbrains.kotlin.multiplatform") version "1.4-M1"
 }
 
 repositories {
     mavenCentral()
+    maven ("https://dl.bintray.com/kotlin/kotlin-eap")
+    maven ("https://kotlin.bintray.com/kotlinx")
 }
 
 kotlin {
