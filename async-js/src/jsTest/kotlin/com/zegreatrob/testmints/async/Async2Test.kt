@@ -32,11 +32,11 @@ class Async2Test {
         assertEquals(result, assertionError)
     }
 
-    private fun testThatFailsDuringVerify(assertionError: AssertionError): Promise<Unit> = setupAsync2(object {
+    private fun testThatFailsDuringVerify(assertionError: AssertionError): Promise<Unit> = (setupAsync2(object {
     }) exercise {
     } verify {
         throw assertionError
-    }
+    }).unsafeCast<Promise<Unit>>()
 
     @Test
     fun willFailExerciseCorrectly() = setupAsync2(object {
@@ -52,11 +52,11 @@ class Async2Test {
         assertEquals(result, assertionError)
     }
 
-    private fun testThatFailsDuringExercise(assertionError: AssertionError): Promise<Unit> = setupAsync2(object {
+    private fun testThatFailsDuringExercise(assertionError: AssertionError): Promise<Unit> = (setupAsync2(object {
     }) exercise {
         throw assertionError
     } verify {
-    }
+    }).unsafeCast<Promise<Unit>>()
 
     @Test
     fun willSupportDeferredInExercise() = setupAsync2(object {
