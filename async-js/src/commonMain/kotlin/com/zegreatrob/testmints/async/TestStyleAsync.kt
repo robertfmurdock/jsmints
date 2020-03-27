@@ -8,18 +8,11 @@ suspend fun <C> setupAsync(context: C, additionalSetup: suspend C.() -> Unit = {
 
 fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
         { context },
-        context.chooseScope(),
+        context.chooseTestScope(),
         additionalActions
 )
 
 fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = Setup(
-        contextProvider,
-        MainScope(),
-        additionalActions
-)
-
-
-fun <C : Any, D : Any> setupAsync2(contextProvider: suspend () -> C, contextExt: D, additionalActions: suspend C.() -> Unit = {}) = Setup(
         contextProvider,
         MainScope(),
         additionalActions
@@ -44,10 +37,20 @@ class Setup<C>(
     infix fun <R> exercise(codeUnderTest: suspend C.() -> R) = scope.async {
         val context = contextProvider()
         with(context) {
+            if (context is ScopeMint) {
+                context.waitForSetupToComplete()
+                context.setupScope.cancel()
+            }
             additionalActions()
+
             context to codeUnderTest()
         }
     }.let { Exercise(scope, it) }
+
+    private suspend fun ScopeMint.waitForSetupToComplete() {
+        val job = setupScope.coroutineContext[Job]
+        job?.children?.toList()?.joinAll()
+    }
 }
 
 class Exercise<C, R>(private val scope: CoroutineScope, private val deferred: Deferred<Pair<C, R>>) {
@@ -55,19 +58,22 @@ class Exercise<C, R>(private val scope: CoroutineScope, private val deferred: De
         val (context, result) = deferred.await()
         context.assertionFunctions(result)
     }.apply {
-        invokeOnCompletion { cause -> scope.cancel(cause?.let { CancellationException("Test failure.", cause) }) }
+        invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
     }.let { finalTransform(it) }
+
+    private fun Throwable.wrapCause() = CancellationException("Test failure.", this)
 
 }
 
 expect fun <C, R, R2> Exercise<C, R>.finalTransform(it: Deferred<R2>): Any?
 
 abstract class ScopeMint {
-    val scope = mintScope()
+    val testScope = mintScope()
+    val setupScope = mintScope() + CoroutineName("Setup")
 }
 
-private fun Any.chooseScope() = if (this is ScopeMint) {
-    scope
+private fun Any.chooseTestScope() = if (this is ScopeMint) {
+    testScope
 } else
     mintScope()
 

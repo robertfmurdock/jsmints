@@ -132,12 +132,14 @@ class Async2Test {
     }
 
     @Test
-    fun blendExperiment() = setupAsync2(object : ScopeMint() {
-        val asyncProducedValue = scope.async { Random.nextInt() }
+    fun canProvideScopeUsingScopeMintSetupScopeWillCompleteBeforeExercise() = setupAsync2(object : ScopeMint() {
+        val expectedValue = Random.nextInt()
+        val asyncProducedValue = setupScope.async { delay(40); expectedValue }
     }) exercise {
-        asyncProducedValue.await()
-    } verify { result ->
-        assertEquals(asyncProducedValue.await(), result)
+        asyncProducedValue.isCompleted
+    } verify { setupAsyncCompletedBeforeExercise ->
+        assertEquals(true, setupAsyncCompletedBeforeExercise)
+        assertEquals(expectedValue, asyncProducedValue.await())
     }
 
 }
