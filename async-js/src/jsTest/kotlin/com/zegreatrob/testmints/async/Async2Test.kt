@@ -130,4 +130,14 @@ class Async2Test {
     } verify { result ->
         assertEquals(1, result.size)
     }
+
+    @Test
+    fun blendExperiment() = setupAsync2(object : ScopeMint() {
+        val asyncProducedValue = scope.async { Random.nextInt() }
+    }) exercise {
+        asyncProducedValue.await()
+    } verify { result ->
+        assertEquals(asyncProducedValue.await(), result)
+    }
+
 }

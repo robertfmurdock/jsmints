@@ -162,6 +162,7 @@ class TestMintsTest {
                 assertEquals(expectedObject, reporter.verifyStartPayload)
             }
         }
+
     }
 }
 

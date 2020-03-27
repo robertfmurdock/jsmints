@@ -142,6 +142,7 @@ class TestStyleAsyncTest {
             }
             assertEquals(expectedValue, actualValue)
         }
+
     }
 
 }

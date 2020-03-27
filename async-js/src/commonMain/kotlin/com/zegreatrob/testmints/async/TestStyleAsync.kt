@@ -6,7 +6,24 @@ expect fun <T> testAsync(block: suspend CoroutineScope.() -> T): Any?
 
 suspend fun <C> setupAsync(context: C, additionalSetup: suspend C.() -> Unit = {}) = SetupAsync(context).apply { additionalSetup(context) }
 
-expect fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}): Setup<C>
+fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
+        { context },
+        context.chooseScope(),
+        additionalActions
+)
+
+fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = Setup(
+        contextProvider,
+        MainScope(),
+        additionalActions
+)
+
+
+fun <C : Any, D : Any> setupAsync2(contextProvider: suspend () -> C, contextExt: D, additionalActions: suspend C.() -> Unit = {}) = Setup(
+        contextProvider,
+        MainScope(),
+        additionalActions
+)
 
 class SetupAsync<C>(private val context: C) {
     suspend infix fun <R> exerciseAsync(codeUnderTest: suspend C.() -> R) =
@@ -44,3 +61,14 @@ class Exercise<C, R>(private val scope: CoroutineScope, private val deferred: De
 }
 
 expect fun <C, R, R2> Exercise<C, R>.finalTransform(it: Deferred<R2>): Any?
+
+abstract class ScopeMint {
+    val scope = mintScope()
+}
+
+private fun Any.chooseScope() = if (this is ScopeMint) {
+    scope
+} else
+    mintScope()
+
+private fun mintScope() = MainScope() + CoroutineName("testMintAsync")
