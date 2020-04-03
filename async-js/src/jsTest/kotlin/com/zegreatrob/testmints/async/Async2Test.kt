@@ -142,4 +142,26 @@ class Async2Test {
         assertEquals(expectedValue, asyncProducedValue.await())
     }
 
+    @Test
+    fun canProvideScopeUsingScopeMintExerciseScopeWillCompleteBeforeVerify() = setupAsync2(object : ScopeMint() {
+        val expectedValue = Random.nextInt()
+    }) exercise {
+        exerciseScope.async { delay(40); expectedValue }
+    } verify { result ->
+        assertEquals(true, result.isCompleted)
+        assertEquals(expectedValue, result.await())
+    }
+
+    @Test
+    fun canMakeScopeInExerciseThatWillCompleteBeforeVerify() = setupAsync2(object : ScopeMint() {
+        val expectedValue = Random.nextInt()
+    }) exercise {
+        coroutineScope {
+            async { delay(40); expectedValue }
+        }
+    } verify { result ->
+        assertEquals(true, result.isCompleted)
+        assertEquals(expectedValue, result.await())
+    }
+
 }
