@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
     }
 }
 
