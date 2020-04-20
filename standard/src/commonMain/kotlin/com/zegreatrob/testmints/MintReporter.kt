@@ -5,4 +5,6 @@ interface MintReporter {
     fun exerciseFinish() = Unit
     fun verifyStart(payload: Any?) = Unit
     fun verifyFinish() = Unit
+    fun teardownStart() = Unit
+    fun teardownFinish() = Unit
 }

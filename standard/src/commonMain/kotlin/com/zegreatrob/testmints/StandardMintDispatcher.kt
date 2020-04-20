@@ -22,6 +22,17 @@ interface StandardMintDispatcher {
                 .also { reporter.verifyStart(result) }
                 .assertionFunctions(result)
                 .also { reporter.verifyFinish() }
+
+        infix fun <R2> verifyAnd(assertionFunctions: C.(R) -> R2) = context
+                .also { verify(assertionFunctions) }
+                .let { Verify(context, result, reporter) }
+    }
+
+    class Verify<C, R>(private val context: C, private val result: R, private val reporter: MintReporter) {
+        infix fun teardown(teardownFunctions: C.(R) -> Unit) = context.also { reporter.teardownStart() }
+                .run { teardownFunctions(result) }
+                .also { reporter.teardownFinish() }
+
     }
 
 }

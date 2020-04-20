@@ -88,10 +88,29 @@ class TestMintsTest {
             actualValue = value
         }
 
+        @Test
+        fun tearDownShouldHaveAccessToScopeOfSetupObjectAndResult() {
+            val expectedValue: Int = Random.nextInt()
+            val expectedResult: Int = Random.nextInt()
+            val valueCollector = mutableListOf<Pair<Int, Int>>()
+            valueCollector.simulateTestAndCollectSetupValueDuringTeardown(expectedValue, expectedResult)
+            assertEquals(expectedValue to expectedResult, valueCollector[0])
+        }
+
+        private fun MutableList<Pair<Int, Int>>.simulateTestAndCollectSetupValueDuringTeardown(expectedValue: Int, expectedResult: Int) = setup(object {
+            @Suppress("UnnecessaryVariable")
+            val value = expectedValue
+        }) exercise {
+            expectedResult
+        } verifyAnd {
+        } teardown { result ->
+            this@simulateTestAndCollectSetupValueDuringTeardown.add(value to result)
+        }
+
         class ReporterFeatures {
 
             enum class Call {
-                ExerciseStart, ExerciseFinish, VerifyStart, VerifyFinish
+                ExerciseStart, ExerciseFinish, VerifyStart, VerifyFinish, TeardownStart, TeardownFinish
             }
 
             @Test
@@ -102,13 +121,15 @@ class TestMintsTest {
                     override fun exerciseFinish() = record(Call.ExerciseFinish)
                     override fun verifyStart(payload: Any?) = record(Call.VerifyStart)
                     override fun verifyFinish() = record(Call.VerifyFinish)
+                    override fun teardownStart() = record(Call.TeardownStart)
+                    override fun teardownFinish() = record(Call.TeardownFinish)
                     private fun record(call: Call) = calls.add(call).let { Unit }
                 }
 
                 object : StandardMintDispatcher {
                     override val reporter = reporter
                 }.run {
-                    setup(object {}) exercise {} verify {}
+                    setup(object {}) exercise {} verifyAnd {} teardown {}
                 }
 
                 assertEquals(
@@ -116,7 +137,9 @@ class TestMintsTest {
                                 Call.ExerciseStart,
                                 Call.ExerciseFinish,
                                 Call.VerifyStart,
-                                Call.VerifyFinish
+                                Call.VerifyFinish,
+                                Call.TeardownStart,
+                                Call.TeardownFinish
                         ),
                         actual = reporter.calls
                 )
