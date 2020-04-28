@@ -1,5 +1,6 @@
 package com.zegreatrob.testmints.async
 
+import com.zegreatrob.testmints.report.MintReporter
 import kotlinx.coroutines.*
 import kotlin.random.Random
 import kotlin.test.Test
@@ -168,5 +169,85 @@ class Async2Test {
         assertEquals(true, result.isCompleted)
         assertEquals(expectedValue, result.await())
     }
+
+    class ReporterFeatures {
+
+        enum class Call {
+            ExerciseStart, ExerciseFinish, VerifyStart, VerifyFinish, TeardownStart, TeardownFinish
+        }
+
+        @Test
+        fun willReportTestEventInOrderToReporter() = testAsync {
+            val reporter = object : MintReporter {
+                val calls = mutableListOf<Call>()
+                override fun exerciseStart(context: Any) = record(Call.ExerciseStart)
+                override fun exerciseFinish() = record(Call.ExerciseFinish)
+                override fun verifyStart(payload: Any?) = record(Call.VerifyStart)
+                override fun verifyFinish() = record(Call.VerifyFinish)
+                override fun teardownStart() = record(Call.TeardownStart)
+                override fun teardownFinish() = record(Call.TeardownFinish)
+                private fun record(call: Call) = calls.add(call).let { Unit }
+            }
+
+            object : AsyncMintDispatcher {
+                override val reporter = reporter
+            }.run {
+                waitForTest { setupAsync2(object {}) exercise {} verifyAnd {} teardown {} }
+            }
+
+            assertEquals(
+                    expected = listOf(
+                            Call.ExerciseStart,
+                            Call.ExerciseFinish,
+                            Call.VerifyStart,
+                            Call.VerifyFinish,
+                            Call.TeardownStart,
+                            Call.TeardownFinish
+                    ),
+                    actual = reporter.calls
+            )
+        }
+
+        @Test
+        fun exerciseStartWillLogContext() = testAsync {
+            val reporter = object : MintReporter {
+                var exerciseStartPayload: Any? = null
+                override fun exerciseStart(context: Any) {
+                    exerciseStartPayload = context
+                }
+            }
+
+            val expectedObject = object {}
+
+            object : AsyncMintDispatcher {
+                override val reporter = reporter
+            }.run {
+                waitForTest { setupAsync2(expectedObject) exercise { } verify {} }
+            }
+
+            assertEquals(expectedObject, reporter.exerciseStartPayload)
+        }
+
+        @Test
+        fun verifyStartWillLogThePayload() = testAsync {
+            val reporter = object : MintReporter {
+                var verifyStartPayload: Any? = null
+                override fun verifyStart(payload: Any?) {
+                    verifyStartPayload = payload
+                }
+            }
+
+            val expectedObject = object {}
+
+            object : AsyncMintDispatcher {
+                override val reporter = reporter
+            }.run {
+                waitForTest { setupAsync2(object {}) exercise { expectedObject } verify {} }
+            }
+
+            assertEquals(expectedObject, reporter.verifyStartPayload)
+        }
+    }
+
 
 }

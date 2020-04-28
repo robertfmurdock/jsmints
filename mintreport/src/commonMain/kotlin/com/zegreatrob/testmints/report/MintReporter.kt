@@ -1,4 +1,4 @@
-package com.zegreatrob.testmints
+package com.zegreatrob.testmints.report
 
 interface MintReporter {
     fun exerciseStart(context: Any) = Unit

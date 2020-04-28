@@ -1,5 +1,7 @@
 package com.zegreatrob.testmints
 
+import com.zegreatrob.testmints.report.MintReporter
+
 
 interface StandardMintDispatcher {
 

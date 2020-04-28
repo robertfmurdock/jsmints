@@ -1,28 +1,16 @@
 package com.zegreatrob.testmints.async
 
+import com.zegreatrob.testmints.report.MintReporter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
-fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
-        { context },
-        context.chooseTestScope(),
-        additionalActions
-)
-
-fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = Setup(
-        contextProvider,
-        mintScope(),
-        additionalActions
-)
-
-private fun Any.chooseTestScope() = if (this is ScopeMint) testScope else mintScope()
-
-class Setup<C>(
+class Setup<C : Any>(
         private val contextProvider: suspend () -> C,
         private val scope: CoroutineScope,
-        private val additionalActions: suspend C.() -> Unit
+        private val additionalActions: suspend C.() -> Unit,
+        private val reporter: MintReporter
 ) {
-    infix fun <R> exercise(codeUnderTest: suspend C.() -> R) = Exercise(scope) {
+    infix fun <R> exercise(codeUnderTest: suspend C.() -> R) = Exercise(scope, reporter) {
         scope.async {
             val context = contextProvider()
             with(context) {
@@ -31,9 +19,16 @@ class Setup<C>(
                 }
                 additionalActions()
 
-                context to codeUnderTest()
+                val result = runCodeUnderTest(context, codeUnderTest)
+                context to result
             }
         }
     }
 
+    private suspend fun <R> runCodeUnderTest(context: C, codeUnderTest: suspend C.() -> R): R {
+        reporter.exerciseStart(context)
+        val result = codeUnderTest(context)
+        reporter.exerciseFinish()
+        return result
+    }
 }

@@ -1,5 +1,6 @@
 package com.zegreatrob.testmints
 
+import com.zegreatrob.testmints.report.MintReporter
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals

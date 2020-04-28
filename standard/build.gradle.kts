@@ -12,9 +12,7 @@ repositories {
 kotlin {
     targets {
         jvm()
-        js {
-            //            nodejs {}
-        }
+        js { nodejs {} }
         macosX64()
         iosX64()
         linuxX64()
@@ -25,6 +23,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(project(":mintreport"))
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:${BuildConstants.kotlinVersion}")

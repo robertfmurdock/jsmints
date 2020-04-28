@@ -8,7 +8,7 @@ actual fun <T> testAsync(block: suspend CoroutineScope.() -> T) {
     runBlocking { block() }
 }
 
-actual fun <C, R, R2> Exercise<C, R>.finalTransform(it: () -> Deferred<R2>) {
+actual fun <R2> finalTransform(it: () -> Deferred<R2>) {
     runBlocking { it().await() }
 }
 

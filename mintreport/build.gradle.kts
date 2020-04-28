@@ -7,14 +7,17 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 kotlin {
     targets {
-        js {
-            nodejs {}
-        }
+        jvm()
+        js { nodejs {} }
+        macosX64()
+        iosX64()
+        linuxX64()
+        mingwX64()
+        linuxArm32Hfp()
     }
 
     sourceSets {
@@ -23,18 +26,35 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.4")
             }
         }
 
-        val jsMain by getting {
+        val jvmMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-test-junit:${BuildConstants.kotlinVersion}")
+            }
+        }
+
+        val nativeCommonMain by creating {
+            dependsOn(commonMain)
+        }
+
+        val macosX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val iosX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val linuxX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val mingwX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val linuxArm32HfpMain by getting { dependsOn(nativeCommonMain) }
+
+        getByName("jsMain") {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.4")
             }
         }
-
     }
 }
 
@@ -44,5 +64,7 @@ tasks {
         kotlinOptions.sourceMap = true
         kotlinOptions.sourceMapEmbedSources = "always"
     }
-
 }
+
+
+
