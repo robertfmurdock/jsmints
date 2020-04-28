@@ -2,7 +2,7 @@ package com.zegreatrob.testmints.async
 
 import kotlinx.coroutines.*
 
-expect fun <T> testAsync(block: suspend CoroutineScope.() -> T): Any?
+expect fun <T> testAsync(block: suspend CoroutineScope.() -> T)
 
 suspend fun <C> setupAsync(context: C, additionalSetup: suspend C.() -> Unit = {}) = SetupAsync(context).apply { additionalSetup(context) }
 
@@ -69,7 +69,7 @@ class Exercise<C, R>(private val scope: CoroutineScope, private val deferred: De
 
 }
 
-expect fun <C, R, R2> Exercise<C, R>.finalTransform(it: Deferred<R2>): Any?
+expect fun <C, R, R2> Exercise<C, R>.finalTransform(it: Deferred<R2>)
 
 abstract class ScopeMint {
     val testScope = mintScope()
