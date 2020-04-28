@@ -71,6 +71,8 @@ class Exercise<C, R>(private val scope: CoroutineScope, private val deferred: De
 
 expect fun <C, R, R2> Exercise<C, R>.finalTransform(it: Deferred<R2>)
 
+expect suspend fun waitForTest(testFunction: () -> Unit)
+
 abstract class ScopeMint {
     val testScope = mintScope()
     val setupScope = mintScope() + CoroutineName("Setup")

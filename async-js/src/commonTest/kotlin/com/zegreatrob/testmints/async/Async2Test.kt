@@ -1,7 +1,6 @@
 package com.zegreatrob.testmints.async
 
 import kotlinx.coroutines.*
-import kotlin.js.Promise
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,7 +22,7 @@ class Async2Test {
         val assertionError = AssertionError("ExpectedAssertion")
     }) exercise {
         try {
-            testThatFailsDuringVerify(assertionError).await()
+            testThatFailsDuringVerify(assertionError)
             fail("The test should fail.")
         } catch (bad: Throwable) {
             bad
@@ -32,18 +31,20 @@ class Async2Test {
         assertEquals(result, assertionError)
     }
 
-    private fun testThatFailsDuringVerify(assertionError: AssertionError): Promise<Unit> = (setupAsync2(object {
-    }) exercise {
-    } verify {
-        throw assertionError
-    }).unsafeCast<Promise<Unit>>()
+    private suspend fun testThatFailsDuringVerify(assertionError: AssertionError) = waitForTest {
+        setupAsync2(object {
+        }) exercise {
+        } verify {
+            throw assertionError
+        }
+    }
 
     @Test
     fun willFailExerciseCorrectly() = setupAsync2(object {
         val assertionError = AssertionError("ExpectedAssertion")
     }) exercise {
         try {
-            testThatFailsDuringExercise(assertionError).await()
+            testThatFailsDuringExercise(assertionError)
             fail("The test should fail.")
         } catch (bad: Throwable) {
             bad
@@ -52,11 +53,13 @@ class Async2Test {
         assertEquals(result, assertionError)
     }
 
-    private fun testThatFailsDuringExercise(assertionError: AssertionError): Promise<Unit> = (setupAsync2(object {
-    }) exercise {
-        throw assertionError
-    } verify {
-    }).unsafeCast<Promise<Unit>>()
+    private suspend fun testThatFailsDuringExercise(assertionError: AssertionError) = waitForTest {
+        setupAsync2(object {
+        }) exercise {
+            throw assertionError
+        } verify {
+        }
+    }
 
     @Test
     fun willSupportDeferredInExercise() = setupAsync2(object {
