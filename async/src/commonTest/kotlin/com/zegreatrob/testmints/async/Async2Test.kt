@@ -19,7 +19,7 @@ class Async2Test {
 
     @Test
     fun willFailVerifyCorrectly() = setupAsync2(object {
-        val assertionError = AssertionError("ExpectedAssertion")
+        val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
     }) exercise {
         try {
             testThatFailsDuringVerify(assertionError)
@@ -28,7 +28,7 @@ class Async2Test {
             bad
         }
     } verify { result: Throwable ->
-        assertEquals(result, assertionError)
+        assertEquals(result.message, assertionError.message)
     }
 
     private suspend fun testThatFailsDuringVerify(assertionError: AssertionError) = waitForTest {
@@ -41,7 +41,7 @@ class Async2Test {
 
     @Test
     fun willFailExerciseCorrectly() = setupAsync2(object {
-        val assertionError = AssertionError("ExpectedAssertion")
+        val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
     }) exercise {
         try {
             testThatFailsDuringExercise(assertionError)
@@ -50,7 +50,7 @@ class Async2Test {
             bad
         }
     } verify { result: Throwable ->
-        assertEquals(result, assertionError)
+        assertEquals(result.message, assertionError.message)
     }
 
     private suspend fun testThatFailsDuringExercise(assertionError: AssertionError) = waitForTest {
@@ -135,14 +135,16 @@ class Async2Test {
     }
 
     @Test
-    fun canProvideScopeUsingScopeMintSetupScopeWillCompleteBeforeExercise() = setupAsync2(object : ScopeMint() {
-        val expectedValue = Random.nextInt()
-        val asyncProducedValue = setupScope.async { delay(40); expectedValue }
-    }) exercise {
-        asyncProducedValue.isCompleted
-    } verify { setupAsyncCompletedBeforeExercise ->
-        assertEquals(true, setupAsyncCompletedBeforeExercise)
-        assertEquals(expectedValue, asyncProducedValue.await())
+    fun canProvideScopeUsingScopeMintSetupScopeWillCompleteBeforeExercise() = eventLoopProtect {
+        setupAsync2(object : ScopeMint() {
+            val expectedValue = Random.nextInt()
+            val asyncProducedValue = setupScope.async { delay(40); expectedValue }
+        }) exercise {
+            asyncProducedValue.isCompleted
+        } verify { setupAsyncCompletedBeforeExercise ->
+            assertEquals(true, setupAsyncCompletedBeforeExercise)
+            assertEquals(expectedValue, asyncProducedValue.await())
+        }
     }
 
     @Test

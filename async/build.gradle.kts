@@ -1,4 +1,3 @@
-
 import com.zegreatrob.testmints.build.BuildConstants
 
 plugins {
@@ -13,6 +12,7 @@ repositories {
 kotlin {
     targets {
         jvm()
+        js { nodejs() }
         macosX64()
         linuxX64()
     }
@@ -28,7 +28,7 @@ kotlin {
         }
 
         val jvmMain by getting {
-            dependencies  {
+            dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
             }
@@ -36,7 +36,7 @@ kotlin {
 
         val nativeCommonMain by creating {
             dependsOn(commonMain)
-            dependencies  {
+            dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.4")
             }
         }
@@ -45,6 +45,12 @@ kotlin {
 
         val linuxX64Main by getting { dependsOn(nativeCommonMain) }
 
+        val jsMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-test-js")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.4")
+            }
+        }
 
     }
 }
