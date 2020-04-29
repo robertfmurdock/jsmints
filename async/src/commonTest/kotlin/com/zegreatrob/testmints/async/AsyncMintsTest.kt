@@ -1,5 +1,6 @@
 package com.zegreatrob.testmints.async
 
+import com.zegreatrob.testmints.captureException
 import com.zegreatrob.testmints.report.MintReporter
 import kotlinx.coroutines.*
 import kotlin.random.Random
@@ -359,11 +360,4 @@ class AsyncMintsTest {
         }
     }
 
-}
-
-suspend fun captureException(work: suspend () -> Unit) = try {
-    work()
-    null
-} catch (expectedFailure: Throwable) {
-    expectedFailure
 }
