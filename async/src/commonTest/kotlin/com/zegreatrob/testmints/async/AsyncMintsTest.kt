@@ -45,9 +45,11 @@ class AsyncMintsTest {
 
         @Test
         fun verifyWillCaptureFailures() = asyncSetup(object {
+
             fun testThatFails() = asyncSetup(object {
             }) exercise {
             } verify { fail("LOL") }
+
         }) exercise {
             captureException {
                 waitForTest { testThatFails() }
@@ -133,6 +135,7 @@ class AsyncMintsTest {
             } verify {
                 actualValue = value
             }
+
         }) exercise {
             waitForTest { testThatUsesSetupObjectInVerify() }
         } verify {
