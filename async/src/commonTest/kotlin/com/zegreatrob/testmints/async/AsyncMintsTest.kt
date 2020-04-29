@@ -14,7 +14,7 @@ class AsyncMintsTest {
         private fun Int.plusOne() = this + 1
 
         @Test
-        fun simpleCase() = asyncSetup(object {
+        fun willOrganizeTestNicely() = asyncSetup(object {
             val input: Int = Random.nextInt()
             val expected = input + 1
         }) exercise {
@@ -24,7 +24,7 @@ class AsyncMintsTest {
         }
 
         @Test
-        fun caseWithAsyncInsideTheSetupClosure() = asyncSetup(object {
+        fun suspendFunctionsCanBeUsedInSetupClosure() = asyncSetup(object {
             val input: Int = Random.nextInt()
             val expected = input + 1
             var databaseSetupCounter = 0
@@ -41,96 +41,107 @@ class AsyncMintsTest {
     }
 
     class Features {
+
         @Test
-        fun canFailAsync() = testAsync {
-            try {
-                waitForTest {
-                    asyncSetup<Any>(object {
-                    }) exercise {
-                    } verify { fail("LOL") }
-                }
-            } catch (expectedFailure: AssertionError) {
-                assertEquals("LOL", expectedFailure.message)
+        fun verifyWillCaptureFailures() = asyncSetup(object {
+            fun testThatFails() = asyncSetup(object {
+            }) exercise {
+            } verify { fail("LOL") }
+        }) exercise {
+            captureException {
+                waitForTest { testThatFails() }
             }
+        } verify { result ->
+            assertEquals("LOL", result?.message)
+        }
+
+        private suspend fun captureException(work: suspend () -> Unit) = try {
+            work()
+            null
+        } catch (expectedFailure: Throwable) {
+            expectedFailure
         }
 
         @Test
-        fun canFailAsyncWithCoroutine() = testAsync {
-            try {
-                waitForTest {
-                    asyncSetup<Any>(object {
-                    }) exercise {
-                    } verify {
-                        withContext<Nothing>(Dispatchers.Default) {
-                            delay(3)
-                            fail("LOL")
-                        }
-                    }
+        fun canFailAsyncWithCoroutine() = asyncSetup(object {
+
+            fun testThatFailsWithCoroutine() = asyncSetup(Unit) exercise {
+            } verify {
+                withContext<Nothing>(Dispatchers.Default) {
+                    delay(3)
+                    fail("LOL")
                 }
-            } catch (expectedFailure: AssertionError) {
-                assertEquals("LOL", expectedFailure.message)
             }
+
+        }) exercise {
+            captureException { waitForTest { testThatFailsWithCoroutine() } }
+        } verify { result ->
+            assertEquals("LOL", result?.message)
         }
 
         @Test
-        fun verifyShouldThrowErrorWhenFailureOccurs() = testAsync {
-            try {
-                waitForTest {
-                    asyncSetup<Any>(object {
-                    }) exercise {
-                    } verify { fail("LOL") }
-                }
-            } catch (expectedFailure: AssertionError) {
-                assertEquals("LOL", expectedFailure.message)
-            }
+        fun verifyShouldThrowErrorWhenFailureOccurs() = asyncSetup(object {
+
+            fun failingTest() = asyncSetup<Any>(object {
+            }) exercise {
+            } verify { fail("LOL") }
+
+        }) exercise {
+            captureException { waitForTest { failingTest() } }
+        } verify { result ->
+            assertEquals("LOL", result?.message)
         }
 
         @Test
-        fun exerciseShouldHaveAccessToScopeOfSetupObject() = testAsync {
+        fun exerciseShouldHaveAccessToScopeOfSetupObject() = asyncSetup(object {
             val expectedValue: Int? = Random.nextInt()
             var actualValue: Int? = null
-            waitForTest {
-                asyncSetup(object {
-                    @Suppress("UnnecessaryVariable")
-                    val value = expectedValue
-                }) exercise {
-                    actualValue = value
-                } verify {}
-            }
 
+            fun testThatSharesScopeExample() = asyncSetup(object {
+                @Suppress("UnnecessaryVariable")
+                val value = expectedValue
+            }) exercise {
+                actualValue = value
+            } verify {}
+
+        }) exercise {
+            waitForTest { testThatSharesScopeExample() }
+        } verify {
             assertEquals(expectedValue, actualValue)
         }
 
         @Test
-        fun verifyShouldReceiveTheResultOfExerciseAsParameter() = testAsync {
+        fun verifyShouldReceiveTheResultOfExerciseAsParameter() = asyncSetup(object {
             val expectedValue = Random.nextInt()
             var actualValue: Int? = null
-            waitForTest {
-                testAsync {
-                    asyncSetup(object {
-                    }) exercise {
-                        expectedValue
-                    } verify { result ->
-                        actualValue = result
-                    }
-                }
+
+            fun testThatForwardsResultOfExerciseToVerify() = asyncSetup(object {
+            }) exercise {
+                expectedValue
+            } verify { result ->
+                actualValue = result
             }
+
+        }) exercise {
+            waitForTest { testThatForwardsResultOfExerciseToVerify() }
+        } verify {
             assertEquals(expectedValue, actualValue)
         }
 
         @Test
-        fun verifyShouldHaveAccessToScopeOfSetupObject() = testAsync {
-            val expectedValue: Int? = Random.nextInt()
+        fun verifyShouldHaveAccessToScopeOfSetupObject() = asyncSetup(object {
+            val expectedValue = Random.nextInt()
             var actualValue: Int? = null
-            waitForTest {
-                asyncSetup(object {
-                    @Suppress("UnnecessaryVariable")
-                    val value = expectedValue
-                }) exercise {
-                } verify {
-                    actualValue = value
-                }
+
+            fun testThatUsesSetupObjectInVerify() = asyncSetup(object {
+                val value = expectedValue
+            }) exercise {
+            } verify {
+                actualValue = value
             }
+        }) exercise {
+            waitForTest { testThatUsesSetupObjectInVerify() }
+        } verify {
             assertEquals(expectedValue, actualValue)
         }
 
