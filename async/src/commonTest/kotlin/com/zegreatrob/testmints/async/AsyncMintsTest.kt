@@ -7,6 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
+@Suppress("unused")
 class AsyncMintsTest {
 
     class ExampleUsage {
@@ -53,13 +54,6 @@ class AsyncMintsTest {
             }
         } verify { result ->
             assertEquals("LOL", result?.message)
-        }
-
-        private suspend fun captureException(work: suspend () -> Unit) = try {
-            work()
-            null
-        } catch (expectedFailure: Throwable) {
-            expectedFailure
         }
 
         @Test
@@ -145,167 +139,146 @@ class AsyncMintsTest {
             assertEquals(expectedValue, actualValue)
         }
 
-    }
+        @Test
+        fun failuresThrownDuringVerifyWillFailTheTest() = asyncSetup(object {
+            val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
 
-    @Test
-    fun example() = asyncSetup(object {
-        val thing = 1
-    }) exercise {
-        thing + 1
-    } verify { result ->
-        assertEquals(2, result)
-    }
+            fun testThatFailsDuringVerify(assertionError: AssertionError) = asyncSetup(object {
+            }) exercise {
+            } verify { throw assertionError }
 
-    @Test
-    fun willFailVerifyCorrectly() = asyncSetup(object {
-        val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
-    }) exercise {
-        try {
-            testThatFailsDuringVerify(assertionError)
-            fail("The test should fail.")
-        } catch (bad: Throwable) {
-            bad
-        }
-    } verify { result: Throwable ->
-        assertEquals(result.message, assertionError.message)
-    }
-
-    private suspend fun testThatFailsDuringVerify(assertionError: AssertionError) = waitForTest {
-        asyncSetup(object {
         }) exercise {
-        } verify {
-            throw assertionError
+            captureException { waitForTest { testThatFailsDuringVerify(assertionError) } }
+        } verify { result ->
+            assertEquals(assertionError.message, result?.message)
         }
-    }
 
-    @Test
-    fun willFailExerciseCorrectly() = asyncSetup(object {
-        val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
-    }) exercise {
-        try {
-            testThatFailsDuringExercise(assertionError)
-            fail("The test should fail.")
-        } catch (bad: Throwable) {
-            bad
-        }
-    } verify { result: Throwable ->
-        assertEquals(result.message, assertionError.message)
-    }
+        @Test
+        fun failuresThrownDuringExerciseWillFailTheTest() = asyncSetup(object {
+            val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
 
-    private suspend fun testThatFailsDuringExercise(assertionError: AssertionError) = waitForTest {
-        asyncSetup(object {
+            fun testThatFailsDuringExercise() = asyncSetup(object {
+            }) exercise {
+                throw assertionError
+            } verify {}
+
         }) exercise {
-            throw assertionError
-        } verify {
+            captureException { waitForTest { testThatFailsDuringExercise() } }
+        } verify { result ->
+            assertEquals(assertionError.message, result?.message)
         }
-    }
 
-    @Test
-    fun willSupportDeferredInExercise() = asyncSetup(object {
-        val expected = Random.nextInt()
-        val asyncGuy = object {
-            fun doThingAsync() = CompletableDeferred(expected)
+        @Test
+        fun canUseDeferredDuringExerciseClosure() = asyncSetup(object {
+            val expected = Random.nextInt()
+            val asyncGuy = object {
+                fun doThingAsync() = CompletableDeferred(expected)
+            }
+        }) exercise {
+            asyncGuy.doThingAsync().await()
+        } verify { result: Int ->
+            assertEquals(expected, result)
         }
-    }) exercise {
-        asyncGuy.doThingAsync().await()
-    } verify { result: Int ->
-        assertEquals(expected, result)
-    }
 
-    @Test
-    fun willSupportSuspendInExercise() = asyncSetup(object {
-        val expected = Random.nextInt()
-        val asyncGuy = object {
-            suspend fun doThingAsync() = CompletableDeferred(expected).await()
+        @Test
+        fun canUseSuspendFunctionsDuringExerciseClosure() = asyncSetup(object {
+            val expected = Random.nextInt()
+            val asyncGuy = object {
+                suspend fun doThingAsync() = CompletableDeferred(expected).await()
+            }
+        }) exercise {
+            asyncGuy.doThingAsync()
+        } verify { result: Int ->
+            assertEquals(expected, result)
         }
-    }) exercise {
-        asyncGuy.doThingAsync()
-    } verify { result: Int ->
-        assertEquals(expected, result)
-    }
 
-    @Test
-    fun willSupportDeferredInVerify() = asyncSetup(object {
-        val expected = Random.nextInt()
-    }) exercise {
-        object {
-            fun doThingAsync() = CompletableDeferred(expected)
+        @Test
+        fun canUseDeferredDuringVerifyClosure() = asyncSetup(object {
+            val expected = Random.nextInt()
+        }) exercise {
+            object {
+                fun doThingAsync() = CompletableDeferred(expected)
+            }
+        } verify { asyncGuy ->
+            val result = asyncGuy.doThingAsync().await()
+            assertEquals(expected, result)
         }
-    } verify { asyncGuy ->
-        val result = asyncGuy.doThingAsync().await()
-        assertEquals(expected, result)
-    }
 
-    @Test
-    fun willSupportSuspendInVerify() = asyncSetup(object {
-        val expected = Random.nextInt()
-    }) exercise {
-        object {
-            suspend fun doThingAsync() = CompletableDeferred(expected).await()
+        @Test
+        fun canUseSuspendFunctionsDuringVerifyClosure() = asyncSetup(object {
+            val expected = Random.nextInt()
+        }) exercise {
+            object {
+                suspend fun doThingAsync() = CompletableDeferred(expected).await()
+            }
+        } verify { asyncGuy ->
+            val result = asyncGuy.doThingAsync()
+            assertEquals(expected, result)
         }
-    } verify { asyncGuy ->
-        val result = asyncGuy.doThingAsync()
-        assertEquals(expected, result)
-    }
 
-    @Test
-    fun willSupportSuspendObjectInitializationWhichIsUsefulForHelperMethods() = asyncSetup({
-        val asyncProducedValue = CompletableDeferred(Random.nextInt()).await()
-        object {
-            val asyncProducedValue = asyncProducedValue
+
+        @Test
+        fun setupObjectCanBeCreatedInSuspendClosure() = asyncSetup({
+            val asyncProducedValue = CompletableDeferred(Random.nextInt()).await()
+            object {
+                val asyncProducedValue = asyncProducedValue
+            }
+        }) exercise {
+            asyncProducedValue
+        } verify { result ->
+            assertEquals(asyncProducedValue, result)
         }
-    }) exercise {
-        asyncProducedValue
-    } verify { result ->
-        assertEquals(asyncProducedValue, result)
-    }
 
-    @Test
-    fun willSupportAfterObjectAsyncSetup() = asyncSetup(object {
-        val coolString = "${Random.nextDouble()}"
-        var list = mutableListOf<String>()
-    }) {
-        val asyncProducedValue = CompletableDeferred("$coolString And ${Random.nextInt()}").await()
-        list.add(asyncProducedValue)
-    } exercise {
-        list.apply { shuffle() }
-    } verify { result ->
-        assertEquals(1, result.size)
-    }
+        @Test
+        fun setupCanContinueInSuspendableClosureBeforeExercise() = asyncSetup(object {
+            val coolString = "${Random.nextDouble()}"
+            var list = mutableListOf<String>()
+        }) {
+            val asyncProducedValue = CompletableDeferred("$coolString And ${Random.nextInt()}").await()
+            list.add(asyncProducedValue)
+        } exercise {
+            list.apply { shuffle() }
+        } verify { result ->
+            assertEquals(1, result.size)
+        }
 
-    @Test
-    fun canProvideScopeUsingScopeMintSetupScopeWillCompleteBeforeExercise() = eventLoopProtect {
-        asyncSetup(object : ScopeMint() {
+        @Test
+        fun usingScopeMintWillProvideSetupScopeThatWillCompleteBeforeExercise() = nativeEventLoopWeirdnessProtection {
+            asyncSetup(object : ScopeMint() {
+                val expectedValue = Random.nextInt()
+                val asyncProducedValue = setupScope.async { delay(40); expectedValue }
+            }) exercise {
+                asyncProducedValue.isCompleted
+            } verify { setupAsyncCompletedBeforeExercise ->
+                assertEquals(true, setupAsyncCompletedBeforeExercise)
+                assertEquals(expectedValue, asyncProducedValue.await())
+            }
+        }
+
+        private fun nativeEventLoopWeirdnessProtection(thing: () -> Unit) = eventLoopProtect(thing)
+
+        @Test
+        fun usingScopeMintWillProvideExerciseScopeThatWillCompleteBeforeVerify() = asyncSetup(object : ScopeMint() {
             val expectedValue = Random.nextInt()
-            val asyncProducedValue = setupScope.async { delay(40); expectedValue }
         }) exercise {
-            asyncProducedValue.isCompleted
-        } verify { setupAsyncCompletedBeforeExercise ->
-            assertEquals(true, setupAsyncCompletedBeforeExercise)
-            assertEquals(expectedValue, asyncProducedValue.await())
+            exerciseScope.async { delay(40); expectedValue }
+        } verify { result ->
+            assertEquals(true, result.isCompleted)
+            assertEquals(expectedValue, result.await())
         }
-    }
 
-    @Test
-    fun canProvideScopeUsingScopeMintExerciseScopeWillCompleteBeforeVerify() = asyncSetup(object : ScopeMint() {
-        val expectedValue = Random.nextInt()
-    }) exercise {
-        exerciseScope.async { delay(40); expectedValue }
-    } verify { result ->
-        assertEquals(true, result.isCompleted)
-        assertEquals(expectedValue, result.await())
-    }
-
-    @Test
-    fun canMakeScopeInExerciseThatWillCompleteBeforeVerify() = asyncSetup(object : ScopeMint() {
-        val expectedValue = Random.nextInt()
-    }) exercise {
-        coroutineScope {
-            async { delay(40); expectedValue }
+        @Test
+        fun canMakeScopeInExerciseThatWillCompleteBeforeVerify() = asyncSetup(object : ScopeMint() {
+            val expectedValue = Random.nextInt()
+        }) exercise {
+            coroutineScope {
+                async { delay(40); expectedValue }
+            }
+        } verify { result ->
+            assertEquals(true, result.isCompleted)
+            assertEquals(expectedValue, result.await())
         }
-    } verify { result ->
-        assertEquals(true, result.isCompleted)
-        assertEquals(expectedValue, result.await())
+
     }
 
     class ReporterFeatures {
@@ -315,24 +288,24 @@ class AsyncMintsTest {
         }
 
         @Test
-        fun willReportTestEventInOrderToReporter() = testAsync {
-            val reporter = object : MintReporter {
-                val calls = mutableListOf<Call>()
+        fun willReportTestEventInOrderToReporter() = asyncSetup(object : AsyncMintDispatcher {
+            val calls = mutableListOf<Call>()
+            private fun record(call: Call) = calls.add(call).let { Unit }
+
+            override val reporter = object : MintReporter {
                 override fun exerciseStart(context: Any) = record(Call.ExerciseStart)
                 override fun exerciseFinish() = record(Call.ExerciseFinish)
                 override fun verifyStart(payload: Any?) = record(Call.VerifyStart)
                 override fun verifyFinish() = record(Call.VerifyFinish)
                 override fun teardownStart() = record(Call.TeardownStart)
                 override fun teardownFinish() = record(Call.TeardownFinish)
-                private fun record(call: Call) = calls.add(call).let { Unit }
             }
 
-            object : AsyncMintDispatcher {
-                override val reporter = reporter
-            }.run {
-                waitForTest { setupAsync2(object {}) exercise {} verifyAnd {} teardown {} }
-            }
+            fun exampleTest() = asyncSetup(object {}) exercise {} verifyAnd {} teardown {}
 
+        }) exercise {
+            waitForTest { exampleTest() }
+        } verify {
             assertEquals(
                     expected = listOf(
                             Call.ExerciseStart,
@@ -342,49 +315,52 @@ class AsyncMintsTest {
                             Call.TeardownStart,
                             Call.TeardownFinish
                     ),
-                    actual = reporter.calls
+                    actual = calls
             )
         }
 
         @Test
-        fun exerciseStartWillLogContext() = testAsync {
-            val reporter = object : MintReporter {
-                var exerciseStartPayload: Any? = null
+        fun exerciseStartWillLogContext() = asyncSetup(object : AsyncMintDispatcher {
+            var exerciseStartPayload: Any? = null
+            override val reporter = object : MintReporter {
                 override fun exerciseStart(context: Any) {
                     exerciseStartPayload = context
                 }
             }
-
             val expectedObject = object {}
 
-            object : AsyncMintDispatcher {
-                override val reporter = reporter
-            }.run {
-                waitForTest { setupAsync2(expectedObject) exercise { } verify {} }
-            }
+            fun simpleTest() = asyncSetup(expectedObject) exercise { } verify {}
 
-            assertEquals(expectedObject, reporter.exerciseStartPayload)
+        }) exercise {
+            waitForTest { simpleTest() }
+        } verify {
+            assertEquals(expectedObject, exerciseStartPayload)
         }
 
         @Test
-        fun verifyStartWillLogThePayload() = testAsync {
-            val reporter = object : MintReporter {
-                var verifyStartPayload: Any? = null
+        fun verifyStartWillLogThePayload() = asyncSetup(object : AsyncMintDispatcher {
+            var verifyStartPayload: Any? = null
+
+            override val reporter = object : MintReporter {
                 override fun verifyStart(payload: Any?) {
                     verifyStartPayload = payload
                 }
             }
+            val expectedResult = object {}
+            fun simpleTest() = asyncSetup(object {}) exercise { expectedResult } verify {}
 
-            val expectedObject = object {}
-
-            object : AsyncMintDispatcher {
-                override val reporter = reporter
-            }.run {
-                waitForTest { setupAsync2(object {}) exercise { expectedObject } verify {} }
-            }
-
-            assertEquals(expectedObject, reporter.verifyStartPayload)
+        }) exercise {
+            waitForTest { simpleTest() }
+        } verify {
+            assertEquals(expectedResult, verifyStartPayload)
         }
     }
 
+}
+
+suspend fun captureException(work: suspend () -> Unit) = try {
+    work()
+    null
+} catch (expectedFailure: Throwable) {
+    expectedFailure
 }

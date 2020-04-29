@@ -6,14 +6,14 @@ import com.zegreatrob.testmints.report.ReporterProvider
 interface AsyncMintDispatcher : SetupSyntax
 
 interface SetupSyntax : ReporterProvider {
-    fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
+    fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
             { context },
             context.chooseTestScope(),
             additionalActions,
             reporter
     )
 
-    fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = Setup(
+    fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = Setup(
             contextProvider,
             mintScope(),
             additionalActions,
@@ -25,10 +25,10 @@ interface SetupSyntax : ReporterProvider {
 }
 
 fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
-        .setupAsync2(context, additionalActions)
+        .asyncSetup(context, additionalActions)
 
 fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
-        .setupAsync2(contextProvider, additionalActions)
+        .asyncSetup(contextProvider, additionalActions)
 
 @Deprecated("Ready to promote this use case to normal. Please transition to setupAsync.",
         ReplaceWith("asyncSetup(context, additionalActions)"))
