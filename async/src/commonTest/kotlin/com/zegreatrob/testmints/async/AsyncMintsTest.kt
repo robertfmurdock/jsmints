@@ -7,10 +7,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
-class Async2Test {
+class AsyncMintsTest {
 
     @Test
-    fun example() = setupAsync2(object {
+    fun example() = asyncSetup(object {
         val thing = 1
     }) exercise {
         thing + 1
@@ -19,7 +19,7 @@ class Async2Test {
     }
 
     @Test
-    fun willFailVerifyCorrectly() = setupAsync2(object {
+    fun willFailVerifyCorrectly() = asyncSetup(object {
         val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
     }) exercise {
         try {
@@ -33,7 +33,7 @@ class Async2Test {
     }
 
     private suspend fun testThatFailsDuringVerify(assertionError: AssertionError) = waitForTest {
-        setupAsync2(object {
+        asyncSetup(object {
         }) exercise {
         } verify {
             throw assertionError
@@ -41,7 +41,7 @@ class Async2Test {
     }
 
     @Test
-    fun willFailExerciseCorrectly() = setupAsync2(object {
+    fun willFailExerciseCorrectly() = asyncSetup(object {
         val assertionError = AssertionError("ExpectedAssertion ${Random.nextInt()}")
     }) exercise {
         try {
@@ -55,7 +55,7 @@ class Async2Test {
     }
 
     private suspend fun testThatFailsDuringExercise(assertionError: AssertionError) = waitForTest {
-        setupAsync2(object {
+        asyncSetup(object {
         }) exercise {
             throw assertionError
         } verify {
@@ -63,7 +63,7 @@ class Async2Test {
     }
 
     @Test
-    fun willSupportDeferredInExercise() = setupAsync2(object {
+    fun willSupportDeferredInExercise() = asyncSetup(object {
         val expected = Random.nextInt()
         val asyncGuy = object {
             fun doThingAsync() = CompletableDeferred(expected)
@@ -75,7 +75,7 @@ class Async2Test {
     }
 
     @Test
-    fun willSupportSuspendInExercise() = setupAsync2(object {
+    fun willSupportSuspendInExercise() = asyncSetup(object {
         val expected = Random.nextInt()
         val asyncGuy = object {
             suspend fun doThingAsync() = CompletableDeferred(expected).await()
@@ -87,7 +87,7 @@ class Async2Test {
     }
 
     @Test
-    fun willSupportDeferredInVerify() = setupAsync2(object {
+    fun willSupportDeferredInVerify() = asyncSetup(object {
         val expected = Random.nextInt()
     }) exercise {
         object {
@@ -99,7 +99,7 @@ class Async2Test {
     }
 
     @Test
-    fun willSupportSuspendInVerify() = setupAsync2(object {
+    fun willSupportSuspendInVerify() = asyncSetup(object {
         val expected = Random.nextInt()
     }) exercise {
         object {
@@ -111,7 +111,7 @@ class Async2Test {
     }
 
     @Test
-    fun willSupportSuspendObjectInitializationWhichIsUsefulForHelperMethods() = setupAsync2({
+    fun willSupportSuspendObjectInitializationWhichIsUsefulForHelperMethods() = asyncSetup({
         val asyncProducedValue = CompletableDeferred(Random.nextInt()).await()
         object {
             val asyncProducedValue = asyncProducedValue
@@ -123,7 +123,7 @@ class Async2Test {
     }
 
     @Test
-    fun willSupportAfterObjectAsyncSetup() = setupAsync2(object {
+    fun willSupportAfterObjectAsyncSetup() = asyncSetup(object {
         val coolString = "${Random.nextDouble()}"
         var list = mutableListOf<String>()
     }) {
@@ -137,7 +137,7 @@ class Async2Test {
 
     @Test
     fun canProvideScopeUsingScopeMintSetupScopeWillCompleteBeforeExercise() = eventLoopProtect {
-        setupAsync2(object : ScopeMint() {
+        asyncSetup(object : ScopeMint() {
             val expectedValue = Random.nextInt()
             val asyncProducedValue = setupScope.async { delay(40); expectedValue }
         }) exercise {
@@ -149,7 +149,7 @@ class Async2Test {
     }
 
     @Test
-    fun canProvideScopeUsingScopeMintExerciseScopeWillCompleteBeforeVerify() = setupAsync2(object : ScopeMint() {
+    fun canProvideScopeUsingScopeMintExerciseScopeWillCompleteBeforeVerify() = asyncSetup(object : ScopeMint() {
         val expectedValue = Random.nextInt()
     }) exercise {
         exerciseScope.async { delay(40); expectedValue }
@@ -159,7 +159,7 @@ class Async2Test {
     }
 
     @Test
-    fun canMakeScopeInExerciseThatWillCompleteBeforeVerify() = setupAsync2(object : ScopeMint() {
+    fun canMakeScopeInExerciseThatWillCompleteBeforeVerify() = asyncSetup(object : ScopeMint() {
         val expectedValue = Random.nextInt()
     }) exercise {
         coroutineScope {

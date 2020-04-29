@@ -16,35 +16,30 @@ class TestStyleAsyncTest {
         private fun Int.plusOne() = this + 1
 
         @Test
-        fun simpleCase() = testAsync {
-            setupAsync(object {
-                val input: Int = Random.nextInt()
-                val expected = input + 1
-            }) exerciseAsync {
-                input.plusOne()
-            } verifyAsync { result ->
-                assertEquals(expected, result)
-            }
+        fun simpleCase() = asyncSetup(object {
+            val input: Int = Random.nextInt()
+            val expected = input + 1
+        }) exercise {
+            input.plusOne()
+        } verify { result ->
+            assertEquals(expected, result)
         }
 
         @Test
-        fun caseWithAsyncInsideTheSetupClosure() = testAsync {
-            setupAsync(object {
-                val input: Int = Random.nextInt()
-                val expected = input + 1
-                var databaseSetupCounter = 0
-            }) {
-                withContext(Dispatchers.Default) {
-                    delay(4)
-                    databaseSetupCounter++
-                }
-            } exerciseAsync {
-                input + databaseSetupCounter
-            } verifyAsync { result ->
-                assertEquals(expected, result)
+        fun caseWithAsyncInsideTheSetupClosure() = asyncSetup(object {
+            val input: Int = Random.nextInt()
+            val expected = input + 1
+            var databaseSetupCounter = 0
+        }) {
+            withContext(Dispatchers.Default) {
+                delay(4)
+                databaseSetupCounter++
             }
+        } exercise {
+            input + databaseSetupCounter
+        } verify { result ->
+            assertEquals(expected, result)
         }
-
     }
 
     class Features {
@@ -52,13 +47,9 @@ class TestStyleAsyncTest {
         fun canFailAsync() = testAsync {
             try {
                 waitForTest {
-                    testAsync {
-                        val exercisedContext = setupAsync(object {
-                        }) exerciseAsync {
-                        }
-
-                        exercisedContext.verifyAsync<Nothing> { fail("LOL") }
-                    }
+                    asyncSetup<Any>(object {
+                    }) exercise {
+                    } verify { fail("LOL") }
                 }
             } catch (expectedFailure: AssertionError) {
                 assertEquals("LOL", expectedFailure.message)
@@ -69,16 +60,12 @@ class TestStyleAsyncTest {
         fun canFailAsyncWithCoroutine() = testAsync {
             try {
                 waitForTest {
-                    testAsync {
-                        val exercisedContext = setupAsync(object {
-                        }) exerciseAsync {
-                        }
-
-                        exercisedContext.verifyAsync<Nothing> {
-                            withContext(Dispatchers.Default) {
-                                delay(3)
-                                fail("LOL")
-                            }
+                    asyncSetup<Any>(object {
+                    }) exercise {
+                    } verify {
+                        withContext<Nothing>(Dispatchers.Default) {
+                            delay(3)
+                            fail("LOL")
                         }
                     }
                 }
@@ -91,12 +78,9 @@ class TestStyleAsyncTest {
         fun verifyShouldThrowErrorWhenFailureOccurs() = testAsync {
             try {
                 waitForTest {
-                    testAsync {
-                        val exercisedContext = setupAsync(object {
-                        }) exerciseAsync {
-                        }
-                        exercisedContext.verifyAsync<Nothing> { fail("LOL") }
-                    }
+                    asyncSetup<Any>(object {
+                    }) exercise {
+                    } verify { fail("LOL") }
                 }
             } catch (expectedFailure: AssertionError) {
                 assertEquals("LOL", expectedFailure.message)
@@ -108,14 +92,12 @@ class TestStyleAsyncTest {
             val expectedValue: Int? = Random.nextInt()
             var actualValue: Int? = null
             waitForTest {
-                testAsync {
-                    setupAsync(object {
-                        @Suppress("UnnecessaryVariable")
-                        val value = expectedValue
-                    }) exerciseAsync {
-                        actualValue = value
-                    }
-                }
+                asyncSetup(object {
+                    @Suppress("UnnecessaryVariable")
+                    val value = expectedValue
+                }) exercise {
+                    actualValue = value
+                } verify {}
             }
 
             assertEquals(expectedValue, actualValue)
@@ -143,14 +125,12 @@ class TestStyleAsyncTest {
             val expectedValue: Int? = Random.nextInt()
             var actualValue: Int? = null
             waitForTest {
-                testAsync {
-                    setupAsync(object {
-                        @Suppress("UnnecessaryVariable")
-                        val value = expectedValue
-                    }) exerciseAsync {
-                    } verifyAsync {
-                        actualValue = value
-                    }
+                asyncSetup(object {
+                    @Suppress("UnnecessaryVariable")
+                    val value = expectedValue
+                }) exercise {
+                } verify {
+                    actualValue = value
                 }
             }
             assertEquals(expectedValue, actualValue)

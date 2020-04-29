@@ -1,6 +1,7 @@
 package com.zegreatrob.testmints.async
 
-import com.zegreatrob.testmints.report.MintReporter
+import com.zegreatrob.testmints.report.MintReporterConfig
+import com.zegreatrob.testmints.report.ReporterProvider
 
 interface AsyncMintDispatcher : SetupSyntax
 
@@ -23,16 +24,19 @@ interface SetupSyntax : ReporterProvider {
 
 }
 
-fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
+fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
         .setupAsync2(context, additionalActions)
 
-fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
+fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
         .setupAsync2(contextProvider, additionalActions)
 
-interface ReporterProvider {
-    val reporter: MintReporter
-}
+@Deprecated("Ready to promote this use case to normal. Please transition to setupAsync.",
+        ReplaceWith("asyncSetup(context, additionalActions)"))
+fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = asyncSetup(context, additionalActions)
 
-object AsyncMints : AsyncMintDispatcher {
-    override var reporter: MintReporter = object : MintReporter {}
-}
+@Deprecated("Ready to promote this use case to normal. Please transition to setupAsync.",
+        ReplaceWith("asyncSetup(contextProvider, additionalActions)"))
+fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) =
+        asyncSetup(contextProvider, additionalActions)
+
+object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig

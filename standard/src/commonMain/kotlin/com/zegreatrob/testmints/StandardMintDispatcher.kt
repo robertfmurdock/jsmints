@@ -1,11 +1,10 @@
 package com.zegreatrob.testmints
 
 import com.zegreatrob.testmints.report.MintReporter
+import com.zegreatrob.testmints.report.ReporterProvider
 
 
-interface StandardMintDispatcher {
-
-    val reporter: MintReporter
+interface StandardMintDispatcher : ReporterProvider {
 
 // Vernacular based on http://xunitpatterns.com/Four%20Phase%20Test.html
 
