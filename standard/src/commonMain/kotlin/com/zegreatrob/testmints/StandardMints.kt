@@ -5,4 +5,4 @@ import com.zegreatrob.testmints.report.ReporterProvider
 
 object StandardMints : StandardMintDispatcher, ReporterProvider by MintReporterConfig
 
-fun <C : Any> setup(context: C) = StandardMints.setup(context)
+fun <C : Any> setup(context: C, additionalSetupActions: C.() -> Unit = {}) = StandardMints.setup(context, additionalSetupActions)

@@ -109,6 +109,35 @@ class TestMintsTest {
             assertEquals(expectedValue to expectedResult, valueCollector[0])
         }
 
+        @Test
+        fun whenFailureOccursInVerifyAndExceptionOccursInTeardownBothAreReported() = setup(object {
+            val verifyFailure = AssertionError("Got 'em")
+            val teardownException = Exception("Oh man, not good.")
+
+            fun failingTestThatExplodesInTeardown() = setup(object {}) exercise {
+            } verifyAnd { throw verifyFailure } teardown { throw teardownException }
+
+        }) exercise {
+            captureException { failingTestThatExplodesInTeardown() }
+        } verify { result ->
+            assertEquals(CompoundMintTestException(verifyFailure, teardownException), result)
+        }
+
+        @Test
+        fun whenExceptionOccursInSetupClosureWillNotRunExerciseOrTeardown() = setup(object {
+            val setupException = Exception("Oh man, not good.")
+            var exerciseOrVerifyTriggered = false
+
+            fun testThatExplodeInSetupClosure() = setup(Unit) {
+                throw setupException
+            } exercise { exerciseOrVerifyTriggered = true } verify { exerciseOrVerifyTriggered = true }
+
+        }) exercise {
+            captureException { testThatExplodeInSetupClosure() }
+        } verify { result ->
+            assertEquals(setupException, result)
+        }
+
         class ReporterFeatures {
 
             enum class Call {
