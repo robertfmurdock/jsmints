@@ -284,6 +284,25 @@ class AsyncMintsTest {
             assertEquals(expectedValue, result.await())
         }
 
+        @Test
+        fun tearDownShouldHaveAccessToScopeOfSetupObjectAndResult() = asyncSetup(object {
+            val expectedValue: Int = Random.nextInt()
+            val expectedResult: Int = Random.nextInt()
+            val valueCollector = mutableListOf<Pair<Int, Int>>()
+        }) exercise {
+            fun testThatSendsContextToTeardown() = asyncSetup(object {
+                val value = expectedValue
+            }) exercise {
+                expectedResult
+            } verifyAnd {
+            } teardown { result ->
+                valueCollector.add(value to result)
+            }
+
+            waitForTest { testThatSendsContextToTeardown() }
+        } verify {
+            assertEquals(expectedValue to expectedResult, valueCollector[0])
+        }
 
         @Test
         fun whenFailureOccursInVerifyAndExceptionOccursInTeardownBothAreReported() = asyncSetup(object {
