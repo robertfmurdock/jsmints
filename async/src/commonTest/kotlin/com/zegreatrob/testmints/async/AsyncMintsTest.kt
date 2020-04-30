@@ -1,5 +1,6 @@
 package com.zegreatrob.testmints.async
 
+import com.zegreatrob.testmints.CompoundMintTestException
 import com.zegreatrob.testmints.captureException
 import com.zegreatrob.testmints.report.MintReporter
 import kotlinx.coroutines.*
@@ -281,6 +282,42 @@ class AsyncMintsTest {
         } verify { result ->
             assertEquals(true, result.isCompleted)
             assertEquals(expectedValue, result.await())
+        }
+
+
+        @Test
+        fun whenFailureOccursInVerifyAndExceptionOccursInTeardownBothAreReported() = asyncSetup(object {
+            val verifyFailure = AssertionError("Got 'em")
+            val teardownException = Exception("Oh man, not good. ${Random.nextInt()}")
+
+            fun failingTestThatExplodesInTeardown() = asyncSetup(object {}) exercise {
+            } verifyAnd { throw verifyFailure } teardown { throw teardownException }
+
+        }) exercise {
+            captureException { waitForTest { failingTestThatExplodesInTeardown() } }
+        } verify { result ->
+            when (result) {
+                is CompoundMintTestException -> {
+                    assertEquals(verifyFailure.message, result.failure.message)
+                    assertEquals(teardownException.message, result.exception.message)
+                }
+                else -> fail("was not correct exception type.")
+            }
+        }
+
+        @Test
+        fun whenExceptionOccursInSetupClosureWillNotRunExerciseOrTeardown() = asyncSetup(object {
+            val setupException = Exception("Oh man, not good. ${Random.nextInt()}")
+            var exerciseOrVerifyTriggered = false
+
+            fun testThatExplodeInSetupClosure() = asyncSetup(Unit) {
+                throw setupException
+            } exercise { exerciseOrVerifyTriggered = true } verify { exerciseOrVerifyTriggered = true }
+
+        }) exercise {
+            captureException { waitForTest { testThatExplodeInSetupClosure() } }
+        } verify { result ->
+            assertEquals(setupException.message, result?.message)
         }
 
     }
