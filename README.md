@@ -114,13 +114,13 @@ You'll probably have to play with it a bit to get the hang of it, but give it a 
 Be warned: when using the async mints, you *MUST* use the form:
 
     @Test
-    fun plusOne() = asyncSetup 
+    fun plusOne() = asyncSetup ...
     
 and not 
     
     @Test
     fun plusOne() { 
-       asyncSetup    
+       asyncSetup ...
     } 
 
 In order to write tests safely on all platforms... especially Javascript.
