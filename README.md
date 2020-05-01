@@ -48,7 +48,7 @@ This works alright, but the comments are a little smelly. Some people might simp
 
 As tests get more complex, this can be confusing, and programmers reading the test may find it difficult to identify what is exactly being tested. And if they can't figure the structure of the test out correctly, it'll be more difficult for them to maintain and understand the original intent behind the test as things change.
 
-Lets chew on the standard mints and see what we can do!
+Let's chew on the standard mints and see what we can do!
 
     @Test
     fun plusOne() = setup(object {
@@ -66,6 +66,50 @@ By using this style, we've retained all the benefits of the comments, and formal
 
 If you're an IntelliJ user (like me), you can download live templates for setting up these tests faster [here](https://github.com/robertfmurdock/testmints/raw/master/templates/IdeaLiveTemplates.zip).
 After you download the file, you can import it using File | Import Settings. If you don't see import settings, you're probably sharing your IDE settings and you'll have to disable sync for a moment in order to do the import.
+
+## Async
+
+For tests that use Kotlin's coroutine system, the regular mints won't work - for those you'll need the alternate module: com.zegreatrob.testmints:async
+
+    @Test
+    fun plusOne() = asyncSetup(object {
+        val input: Int = Random.nextInt()
+        val expected = input + 1
+    }) exercise {
+        input.suspendPlusOne() // suspend functions call be called in the all closures
+    } verify { result ->
+        assertEquals(expected, result)
+    }
+
+In all test closures, suspend functionality can be used. All jobs started in the exercise lambda will end before the verify lambda starts.
+
+If you want access to any of the involved scopes (there is a test scope, a setup scope, and an exercise scope), you can add a ScopeMint to your context object:
+
+    @Test
+    fun plusOne() = asyncSetup(object : ScopeMint() {
+        val input: Int = Random.nextInt()
+        val testTarget = TestTarget(exerciseScope)
+    }) exercise {
+        testTarget.spawnWorkOnExerciseScope()
+    } verify { 
+        assertEquals(true, testTarget.workComplete)
+    }
+
+You'll probably have to play with it a bit to get the hang of it, but give it a shot. So long as you can inject the "exercise scope" into your test target, you won't have to add waits for the work to be done.
+
+Be warned: when using the async mints, you *MUST* use the form:
+
+    @Test
+    fun plusOne() = asyncSetup 
+    
+and not 
+    
+    @Test
+    fun plusOne() { 
+       asyncSetup    
+    } 
+
+In order to write tests safely on all platforms... especially Javascript.
 
 ## Acknowledgements
 
