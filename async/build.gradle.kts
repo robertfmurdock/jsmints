@@ -39,7 +39,7 @@ kotlin {
         val nativeCommonMain by creating {
             dependsOn(commonMain)
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.6")
             }
         }
 
@@ -51,7 +51,7 @@ kotlin {
             dependencies {
                 dependsOn(commonMain)
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.6")
             }
         }
 
