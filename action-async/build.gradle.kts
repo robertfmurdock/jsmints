@@ -58,7 +58,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.3.72")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.7")
-                implementation("io.github.microutils:kotlin-logging-js:1.7.9")
+                implementation("io.github.microutils:kotlin-logging-js:1.7.10")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
         }
