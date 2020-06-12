@@ -339,6 +339,81 @@ class AsyncMintsTest {
             assertEquals(setupException.message, result?.message)
         }
 
+        class TestTemplates {
+            enum class Steps {
+                TemplateSetup, TemplateTeardown, Setup, Exercise, Verify, Teardown
+            }
+
+            private val correctOrder = listOf(
+                    Steps.TemplateSetup,
+                    Steps.Setup,
+                    Steps.Exercise,
+                    Steps.Verify,
+                    Steps.Teardown,
+                    Steps.TemplateTeardown
+            )
+
+            @Test
+            fun whenTestSucceedsSharedSetupAndSharedTeardownRunInCorrectOrder() = asyncSetup(object {
+                val calls = mutableListOf<Steps>()
+                val customSetup = asyncTestTemplate(
+                        sharedSetup = { calls.add(Steps.TemplateSetup) },
+                        sharedTeardown = { calls.add(Steps.TemplateTeardown) }
+                )
+
+                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verifyAnd { calls.add(Steps.Verify) }
+                        .teardown { calls.add(Steps.Teardown) }
+
+            }) exercise {
+                waitForTest { testThatSucceeds() }
+            } verify {
+                assertEquals(correctOrder, calls)
+            }
+
+            @Test
+            fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = asyncSetup(object {
+                val calls = mutableListOf<Steps>()
+                val customSetup = asyncTestTemplate(
+                        sharedSetup = { calls.add(Steps.TemplateSetup) },
+                        sharedTeardown = { calls.add(Steps.TemplateTeardown) }
+                )
+
+                fun testThatFails() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verifyAnd { calls.add(Steps.Verify); fail("This test fails.") }
+                        .teardown { calls.add(Steps.Teardown) }
+
+            }) exercise {
+                captureException { waitForTest {testThatFails() }}
+            } verify {
+                assertEquals(correctOrder, calls)
+            }
+
+            @Test
+            fun whenExceptionOccursInTeardownAndInTemplateTeardownBothAreReported() = asyncSetup(object {
+                val teardownException = Exception("Oh man, not good.")
+                val templateTeardownException = Exception("Now we're really off-road")
+                val customSetup = asyncTestTemplate(
+                        sharedSetup = {}, sharedTeardown = { throw templateTeardownException }
+                )
+
+                fun failingTestThatExplodesInTeardown() = customSetup(object {}) exercise {} verifyAnd {
+                } teardown { throw teardownException }
+
+            }) exercise {
+                captureException { waitForTest {failingTestThatExplodesInTeardown() } }
+            } verify { result ->
+                val expected = CompoundMintTestException(mapOf(
+                        "Teardown exception" to teardownException,
+                        "Template teardown exception" to templateTeardownException)
+                )
+                assertEquals(expected, result)
+            }
+
+        }
+
     }
 
     class ReporterFeatures {

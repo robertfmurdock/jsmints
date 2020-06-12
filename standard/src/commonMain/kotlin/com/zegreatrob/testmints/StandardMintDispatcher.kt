@@ -8,15 +8,23 @@ interface StandardMintDispatcher : ReporterProvider {
 
 // Vernacular based on http://xunitpatterns.com/Four%20Phase%20Test.html
 
-    fun <C : Any> setup(context: C, additionalSetupActions: C.() -> Unit = {}) = Setup(context, reporter, additionalSetupActions)
+    fun <C : Any> setup(context: C, additionalSetupActions: C.() -> Unit = {}) = Setup(
+            context, reporter, additionalSetupActions
+    )
 
-    fun testTemplate(sharedSetup: () -> Unit, sharedTeardown: () -> Unit) = TestTemplate(sharedSetup, sharedTeardown)
+    fun testTemplate(sharedSetup: () -> Unit, sharedTeardown: () -> Unit) = TestTemplate(
+            sharedSetup, sharedTeardown, reporter
+    )
 
 }
 
-class TestTemplate(private val templateSetup: () -> Unit, private val templateTeardown: () -> Unit) {
+class TestTemplate(
+        private val templateSetup: () -> Unit,
+        private val templateTeardown: () -> Unit,
+        val reporter: MintReporter
+) {
     operator fun <C : Any> invoke(context: C, additionalSetupActions: C.() -> Unit = {}) =
-            Setup(context, StandardMints.reporter, additionalSetupActions, templateSetup, templateTeardown)
+            Setup(context, reporter, additionalSetupActions, templateSetup, templateTeardown)
 }
 
 class Setup<C : Any>(

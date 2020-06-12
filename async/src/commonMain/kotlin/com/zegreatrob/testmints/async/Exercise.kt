@@ -10,10 +10,12 @@ class Exercise<C : Any, R>(
         private val reporter: MintReporter,
         private val contextProvider: suspend () -> C,
         private val additionalSetupActions: suspend C.() -> Unit,
-        private val exerciseFunc: suspend C.() -> R
+        private val exerciseFunc: suspend C.() -> R,
+        private val templateSetup: suspend () -> Unit = {},
+        private val templateTeardown: suspend () -> Unit = {}
 ) {
 
-    private val contextDeferred = scope.async(start = CoroutineStart.LAZY) { contextProvider() }
+    private val contextDeferred = scope.async(start = CoroutineStart.LAZY) { templateSetup();contextProvider() }
 
     private val exerciseDeferred = scope.async(start = CoroutineStart.LAZY) {
         val context = contextDeferred.await()
@@ -53,7 +55,7 @@ class Exercise<C : Any, R>(
 
     infix fun <R2> verifyAnd(assertionFunctions: suspend C.(R) -> R2): Verify<C, R> {
         val verifyDeferred = doVerifyAsync(assertionFunctions)
-        return Verify(reporter, verifyDeferred, scope, contextDeferred, exerciseDeferred)
+        return Verify(reporter, verifyDeferred, scope, contextDeferred, exerciseDeferred, templateTeardown)
     }
 
 }
@@ -65,7 +67,8 @@ class Verify<C, R>(
         private val deferred: Deferred<Unit>,
         private val scope: CoroutineScope,
         private val contextDeferred: Deferred<C>,
-        private val exerciseDeferred: Deferred<R>
+        private val exerciseDeferred: Deferred<R>,
+        private val templateTeardown: suspend () -> Unit
 ) {
 
     infix fun teardown(function: suspend C.(R) -> Unit) = finalTransform {
@@ -85,17 +88,43 @@ class Verify<C, R>(
         } catch (exception: Throwable) {
             exception
         }
+
+        val templateTeardownException = catchingTemplateTeardown()
         reporter.teardownFinish()
-        handleTeardownExceptions(failure, teardownException)
+        handleTeardownExceptions(failure, teardownException, templateTeardownException)
     }
 
-    private fun handleTeardownExceptions(failure: Throwable?, teardownException: Throwable?) = when {
-        failure != null && teardownException != null -> throw CompoundMintTestException(
-                mapOf("Failure" to failure,
-                        "Teardown exception" to teardownException))
-        failure != null -> throw failure
-        teardownException != null -> throw teardownException
-        else -> Unit
+    private suspend fun catchingTemplateTeardown() = captureException { templateTeardown() }
+
+    private fun handleTeardownExceptions(
+            failure: Throwable?,
+            teardownException: Throwable?,
+            templateTeardownException: Throwable?
+    ) {
+        val problems = exceptionDescriptionMap(failure, teardownException, templateTeardownException)
+
+        if (problems.size == 1) {
+            throw problems.values.first()
+        } else if (problems.isNotEmpty()) {
+            throw CompoundMintTestException(problems)
+        }
     }
 
+    private fun exceptionDescriptionMap(
+            failure: Throwable?,
+            teardownException: Throwable?,
+            templateTeardownException: Throwable?
+    ) = descriptionMap(failure, teardownException, templateTeardownException)
+            .mapNotNull { (descriptor, exception) -> exception?.let { descriptor to exception } }
+            .toMap()
+
+    private fun descriptionMap(
+            failure: Throwable?,
+            teardownException: Throwable?,
+            templateTeardownException: Throwable?
+    ) = mapOf(
+            "Failure" to failure,
+            "Teardown exception" to teardownException,
+            "Template teardown exception" to templateTeardownException
+    )
 }

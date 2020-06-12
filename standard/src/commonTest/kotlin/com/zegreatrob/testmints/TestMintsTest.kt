@@ -147,7 +147,7 @@ class TestMintsTest {
                 BeforeAll, AfterAll, Setup, Exercise, Verify, Teardown
             }
 
-            val correctOrder = listOf(
+            private val correctOrder = listOf(
                     Steps.BeforeAll,
                     Steps.Setup,
                     Steps.Exercise,
