@@ -11,7 +11,7 @@
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
-    <bytecodeTargetLevel target="11">
+    <bytecodeTargetLevel target="14">
       <module name="com.zegreatrob.testmints.buildSrc.main" target="1.8" />
       <module name="com.zegreatrob.testmints.buildSrc.test" target="1.8" />
       <module name="com.zegreatrob.testmints.mintreport.jvmMain" target="1.6" />
@@ -21,11 +21,7 @@
       <module name="testmints.action.jvmMain~1" target="1.8" />
       <module name="testmints.action.jvmTest~1" target="1.8" />
       <module name="testmints.async-js" target="11" />
-      <module name="testmints.async.jvmMain" target="1.6" />
-      <module name="testmints.async.jvmTest" target="1.6" />
       <module name="testmints.mintreport" target="11" />
-      <module name="testmints.standard.jvmMain" target="1.6" />
-      <module name="testmints.standard.jvmTest" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>

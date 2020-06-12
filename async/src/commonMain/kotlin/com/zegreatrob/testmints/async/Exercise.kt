@@ -90,7 +90,9 @@ class Verify<C, R>(
     }
 
     private fun handleTeardownExceptions(failure: Throwable?, teardownException: Throwable?) = when {
-        failure != null && teardownException != null -> throw CompoundMintTestException(failure, teardownException)
+        failure != null && teardownException != null -> throw CompoundMintTestException(
+                mapOf("Failure" to failure,
+                        "Teardown exception" to teardownException))
         failure != null -> throw failure
         teardownException != null -> throw teardownException
         else -> Unit

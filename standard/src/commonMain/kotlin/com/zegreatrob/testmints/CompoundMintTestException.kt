@@ -1,9 +1,10 @@
 package com.zegreatrob.testmints
 
-data class CompoundMintTestException(val failure: Throwable, val exception: Throwable) : Exception(
-        message(failure, exception), exception
+data class CompoundMintTestException(val exceptions: Map<String, Throwable>) : Exception(
+        message(exceptions), exceptions.values.first()
 )
 
-private fun message(failure: Throwable, exception: Throwable) = "Test failed and also threw exception during teardown.\n" +
-        "Failure was: ${failure.message}\n" +
-        "Teardown exception was: ${exception.message}"
+private fun message(failure: Map<String, Throwable>) = "Multiple exceptions occured.\n" +
+        failure.map { (describer, exception) ->
+            "$describer was: ${exception.message}\n"
+        }.joinToString()

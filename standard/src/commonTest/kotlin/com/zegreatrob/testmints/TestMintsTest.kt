@@ -95,6 +95,7 @@ class TestMintsTest {
             val expectedResult: Int = Random.nextInt()
             val valueCollector = mutableListOf<Pair<Int, Int>>()
         }) exercise {
+
             fun testThatSendsContextToTeardown() = setup(object {
                 val value = expectedValue
             }) exercise {
@@ -120,7 +121,9 @@ class TestMintsTest {
         }) exercise {
             captureException { failingTestThatExplodesInTeardown() }
         } verify { result ->
-            assertEquals(CompoundMintTestException(verifyFailure, teardownException), result)
+            assertEquals(CompoundMintTestException(mapOf(
+                    "Failure" to verifyFailure,
+                    "Teardown exception" to teardownException)), result)
         }
 
         @Test
@@ -136,6 +139,78 @@ class TestMintsTest {
             captureException { testThatExplodeInSetupClosure() }
         } verify { result ->
             assertEquals(setupException, result)
+        }
+
+
+        class TestTemplates {
+            enum class Steps {
+                BeforeAll, AfterAll, Setup, Exercise, Verify, Teardown
+            }
+
+            val correctOrder = listOf(
+                    Steps.BeforeAll,
+                    Steps.Setup,
+                    Steps.Exercise,
+                    Steps.Verify,
+                    Steps.Teardown,
+                    Steps.AfterAll
+            )
+
+            @Test
+            fun whenTestSucceedsSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
+                val calls = mutableListOf<Steps>()
+                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
+                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
+                val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
+
+                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verifyAnd { calls.add(Steps.Verify) }
+                        .teardown { calls.add(Steps.Teardown) }
+
+            }) exercise {
+                testThatSucceeds()
+            } verify {
+                assertEquals(correctOrder, calls)
+            }
+
+            @Test
+            fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
+                val calls = mutableListOf<Steps>()
+                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
+                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
+                val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
+
+                fun testThatFails() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verifyAnd { calls.add(Steps.Verify); fail("This test fails.") }
+                        .teardown { calls.add(Steps.Teardown) }
+
+            }) exercise {
+                captureException { testThatFails() }
+            } verify {
+                assertEquals(correctOrder, calls)
+            }
+
+            @Test
+            fun whenExceptionOccursInTeardownAndInTemplateTeardownBothAreReported() = setup(object {
+                val teardownException = Exception("Oh man, not good.")
+                val templateTeardownException = Exception("Now we're really off-road")
+                val customSetup = testTemplate(sharedSetup = {}, sharedTeardown = { throw templateTeardownException })
+
+                fun failingTestThatExplodesInTeardown() = customSetup(object {}) exercise {} verifyAnd {
+                } teardown { throw teardownException }
+
+            }) exercise {
+                captureException { failingTestThatExplodesInTeardown() }
+            } verify { result ->
+                val expected = CompoundMintTestException(mapOf(
+                        "Teardown exception" to teardownException,
+                        "Template teardown exception" to templateTeardownException)
+                )
+                assertEquals(expected, result)
+            }
+
         }
 
         class ReporterFeatures {

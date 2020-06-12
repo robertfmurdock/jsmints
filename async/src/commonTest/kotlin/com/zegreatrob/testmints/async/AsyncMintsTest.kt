@@ -317,8 +317,8 @@ class AsyncMintsTest {
         } verify { result ->
             when (result) {
                 is CompoundMintTestException -> {
-                    assertEquals(verifyFailure.message, result.failure.message)
-                    assertEquals(teardownException.message, result.exception.message)
+                    assertEquals(verifyFailure.message, result.exceptions["Failure"]?.message)
+                    assertEquals(teardownException.message, result.exceptions["Teardown exception"]?.message)
                 }
                 else -> fail("was not correct exception type.")
             }
