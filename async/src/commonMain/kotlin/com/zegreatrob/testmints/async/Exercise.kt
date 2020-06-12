@@ -37,8 +37,14 @@ class Exercise<C : Any, R>(
     }
 
     infix fun <R2> verify(assertionFunctions: suspend C.(R) -> R2) = finalTransform {
-        doVerifyAsync(assertionFunctions).apply {
-            invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
+        doVerifyAsync(assertionFunctions)
+                .apply {
+            invokeOnCompletion { cause ->
+                scope.launch {
+                    captureException{ templateTeardown() }
+                    scope.cancel(cause?.wrapCause())
+                }
+            }
         }
     }
 

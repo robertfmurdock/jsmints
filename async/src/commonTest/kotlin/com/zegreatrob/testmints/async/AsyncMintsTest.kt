@@ -3,6 +3,8 @@ package com.zegreatrob.testmints.async
 import com.zegreatrob.testmints.CompoundMintTestException
 import com.zegreatrob.testmints.captureException
 import com.zegreatrob.testmints.report.MintReporter
+import com.zegreatrob.testmints.setup
+import com.zegreatrob.testmints.testTemplate
 import kotlinx.coroutines.*
 import kotlin.random.Random
 import kotlin.test.Test
@@ -371,6 +373,25 @@ class AsyncMintsTest {
             } verify {
                 assertEquals(correctOrder, calls)
             }
+
+            @Test
+            fun whenTestSucceedsEndingWithVerifySharedSetupAndSharedTeardownRunInCorrectOrder() = asyncSetup(object {
+                val calls = mutableListOf<Steps>()
+                val customSetup = asyncTestTemplate(
+                        sharedSetup = { calls.add(Steps.TemplateSetup) },
+                        sharedTeardown = { calls.add(Steps.TemplateTeardown) }
+                )
+
+                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verify { calls.add(Steps.Verify) }
+
+            }) exercise {
+                waitForTest { testThatSucceeds() }
+            } verify {
+                assertEquals(correctOrder - Steps.Teardown, calls)
+            }
+
 
             @Test
             fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = asyncSetup(object {
