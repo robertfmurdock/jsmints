@@ -157,7 +157,7 @@ class TestMintsTest {
             )
 
             @Test
-            fun whenTestSucceedsSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
+            fun whenTestSucceedsIncludingTeardownSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
                 fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
                 fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
@@ -172,6 +172,23 @@ class TestMintsTest {
                 testThatSucceeds()
             } verify {
                 assertEquals(correctOrder, calls)
+            }
+
+            @Test
+            fun whenTestSucceedsEndingWithVerifySharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
+                val calls = mutableListOf<Steps>()
+                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
+                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
+                val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
+
+                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verify { calls.add(Steps.Verify) }
+
+            }) exercise {
+                testThatSucceeds()
+            } verify {
+                assertEquals(correctOrder - Steps.Teardown, calls)
             }
 
             @Test

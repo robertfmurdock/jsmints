@@ -50,6 +50,7 @@ class Exercise<C, R>(
         private val templateTeardown: () -> Unit = {}
 ) {
     infix fun <R2> verify(assertionFunctions: C.(R) -> R2) = doVerify(assertionFunctions)
+            .also { templateTeardown() }
             .let { if (it != null) throw it else Unit }
 
     private fun <R2> doVerify(assertionFunctions: C.(R) -> R2) = context
