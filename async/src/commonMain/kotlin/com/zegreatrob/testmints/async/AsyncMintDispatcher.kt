@@ -71,7 +71,7 @@ class TestTemplate(
                     templateTeardown
             )
 
-    fun extend(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) = TestTemplate(
+    fun extend(sharedSetup: suspend () -> Unit = {}, sharedTeardown: suspend () -> Unit = {}) = TestTemplate(
             templateSetup = { templateSetup(); sharedSetup() },
             templateTeardown = { sharedTeardown(); templateTeardown() },
             reporter = reporter
