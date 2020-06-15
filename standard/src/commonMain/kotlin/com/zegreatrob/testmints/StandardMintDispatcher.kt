@@ -25,6 +25,12 @@ class TestTemplate(
 ) {
     operator fun <C : Any> invoke(context: C, additionalSetupActions: C.() -> Unit = {}) =
             Setup(context, reporter, additionalSetupActions, templateSetup, templateTeardown)
+
+    fun testTemplate(sharedSetup: () -> Unit = {}, sharedTeardown: () -> Unit = {}) = TestTemplate(
+            templateSetup = { templateSetup(); sharedSetup() },
+            templateTeardown = { sharedTeardown(); templateTeardown() },
+            reporter = reporter
+    )
 }
 
 class Setup<C : Any>(

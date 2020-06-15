@@ -228,6 +228,23 @@ class TestMintsTest {
                 assertEquals(expected, result)
             }
 
+            @Test
+            fun testTemplateCanBeExtendedByCallingTestTemplateAgain() = setup(object {
+                val calls = mutableListOf<String>()
+                val customSetup = testTemplate(
+                        sharedSetup = {calls.add("setup")}, sharedTeardown = { calls.add("teardown") }
+                )
+
+                val bolsteredCustomSetup = customSetup.testTemplate(
+                        sharedSetup = {calls.add("inner setup")}, sharedTeardown = { calls.add("inner teardown") }
+                )
+
+                fun test() = bolsteredCustomSetup(object {}) exercise {} verify {}
+            }) exercise {
+                test()
+            } verify {
+                assertEquals(listOf("setup", "inner setup", "inner teardown", "teardown"), calls)
+            }
         }
 
         class ReporterFeatures {
