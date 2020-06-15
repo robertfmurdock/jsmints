@@ -3,8 +3,6 @@ package com.zegreatrob.testmints.async
 import com.zegreatrob.testmints.CompoundMintTestException
 import com.zegreatrob.testmints.captureException
 import com.zegreatrob.testmints.report.MintReporter
-import com.zegreatrob.testmints.setup
-import com.zegreatrob.testmints.testTemplate
 import kotlinx.coroutines.*
 import kotlin.random.Random
 import kotlin.test.Test
@@ -67,7 +65,7 @@ class AsyncMintsTest {
 
             fun testThatFailsWithCoroutine() = asyncSetup(Unit) exercise {
             } verify {
-                withContext<Nothing>(Dispatchers.Default) {
+                withContext<Unit>(Dispatchers.Default) {
                     delay(3)
                     fail("LOL")
                 }
@@ -392,6 +390,23 @@ class AsyncMintsTest {
                 assertEquals(correctOrder - Steps.Teardown, calls)
             }
 
+            @Test
+            fun testTemplateCanBeExtendedByCallingTestTemplateAgain() = asyncSetup(object {
+                val calls = mutableListOf<String>()
+                val customSetup = asyncTestTemplate(
+                        sharedSetup = { calls.add("setup") }, sharedTeardown = { calls.add("teardown") }
+                )
+
+                val bolsteredCustomSetup = customSetup.extend(
+                        sharedSetup = { calls.add("inner setup") }, sharedTeardown = { calls.add("inner teardown") }
+                )
+
+                fun test() = bolsteredCustomSetup(object {}) exercise {} verify {}
+            }) exercise {
+                waitForTest { test() }
+            } verify {
+                assertEquals(listOf("setup", "inner setup", "inner teardown", "teardown"), calls)
+            }
 
             @Test
             fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = asyncSetup(object {
@@ -407,7 +422,7 @@ class AsyncMintsTest {
                         .teardown { calls.add(Steps.Teardown) }
 
             }) exercise {
-                captureException { waitForTest {testThatFails() }}
+                captureException { waitForTest { testThatFails() } }
             } verify {
                 assertEquals(correctOrder, calls)
             }
@@ -424,7 +439,7 @@ class AsyncMintsTest {
                 } teardown { throw teardownException }
 
             }) exercise {
-                captureException { waitForTest {failingTestThatExplodesInTeardown() } }
+                captureException { waitForTest { failingTestThatExplodesInTeardown() } }
             } verify { result ->
                 val expected = CompoundMintTestException(mapOf(
                         "Teardown exception" to teardownException,

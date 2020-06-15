@@ -235,7 +235,7 @@ class TestMintsTest {
                         sharedSetup = {calls.add("setup")}, sharedTeardown = { calls.add("teardown") }
                 )
 
-                val bolsteredCustomSetup = customSetup.testTemplate(
+                val bolsteredCustomSetup = customSetup.extend(
                         sharedSetup = {calls.add("inner setup")}, sharedTeardown = { calls.add("inner teardown") }
                 )
 

@@ -21,12 +21,12 @@ interface StandardMintDispatcher : ReporterProvider {
 class TestTemplate(
         private val templateSetup: () -> Unit,
         private val templateTeardown: () -> Unit,
-        val reporter: MintReporter
+        private val reporter: MintReporter
 ) {
     operator fun <C : Any> invoke(context: C, additionalSetupActions: C.() -> Unit = {}) =
             Setup(context, reporter, additionalSetupActions, templateSetup, templateTeardown)
 
-    fun testTemplate(sharedSetup: () -> Unit = {}, sharedTeardown: () -> Unit = {}) = TestTemplate(
+    fun extend(sharedSetup: () -> Unit = {}, sharedTeardown: () -> Unit = {}) = TestTemplate(
             templateSetup = { templateSetup(); sharedSetup() },
             templateTeardown = { sharedTeardown(); templateTeardown() },
             reporter = reporter
