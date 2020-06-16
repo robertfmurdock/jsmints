@@ -245,6 +245,26 @@ class TestMintsTest {
             } verify {
                 assertEquals(listOf("setup", "inner setup", "inner teardown", "teardown"), calls)
             }
+
+            @Test
+            fun sharedSetupCanReturnContextThatWillBeProvidedToTheTeardown() = setup(object {
+                val int = Random.nextInt()
+                val callArguments = mutableListOf<Any>()
+                val customSetup = testTemplate(
+                        sharedSetup = { int },
+                        sharedTeardown = { it: Int -> callArguments.add(it) }
+                )
+
+                fun testThatSucceeds() = customSetup(object {}) { }
+                        .exercise { }
+                        .verify { }
+
+            }) exercise {
+                testThatSucceeds()
+            } verify {
+                assertEquals(listOf<Any>(int), callArguments)
+            }
+
         }
 
         class ReporterFeatures {

@@ -9,44 +9,45 @@ interface StandardMintDispatcher : ReporterProvider {
 // Vernacular based on http://xunitpatterns.com/Four%20Phase%20Test.html
 
     fun <C : Any> setup(context: C, additionalSetupActions: C.() -> Unit = {}) = Setup(
-            context, reporter, additionalSetupActions
+            context, reporter, additionalSetupActions, {}
     )
 
-    fun testTemplate(sharedSetup: () -> Unit, sharedTeardown: () -> Unit) = TestTemplate(
+    fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit) = TestTemplate(
             sharedSetup, sharedTeardown, reporter
     )
 
 }
 
-class TestTemplate(
-        private val templateSetup: () -> Unit,
-        private val templateTeardown: () -> Unit,
+class TestTemplate<SC : Any>(
+        private val templateSetup: () -> SC,
+        private val templateTeardown: (SC) -> Unit,
         private val reporter: MintReporter
 ) {
     operator fun <C : Any> invoke(context: C, additionalSetupActions: C.() -> Unit = {}) =
             Setup(context, reporter, additionalSetupActions, templateSetup, templateTeardown)
 
     fun extend(sharedSetup: () -> Unit = {}, sharedTeardown: () -> Unit = {}) = TestTemplate(
-            templateSetup = { templateSetup(); sharedSetup() },
-            templateTeardown = { sharedTeardown(); templateTeardown() },
+            templateSetup = { templateSetup().also { sharedSetup() } },
+            templateTeardown = { sharedTeardown(); templateTeardown(it) },
             reporter = reporter
     )
 }
 
-class Setup<C : Any>(
+class Setup<C : Any, SC : Any>(
         private val context: C,
         private val reporter: MintReporter,
         private val additionalSetupActions: C.() -> Unit,
-        private val templateSetup: () -> Unit = {},
-        private val templateTeardown: () -> Unit = {}
+        private val templateSetup: () -> SC,
+        private val templateTeardown: (SC) -> Unit = {}
 ) {
-    infix fun <R> exercise(codeUnderTest: C.() -> R) = context
-            .also { templateSetup() }
-            .also(additionalSetupActions)
-            .also { reporter.exerciseStart(context) }
-            .let { it.codeUnderTest() }
-            .let { Exercise(context, it, reporter, templateTeardown) }
-            .also { reporter.exerciseFinish() }
+    infix fun <R> exercise(codeUnderTest: C.() -> R): Exercise<C, R> {
+        val setupContext = templateSetup()
+        additionalSetupActions(context)
+        reporter.exerciseStart(context)
+        val result = codeUnderTest(context)
+        return Exercise(context, result, reporter, { templateTeardown(setupContext) })
+                .also { reporter.exerciseFinish() }
+    }
 }
 
 class Exercise<C, R>(

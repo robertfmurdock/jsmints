@@ -448,6 +448,25 @@ class AsyncMintsTest {
                 assertEquals(expected, result)
             }
 
+            @Test
+            fun sharedSetupCanReturnContextThatWillBeProvidedToTheTeardown() = asyncSetup(object {
+                val int = Random.nextInt()
+                val callArguments = mutableListOf<Any>()
+                val customSetup = asyncTestTemplate(
+                        sharedSetup = { int },
+                        sharedTeardown = { callArguments.add(it) }
+                )
+
+                fun testThatSucceeds() = customSetup(object {}) { }
+                        .exercise { }
+                        .verify { }
+
+            }) exercise {
+                waitForTest { testThatSucceeds() }
+            } verify {
+                assertEquals(listOf<Any>(int), callArguments)
+            }
+
         }
 
     }

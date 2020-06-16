@@ -11,17 +11,21 @@ interface SetupSyntax : ReporterProvider {
             { context },
             context.chooseTestScope(),
             additionalActions,
-            reporter
+            reporter,
+            {},
+            {}
     )
 
     fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = Setup(
-            contextProvider,
+            { contextProvider() },
             mintScope(),
             additionalActions,
-            reporter
+            reporter,
+            {},
+            {}
     )
 
-    fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) = TestTemplate(
+    fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit) = TestTemplate(
             sharedSetup, sharedTeardown, reporter
     )
 }
@@ -34,7 +38,7 @@ fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {
 fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
         .asyncSetup(contextProvider, additionalActions)
 
-fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) =
+fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit) =
         AsyncMints.asyncTestTemplate(sharedSetup, sharedTeardown)
 
 @Deprecated("Ready to promote this use case to normal. Please transition to setupAsync.",
@@ -48,9 +52,9 @@ fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: s
 
 object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig
 
-class TestTemplate(
-        private val templateSetup: suspend () -> Unit,
-        private val templateTeardown: suspend () -> Unit,
+class TestTemplate<SC : Any>(
+        private val templateSetup: suspend () -> SC,
+        private val templateTeardown: suspend (SC) -> Unit,
         private val reporter: MintReporter) {
     operator fun <C : Any> invoke(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
             { context },
@@ -61,7 +65,7 @@ class TestTemplate(
             templateTeardown
     )
 
-    operator fun <C : Any> invoke(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) =
+    operator fun <C : Any> invoke(contextProvider: suspend (SC) -> C, additionalActions: suspend C.() -> Unit = {}) =
             Setup(
                     contextProvider,
                     mintScope(),
@@ -71,10 +75,9 @@ class TestTemplate(
                     templateTeardown
             )
 
-    fun extend(sharedSetup: suspend () -> Unit = {}, sharedTeardown: suspend () -> Unit = {}) = TestTemplate(
-            templateSetup = { templateSetup(); sharedSetup() },
-            templateTeardown = { sharedTeardown(); templateTeardown() },
+    fun extend(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit = {}) = TestTemplate(
+            templateSetup = { templateSetup().also { sharedSetup() } },
+            templateTeardown = { sharedTeardown(); templateTeardown(it) },
             reporter = reporter
     )
-
 }

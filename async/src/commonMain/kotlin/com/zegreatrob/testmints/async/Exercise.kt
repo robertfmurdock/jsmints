@@ -5,17 +5,21 @@ import com.zegreatrob.testmints.captureException
 import com.zegreatrob.testmints.report.MintReporter
 import kotlinx.coroutines.*
 
-class Exercise<C : Any, R>(
+class Exercise<C : Any, R, SC : Any>(
         private val scope: CoroutineScope,
         private val reporter: MintReporter,
-        private val contextProvider: suspend () -> C,
+        private val contextProvider: suspend (SC) -> C,
         private val additionalSetupActions: suspend C.() -> Unit,
         private val exerciseFunc: suspend C.() -> R,
-        private val templateSetup: suspend () -> Unit = {},
-        private val templateTeardown: suspend () -> Unit = {}
+        private val templateSetup: suspend () -> SC,
+        private val templateTeardown: suspend (SC) -> Unit = {}
 ) {
 
-    private val contextDeferred = scope.async(start = CoroutineStart.LAZY) { templateSetup();contextProvider() }
+    private val sharedContextDeferred = scope.async(start = CoroutineStart.LAZY) { templateSetup() }
+
+    private val contextDeferred = scope.async(start = CoroutineStart.LAZY) {
+        contextProvider(sharedContextDeferred.await())
+    }
 
     private val exerciseDeferred = scope.async(start = CoroutineStart.LAZY) {
         val context = contextDeferred.await()
@@ -40,7 +44,7 @@ class Exercise<C : Any, R>(
         doVerifyAsync(assertionFunctions).apply {
             invokeOnCompletion { cause ->
                 scope.launch {
-                    captureException { templateTeardown() }
+                    captureException { templateTeardown(sharedContextDeferred.await()) }
                     scope.cancel(cause?.wrapCause())
                 }
             }
@@ -60,7 +64,9 @@ class Exercise<C : Any, R>(
 
     infix fun <R2> verifyAnd(assertionFunctions: suspend C.(R) -> R2): Verify<C, R> {
         val verifyDeferred = doVerifyAsync(assertionFunctions)
-        return Verify(reporter, verifyDeferred, scope, contextDeferred, exerciseDeferred, templateTeardown)
+        return Verify(reporter, verifyDeferred, scope, contextDeferred, exerciseDeferred) {
+            templateTeardown(sharedContextDeferred.await())
+        }
     }
 
 }
