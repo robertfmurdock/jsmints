@@ -60,27 +60,9 @@ fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: s
 object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig
 
 class TestTemplate<SC : Any>(
-        private val templateSetup: suspend () -> SC,
-        private val templateTeardown: suspend (SC) -> Unit,
-        private val reporter: MintReporter) {
-    operator fun <C : Any> invoke(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
-            { context },
-            context.chooseTestScope(),
-            additionalActions,
-            reporter,
-            templateSetup,
-            templateTeardown
-    )
-
-    operator fun <C : Any> invoke(contextProvider: suspend (SC) -> C, additionalActions: suspend C.() -> Unit = {}) =
-            Setup(
-                    contextProvider,
-                    mintScope(),
-                    additionalActions,
-                    reporter,
-                    templateSetup,
-                    templateTeardown
-            )
+        val templateSetup: suspend () -> SC,
+        val templateTeardown: suspend (SC) -> Unit,
+        val reporter: MintReporter) {
 
     fun extend(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit = {}) = TestTemplate(
             templateSetup = { templateSetup().also { sharedSetup() } },
@@ -97,3 +79,26 @@ operator fun <C : Any> TestTemplate<Unit>.invoke(
     invoke(unitSharedContextAdapter, additionalAction)
 }
 
+operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
+        context: C,
+        additionalActions: suspend C.() -> Unit = {}
+) = Setup(
+        { context },
+        context.chooseTestScope(),
+        additionalActions,
+        reporter,
+        templateSetup,
+        templateTeardown
+)
+
+operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
+        contextProvider: suspend (SC) -> C,
+        additionalActions: suspend C.() -> Unit = {}
+) = Setup(
+        contextProvider,
+        mintScope(),
+        additionalActions,
+        reporter,
+        templateSetup,
+        templateTeardown
+)
