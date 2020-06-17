@@ -74,9 +74,9 @@ class TestTemplate<SC : Any>(
 operator fun <C : Any> TestTemplate<Unit>.invoke(
         contextProvider: suspend () -> C,
         additionalAction: suspend C.() -> Unit = {}
-) {
+): Setup<C, Unit> {
     val unitSharedContextAdapter: suspend (Unit) -> C = { contextProvider() }
-    invoke(unitSharedContextAdapter, additionalAction)
+    return invoke(unitSharedContextAdapter, additionalAction)
 }
 
 operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
