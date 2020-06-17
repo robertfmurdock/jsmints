@@ -88,11 +88,13 @@ class TestTemplate<SC : Any>(
             reporter = reporter
     )
 
-    operator fun <C : Any> TestTemplate<Unit>.invoke(
-            contextProvider: suspend () -> C,
-            additionalAction: suspend C.() -> Unit = {}
-    ) {
-        val unitSharedContextAdapter: suspend (Unit) -> C = { contextProvider() }
-        invoke(unitSharedContextAdapter, additionalAction)
+    companion object {
+        operator fun <C : Any> TestTemplate<Unit>.invoke(
+                contextProvider: suspend () -> C,
+                additionalAction: suspend C.() -> Unit = {}
+        ) {
+            val unitSharedContextAdapter: suspend (Unit) -> C = { contextProvider() }
+            invoke(unitSharedContextAdapter, additionalAction)
+        }
     }
 }
