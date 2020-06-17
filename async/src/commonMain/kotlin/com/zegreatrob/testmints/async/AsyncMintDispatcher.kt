@@ -87,12 +87,12 @@ class TestTemplate<SC : Any>(
             templateTeardown = { sharedTeardown(); templateTeardown(it) },
             reporter = reporter
     )
-}
 
-operator fun <C : Any> TestTemplate<Unit>.invoke(
-        contextProvider: suspend () -> C,
-        additionalAction: suspend C.() -> Unit = {}
-) {
-    val unitSharedContextAdapter: suspend (Unit) -> C = { contextProvider() }
-    invoke(unitSharedContextAdapter, additionalAction)
+    operator fun <C : Any> TestTemplate<Unit>.invoke(
+            contextProvider: suspend () -> C,
+            additionalAction: suspend C.() -> Unit = {}
+    ) {
+        val unitSharedContextAdapter: suspend (Unit) -> C = { contextProvider() }
+        invoke(unitSharedContextAdapter, additionalAction)
+    }
 }
