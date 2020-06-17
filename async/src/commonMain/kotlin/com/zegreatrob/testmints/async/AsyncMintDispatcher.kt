@@ -41,6 +41,9 @@ fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: su
 fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit) =
         AsyncMints.asyncTestTemplate(sharedSetup, sharedTeardown)
 
+fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) =
+        AsyncMints.asyncTestTemplate(sharedSetup, { sharedTeardown() })
+
 @Deprecated("Ready to promote this use case to normal. Please transition to setupAsync.",
         ReplaceWith("asyncSetup(context, additionalActions)"))
 fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = asyncSetup(context, additionalActions)

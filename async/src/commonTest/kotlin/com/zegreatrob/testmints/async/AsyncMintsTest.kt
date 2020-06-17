@@ -454,7 +454,7 @@ class AsyncMintsTest {
                 val callArguments = mutableListOf<Any>()
                 val customSetup = asyncTestTemplate(
                         sharedSetup = { int },
-                        sharedTeardown = { callArguments.add(it) }
+                        sharedTeardown = { it: Int -> callArguments.add(it) }
                 )
 
                 fun testThatSucceeds() = customSetup(object {}) { }
