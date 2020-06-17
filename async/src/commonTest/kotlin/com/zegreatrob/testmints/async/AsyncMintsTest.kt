@@ -466,9 +466,7 @@ class AsyncMintsTest {
             } verify {
                 assertEquals(listOf<Any>(int), callArguments)
             }
-
         }
-
     }
 
     class ReporterFeatures {

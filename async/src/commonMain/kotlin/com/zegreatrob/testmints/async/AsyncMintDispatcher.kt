@@ -25,6 +25,10 @@ interface SetupSyntax : ReporterProvider {
             {}
     )
 
+    fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) = TestTemplate(
+            sharedSetup, { sharedTeardown() }, reporter
+    )
+
     fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit) = TestTemplate(
             sharedSetup, sharedTeardown, reporter
     )
@@ -83,4 +87,12 @@ class TestTemplate<SC : Any>(
             templateTeardown = { sharedTeardown(); templateTeardown(it) },
             reporter = reporter
     )
+}
+
+operator fun <C : Any> TestTemplate<Unit>.invoke(
+        contextProvider: suspend () -> C,
+        additionalAction: suspend C.() -> Unit = {}
+) {
+    val unitSharedContextAdapter: suspend (Unit) -> C = { contextProvider() }
+    invoke(unitSharedContextAdapter, additionalAction)
 }
