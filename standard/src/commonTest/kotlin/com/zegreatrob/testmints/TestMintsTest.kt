@@ -192,6 +192,58 @@ class TestMintsTest {
             }
 
             @Test
+            fun wrapperFunctionCanBeUsedAsAlternativeToSharedSetupAndSharedTeardown() = setup(object {
+                val calls = mutableListOf<Steps>()
+                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
+                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
+                val customSetup = testTemplate(wrapper = { runTest: () -> Unit ->
+                    beforeAll()
+                    runTest()
+                    afterAll()
+                })
+
+                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verify { calls.add(Steps.Verify) }
+
+            }) exercise {
+                testThatSucceeds()
+            } verify {
+                assertEquals(correctOrder - Steps.Teardown, calls)
+            }
+
+            @Test
+            fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFail() = setup(object {
+                val customSetup = testTemplate(wrapper = {})
+
+                fun testThatFailsBecauseOfBadTemplate() = customSetup(object {})
+                        .exercise { }
+                        .verify { }
+
+            }) exercise {
+                captureException { testThatFailsBecauseOfBadTemplate() }
+            } verify { result ->
+                assertEquals("Incomplete test template: the wrapper function never called the test function",
+                        result?.message)
+            }
+
+            @Test
+            fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFailIncludingTeardown() = setup(object {
+                val customSetup = testTemplate(wrapper = {})
+
+                fun testThatFailsBecauseOfBadTemplate() = customSetup(object {})
+                        .exercise { }
+                        .verifyAnd { }
+                        .teardown { }
+
+            }) exercise {
+                captureException { testThatFailsBecauseOfBadTemplate() }
+            } verify { result ->
+                assertEquals("Incomplete test template: the wrapper function never called the test function",
+                        result?.message)
+            }
+
+            @Test
             fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
                 fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }

@@ -13,3 +13,5 @@ fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit)
 
 fun testTemplate(sharedSetup: () -> Unit, sharedTeardown: () -> Unit) =
         StandardMints.testTemplate(sharedSetup, { sharedTeardown() })
+
+fun testTemplate(wrapper: (() -> Unit) -> Unit) = StandardMints.testTemplate(wrapper)
