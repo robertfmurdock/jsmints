@@ -15,24 +15,6 @@ class Exercise<C : Any, R, SC : Any>(
         private val templateTeardown: suspend (SC) -> Unit = {}
 ) {
 
-    private val sharedContextDeferred = scope.async(start = CoroutineStart.LAZY) { templateSetup() }
-
-    private val contextDeferred = scope.async(start = CoroutineStart.LAZY) {
-        contextProvider(sharedContextDeferred.await())
-    }
-
-    private val exerciseDeferred = scope.async(start = CoroutineStart.LAZY) {
-        val context = contextDeferred.await()
-        with(context) {
-            additionalSetupActions()
-            if (context is ScopeMint) {
-                waitForJobsToFinish(context.setupScope)
-            }
-
-            runCodeUnderTest(context, exerciseFunc)
-        }
-    }
-
     private suspend fun <R> runCodeUnderTest(context: C, codeUnderTest: suspend C.() -> R): R {
         reporter.exerciseStart(context)
         val result = codeUnderTest(context)
@@ -48,33 +30,31 @@ class Exercise<C : Any, R, SC : Any>(
 
     private fun <R2> runTestAsync(assertionFunctions: suspend C.(R) -> R2): (suspend C.(R) -> Unit) -> Deferred<Unit> =
             { teardownFunc ->
-                val verifyDeferred = doVerifyAsync(assertionFunctions)
-                runTestAsync(teardownFunc, verifyDeferred)
+                runTestAsync(assertionFunctions, teardownFunc)
             }
 
-    private fun <R2> doVerifyAsync(assertionFunctions: suspend C.(R) -> R2) = scope.async {
-        val context = contextDeferred.await()
-        val result = exerciseDeferred.await()
-        if (context is ScopeMint) {
-            waitForJobsToFinish(context.exerciseScope)
-        }
-        reporter.verifyStart(result)
-        context.assertionFunctions(result)
-        reporter.verifyFinish()
+    private fun <R2> runTestAsync(assertionFunctions: suspend C.(R) -> R2, teardownFunc: suspend C.(R) -> Unit) =
+            scope.async { runTest(assertionFunctions, teardownFunc) }.apply {
+                invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
+            }
+
+    private suspend fun <R2> runTest(assertionFunctions: suspend C.(R) -> R2, teardownFunc: suspend C.(R) -> Unit) {
+        val (sharedContext, context) = performSetup()
+        val result = performExercise(context)
+        val failure = performVerify(context, result, assertionFunctions)
+        performTeardown(sharedContext, context, result, failure, teardownFunc)
     }
 
-    private fun runTestAsync(function: suspend C.(R) -> Unit, verifyDeferred: Deferred<Unit>) = teardownAsync(function, verifyDeferred).apply {
-        invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
-    }
-
-    private fun teardownAsync(teardownFunction: suspend C.(R) -> Unit, verifyDeferred: Deferred<Unit>) = scope.async {
-        val sharedContext = sharedContextDeferred.await()
-        val context = contextDeferred.await()
-        val result = exerciseDeferred.await()
-        val failure = captureException { verifyDeferred.await() }
+    private suspend fun performTeardown(
+            sharedContext: SC,
+            context: C,
+            result: R,
+            failure: Throwable?,
+            teardownFunc: suspend C.(R) -> Unit
+    ) {
         reporter.teardownStart()
         val teardownException = try {
-            teardownFunction(context, result)
+            teardownFunc(context, result)
             null
         } catch (exception: Throwable) {
             exception
@@ -84,6 +64,30 @@ class Exercise<C : Any, R, SC : Any>(
         reporter.teardownFinish()
         handleTeardownExceptions(failure, teardownException, templateTeardownException)
     }
+
+    private suspend fun <R2> performVerify(context: C, result: R, assertionFunctions: suspend C.(R) -> R2) =
+            captureException {
+                reporter.verifyStart(result)
+                context.assertionFunctions(result)
+                reporter.verifyFinish()
+            }
+
+    private suspend fun performSetup(): Pair<SC, C> {
+        val sharedContext = templateSetup()
+        val context = contextProvider(sharedContext)
+        additionalSetupActions(context)
+        if (context is ScopeMint) {
+            waitForJobsToFinish(context.setupScope)
+        }
+        return Pair(sharedContext, context)
+    }
+
+    private suspend fun performExercise(context: C) = runCodeUnderTest(context, exerciseFunc)
+            .also {
+                if (context is ScopeMint) {
+                    waitForJobsToFinish(context.exerciseScope)
+                }
+            }
 
     private suspend fun performTemplateTeardown(sharedContext: SC) = captureException {
         templateTeardown(sharedContext)
