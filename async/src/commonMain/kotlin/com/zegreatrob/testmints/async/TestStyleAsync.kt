@@ -9,7 +9,7 @@ expect fun <T> testAsync(block: suspend CoroutineScope.() -> T)
 suspend fun <C> setupAsync(context: C, additionalSetup: suspend C.() -> Unit = {}) = SetupAsync(context)
         .apply { additionalSetup(context) }
 
-expect fun <R2> finalTransform(it: () -> Deferred<R2>)
+expect fun finalTransform(it: () -> Deferred<Unit>)
 
 expect suspend fun waitForTest(testFunction: () -> Unit)
 

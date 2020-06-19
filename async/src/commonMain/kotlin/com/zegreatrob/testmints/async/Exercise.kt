@@ -80,12 +80,15 @@ class Verify<C, R>(
         private val contextDeferred: Deferred<C>,
         private val exerciseDeferred: Deferred<R>,
         private val templateTeardown: suspend () -> Unit
+//        , private val runTest: suspend (C.(R) -> Unit) -> Unit
 ) {
 
     infix fun teardown(function: suspend C.(R) -> Unit) = finalTransform {
-        teardownAsync(function).apply {
-            invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
-        }
+        runTestAsync(function)
+    }
+
+    private fun runTestAsync(function: suspend C.(R) -> Unit) = teardownAsync(function).apply {
+        invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
     }
 
     private fun teardownAsync(teardownFunction: suspend C.(R) -> Unit) = scope.async {
@@ -107,35 +110,36 @@ class Verify<C, R>(
 
     private suspend fun catchingTemplateTeardown() = captureException { templateTeardown() }
 
-    private fun handleTeardownExceptions(
-            failure: Throwable?,
-            teardownException: Throwable?,
-            templateTeardownException: Throwable?
-    ) {
-        val problems = exceptionDescriptionMap(failure, teardownException, templateTeardownException)
-
-        if (problems.size == 1) {
-            throw problems.values.first()
-        } else if (problems.isNotEmpty()) {
-            throw CompoundMintTestException(problems)
-        }
-    }
-
-    private fun exceptionDescriptionMap(
-            failure: Throwable?,
-            teardownException: Throwable?,
-            templateTeardownException: Throwable?
-    ) = descriptionMap(failure, teardownException, templateTeardownException)
-            .mapNotNull { (descriptor, exception) -> exception?.let { descriptor to exception } }
-            .toMap()
-
-    private fun descriptionMap(
-            failure: Throwable?,
-            teardownException: Throwable?,
-            templateTeardownException: Throwable?
-    ) = mapOf(
-            "Failure" to failure,
-            "Teardown exception" to teardownException,
-            "Template teardown exception" to templateTeardownException
-    )
 }
+
+private fun handleTeardownExceptions(
+        failure: Throwable?,
+        teardownException: Throwable?,
+        templateTeardownException: Throwable?
+) {
+    val problems = exceptionDescriptionMap(failure, teardownException, templateTeardownException)
+
+    if (problems.size == 1) {
+        throw problems.values.first()
+    } else if (problems.isNotEmpty()) {
+        throw CompoundMintTestException(problems)
+    }
+}
+
+private fun exceptionDescriptionMap(
+        failure: Throwable?,
+        teardownException: Throwable?,
+        templateTeardownException: Throwable?
+) = descriptionMap(failure, teardownException, templateTeardownException)
+        .mapNotNull { (descriptor, exception) -> exception?.let { descriptor to exception } }
+        .toMap()
+
+private fun descriptionMap(
+        failure: Throwable?,
+        teardownException: Throwable?,
+        templateTeardownException: Throwable?
+) = mapOf(
+        "Failure" to failure,
+        "Teardown exception" to teardownException,
+        "Template teardown exception" to templateTeardownException
+)
