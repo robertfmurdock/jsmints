@@ -6,6 +6,7 @@ import com.zegreatrob.testmints.report.MintReporter
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 
 class Setup<C : Any, SC : Any>(
         private val contextProvider: suspend (SC) -> C,
@@ -18,7 +19,7 @@ class Setup<C : Any, SC : Any>(
     infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { verifyFunc ->
         { teardownFunc ->
             scope.async { runTest(exerciseFunc, verifyFunc, teardownFunc) }.apply {
-//                invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
+                invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
             }
         }
     }
