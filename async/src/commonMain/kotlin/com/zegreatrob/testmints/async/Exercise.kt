@@ -62,39 +62,20 @@ class Exercise<C : Any, R, SC : Any>(
         reporter.verifyFinish()
     }
 
-    infix fun <R2> verifyAnd(assertionFunctions: suspend C.(R) -> R2): Verify<C, R> {
+    infix fun <R2> verifyAnd(assertionFunctions: suspend C.(R) -> R2) = Verify<C, R> { teardownFunc ->
         val verifyDeferred = doVerifyAsync(assertionFunctions)
-        return Verify(reporter, verifyDeferred, scope, contextDeferred, exerciseDeferred) {
-            templateTeardown(sharedContextDeferred.await())
-        }
+        runTestAsync(teardownFunc, verifyDeferred)
     }
 
-}
-
-private fun Throwable.wrapCause() = CancellationException("Test failure.", this)
-
-class Verify<C, R>(
-        private val reporter: MintReporter,
-        private val deferred: Deferred<Unit>,
-        private val scope: CoroutineScope,
-        private val contextDeferred: Deferred<C>,
-        private val exerciseDeferred: Deferred<R>,
-        private val templateTeardown: suspend () -> Unit
-//        , private val runTest: suspend (C.(R) -> Unit) -> Unit
-) {
-
-    infix fun teardown(function: suspend C.(R) -> Unit) = finalTransform {
-        runTestAsync(function)
-    }
-
-    private fun runTestAsync(function: suspend C.(R) -> Unit) = teardownAsync(function).apply {
+    private fun runTestAsync(function: suspend C.(R) -> Unit, verifyDeferred: Deferred<Unit>) = teardownAsync(function, verifyDeferred).apply {
         invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
     }
 
-    private fun teardownAsync(teardownFunction: suspend C.(R) -> Unit) = scope.async {
+    private fun teardownAsync(teardownFunction: suspend C.(R) -> Unit, verifyDeferred: Deferred<Unit>) = scope.async {
+        val sharedContext = sharedContextDeferred.await()
         val context = contextDeferred.await()
         val result = exerciseDeferred.await()
-        val failure = captureException { deferred.await() }
+        val failure = captureException { verifyDeferred.await() }
         reporter.teardownStart()
         val teardownException = try {
             teardownFunction(context, result)
@@ -103,14 +84,17 @@ class Verify<C, R>(
             exception
         }
 
-        val templateTeardownException = catchingTemplateTeardown()
+        val templateTeardownException = performTemplateTeardown(sharedContext)
         reporter.teardownFinish()
         handleTeardownExceptions(failure, teardownException, templateTeardownException)
     }
 
-    private suspend fun catchingTemplateTeardown() = captureException { templateTeardown() }
-
+    private suspend fun performTemplateTeardown(sharedContext: SC) = captureException {
+        templateTeardown(sharedContext)
+    }
 }
+
+private fun Throwable.wrapCause() = CancellationException("Test failure.", this)
 
 private fun handleTeardownExceptions(
         failure: Throwable?,
