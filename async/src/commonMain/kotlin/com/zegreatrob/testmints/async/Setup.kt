@@ -15,7 +15,7 @@ class Setup<C : Any, SC : Any>(
         private val reporter: MintReporter,
         private val templateSetup: suspend () -> SC,
         private val templateTeardown: suspend (SC) -> Unit = {},
-        val wrapper: suspend (suspend () -> Unit) -> Unit = { it() }
+        private val wrapper: suspend (suspend () -> Unit) -> Unit = { it() }
 ) {
     infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { verifyFunc ->
         { teardownFunc ->
@@ -29,7 +29,7 @@ class Setup<C : Any, SC : Any>(
             exerciseFunc: suspend C.() -> R,
             verifyFunc: suspend C.(R) -> Unit,
             teardownFunc: suspend C.(R) -> Unit
-    ) = wrapper {
+    ) = checkedInvoke(wrapper) {
         val (sharedContext, context) = performSetup()
         val result = performExercise(context, exerciseFunc)
         val failure = performVerify(context, result, verifyFunc)
@@ -126,3 +126,13 @@ private fun descriptionMap(
         "Teardown exception" to teardownException,
         "Template teardown exception" to templateTeardownException
 )
+
+
+private suspend fun checkedInvoke(wrapper: suspend (suspend () -> Unit) -> Unit, test: suspend () -> Unit) {
+    var testWasInvoked = false
+    wrapper.invoke {
+        testWasInvoked = true
+        test()
+    }
+    if (!testWasInvoked) throw Exception("Incomplete test template: the wrapper function never called the test function")
+}

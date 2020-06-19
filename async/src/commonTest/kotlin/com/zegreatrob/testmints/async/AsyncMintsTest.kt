@@ -429,6 +429,34 @@ class AsyncMintsTest {
                 assertEquals(correctOrder - Steps.Teardown, calls)
             }
 
+            @Test
+            fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFail() = asyncSetup(object {
+                val customSetup = asyncTestTemplate(wrapper = {})
+                fun testThatFailsBecauseOfBadTemplate() = customSetup(object {})
+                        .exercise { }
+                        .verify { }
+            }) exercise {
+                captureException { waitForTest { testThatFailsBecauseOfBadTemplate() } }
+            } verify { result ->
+                assertEquals("Incomplete test template: the wrapper function never called the test function",
+                        result?.message)
+            }
+
+            @Test
+            fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFailIncludingTeardown() = asyncSetup(object {
+                val customSetup = asyncTestTemplate(wrapper = {})
+
+                fun testThatFailsBecauseOfBadTemplate() = customSetup(object {})
+                        .exercise { }
+                        .verifyAnd { }
+                        .teardown { }
+
+            }) exercise {
+                captureException { waitForTest { testThatFailsBecauseOfBadTemplate() } }
+            } verify { result ->
+                assertEquals("Incomplete test template: the wrapper function never called the test function",
+                        result?.message)
+            }
 
             @Test
             fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = asyncSetup(object {
