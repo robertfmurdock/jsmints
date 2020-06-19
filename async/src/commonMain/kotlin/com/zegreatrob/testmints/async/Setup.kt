@@ -3,7 +3,9 @@ package com.zegreatrob.testmints.async
 import com.zegreatrob.testmints.CompoundMintTestException
 import com.zegreatrob.testmints.captureException
 import com.zegreatrob.testmints.report.MintReporter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 
 class Setup<C : Any, SC : Any>(
         private val contextProvider: suspend (SC) -> C,
@@ -13,32 +15,30 @@ class Setup<C : Any, SC : Any>(
         private val templateSetup: suspend () -> SC,
         private val templateTeardown: suspend (SC) -> Unit = {}
 ) {
-    infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { assertionFunctions ->
-        runTestAsync(exerciseFunc, assertionFunctions)
+    infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { verifyFunc ->
+        { teardownFunc ->
+            scope.async { runTest(exerciseFunc, verifyFunc, teardownFunc) }.apply {
+//                invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
+            }
+        }
     }
 
-    private fun <R> runTestAsync(exerciseFunc: suspend C.() -> R, assertionFunctions: suspend C.(R) -> Unit): (suspend C.(R) -> Unit) -> Deferred<Unit> =
-            { teardownFunc ->
-                runTestAsync(exerciseFunc, assertionFunctions, teardownFunc)
-            }
+    private suspend fun <R> runTest(
+            exerciseFunc: suspend C.() -> R,
+            verifyFunc: suspend C.(R) -> Unit,
+            teardownFunc: suspend C.(R) -> Unit
+    ) {
+        val (sharedContext, context) = performSetup()
+        val result = performExercise(context, exerciseFunc)
+        val failure = performVerify(context, result, verifyFunc)
+        performTeardown(sharedContext, context, result, failure, teardownFunc)
+    }
 
     private suspend fun <R> runCodeUnderTest(context: C, codeUnderTest: suspend C.() -> R): R {
         reporter.exerciseStart(context)
         val result = codeUnderTest(context)
         reporter.exerciseFinish()
         return result
-    }
-
-    private fun <R> runTestAsync(exerciseFunc: suspend C.() -> R, assertionFunctions: suspend C.(R) -> Unit, teardownFunc: suspend C.(R) -> Unit) =
-            scope.async { runTest(exerciseFunc, assertionFunctions, teardownFunc) }.apply {
-                invokeOnCompletion { cause -> scope.cancel(cause?.wrapCause()) }
-            }
-
-    private suspend fun <R> runTest(exerciseFunc: suspend C.() -> R, assertionFunctions: suspend C.(R) -> Unit, teardownFunc: suspend C.(R) -> Unit) {
-        val (sharedContext, context) = performSetup()
-        val result = performExercise(context, exerciseFunc)
-        val failure = performVerify(context, result, assertionFunctions)
-        performTeardown(sharedContext, context, result, failure, teardownFunc)
     }
 
     private suspend fun <R> performTeardown(
