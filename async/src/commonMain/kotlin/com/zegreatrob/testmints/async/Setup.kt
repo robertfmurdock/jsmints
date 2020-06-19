@@ -14,7 +14,8 @@ class Setup<C : Any, SC : Any>(
         private val additionalActions: suspend C.() -> Unit,
         private val reporter: MintReporter,
         private val templateSetup: suspend () -> SC,
-        private val templateTeardown: suspend (SC) -> Unit = {}
+        private val templateTeardown: suspend (SC) -> Unit = {},
+        val wrapper: suspend (suspend () -> Unit) -> Unit = { it() }
 ) {
     infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { verifyFunc ->
         { teardownFunc ->
@@ -28,7 +29,7 @@ class Setup<C : Any, SC : Any>(
             exerciseFunc: suspend C.() -> R,
             verifyFunc: suspend C.(R) -> Unit,
             teardownFunc: suspend C.(R) -> Unit
-    ) {
+    ) = wrapper {
         val (sharedContext, context) = performSetup()
         val result = performExercise(context, exerciseFunc)
         val failure = performVerify(context, result, verifyFunc)

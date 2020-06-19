@@ -144,23 +144,23 @@ class TestMintsTest {
 
         class TestTemplates {
             enum class Steps {
-                BeforeAll, AfterAll, Setup, Exercise, Verify, Teardown
+                TemplateSetup, TemplateTeardown, Setup, Exercise, Verify, Teardown
             }
 
             private val correctOrder = listOf(
-                    Steps.BeforeAll,
+                    Steps.TemplateSetup,
                     Steps.Setup,
                     Steps.Exercise,
                     Steps.Verify,
                     Steps.Teardown,
-                    Steps.AfterAll
+                    Steps.TemplateTeardown
             )
 
             @Test
             fun whenTestSucceedsIncludingTeardownSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
-                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
+                fun beforeAll() = calls.add(Steps.TemplateSetup).let { Unit }
+                fun afterAll() = calls.add(Steps.TemplateTeardown).let { Unit }
                 val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
 
                 fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
@@ -177,9 +177,9 @@ class TestMintsTest {
             @Test
             fun whenTestSucceedsEndingWithVerifySharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
-                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
-                val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
+                fun templateSetup() = calls.add(Steps.TemplateSetup).let { Unit }
+                fun templateTeardown() = calls.add(Steps.TemplateTeardown).let { Unit }
+                val customSetup = testTemplate(sharedSetup = ::templateSetup, sharedTeardown = ::templateTeardown)
 
                 fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
                         .exercise { calls.add(Steps.Exercise) }
@@ -194,12 +194,12 @@ class TestMintsTest {
             @Test
             fun wrapperFunctionCanBeUsedAsAlternativeToSharedSetupAndSharedTeardown() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
-                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
+                fun templateSetup() = calls.add(Steps.TemplateSetup).let { Unit }
+                fun templateTeardown() = calls.add(Steps.TemplateTeardown).let { Unit }
                 val customSetup = testTemplate(wrapper = { runTest: () -> Unit ->
-                    beforeAll()
+                    templateSetup()
                     runTest()
-                    afterAll()
+                    templateTeardown()
                 })
 
                 fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
@@ -246,8 +246,8 @@ class TestMintsTest {
             @Test
             fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun beforeAll() = calls.add(Steps.BeforeAll).let { Unit }
-                fun afterAll() = calls.add(Steps.AfterAll).let { Unit }
+                fun beforeAll() = calls.add(Steps.TemplateSetup).let { Unit }
+                fun afterAll() = calls.add(Steps.TemplateTeardown).let { Unit }
                 val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
 
                 fun testThatFails() = customSetup(object {}) { calls.add(Steps.Setup) }

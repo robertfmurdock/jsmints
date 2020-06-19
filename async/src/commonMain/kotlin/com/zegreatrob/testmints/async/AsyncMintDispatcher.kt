@@ -29,8 +29,13 @@ interface SetupSyntax : ReporterProvider {
             sharedSetup, { sharedTeardown() }, reporter
     )
 
-    fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit) = TestTemplate(
-            sharedSetup, sharedTeardown, reporter
+    fun <SC : Any> asyncTestTemplate(
+            sharedSetup: suspend () -> SC,
+            sharedTeardown: suspend (SC) -> Unit
+    ) = TestTemplate(sharedSetup, sharedTeardown, reporter)
+
+    fun asyncTestTemplate(wrapper: suspend (suspend () -> Unit) -> Unit): TestTemplate<Unit> = TestTemplate(
+            {}, {}, reporter, wrapper
     )
 }
 
@@ -48,6 +53,8 @@ fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: 
 fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) =
         AsyncMints.asyncTestTemplate(sharedSetup, { sharedTeardown() })
 
+fun asyncTestTemplate(wrapper: suspend (suspend () -> Unit) -> Unit) = AsyncMints.asyncTestTemplate(wrapper)
+
 @Deprecated("Ready to promote this use case to normal. Please transition to setupAsync.",
         ReplaceWith("asyncSetup(context, additionalActions)"))
 fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) = asyncSetup(context, additionalActions)
@@ -62,12 +69,14 @@ object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig
 class TestTemplate<SC : Any>(
         val templateSetup: suspend () -> SC,
         val templateTeardown: suspend (SC) -> Unit,
-        val reporter: MintReporter) {
+        val reporter: MintReporter,
+        val wrapper: suspend (suspend () -> Unit) -> Unit = { it() }) {
 
     fun extend(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit = {}) = TestTemplate(
             templateSetup = { templateSetup().also { sharedSetup() } },
             templateTeardown = { sharedTeardown(); templateTeardown(it) },
-            reporter = reporter
+            reporter = reporter,
+            wrapper = wrapper
     )
 }
 
@@ -88,7 +97,8 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
         additionalActions,
         reporter,
         templateSetup,
-        templateTeardown
+        templateTeardown,
+        wrapper
 )
 
 operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
@@ -100,5 +110,6 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
         additionalActions,
         reporter,
         templateSetup,
-        templateTeardown
+        templateTeardown,
+        wrapper
 )

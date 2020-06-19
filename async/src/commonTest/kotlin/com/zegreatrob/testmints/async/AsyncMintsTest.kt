@@ -409,6 +409,28 @@ class AsyncMintsTest {
             }
 
             @Test
+            fun wrapperFunctionCanBeUsedAsAlternativeToSharedSetupAndSharedTeardown() = asyncSetup(object {
+                val calls = mutableListOf<Steps>()
+                fun templateSetup() = calls.add(Steps.TemplateSetup).let { Unit }
+                fun templateTeardown() = calls.add(Steps.TemplateTeardown).let { Unit }
+                val customSetup = asyncTestTemplate(wrapper = { runTest ->
+                    templateSetup()
+                    runTest()
+                    templateTeardown()
+                })
+
+                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verify { calls.add(Steps.Verify) }
+
+            }) exercise {
+                waitForTest { testThatSucceeds() }
+            } verify {
+                assertEquals(correctOrder - Steps.Teardown, calls)
+            }
+
+
+            @Test
             fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = asyncSetup(object {
                 val calls = mutableListOf<Steps>()
                 val customSetup = asyncTestTemplate(
