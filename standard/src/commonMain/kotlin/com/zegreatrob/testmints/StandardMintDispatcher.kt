@@ -67,17 +67,19 @@ class Exercise<C, R, SC>(
         private val templateTeardown: (SC) -> Unit,
         private val wrapper: (() -> Unit) -> Unit,
         private val exerciseFunc: () -> Pair<SC, R>
+//        ,
+//        private val runTest: (C.(R) -> Any) -> Unit
 ) {
-    infix fun <R2> verify(assertionFunctions: C.(R) -> R2) = runTest(assertionFunctions)() {}
+    infix fun verify(assertionFunctions: C.(R) -> Unit) = runTest(assertionFunctions)() {}
 
     private fun <R2> doVerify(assertionFunctions: C.(R) -> R2, result: R) = context
             .also { reporter.verifyStart(result) }
             .let { captureException { it.assertionFunctions(result) } }
             .also { reporter.verifyFinish() }
 
-    infix fun <R2> verifyAnd(assertionFunctions: C.(R) -> R2) = Verify(runTest(assertionFunctions))
+    infix fun verifyAnd(assertionFunctions: C.(R) -> Unit) = Verify(runTest(assertionFunctions))
 
-    private fun <R2> runTest(assertionFunctions: C.(R) -> R2): (C.(R) -> Unit) -> Unit = { teardownFunctions ->
+    private fun runTest(assertionFunctions: C.(R) -> Any?): (C.(R) -> Unit) -> Unit = { teardownFunctions ->
         checkedInvoke(wrapper) {
             val (sharedContext, result) = exerciseFunc()
             val failure = doVerify(assertionFunctions, result)
