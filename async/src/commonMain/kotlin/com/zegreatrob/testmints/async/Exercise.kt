@@ -40,16 +40,17 @@ class Exercise<C : Any, R, SC : Any>(
         return result
     }
 
-    infix fun <R2> verify(assertionFunctions: suspend C.(R) -> R2) = finalTransform {
-        doVerifyAsync(assertionFunctions).apply {
-            invokeOnCompletion { cause ->
-                scope.launch {
-                    captureException { templateTeardown(sharedContextDeferred.await()) }
-                    scope.cancel(cause?.wrapCause())
-                }
-            }
-        }
+    infix fun verify(assertionFunctions: suspend C.(R) -> Unit) = finalTransform {
+        runTestAsync { }(assertionFunctions)
     }
+
+    infix fun <R2> verifyAnd(assertionFunctions: suspend C.(R) -> R2) = Verify(runTestAsync(assertionFunctions))
+
+    private fun <R2> runTestAsync(assertionFunctions: suspend C.(R) -> R2): (suspend C.(R) -> Unit) -> Deferred<Unit> =
+            { teardownFunc ->
+                val verifyDeferred = doVerifyAsync(assertionFunctions)
+                runTestAsync(teardownFunc, verifyDeferred)
+            }
 
     private fun <R2> doVerifyAsync(assertionFunctions: suspend C.(R) -> R2) = scope.async {
         val context = contextDeferred.await()
@@ -60,11 +61,6 @@ class Exercise<C : Any, R, SC : Any>(
         reporter.verifyStart(result)
         context.assertionFunctions(result)
         reporter.verifyFinish()
-    }
-
-    infix fun <R2> verifyAnd(assertionFunctions: suspend C.(R) -> R2) = Verify<C, R> { teardownFunc ->
-        val verifyDeferred = doVerifyAsync(assertionFunctions)
-        runTestAsync(teardownFunc, verifyDeferred)
     }
 
     private fun runTestAsync(function: suspend C.(R) -> Unit, verifyDeferred: Deferred<Unit>) = teardownAsync(function, verifyDeferred).apply {
