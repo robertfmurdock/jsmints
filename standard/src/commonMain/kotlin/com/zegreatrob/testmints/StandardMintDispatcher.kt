@@ -68,52 +68,26 @@ class Exercise<C, R, SC>(
         private val wrapper: (() -> Unit) -> Unit,
         private val exerciseFunc: () -> Pair<SC, R>
 ) {
-    infix fun <R2> verify(assertionFunctions: C.(R) -> R2) = checkedInvoke(wrapper) {
-        val (sharedContext, result) = exerciseFunc()
-
-        val doVerify = doVerify(assertionFunctions, result)
-        doVerify
-                .also { templateTeardown(sharedContext) }
-                .let { if (it != null) throw it else Unit }
-    }
+    infix fun <R2> verify(assertionFunctions: C.(R) -> R2) = runTest(assertionFunctions)() {}
 
     private fun <R2> doVerify(assertionFunctions: C.(R) -> R2, result: R) = context
             .also { reporter.verifyStart(result) }
             .let { captureException { it.assertionFunctions(result) } }
             .also { reporter.verifyFinish() }
 
-    infix fun <R2> verifyAnd(assertionFunctions: C.(R) -> R2) =
-            Verify(context, {
-                val (sharedContext, result) = exerciseFunc()
-                val throwable = doVerify(assertionFunctions, result)
-                Triple(result, sharedContext, throwable)
-            }, reporter, templateTeardown, wrapper)
-}
+    infix fun <R2> verifyAnd(assertionFunctions: C.(R) -> R2) = Verify(runTest(assertionFunctions))
 
-private fun checkedInvoke(wrapper: (() -> Unit) -> Unit, test: () -> Unit) {
-    var testWasInvoked = false
-    wrapper.invoke {
-        testWasInvoked = true
-        test()
-    }
-    if(!testWasInvoked) throw Exception("Incomplete test template: the wrapper function never called the test function")
-}
+    private fun <R2> runTest(assertionFunctions: C.(R) -> R2): (C.(R) -> Unit) -> Unit = { teardownFunctions ->
+        checkedInvoke(wrapper) {
+            val (sharedContext, result) = exerciseFunc()
+            val failure = doVerify(assertionFunctions, result)
 
-class Verify<C, R, SC>(
-        private val context: C,
-        private val verifyFunc: () -> Triple<R, SC, Throwable?>,
-        private val reporter: MintReporter,
-        private val templateTeardown: (SC) -> Unit = {},
-        private val wrapper: (() -> Unit) -> Unit
-) {
-    infix fun teardown(teardownFunctions: C.(R) -> Unit) = checkedInvoke(wrapper) {
-        val (result, sharedContext, failure) = verifyFunc()
-
-        context.also { reporter.teardownStart() }
-                .run { captureException { teardownFunctions(result) } }
-                .let { it to captureException { templateTeardown(sharedContext) } }
-                .also { reporter.teardownFinish() }
-                .let { handleTeardownExceptions(it, failure) }
+            context.also { reporter.teardownStart() }
+                    .run { captureException { teardownFunctions(result) } }
+                    .let { it to captureException { templateTeardown(sharedContext) } }
+                    .also { reporter.teardownFinish() }
+                    .let { handleTeardownExceptions(it, failure) }
+        }
     }
 
     private fun handleTeardownExceptions(pair: Pair<Throwable?, Throwable?>, failure: Throwable?) {
@@ -135,6 +109,18 @@ class Verify<C, R, SC>(
             )
                     .mapNotNull { (descriptor, exception) -> exception?.let { descriptor to exception } }
                     .toMap()
+}
 
+private fun checkedInvoke(wrapper: (() -> Unit) -> Unit, test: () -> Unit) {
+    var testWasInvoked = false
+    wrapper.invoke {
+        testWasInvoked = true
+        test()
+    }
+    if (!testWasInvoked) throw Exception("Incomplete test template: the wrapper function never called the test function")
+}
+
+class Verify<C, R>(private val runTest: (C.(R) -> Unit) -> Unit) {
+    infix fun teardown(teardownFunctions: C.(R) -> Unit) = runTest(teardownFunctions)
 }
 
