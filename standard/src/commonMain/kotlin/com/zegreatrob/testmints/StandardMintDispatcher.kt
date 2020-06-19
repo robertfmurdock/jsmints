@@ -39,6 +39,10 @@ class TestTemplate<SC : Any>(
     )
 }
 
+typealias ExerciseFunc<C, R> = C.() -> R
+typealias VerifyFunc<C, R> = C.(R) -> Any
+typealias TeardownFunc<C, R> = C.(R) -> Unit
+
 class Setup<C : Any, SC : Any>(
         private val context: C,
         private val reporter: MintReporter,
@@ -49,37 +53,55 @@ class Setup<C : Any, SC : Any>(
 ) {
     infix fun <R> exercise(codeUnderTest: C.() -> R) = Exercise<C, R> { assertionFunctions ->
         { teardownFunctions ->
-            checkedInvoke(wrapper) {
-                val (sharedContext, result) = produceResult(codeUnderTest)
-                        .also { reporter.exerciseFinish() }
-                val failure = context
-                        .also { reporter.verifyStart(result) }
-                        .let { captureException { it.assertionFunctions(result) } }
-                        .also { reporter.verifyFinish() }
-
-                context.also { reporter.teardownStart() }
-                        .run { captureException { teardownFunctions(result) } }
-                        .let { it to captureException { templateTeardown(sharedContext) } }
-                        .also { reporter.teardownFinish() }
-                        .let { handleTeardownExceptions(it, failure) }
-            }
+            runTest(codeUnderTest, assertionFunctions, teardownFunctions)
         }
     }
 
-    private fun <R> produceResult(codeUnderTest: C.() -> R): Pair<SC, R> {
-        val setupContext = templateSetup()
+    private fun <R> runTest(
+            exerciseFunc: ExerciseFunc<C, R>,
+            verifyFunc: VerifyFunc<C, R>,
+            teardownFunc: TeardownFunc<C, R>
+    ) = checkedInvoke(wrapper) {
+        val reportedExerciseFunc = exerciseFunc.makeReporting(reporter)
+        val reportedVerifyFunc = verifyFunc.makeReporting(reporter)
+        val reportedTeardownFunc = teardownFunc.plus(templateTeardown).makeReporting(reporter)
+
+        val sharedContext = setup()
+        val result = reportedExerciseFunc(context)
+        val failure = reportedVerifyFunc(context, result)
+
+        reportedTeardownFunc(sharedContext, context, result, failure)
+    }
+
+    private fun setup(): SC {
+        val sharedContext = templateSetup()
         additionalSetupActions(context)
-        reporter.exerciseStart(context)
-        val result = codeUnderTest(context)
-        return Pair(setupContext, result)
+        return sharedContext
     }
 
 }
 
-class Exercise<C, R>(private val runTest: (C.(R) -> Any) -> (C.(R) -> Unit) -> Unit) {
-    infix fun verify(assertionFunctions: C.(R) -> Unit) = runTest(assertionFunctions)() {}
+private fun <C : Any, R> ExerciseFunc<C, R>.makeReporting(reporter: MintReporter): ExerciseFunc<C, R> = {
+    reporter.exerciseStart(this)
+    this@makeReporting(this)
+            .also { reporter.exerciseFinish() }
+}
 
-    infix fun verifyAnd(assertionFunctions: C.(R) -> Unit) = Verify(runTest(assertionFunctions))
+private fun <C : Any, R> VerifyFunc<C, R>.makeReporting(mintReporter: MintReporter) = { context: C, result: R ->
+    context
+            .also { mintReporter.verifyStart(result) }
+            .let { captureException { it.(this)(result) } }
+            .also { mintReporter.verifyFinish() }
+}
+
+private fun <SC : Any, C : Any, R> TeardownFunc<C, R>.plus(templateTeardown: (SC) -> Unit) =
+        { sc: SC, c: C, r: R -> captureException { c.(this)(r) } to captureException { templateTeardown(sc) } }
+
+private fun <SC : Any, C : Any, R> ((SC, C, R) -> Pair<Throwable?, Throwable?>).makeReporting(mintReporter: MintReporter) = { sharedContext: SC, context: C, result: R, failure: Throwable? ->
+    context.also { mintReporter.teardownStart() }
+            .run { this@makeReporting(sharedContext, context, result) }
+            .also { mintReporter.teardownFinish() }
+            .let { handleTeardownExceptions(it, failure) }
 }
 
 private fun handleTeardownExceptions(pair: Pair<Throwable?, Throwable?>, failure: Throwable?) {
