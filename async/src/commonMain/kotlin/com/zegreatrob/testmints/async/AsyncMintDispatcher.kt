@@ -37,7 +37,7 @@ interface SetupSyntax : ReporterProvider {
 
     fun <SC : Any> asyncTestTemplate(
             sharedSetup: suspend () -> SC,
-            sharedTeardown: suspend (SC) -> Unit
+            sharedTeardown: suspend (SC) -> Unit = {}
     ) = TestTemplate<SC>(reporter) {
         val sc = sharedSetup()
         it(sc)
@@ -61,7 +61,7 @@ fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {
 fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
         .asyncSetup(contextProvider, additionalActions)
 
-fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit) =
+fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit = {}) =
         AsyncMints.asyncTestTemplate(sharedSetup, sharedTeardown)
 
 fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) =
