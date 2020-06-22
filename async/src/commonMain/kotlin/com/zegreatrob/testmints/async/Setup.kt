@@ -13,9 +13,7 @@ class Setup<C : Any, SC : Any>(
         private val scope: CoroutineScope,
         private val additionalActions: suspend C.() -> Unit,
         private val reporter: MintReporter,
-        private val templateSetup: suspend () -> SC,
-        private val templateTeardown: suspend (SC) -> Unit = {},
-        private val wrapper: suspend (suspend () -> Unit) -> Unit = { it() }
+        private val wrapper: suspend (suspend (SC) -> Unit) -> Unit
 ) {
     infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { verifyFunc ->
         { teardownFunc ->
@@ -32,22 +30,19 @@ class Setup<C : Any, SC : Any>(
     ) {
         var verifyFailure: Throwable? = null
         var teardownException: Throwable? = null
-        var wrapperException: Throwable? = null
-        checkedInvoke(wrapper) {
-            val (sharedContext, context) = performSetup()
+        val wrapperException = checkedInvoke(wrapper) { sharedContext ->
+            val context = performSetup(sharedContext)
             val result = performExercise(context, exerciseFunc)
             verifyFailure = performVerify(context, result, verifyFunc)
-            reporter.teardownStart()
-            teardownException = try {
-                teardownFunc(context, result)
-                null
-            } catch (exception: Throwable) {
-                exception
-            }
-            wrapperException = performTemplateTeardown(sharedContext)
+            teardownException = performTeardown(context, result, teardownFunc)
         }
         reporter.teardownFinish()
         handleTeardownExceptions(verifyFailure, teardownException, wrapperException)
+    }
+
+    private suspend fun <R> performTeardown(context: C, result: R, teardownFunc: suspend C.(R) -> Unit): Throwable? {
+        reporter.teardownStart()
+        return captureException { teardownFunc(context, result) }
     }
 
     private suspend fun <R> runCodeUnderTest(context: C, codeUnderTest: suspend C.() -> R): R {
@@ -64,14 +59,13 @@ class Setup<C : Any, SC : Any>(
                 reporter.verifyFinish()
             }
 
-    private suspend fun performSetup(): Pair<SC, C> {
-        val sharedContext = templateSetup()
+    private suspend fun performSetup(sharedContext: SC): C {
         val context = contextProvider(sharedContext)
         additionalActions(context)
         if (context is ScopeMint) {
             waitForJobsToFinish(context.setupScope)
         }
-        return Pair(sharedContext, context)
+        return context
     }
 
     private suspend fun <R> performExercise(context: C, exerciseFunc: suspend C.() -> R) = runCodeUnderTest(context, exerciseFunc)
@@ -80,10 +74,6 @@ class Setup<C : Any, SC : Any>(
                     waitForJobsToFinish(context.exerciseScope)
                 }
             }
-
-    private suspend fun performTemplateTeardown(sharedContext: SC) = captureException {
-        templateTeardown(sharedContext)
-    }
 
 }
 
@@ -121,12 +111,14 @@ private fun descriptionMap(
         "Template teardown exception" to templateTeardownException
 )
 
-
-private suspend fun checkedInvoke(wrapper: suspend (suspend () -> Unit) -> Unit, test: suspend () -> Unit) {
+private suspend fun <SC : Any> checkedInvoke(
+        wrapper: suspend (suspend (SC) -> Unit) -> Unit,
+        test: suspend (SC) -> Unit
+) = captureException {
     var testWasInvoked = false
-    wrapper.invoke {
+    wrapper.invoke { sharedContext ->
         testWasInvoked = true
-        test()
+        test(sharedContext)
     }
     if (!testWasInvoked) throw Exception("Incomplete test template: the wrapper function never called the test function")
 }

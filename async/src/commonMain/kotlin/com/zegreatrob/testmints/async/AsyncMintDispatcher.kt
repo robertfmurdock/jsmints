@@ -3,39 +3,53 @@ package com.zegreatrob.testmints.async
 import com.zegreatrob.testmints.report.MintReporter
 import com.zegreatrob.testmints.report.MintReporterConfig
 import com.zegreatrob.testmints.report.ReporterProvider
+import kotlin.jvm.JvmName
 
 interface AsyncMintDispatcher : SetupSyntax
 
 interface SetupSyntax : ReporterProvider {
-    fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup(
+    fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup<C, Unit>(
             { context },
             context.chooseTestScope(),
             additionalActions,
             reporter,
-            {},
-            {}
+            { it(Unit) }
     )
 
-    fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = Setup(
+    fun <C : Any> asyncSetup(
+            contextProvider: suspend () -> C,
+            additionalActions: suspend C.() -> Unit = {}
+    ) = Setup<C, Unit>(
             { contextProvider() },
             mintScope(),
             additionalActions,
             reporter,
-            {},
-            {}
+            { it(Unit) }
     )
 
-    fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) = TestTemplate(
-            sharedSetup, { sharedTeardown() }, reporter
-    )
+    fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) = TestTemplate<Unit>(
+            reporter
+    ) {
+        sharedSetup()
+        it(Unit)
+        sharedTeardown()
+    }
 
     fun <SC : Any> asyncTestTemplate(
             sharedSetup: suspend () -> SC,
             sharedTeardown: suspend (SC) -> Unit
-    ) = TestTemplate(sharedSetup, sharedTeardown, reporter)
+    ) = TestTemplate<SC>(reporter) {
+        val sc = sharedSetup()
+        it(sc)
+        sharedTeardown(sc)
+    }
 
-    fun asyncTestTemplate(wrapper: suspend (suspend () -> Unit) -> Unit): TestTemplate<Unit> = TestTemplate(
-            {}, {}, reporter, wrapper
+    fun asyncTestTemplateSimple(wrapper: suspend (suspend () -> Unit) -> Unit) = TestTemplate<Unit>(reporter) {
+        wrapper { it(Unit) }
+    }
+
+    fun <SC : Any> asyncTestTemplate(wrapper: suspend (suspend (SC) -> Unit) -> Unit) = TestTemplate(
+            reporter, wrapper
     )
 }
 
@@ -53,7 +67,11 @@ fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: 
 fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) =
         AsyncMints.asyncTestTemplate(sharedSetup, { sharedTeardown() })
 
-fun asyncTestTemplate(wrapper: suspend (suspend () -> Unit) -> Unit) = AsyncMints.asyncTestTemplate(wrapper)
+@JvmName("asyncTestTemplateSimple")
+fun asyncTestTemplate(wrapper: suspend (suspend () -> Unit) -> Unit) = AsyncMints.asyncTestTemplateSimple(wrapper)
+
+@JvmName("asyncTestTemplateSC")
+fun <SC : Any> asyncTestTemplate(wrapper: suspend (suspend (SC) -> Unit) -> Unit) = AsyncMints.asyncTestTemplate(wrapper)
 
 @Deprecated("Ready to promote this use case to normal. Please transition to setupAsync.",
         ReplaceWith("asyncSetup(context, additionalActions)"))
@@ -67,16 +85,19 @@ fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: s
 object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig
 
 class TestTemplate<SC : Any>(
-        val templateSetup: suspend () -> SC,
-        val templateTeardown: suspend (SC) -> Unit,
         val reporter: MintReporter,
-        val wrapper: suspend (suspend () -> Unit) -> Unit = { it() }) {
+        val wrapper: suspend (suspend (SC) -> Unit) -> Unit
+) {
 
-    fun extend(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit = {}) = TestTemplate(
-            templateSetup = { templateSetup().also { sharedSetup() } },
-            templateTeardown = { sharedTeardown(); templateTeardown(it) },
+    fun extend(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit = {}) = TestTemplate<SC>(
             reporter = reporter,
-            wrapper = wrapper
+            wrapper = { test ->
+                wrapper {
+                    sharedSetup()
+                    test(it)
+                    sharedTeardown()
+                }
+            }
     )
 }
 
@@ -96,8 +117,6 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
         context.chooseTestScope(),
         additionalActions,
         reporter,
-        templateSetup,
-        templateTeardown,
         wrapper
 )
 
@@ -109,7 +128,5 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
         mintScope(),
         additionalActions,
         reporter,
-        templateSetup,
-        templateTeardown,
         wrapper
 )
