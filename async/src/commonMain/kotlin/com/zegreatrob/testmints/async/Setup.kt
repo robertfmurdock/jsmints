@@ -29,11 +29,25 @@ class Setup<C : Any, SC : Any>(
             exerciseFunc: suspend C.() -> R,
             verifyFunc: suspend C.(R) -> Unit,
             teardownFunc: suspend C.(R) -> Unit
-    ) = checkedInvoke(wrapper) {
-        val (sharedContext, context) = performSetup()
-        val result = performExercise(context, exerciseFunc)
-        val failure = performVerify(context, result, verifyFunc)
-        performTeardown(sharedContext, context, result, failure, teardownFunc)
+    ) {
+        var verifyFailure: Throwable? = null
+        var teardownException: Throwable? = null
+        var wrapperException: Throwable? = null
+        checkedInvoke(wrapper) {
+            val (sharedContext, context) = performSetup()
+            val result = performExercise(context, exerciseFunc)
+            verifyFailure = performVerify(context, result, verifyFunc)
+            reporter.teardownStart()
+            teardownException = try {
+                teardownFunc(context, result)
+                null
+            } catch (exception: Throwable) {
+                exception
+            }
+            wrapperException = performTemplateTeardown(sharedContext)
+        }
+        reporter.teardownFinish()
+        handleTeardownExceptions(verifyFailure, teardownException, wrapperException)
     }
 
     private suspend fun <R> runCodeUnderTest(context: C, codeUnderTest: suspend C.() -> R): R {
@@ -41,26 +55,6 @@ class Setup<C : Any, SC : Any>(
         val result = codeUnderTest(context)
         reporter.exerciseFinish()
         return result
-    }
-
-    private suspend fun <R> performTeardown(
-            sharedContext: SC,
-            context: C,
-            result: R,
-            failure: Throwable?,
-            teardownFunc: suspend C.(R) -> Unit
-    ) {
-        reporter.teardownStart()
-        val teardownException = try {
-            teardownFunc(context, result)
-            null
-        } catch (exception: Throwable) {
-            exception
-        }
-
-        val templateTeardownException = performTemplateTeardown(sharedContext)
-        reporter.teardownFinish()
-        handleTeardownExceptions(failure, teardownException, templateTeardownException)
     }
 
     private suspend fun <R> performVerify(context: C, result: R, assertionFunctions: suspend C.(R) -> Unit) =
