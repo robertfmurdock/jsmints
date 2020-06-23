@@ -9,7 +9,7 @@ object StandardMints : StandardMintDispatcher, ReporterProvider by MintReporterC
 fun <C : Any> setup(context: C, additionalSetupActions: C.() -> Unit = {}) =
         StandardMints.setup(context, additionalSetupActions)
 
-fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit) =
+fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit = {}) =
         StandardMints.testTemplate(sharedSetup, sharedTeardown)
 
 fun testTemplate(sharedSetup: () -> Unit, sharedTeardown: () -> Unit) =
