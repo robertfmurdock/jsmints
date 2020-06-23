@@ -241,6 +241,71 @@ class TestMintsTest {
             }
 
             @Test
+            fun canExtendToTransformSharedContextUsingSharedSetupAndTeardown() = setup(object {
+                val calls = mutableListOf<Steps>()
+
+                val originalSharedContext = 41
+                val customSetup = testTemplate(wrapper = { runTest: (sharedContext: Int) -> Unit ->
+                    runTest(originalSharedContext)
+                })
+
+                val extendedSetup = customSetup.extend(sharedSetup = { sc ->
+                    calls.add(Steps.TemplateSetup)
+                    "$sc bottles of beer on the wall."
+                }, sharedTeardown = { calls.add(Steps.TemplateTeardown) })
+
+                var sharedContextReceived: Any? = null
+
+                fun testThatSucceeds() = extendedSetup(contextProvider = { sc ->
+                    object {}.also {
+                        sharedContextReceived = sc
+                    }
+                }) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verifyAnd { calls.add(Steps.Verify) }
+                        .teardown { calls.add(Steps.Teardown) }
+
+            }) exercise {
+                testThatSucceeds()
+            } verify {
+                assertEquals(correctOrder, calls)
+                assertEquals("$originalSharedContext bottles of beer on the wall.", sharedContextReceived)
+            }
+
+            @Test
+            fun canExtendToTransformSharedContextUsingWrapperStyle() = setup(object {
+                val calls = mutableListOf<Steps>()
+
+                val originalSharedContext = 67
+                val customSetup = testTemplate(wrapper = { runTest: (sharedContext: Int) -> Unit ->
+                    runTest(originalSharedContext)
+                })
+
+                val extendedSetup = customSetup.extend<String>(wrapper = { sc, test ->
+                    calls.add(Steps.TemplateSetup)
+                    test("$sc bottles of beer on the wall.")
+                    calls.add(Steps.TemplateTeardown)
+                })
+
+                var sharedContextReceived: Any? = null
+
+                fun testThatSucceeds() = extendedSetup(contextProvider = { sc ->
+                    object {}.also {
+                        sharedContextReceived = sc
+                    }
+                }) { calls.add(Steps.Setup) }
+                        .exercise { calls.add(Steps.Exercise) }
+                        .verifyAnd { calls.add(Steps.Verify) }
+                        .teardown { calls.add(Steps.Teardown) }
+
+            }) exercise {
+                testThatSucceeds()
+            } verify {
+                assertEquals(correctOrder, calls)
+                assertEquals("$originalSharedContext bottles of beer on the wall.", sharedContextReceived)
+            }
+
+            @Test
             fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFail() = setup(object {
                 val customSetup = testTemplate(wrapper = {})
 

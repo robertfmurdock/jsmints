@@ -39,7 +39,7 @@ class TestTemplate<SC : Any>(
     operator fun <C : Any> invoke(context: C, additionalSetupActions: C.() -> Unit = {}) =
             Setup({ context }, reporter, additionalSetupActions, wrapper)
 
-    operator fun <C : Any> invoke(contextProvider: (SC)-> C, additionalSetupActions: C.() -> Unit = {}) =
+    operator fun <C : Any> invoke(contextProvider: (SC) -> C, additionalSetupActions: C.() -> Unit = {}) =
             Setup(contextProvider, reporter, additionalSetupActions, wrapper)
 
     fun extend(sharedSetup: () -> Unit = {}, sharedTeardown: () -> Unit = {}) = TestTemplate<SC>(
@@ -52,6 +52,17 @@ class TestTemplate<SC : Any>(
                 }
             }
     )
+
+    fun <SC2 : Any> extend(wrapper: (SC, (SC2) -> Unit) -> Unit) = TestTemplate<SC2>(reporter) { test ->
+        this.wrapper { sc1 -> wrapper(sc1, test) }
+    }
+
+    fun <SC2 : Any> extend(sharedSetup: (SC) -> SC2, sharedTeardown: (SC2) -> Unit = {}) = extend<SC2> { sc1, test ->
+        val sc2 = sharedSetup(sc1)
+        test(sc2)
+        sharedTeardown(sc2)
+    }
+
 }
 
 typealias ExerciseFunc<C, R> = C.() -> R
