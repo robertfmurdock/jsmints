@@ -430,7 +430,7 @@ class AsyncMintsTest {
             }
 
             @Test
-            fun wrapperFunctionProvideSharedContextAlso() = asyncSetup(object {
+            fun wrapperFunctionProvideSharedContext() = asyncSetup(object {
                 val calls = mutableListOf<Steps>()
 
                 val expectedSharedContext = 17
@@ -455,6 +455,30 @@ class AsyncMintsTest {
             } verify {
                 assertEquals(correctOrder - Steps.Teardown, calls)
                 assertEquals(expectedSharedContext, sharedContextReceived)
+            }
+
+            @Test
+            fun templateSharedContextCanBeUsedAsContext() = asyncSetup(object {
+                val calls = mutableListOf<Steps>()
+
+                val sharedContext = 17
+                val customSetup = asyncTestTemplate(wrapper = { runTest: suspend (sharedContext: Int) -> Unit ->
+                    calls.add(Steps.TemplateSetup)
+                    runTest(sharedContext)
+                    calls.add(Steps.TemplateTeardown)
+                })
+
+                var contextReceived: Int? = null
+
+                fun testThatSucceeds() = customSetup { calls.add(Steps.Setup) }
+                        .exercise { contextReceived = this; calls.add(Steps.Exercise) }
+                        .verify { calls.add(Steps.Verify) }
+
+            }) exercise {
+                waitForTest { testThatSucceeds() }
+            } verify {
+                assertEquals(correctOrder - Steps.Teardown, calls)
+                assertEquals(sharedContext, contextReceived)
             }
 
             @Test

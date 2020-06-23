@@ -140,3 +140,11 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
         reporter,
         wrapper
 )
+
+operator fun <C : Any> TestTemplate<C>.invoke(additionalActions: suspend C.() -> Unit = {}) = Setup(
+        { it },
+        mintScope(),
+        additionalActions,
+        reporter,
+        wrapper
+)
