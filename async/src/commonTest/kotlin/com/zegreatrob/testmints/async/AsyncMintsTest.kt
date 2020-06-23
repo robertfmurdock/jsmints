@@ -486,6 +486,36 @@ class AsyncMintsTest {
             }
 
             @Test
+            fun canExtendToTransformSharedContextUsingSharedSetupAndTeardown() = asyncSetup(object {
+                val calls = mutableListOf<Steps>()
+
+                val originalSharedContext = 41
+
+                val extendedSetup = asyncTestTemplate(sharedSetup = { originalSharedContext })
+                        .extend(
+                                sharedSetup = { sc ->
+                                    calls.add(Steps.TemplateSetup)
+                                    "$sc bottles of beer on the wall."
+                                },
+                                sharedTeardown = { calls.add(Steps.TemplateTeardown) }
+                        )
+
+                var sharedContextReceived: Any? = null
+
+                fun testThatSucceeds() = extendedSetup(contextProvider = { sc -> sharedContextReceived = sc }) {
+                    calls.add(Steps.Setup)
+                }.exercise { calls.add(Steps.Exercise) }
+                        .verifyAnd { calls.add(Steps.Verify) }
+                        .teardown { calls.add(Steps.Teardown) }
+
+            }) exercise {
+                waitForTest { testThatSucceeds() }
+            } verify {
+                assertEquals(correctOrder, calls)
+                assertEquals("$originalSharedContext bottles of beer on the wall.", sharedContextReceived)
+            }
+
+            @Test
             fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFail() = asyncSetup(object {
                 val customSetup = asyncTestTemplate(wrapper = {})
                 fun testThatFailsBecauseOfBadTemplate() = customSetup(object {})
