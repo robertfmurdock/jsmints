@@ -29,7 +29,7 @@ class TestMintsTest {
         @Test
         fun verifyShouldThrowErrorWhenFailureOccurs() = setup(object {
 
-            fun simulatedTestThatFailsInVerify(): Unit = setup(Unit) exercise {} verify { fail("LOL") }
+            fun simulatedTestThatFailsInVerify() = setup(Unit) exercise {} verify { fail("LOL") }
 
         }) exercise {
             captureException { simulatedTestThatFailsInVerify() }
@@ -37,63 +37,61 @@ class TestMintsTest {
             assertEquals("LOL", result?.message)
         }
 
-        class ValueCollector(var actualValue: Int? = null)
-
         @Test
         fun exerciseShouldHaveAccessToScopeOfSetupObject() = setup(object {
             val expectedValue: Int? = Random.nextInt()
-            val valueCollector = ValueCollector()
+            var actualValue: Int? = null
 
             fun testThatUsesContextInExercise() = setup(object {
                 val value = expectedValue
             }) exercise {
-                valueCollector.actualValue = value
+                actualValue = value
             } verify {
             }
 
         }) exercise {
             testThatUsesContextInExercise()
         } verify {
-            assertEquals(expectedValue, valueCollector.actualValue)
+            assertEquals(expectedValue, actualValue)
         }
 
         @Test
         fun verifyShouldReceiveTheResultOfExerciseAsParameter() = setup(object {
             val expectedValue = Random.nextInt()
-            val valueCollector = ValueCollector()
+            var actualValue: Int? = null
 
             fun testThatPassesResultToVerify() = setup(object {}) exercise { expectedValue } verify { result ->
-                valueCollector.actualValue = result
+                actualValue = result
             }
 
         }) exercise {
             testThatPassesResultToVerify()
         } verify {
-            assertEquals(expectedValue, valueCollector.actualValue)
+            assertEquals(expectedValue, actualValue)
         }
 
         @Test
         fun verifyShouldHaveAccessToSetupContext() = setup(object {
             val expectedValue: Int? = Random.nextInt()
-            val valueCollector = ValueCollector()
+            var actualValue: Int? = null
 
             fun testThatUsesContextInVerify() = setup(object {
                 val value = expectedValue
             }) exercise {} verify {
-                valueCollector.actualValue = value
+                actualValue = value
             }
 
         }) exercise {
             testThatUsesContextInVerify()
         } verify {
-            assertEquals(expectedValue, valueCollector.actualValue)
+            assertEquals(expectedValue, actualValue)
         }
 
         @Test
         fun tearDownShouldHaveAccessToScopeOfSetupObjectAndResult() = setup(object {
             val expectedValue: Int = Random.nextInt()
             val expectedResult: Int = Random.nextInt()
-            val valueCollector = mutableListOf<Pair<Int, Int>>()
+            var teardownReceived: Pair<Int, Int>? = null
         }) exercise {
 
             fun testThatSendsContextToTeardown() = setup(object {
@@ -102,12 +100,12 @@ class TestMintsTest {
                 expectedResult
             } verifyAnd {
             } teardown { result ->
-                valueCollector.add(value to result)
+                teardownReceived = value to result
             }
 
             testThatSendsContextToTeardown()
         } verify {
-            assertEquals(expectedValue to expectedResult, valueCollector[0])
+            assertEquals(expectedValue to expectedResult, teardownReceived)
         }
 
         @Test
@@ -141,7 +139,6 @@ class TestMintsTest {
             assertEquals(setupException, result)
         }
 
-
         class TestTemplates {
             enum class Steps {
                 TemplateSetup, TemplateTeardown, Setup, Exercise, Verify, Teardown
@@ -159,9 +156,10 @@ class TestMintsTest {
             @Test
             fun whenTestSucceedsIncludingTeardownSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun beforeAll() = calls.add(Steps.TemplateSetup).let { Unit }
-                fun afterAll() = calls.add(Steps.TemplateTeardown).let { Unit }
-                val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
+                val customSetup = testTemplate(
+                        sharedSetup = { calls.add(Steps.TemplateSetup) },
+                        sharedTeardown = { calls.add(Steps.TemplateTeardown) }
+                )
 
                 fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
                         .exercise { calls.add(Steps.Exercise) }
@@ -177,9 +175,10 @@ class TestMintsTest {
             @Test
             fun whenTestSucceedsEndingWithVerifySharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun templateSetup() = calls.add(Steps.TemplateSetup).let { Unit }
-                fun templateTeardown() = calls.add(Steps.TemplateTeardown).let { Unit }
-                val customSetup = testTemplate(sharedSetup = ::templateSetup, sharedTeardown = ::templateTeardown)
+                val customSetup = testTemplate(
+                        sharedSetup = { calls.add(Steps.TemplateSetup) },
+                        sharedTeardown = { calls.add(Steps.TemplateTeardown) }
+                )
 
                 fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
                         .exercise { calls.add(Steps.Exercise) }
@@ -194,12 +193,10 @@ class TestMintsTest {
             @Test
             fun wrapperFunctionCanBeUsedAsAlternativeToSharedSetupAndSharedTeardown() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun templateSetup() = calls.add(Steps.TemplateSetup).let { Unit }
-                fun templateTeardown() = calls.add(Steps.TemplateTeardown).let { Unit }
                 val customSetup = testTemplate(wrapper = { runTest: () -> Unit ->
-                    templateSetup()
+                    calls.add(Steps.TemplateSetup)
                     runTest()
-                    templateTeardown()
+                    calls.add(Steps.TemplateTeardown)
                 })
 
                 fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
@@ -225,13 +222,9 @@ class TestMintsTest {
 
                 var sharedContextReceived = 0
 
-                fun testThatSucceeds() = customSetup(contextProvider = { sc ->
-                    object {}.also {
-                        sharedContextReceived = sc
-                    }
-                }) { calls.add(Steps.Setup) }
-                        .exercise { calls.add(Steps.Exercise) }
-                        .verify { calls.add(Steps.Verify) }
+                fun testThatSucceeds() = customSetup(contextProvider = { sc -> sharedContextReceived = sc }) {
+                    calls.add(Steps.Setup)
+                } exercise { calls.add(Steps.Exercise) } verify { calls.add(Steps.Verify) }
 
             }) exercise {
                 testThatSucceeds()
