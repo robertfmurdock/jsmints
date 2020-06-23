@@ -99,6 +99,10 @@ class TestTemplate<SC : Any>(
                 }
             }
     )
+
+    fun <SC2 : Any> extend(wrapper: suspend ((SC, suspend (SC2) -> Unit) -> Unit)) = TestTemplate<SC2>(reporter) { test ->
+        this.wrapper { sc1 -> wrapper(sc1, test) }
+    }
 }
 
 operator fun <C : Any> TestTemplate<Unit>.invoke(

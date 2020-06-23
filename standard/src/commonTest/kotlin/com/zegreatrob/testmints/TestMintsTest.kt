@@ -264,7 +264,7 @@ class TestMintsTest {
             }
 
             @Test
-            fun canExtendToTransformSharedContextUsingWrapperStyle() = setup(object {
+            fun canExtendToTransformSharedContextUsingWrapper() = setup(object {
                 val calls = mutableListOf<Steps>()
 
                 val originalSharedContext = 67
@@ -360,7 +360,7 @@ class TestMintsTest {
             }
 
             @Test
-            fun testTemplateCanBeExtendedByCallingTestTemplateAgain() = setup(object {
+            fun testTemplateCanBeExtended() = setup(object {
                 val calls = mutableListOf<String>()
                 val customSetup = testTemplate(
                         sharedSetup = { calls.add("setup") }, sharedTeardown = { calls.add("teardown") }
