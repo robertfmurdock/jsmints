@@ -19,7 +19,7 @@ fun testTemplate(sharedSetup: () -> Unit, sharedTeardown: () -> Unit) =
 fun testTemplate(wrapper: SimpleWrapper) = StandardMints.testTemplateSimple(wrapper)
 
 @JvmName("testTemplateSC")
-fun <SC: Any> testTemplate(wrapper: Wrapper<SC>) = StandardMints.testTemplate(wrapper)
+fun <SC : Any> testTemplate(wrapper: Wrapper<SC>) = StandardMints.testTemplate(wrapper)
 
 typealias SimpleWrapper = (() -> Unit) -> Unit
 typealias Wrapper<SC> = ((SC) -> Unit) -> Unit
