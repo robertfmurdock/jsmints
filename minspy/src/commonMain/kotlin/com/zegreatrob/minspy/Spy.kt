@@ -17,6 +17,7 @@ interface Spy<I, O> {
     else
         fail("No values remaining given input $input")
 
+    @Suppress("unused")
     infix fun spyWillReturn(values: Collection<O>) {
         spyReturnValues += values
     }

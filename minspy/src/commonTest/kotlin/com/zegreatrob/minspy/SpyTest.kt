@@ -1,5 +1,6 @@
+package com.zegreatrob.minspy
+
 import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.minspy.SpyData
 import com.zegreatrob.testmints.setup
 import kotlin.test.Test
 
