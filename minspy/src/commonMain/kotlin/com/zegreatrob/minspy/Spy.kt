@@ -28,11 +28,15 @@ interface Spy<I, O> {
     fun cancel(): Nothing = throw NotImplementedError("Will not implement unused collaborator")
 }
 
-fun Spy<Unit, Unit>.spyFunction() = spyReceivedValues.add(Unit)
+fun Spy<Unit, Unit>.spyFunction() {
+    spyReceivedValues.add(Unit)
+}
 
 fun <O> Spy<Unit, O>.spyFunction() = spyFunction(Unit)
 
-fun <I> Spy<I, Unit>.spyFunction(input: I) = spyReceivedValues.add(input)
+fun <I> Spy<I, Unit>.spyFunction(input: I) {
+    spyReceivedValues.add(input)
+}
 
 fun <I, O> Spy<I, O>.spyFunction(input: I): O = spyReturnWhenGivenValues.fixedGetOrElse(input) {
     safePop(input)

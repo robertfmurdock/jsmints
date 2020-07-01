@@ -32,7 +32,8 @@ class SpyTest {
         val spy = SpyData<Int, Unit>()
     }) exercise {
         spy.spyFunction(77)
-    } verify {
+    } verify { result ->
+        result.assertIsEqualTo(Unit)
         spy.spyReceivedValues
                 .assertIsEqualTo(listOf(77))
     }
@@ -43,7 +44,8 @@ class SpyTest {
         val timesToCall = 3
     }) exercise {
         repeat(timesToCall) { spy.spyFunction() }
-    } verify {
+    } verify { result ->
+        result.assertIsEqualTo(Unit)
         spy.callCount.assertIsEqualTo(3)
     }
 
