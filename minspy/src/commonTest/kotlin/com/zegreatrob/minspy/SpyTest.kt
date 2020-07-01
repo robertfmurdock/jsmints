@@ -5,6 +5,7 @@ import com.zegreatrob.testmints.setup
 import kotlin.test.Test
 
 class SpyTest {
+
     @Test
     fun givenNullableOptionsWillCorrectlyReturnThem() = setup(object {
         val spy = SpyData<String, Int?>().apply {
@@ -35,4 +36,15 @@ class SpyTest {
         spy.spyReceivedValues
                 .assertIsEqualTo(listOf(77))
     }
+
+    @Test
+    fun whenNoArgsNoReturnDoesNotRequireSetup() = setup(object {
+        val spy = SpyData<Unit, Unit>()
+        val timesToCall = 3
+    }) exercise {
+        repeat(timesToCall) { spy.spyFunction() }
+    } verify {
+        spy.callCount.assertIsEqualTo(3)
+    }
+
 }

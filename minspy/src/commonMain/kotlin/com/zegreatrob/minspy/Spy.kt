@@ -4,9 +4,13 @@ import kotlin.test.fail
 
 interface Spy<I, O> {
     val spyReceivedValues: MutableList<I>
+
+    val callCount: Int get() = spyReceivedValues.size
+
     val spyReturnValues: MutableList<O>
 
     val spyReturnWhenGivenValues: MutableMap<I, O>
+
 
     @Suppress("unused")
     infix fun spyWillReturn(values: Collection<O>) {
@@ -23,6 +27,8 @@ interface Spy<I, O> {
 
     fun cancel(): Nothing = throw NotImplementedError("Will not implement unused collaborator")
 }
+
+fun Spy<Unit, Unit>.spyFunction() = spyReceivedValues.add(Unit)
 
 fun <O> Spy<Unit, O>.spyFunction() = spyFunction(Unit)
 
