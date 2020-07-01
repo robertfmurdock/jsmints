@@ -3,6 +3,7 @@ package com.zegreatrob.testmints.action
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minspy.Spy
 import com.zegreatrob.minspy.SpyData
+import com.zegreatrob.minspy.spyFunction
 import com.zegreatrob.testmints.setup
 import kotlin.test.Test
 
