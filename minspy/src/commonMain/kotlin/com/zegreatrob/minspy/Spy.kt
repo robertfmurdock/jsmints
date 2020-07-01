@@ -33,6 +33,8 @@ interface Spy<I, O> {
     fun cancel(): Nothing = throw NotImplementedError("Will not implement unused collaborator")
 }
 
+fun <O> Spy<Unit, O>.spyFunction() = spyFunction(Unit)
+
 private fun <K, V> Map<K, V>.fixedGetOrElse(input: K, function: () -> V) = if (containsKey(input)) {
     getValue(input)
 } else {
