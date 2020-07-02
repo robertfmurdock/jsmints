@@ -637,9 +637,7 @@ class AsyncMintsTest {
                             .verify { }
                 }
             }) exercise {
-                testSuite.forEach {
-                    waitForTest { it() }
-                }
+                testSuite.runSuite()
             } verify {
                 assertEquals(1, beforeAllCount)
             }
@@ -659,9 +657,7 @@ class AsyncMintsTest {
                             .verify { }
                 }
             }) exercise {
-                testSuite.forEach {
-                    waitForTest { it() }
-                }
+                testSuite.runSuite()
             } verify {
                 assertEquals(listOf(
                         "wrapSetup",
@@ -677,17 +673,36 @@ class AsyncMintsTest {
             @Test
             fun templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests() = asyncSetup(object {
                 var beforeAllCount = 0
-                val customSetup = asyncTestTemplate(
-                        beforeAll = { beforeAllCount++ }
-                )
+                val customSetup = asyncTestTemplate(beforeAll = { beforeAllCount++ })
                 val testSuite: List<() -> Unit> = emptyList()
             }) exercise {
-                testSuite.forEach {
-                    waitForTest { it() }
-                }
+                testSuite.runSuite()
             } verify {
                 assertEquals(0, beforeAllCount)
             }
+
+            @Test
+            fun templateExtendedByBeforeAllCanMergeSharedContextEasily() = asyncSetup(object {
+                val parentSharedContext = "parent shared context"
+                val innerBeforeAllContext = 87
+
+                val customSetup = asyncTestTemplate<String>(wrapper = { it(parentSharedContext) })
+                        .extend(beforeAll = { innerBeforeAllContext }, mergeContext = { sc, bac ->
+                            Pair(sc, bac)
+                        })
+
+                var capturedContext: Any? = null
+
+                fun theCoolTest() = customSetup()
+                        .exercise { capturedContext = this }
+                        .verify { }
+            }) exercise {
+                waitForTest { theCoolTest() }
+            } verify {
+                assertEquals(Pair(parentSharedContext, innerBeforeAllContext), capturedContext)
+            }
+
+            private suspend fun List<() -> Any?>.runSuite() = forEach { waitForTest { it() } }
 
         }
     }

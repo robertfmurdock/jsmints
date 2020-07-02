@@ -103,7 +103,7 @@ class TestTemplate<SC : Any>(
         val wrapper: suspend (suspend (SC) -> Unit) -> Unit
 ) {
 
-    fun extend(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit = {}) = TestTemplate<SC>(
+    fun extend(sharedSetup: suspend () -> Unit = {}, sharedTeardown: suspend () -> Unit = {}) = TestTemplate<SC>(
             reporter = reporter,
             wrapper = { test ->
                 wrapper {
@@ -124,9 +124,20 @@ class TestTemplate<SC : Any>(
         sharedTeardown(sc2)
     }
 
-    fun <BAC : Any> extend(beforeAll: suspend () -> BAC): TestTemplate<BAC> {
+    fun <BAC : Any> extend(beforeAll: suspend () -> BAC): TestTemplate<BAC> = extend(
+            beforeAll = beforeAll,
+            mergeContext = { _, bac -> bac }
+    )
+
+    fun <BAC : Any, SC2 : Any> extend(
+            beforeAll: suspend () -> BAC,
+            mergeContext: suspend (SC, BAC) -> SC2
+    ): TestTemplate<SC2> {
         val deferred = templateScope.async(start = CoroutineStart.LAZY) { beforeAll() }
-        return extend<BAC>(sharedSetup = { deferred.await() })
+        return extend(sharedSetup = { sharedContext ->
+            mergeContext(sharedContext, deferred.await())
+        })
+
     }
 }
 
