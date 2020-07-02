@@ -3,6 +3,7 @@ package com.zegreatrob.testmints.async
 import com.zegreatrob.testmints.report.MintReporter
 import com.zegreatrob.testmints.report.MintReporterConfig
 import com.zegreatrob.testmints.report.ReporterProvider
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -58,7 +59,7 @@ interface SetupSyntax : ReporterProvider {
     }
 
     fun <SC : Any> asyncTestTemplate(wrapper: suspend (suspend (SC) -> Unit) -> Unit) = TestTemplate(
-            reporter, wrapper
+            reporter, mintScope(), wrapper
     )
 }
 
@@ -98,6 +99,7 @@ object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig
 
 class TestTemplate<SC : Any>(
         val reporter: MintReporter,
+        val templateScope: CoroutineScope = mintScope(),
         val wrapper: suspend (suspend (SC) -> Unit) -> Unit
 ) {
 
@@ -120,6 +122,11 @@ class TestTemplate<SC : Any>(
         val sc2 = sharedSetup(sc1)
         test(sc2)
         sharedTeardown(sc2)
+    }
+
+    fun <BAC : Any> extend(beforeAll: suspend () -> BAC): TestTemplate<BAC> {
+        val deferred = templateScope.async(start = CoroutineStart.LAZY) { beforeAll() }
+        return extend<BAC>(sharedSetup = { deferred.await() })
     }
 }
 

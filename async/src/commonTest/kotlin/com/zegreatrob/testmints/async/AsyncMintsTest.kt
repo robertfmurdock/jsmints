@@ -628,12 +628,9 @@ class AsyncMintsTest {
             }
 
             @Test
-            fun templateCanBeBuiltWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests() = asyncSetup(object : ScopeMint() {
+            fun templateCanBeBuiltWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests() = asyncSetup(object {
                 var beforeAllCount = 0
-                val customSetup = asyncTestTemplate(
-                        beforeAll = { beforeAllCount++ }
-                )
-
+                val customSetup = asyncTestTemplate(beforeAll = { beforeAllCount++ })
                 val testSuite = (1..3).map {
                     fun() = customSetup(object {}) { }
                             .exercise { }
@@ -648,7 +645,37 @@ class AsyncMintsTest {
             }
 
             @Test
-            fun templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests() = asyncSetup(object : ScopeMint() {
+            fun templateCanBeExtendedWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests() = asyncSetup(object {
+                var calls = mutableListOf<String>()
+                val customSetup = asyncTestTemplate(wrapper = {
+                    calls.add("wrapSetup")
+                    it()
+                    calls.add("wrapTeardown")
+                }).extend(beforeAll = { calls.add("beforeAll") })
+
+                val testSuite = (1..3).map {
+                    fun() = customSetup(object {}) { }
+                            .exercise { }
+                            .verify { }
+                }
+            }) exercise {
+                testSuite.forEach {
+                    waitForTest { it() }
+                }
+            } verify {
+                assertEquals(listOf(
+                        "wrapSetup",
+                        "beforeAll",
+                        "wrapTeardown",
+                        "wrapSetup",
+                        "wrapTeardown",
+                        "wrapSetup",
+                        "wrapTeardown"
+                ), calls)
+            }
+
+            @Test
+            fun templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests() = asyncSetup(object {
                 var beforeAllCount = 0
                 val customSetup = asyncTestTemplate(
                         beforeAll = { beforeAllCount++ }
