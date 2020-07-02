@@ -3,6 +3,9 @@ package com.zegreatrob.testmints.async
 import com.zegreatrob.testmints.report.MintReporter
 import com.zegreatrob.testmints.report.MintReporterConfig
 import com.zegreatrob.testmints.report.ReporterProvider
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlin.jvm.JvmName
 
 interface AsyncMintDispatcher : SetupSyntax
@@ -44,6 +47,12 @@ interface SetupSyntax : ReporterProvider {
         sharedTeardown(sc)
     }
 
+    fun <SC : Any> asyncTestTemplate(beforeAll: suspend () -> SC): TestTemplate<SC> {
+        val templateScope = mintScope()
+        val deferred: Deferred<SC> = templateScope.async(start = CoroutineStart.LAZY) { beforeAll() }
+        return TestTemplate(reporter) { it(deferred.await()) }
+    }
+
     fun asyncTestTemplateSimple(wrapper: suspend (suspend () -> Unit) -> Unit) = TestTemplate<Unit>(reporter) {
         wrapper { it(Unit) }
     }
@@ -63,6 +72,9 @@ fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: su
 
 fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit = {}) =
         AsyncMints.asyncTestTemplate(sharedSetup, sharedTeardown)
+
+fun <SC : Any> asyncTestTemplate(beforeAll: suspend () -> SC) =
+        AsyncMints.asyncTestTemplate(beforeAll = beforeAll)
 
 fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) =
         AsyncMints.asyncTestTemplate(sharedSetup, { sharedTeardown() })

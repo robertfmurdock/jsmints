@@ -626,6 +626,42 @@ class AsyncMintsTest {
             } verify {
                 assertEquals(listOf<Any>(int), callArguments)
             }
+
+            @Test
+            fun templateCanBeBuiltWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests() = asyncSetup(object : ScopeMint() {
+                var beforeAllCount = 0
+                val customSetup = asyncTestTemplate(
+                        beforeAll = { beforeAllCount++ }
+                )
+
+                val testSuite = (1..3).map {
+                    fun() = customSetup(object {}) { }
+                            .exercise { }
+                            .verify { }
+                }
+            }) exercise {
+                testSuite.forEach {
+                    waitForTest { it() }
+                }
+            } verify {
+                assertEquals(1, beforeAllCount)
+            }
+
+            @Test
+            fun templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests() = asyncSetup(object : ScopeMint() {
+                var beforeAllCount = 0
+                val customSetup = asyncTestTemplate(
+                        beforeAll = { beforeAllCount++ }
+                )
+                val testSuite: List<() -> Unit> = emptyList()
+            }) exercise {
+                testSuite.forEach {
+                    waitForTest { it() }
+                }
+            } verify {
+                assertEquals(0, beforeAllCount)
+            }
+
         }
     }
 
