@@ -114,11 +114,16 @@ class TestTemplate<SC : Any>(
             }
     )
 
-    fun <SC2 : Any> extend(wrapper: suspend ((SC, suspend (SC2) -> Unit) -> Unit)) = TestTemplate<SC2>(reporter) { test ->
+    fun <SC2 : Any> extend(
+            wrapper: suspend ((SC, suspend (SC2) -> Unit) -> Unit)
+    ) = TestTemplate<SC2>(reporter) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
     }
 
-    fun <SC2 : Any> extend(sharedSetup: suspend (SC) -> SC2, sharedTeardown: suspend (SC2) -> Unit = {}) = extend<SC2> { sc1, test ->
+    fun <SC2 : Any> extend(
+            sharedSetup: suspend (SC) -> SC2,
+            sharedTeardown: suspend (SC2) -> Unit = {}
+    ) = extend<SC2> { sc1, test ->
         val sc2 = sharedSetup(sc1)
         test(sc2)
         sharedTeardown(sc2)
@@ -137,7 +142,6 @@ class TestTemplate<SC : Any>(
         return extend(sharedSetup = { sharedContext ->
             mergeContext(sharedContext, deferred.await())
         })
-
     }
 }
 
