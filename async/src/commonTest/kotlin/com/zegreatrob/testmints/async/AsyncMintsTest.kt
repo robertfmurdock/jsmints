@@ -227,7 +227,7 @@ class AsyncMintsTest {
             object {
                 val asyncProducedValue = asyncProducedValue
             }
-        }) exercise {
+        }) {} exercise {
             asyncProducedValue
         } verify { result ->
             assertEquals(asyncProducedValue, result)
