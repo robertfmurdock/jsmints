@@ -65,11 +65,11 @@ interface SetupSyntax : ReporterProvider {
 
 private fun Any.chooseTestScope() = if (this is ScopeMint) testScope else mintScope()
 
-fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
-        .asyncSetup(context, additionalActions)
-
 fun <C : Any> asyncSetup(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
         .asyncSetup(contextProvider, additionalActions)
+
+fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = AsyncMints
+        .asyncSetup(context, additionalActions)
 
 fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit = {}) =
         AsyncMints.asyncTestTemplate(sharedSetup, sharedTeardown)
@@ -143,6 +143,18 @@ class TestTemplate<SC : Any>(
             mergeContext(sharedContext, deferred.await())
         })
     }
+
+    operator fun <C : Any> invoke(
+            contextProvider: suspend (SC) -> C,
+            additionalActions: suspend C.() -> Unit = {}
+    ) = Setup(
+            contextProvider,
+            mintScope(),
+            additionalActions,
+            reporter,
+            wrapper
+    )
+
 }
 
 operator fun <C : Any> TestTemplate<Unit>.invoke(
@@ -159,17 +171,6 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
 ) = Setup(
         { context },
         context.chooseTestScope(),
-        additionalActions,
-        reporter,
-        wrapper
-)
-
-operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
-        contextProvider: suspend (SC) -> C,
-        additionalActions: suspend C.() -> Unit = {}
-) = Setup(
-        contextProvider,
-        mintScope(),
         additionalActions,
         reporter,
         wrapper

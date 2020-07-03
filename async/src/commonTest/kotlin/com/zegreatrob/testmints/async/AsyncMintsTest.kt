@@ -442,7 +442,7 @@ class AsyncMintsTest {
 
                 var sharedContextReceived = 0
 
-                fun testThatSucceeds() = customSetup(contextProvider = { sc ->
+                fun testThatSucceeds() = customSetup({ sc ->
                     object {}.also {
                         sharedContextReceived = sc
                     }
@@ -496,7 +496,7 @@ class AsyncMintsTest {
 
                 var sharedContextReceived: Any? = null
 
-                fun testThatSucceeds() = extendedSetup(contextProvider = { sc -> sharedContextReceived = sc }) {
+                fun testThatSucceeds() = extendedSetup({ sc -> sharedContextReceived = sc }) {
                     calls.add(Steps.Setup)
                 }.exercise { calls.add(Steps.Exercise) }
                         .verifyAnd { calls.add(Steps.Verify) }
@@ -526,7 +526,7 @@ class AsyncMintsTest {
 
                 var sharedContextReceived: Any? = null
 
-                fun testThatSucceeds() = extendedSetup(contextProvider = { sc -> sharedContextReceived = sc }) {
+                fun testThatSucceeds() = extendedSetup({ sc -> sharedContextReceived = sc }) {
                     calls.add(Steps.Setup)
                 }.exercise { calls.add(Steps.Exercise) }
                         .verifyAnd { calls.add(Steps.Verify) }
