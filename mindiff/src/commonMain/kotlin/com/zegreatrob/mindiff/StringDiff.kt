@@ -10,7 +10,7 @@ fun stringDiff(l: String, r: String): String {
     }
 
     return differentSectionDescription(l, r, firstDiffIndex)
-            .joinToString("\n")
+        .joinToString("\n")
 }
 
 private fun differentSectionDescription(l: String, r: String, firstDiffIndex: Int): List<String> {
@@ -36,13 +36,13 @@ private fun splitIntoTwoDiffSections(originalFirstDiff: Int, eDiffRange: String,
 
             if (innerFirstDiffIndex > 2) {
                 return diffDescription(
-                        index = originalFirstDiff,
-                        eDiff = eDiffRange.substring(0 until eIndex),
-                        aDiff = aDiffRange.substring(0 until aIndex)
+                    index = originalFirstDiff,
+                    eDiff = eDiffRange.substring(0 until eIndex),
+                    aDiff = aDiffRange.substring(0 until aIndex)
                 ) + diffDescription(
-                        index = originalFirstDiff + eIndex + innerFirstDiffIndex,
-                        eDiff = eDiffRange.substring(eIndex + innerFirstDiffIndex),
-                        aDiff = aDiffRange.substring(aIndex + innerFirstDiffIndex)
+                    index = originalFirstDiff + eIndex + innerFirstDiffIndex,
+                    eDiff = eDiffRange.substring(eIndex + innerFirstDiffIndex),
+                    aDiff = aDiffRange.substring(aIndex + innerFirstDiffIndex)
                 )
             }
         }
@@ -51,13 +51,13 @@ private fun splitIntoTwoDiffSections(originalFirstDiff: Int, eDiffRange: String,
 }
 
 private fun diffDescription(index: Int, eDiff: String, aDiff: String) = listOf(
-        "Difference at index $index.",
-        "E: $eDiff",
-        "A: $aDiff"
+    "Difference at index $index.",
+    "E: $eDiff",
+    "A: $aDiff"
 )
 
 private fun String.diffRange(firstDiffIndex: Int, reverseDiffIndex: Int) = substring(
-        firstDiffIndex until length - reverseDiffIndex
+    firstDiffIndex until length - reverseDiffIndex
 )
 
 private fun String.firstDiffIndex() = indexOf("x")

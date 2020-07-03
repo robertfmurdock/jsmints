@@ -3,7 +3,7 @@ package com.zegreatrob.mindiff
 import kotlin.math.max
 
 fun diff(left: String, right: String) = indexes(left, right)
-        .joinToString("") { index -> charDiff(left.getOrNull(index), right.getOrNull(index)) }
+    .joinToString("") { index -> charDiff(left.getOrNull(index), right.getOrNull(index)) }
 
 private fun indexes(left: String, right: String) = (0 until max(left.length, right.length))
 

@@ -17,7 +17,7 @@ class GeneralExecutableActionDispatcherTest {
 
     @Test
     fun syntaxAllowsInterceptionOfActionExecutionIncludingReplacingResult() = setup(object :
-            GeneralExecutableActionDispatcherSyntax {
+        GeneralExecutableActionDispatcherSyntax {
         val expectedReplacedResult = 127
         override val generalDispatcher = generalDispatcherSpy().apply { spyWillReturn(expectedReplacedResult) }
         val action = DivideAction(6, 7)

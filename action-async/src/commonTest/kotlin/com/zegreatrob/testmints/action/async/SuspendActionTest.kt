@@ -7,6 +7,7 @@ import com.zegreatrob.testmints.action.Action
 import com.zegreatrob.testmints.action.ExecutableActionExecuteSyntax
 import com.zegreatrob.testmints.action.SimpleExecutableAction
 import com.zegreatrob.testmints.async.asyncSetup
+import com.zegreatrob.testmints.async.invoke
 import kotlinx.coroutines.coroutineScope
 import kotlin.test.Test
 
@@ -76,7 +77,7 @@ class SuspendActionTest : SuspendActionExecuteSyntax {
         }
 
         data class SubtractAction(val left: Int, val right: Int) :
-                SimpleExecutableAction<SubtractActionDispatcher, Int> {
+            SimpleExecutableAction<SubtractActionDispatcher, Int> {
             override val performFunc = link(SubtractActionDispatcher::invoke)
         }
 

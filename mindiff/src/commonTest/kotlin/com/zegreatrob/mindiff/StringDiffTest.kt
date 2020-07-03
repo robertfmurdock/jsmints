@@ -27,7 +27,7 @@ class StringDiffTest {
             stringDiff(l, r)
         } verify { result ->
             result.split("\n")[0]
-                    .assertIsEqualTo("Difference at index 3.")
+                .assertIsEqualTo("Difference at index 3.")
         }
 
         @Test
@@ -35,13 +35,13 @@ class StringDiffTest {
             stringDiff(l, r)
         } verify { result ->
             result.split("\n")
-                    .takeLast(2)
-                    .assertIsEqualTo(
-                            listOf(
-                                    "E: man",
-                                    "A: lady"
-                            )
+                .takeLast(2)
+                .assertIsEqualTo(
+                    listOf(
+                        "E: man",
+                        "A: lady"
                     )
+                )
         }
     }
 
@@ -56,7 +56,7 @@ class StringDiffTest {
             stringDiff(l, r)
         } verify { result ->
             result.split("\n")[0]
-                    .assertIsEqualTo("Difference at index 4.")
+                .assertIsEqualTo("Difference at index 4.")
         }
 
         @Test
@@ -64,13 +64,13 @@ class StringDiffTest {
             stringDiff(l, r)
         } verify { result ->
             result.split("\n")
-                    .takeLast(2)
-                    .assertIsEqualTo(
-                            listOf(
-                                    "E: man",
-                                    "A: lady"
-                            )
+                .takeLast(2)
+                .assertIsEqualTo(
+                    listOf(
+                        "E: man",
+                        "A: lady"
                     )
+                )
         }
     }
 
@@ -87,12 +87,12 @@ class StringDiffTest {
             val lines = result.split("\n")
             lines[0].assertIsEqualTo("Difference at index 4.")
             lines.slice(1..2)
-                    .assertIsEqualTo(
-                            listOf(
-                                    "E: man",
-                                    "A: lady"
-                            )
+                .assertIsEqualTo(
+                    listOf(
+                        "E: man",
+                        "A: lady"
                     )
+                )
         }
 
         @Test
@@ -102,12 +102,12 @@ class StringDiffTest {
             val lines = result.split("\n")
             lines[3].assertIsEqualTo("Difference at index 39.")
             lines.slice(4..5)
-                    .assertIsEqualTo(
-                            listOf(
-                                    "E: jig",
-                                    "A: salsa"
-                            )
+                .assertIsEqualTo(
+                    listOf(
+                        "E: jig",
+                        "A: salsa"
                     )
+                )
 
         }
 

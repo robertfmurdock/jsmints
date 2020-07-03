@@ -5,6 +5,7 @@ import com.zegreatrob.minspy.Spy
 import com.zegreatrob.minspy.SpyData
 import com.zegreatrob.minspy.spyFunction
 import com.zegreatrob.testmints.async.asyncSetup
+import com.zegreatrob.testmints.async.invoke
 import kotlin.test.Test
 
 private typealias DivideActionDispatcher = suspend (GeneralSuspendActionDispatcherTest.DivideAction) -> Int
@@ -17,7 +18,7 @@ class GeneralSuspendActionDispatcherTest {
 
     @Test
     fun syntaxAllowsInterceptionOfActionExecutionIncludingReplacingResult() = asyncSetup(object :
-            GeneralSuspendActionDispatcherSyntax {
+        GeneralSuspendActionDispatcherSyntax {
         val expectedReplacedResult = 127
         override val generalDispatcher = generalDispatcherSpy().apply { spyWillReturn(expectedReplacedResult) }
         val action = DivideAction(6, 7)

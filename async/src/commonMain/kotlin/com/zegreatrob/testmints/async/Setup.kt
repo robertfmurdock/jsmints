@@ -9,11 +9,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 
 class Setup<C : Any, SC : Any>(
-        private val contextProvider: suspend (SC) -> C,
-        private val scope: CoroutineScope,
-        private val additionalActions: suspend C.() -> Unit,
-        private val reporter: MintReporter,
-        private val wrapper: suspend (suspend (SC) -> Unit) -> Unit
+    private val contextProvider: suspend (SC) -> C,
+    private val scope: CoroutineScope,
+    private val additionalActions: suspend C.() -> Unit,
+    private val reporter: MintReporter,
+    private val wrapper: suspend (suspend (SC) -> Unit) -> Unit
 ) {
     infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { verifyFunc ->
         { teardownFunc ->
@@ -24,9 +24,9 @@ class Setup<C : Any, SC : Any>(
     }
 
     private suspend fun <R> runTest(
-            exerciseFunc: suspend C.() -> R,
-            verifyFunc: suspend C.(R) -> Unit,
-            teardownFunc: suspend C.(R) -> Unit
+        exerciseFunc: suspend C.() -> R,
+        verifyFunc: suspend C.(R) -> Unit,
+        teardownFunc: suspend C.(R) -> Unit
     ) {
         var verifyFailure: Throwable? = null
         var teardownException: Throwable? = null
@@ -53,11 +53,11 @@ class Setup<C : Any, SC : Any>(
     }
 
     private suspend fun <R> performVerify(context: C, result: R, assertionFunctions: suspend C.(R) -> Unit) =
-            captureException {
-                reporter.verifyStart(result)
-                context.assertionFunctions(result)
-                reporter.verifyFinish()
-            }
+        captureException {
+            reporter.verifyStart(result)
+            context.assertionFunctions(result)
+            reporter.verifyFinish()
+        }
 
     private suspend fun performSetup(sharedContext: SC): C {
         val context = contextProvider(sharedContext)
@@ -68,7 +68,8 @@ class Setup<C : Any, SC : Any>(
         return context
     }
 
-    private suspend fun <R> performExercise(context: C, exerciseFunc: suspend C.() -> R) = runCodeUnderTest(context, exerciseFunc)
+    private suspend fun <R> performExercise(context: C, exerciseFunc: suspend C.() -> R) =
+        runCodeUnderTest(context, exerciseFunc)
             .also {
                 if (context is ScopeMint) {
                     waitForJobsToFinish(context.exerciseScope)
@@ -80,9 +81,9 @@ class Setup<C : Any, SC : Any>(
 private fun Throwable.wrapCause() = CancellationException("Test failure.", this)
 
 private fun handleTeardownExceptions(
-        failure: Throwable?,
-        teardownException: Throwable?,
-        templateTeardownException: Throwable?
+    failure: Throwable?,
+    teardownException: Throwable?,
+    templateTeardownException: Throwable?
 ) {
     val problems = exceptionDescriptionMap(failure, teardownException, templateTeardownException)
 
@@ -94,26 +95,26 @@ private fun handleTeardownExceptions(
 }
 
 private fun exceptionDescriptionMap(
-        failure: Throwable?,
-        teardownException: Throwable?,
-        templateTeardownException: Throwable?
+    failure: Throwable?,
+    teardownException: Throwable?,
+    templateTeardownException: Throwable?
 ) = descriptionMap(failure, teardownException, templateTeardownException)
-        .mapNotNull { (descriptor, exception) -> exception?.let { descriptor to exception } }
-        .toMap()
+    .mapNotNull { (descriptor, exception) -> exception?.let { descriptor to exception } }
+    .toMap()
 
 private fun descriptionMap(
-        failure: Throwable?,
-        teardownException: Throwable?,
-        templateTeardownException: Throwable?
+    failure: Throwable?,
+    teardownException: Throwable?,
+    templateTeardownException: Throwable?
 ) = mapOf(
-        "Failure" to failure,
-        "Teardown exception" to teardownException,
-        "Template teardown exception" to templateTeardownException
+    "Failure" to failure,
+    "Teardown exception" to teardownException,
+    "Template teardown exception" to templateTeardownException
 )
 
 private suspend fun <SC : Any> checkedInvoke(
-        wrapper: suspend (suspend (SC) -> Unit) -> Unit,
-        test: suspend (SC) -> Unit
+    wrapper: suspend (suspend (SC) -> Unit) -> Unit,
+    test: suspend (SC) -> Unit
 ) = captureException {
     var testWasInvoked = false
     wrapper.invoke { sharedContext ->

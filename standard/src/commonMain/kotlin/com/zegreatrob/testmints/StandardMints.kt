@@ -7,13 +7,13 @@ import kotlin.jvm.JvmName
 object StandardMints : StandardMintDispatcher, ReporterProvider by MintReporterConfig
 
 fun <C : Any> setup(context: C, additionalSetupActions: C.() -> Unit = {}) =
-        StandardMints.setup(context, additionalSetupActions)
+    StandardMints.setup(context, additionalSetupActions)
 
 fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit = {}) =
-        StandardMints.testTemplate(sharedSetup, sharedTeardown)
+    StandardMints.testTemplate(sharedSetup, sharedTeardown)
 
 fun testTemplate(sharedSetup: () -> Unit, sharedTeardown: () -> Unit) =
-        StandardMints.testTemplate(sharedSetup, { sharedTeardown() })
+    StandardMints.testTemplate(sharedSetup, { sharedTeardown() })
 
 @JvmName("testTemplateSimple")
 fun testTemplate(wrapper: SimpleWrapper) = StandardMints.testTemplateSimple(wrapper)

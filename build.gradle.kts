@@ -77,10 +77,10 @@ subprojects {
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
     val macTargets = listOf(
-            "macosX64",
-            "iosX64",
-            "iosArm32",
-            "iosArm64"
+        "macosX64",
+        "iosX64",
+        "iosArm32",
+        "iosArm64"
     )
 
     tasks {
@@ -88,15 +88,15 @@ subprojects {
 
             doFirst {
                 val publications = publishing.publications
-                        .filterNot {
-                            it.name.contains("-test")
-                        }
-                        .map { it.name }
-                        .filter {
-                            if (isMacRelease()) {
-                                macTargets.contains(it)
-                            } else true
-                        }
+                    .filterNot {
+                        it.name.contains("-test")
+                    }
+                    .map { it.name }
+                    .filter {
+                        if (isMacRelease()) {
+                            macTargets.contains(it)
+                        } else true
+                    }
 
                 publishing.publications.getByName<MavenPublication>("kotlinMultiplatform") {
                     groupId = "com.zegreatrob.testmints"
@@ -105,19 +105,19 @@ subprojects {
                 }
 
                 publishing.publications.filterIsInstance(MavenPublication::class.java)
-                        .map {
-                            it.artifact(file("build/publications/${it.name}/module.json")) {
-                                extension = "module"
-                            }
-                            it.artifact(file("build/classes/kotlin/${it.name}/main/${project.name}.klib")) {
-                                extension = "klib"
-                            }
+                    .map {
+                        it.artifact(file("build/publications/${it.name}/module.json")) {
+                            extension = "module"
                         }
+                        it.artifact(file("build/classes/kotlin/${it.name}/main/${project.name}.klib")) {
+                            extension = "klib"
+                        }
+                    }
 
                 publishing.publications.filterIsInstance(MavenPublication::class.java)
-                        .map { it.artifacts }
-                        .flatten()
-                        .forEach { println("${it.file}") }
+                    .map { it.artifacts }
+                    .flatten()
+                    .forEach { println("${it.file}") }
 
                 setPublications(* publications.toTypedArray())
             }

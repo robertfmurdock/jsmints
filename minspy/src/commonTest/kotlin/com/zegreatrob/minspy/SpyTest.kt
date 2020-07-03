@@ -35,7 +35,7 @@ class SpyTest {
     } verify { result ->
         result.assertIsEqualTo(Unit)
         spy.spyReceivedValues
-                .assertIsEqualTo(listOf(77))
+            .assertIsEqualTo(listOf(77))
     }
 
     @Test

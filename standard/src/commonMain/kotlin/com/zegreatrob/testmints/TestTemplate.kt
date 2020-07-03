@@ -5,7 +5,7 @@ import com.zegreatrob.testmints.report.MintReporter
 class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: ((SC) -> Unit) -> Unit) {
 
     operator fun <C : Any> invoke(contextProvider: (SC) -> C, additionalSetupActions: C.() -> Unit = {}) =
-            Setup(contextProvider, reporter, additionalSetupActions, wrapper)
+        Setup(contextProvider, reporter, additionalSetupActions, wrapper)
 
     fun <SC2 : Any> extend(wrapper: (SC, (SC2) -> Unit) -> Unit) = TestTemplate<SC2>(reporter) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
@@ -18,19 +18,19 @@ class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: ((SC) -> U
     }
 
     fun extend(sharedSetup: () -> Unit = {}, sharedTeardown: () -> Unit = {}) = TestTemplate<SC>(
-            reporter = reporter,
-            wrapper = { test ->
-                wrapper {
-                    sharedSetup()
-                    test(it)
-                    sharedTeardown()
-                }
+        reporter = reporter,
+        wrapper = { test ->
+            wrapper {
+                sharedSetup()
+                test(it)
+                sharedTeardown()
             }
+        }
     )
 
 }
 
 operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
-        context: C,
-        additionalSetupActions: C.() -> Unit = {}
+    context: C,
+    additionalSetupActions: C.() -> Unit = {}
 ) = Setup({ context }, reporter, additionalSetupActions, wrapper)
