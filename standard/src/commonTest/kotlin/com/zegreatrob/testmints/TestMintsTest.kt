@@ -222,7 +222,7 @@ class TestMintsTest {
 
                 var sharedContextReceived = 0
 
-                fun testThatSucceeds() = customSetup(contextProvider = { sc -> sharedContextReceived = sc }) {
+                fun testThatSucceeds() = customSetup({ sc -> sharedContextReceived = sc }) {
                     calls.add(Steps.Setup)
                 } exercise { calls.add(Steps.Exercise) } verify { calls.add(Steps.Verify) }
 
@@ -250,7 +250,7 @@ class TestMintsTest {
 
                 var sharedContextReceived: Any? = null
 
-                fun testThatSucceeds() = extendedSetup(contextProvider = { sc -> sharedContextReceived = sc }) {
+                fun testThatSucceeds() = extendedSetup({ sc -> sharedContextReceived = sc }) {
                     calls.add(Steps.Setup)
                 }.exercise { calls.add(Steps.Exercise) }
                         .verifyAnd { calls.add(Steps.Verify) }
@@ -278,7 +278,7 @@ class TestMintsTest {
 
                 var sharedContextReceived: Any? = null
 
-                fun testThatSucceeds() = extendedSetup(contextProvider = { sc -> sharedContextReceived = sc }) {
+                fun testThatSucceeds() = extendedSetup({ sc -> sharedContextReceived = sc }) {
                     calls.add(Steps.Setup)
                 }.exercise { calls.add(Steps.Exercise) }
                         .verifyAnd { calls.add(Steps.Verify) }
@@ -447,9 +447,9 @@ class TestMintsTest {
 
                 val expectedObject = object {}
 
-            }) exercise {
                 fun simpleTest() = setup(expectedObject) exercise { } verify {}
 
+            }) exercise {
                 simpleTest()
             } verify {
                 assertEquals(expectedObject, reporter.exerciseStartPayload)
@@ -464,9 +464,8 @@ class TestMintsTest {
                     }
                 }
                 val expectedObject = object {}
-            }) exercise {
                 fun simpleTest() = setup(object {}) exercise { expectedObject } verify {}
-
+            }) exercise {
                 simpleTest()
             } verify {
                 assertEquals(expectedObject, reporter.verifyStartPayload)

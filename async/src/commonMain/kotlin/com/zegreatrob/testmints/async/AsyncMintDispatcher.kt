@@ -99,7 +99,7 @@ object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig
 
 class TestTemplate<SC : Any>(
         val reporter: MintReporter,
-        val templateScope: CoroutineScope = mintScope(),
+        private val templateScope: CoroutineScope = mintScope(),
         val wrapper: suspend (suspend (SC) -> Unit) -> Unit
 ) {
 
