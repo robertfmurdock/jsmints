@@ -34,3 +34,6 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
     context: C,
     additionalSetupActions: C.() -> Unit = {}
 ) = Setup({ context }, reporter, additionalSetupActions, wrapper)
+
+operator fun <SC : Any> TestTemplate<SC>.invoke(additionalSetupActions: SC.() -> Unit = {}): Setup<SC, SC> =
+    Setup({ it }, reporter, additionalSetupActions, wrapper)

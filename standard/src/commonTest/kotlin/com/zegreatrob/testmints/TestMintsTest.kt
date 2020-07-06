@@ -239,6 +239,24 @@ class TestMintsTest {
             }
 
             @Test
+            fun sharedContextCanBeUsedAsContext() = setup(object {
+                val sharedContext = 47
+                val customSetup = testTemplate(sharedSetup = { sharedContext })
+                var contextReceived: Any? = null
+                var additionalActionsCallCount = 0
+                fun simpleTestUsingOnlySharedContext() = customSetup {
+                    additionalActionsCallCount++
+                } exercise {
+                    contextReceived = this
+                } verify { }
+            }) exercise {
+                simpleTestUsingOnlySharedContext()
+            } verify {
+                assertEquals(sharedContext, contextReceived)
+                assertEquals(1, additionalActionsCallCount)
+            }
+
+            @Test
             fun canExtendToTransformSharedContextUsingSharedSetupAndTeardown() = setup(object {
                 val calls = mutableListOf<Steps>()
 
