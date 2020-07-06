@@ -5,6 +5,7 @@ import com.zegreatrob.minspy.Spy
 import com.zegreatrob.minspy.SpyData
 import com.zegreatrob.minspy.spyFunction
 import com.zegreatrob.testmints.setup
+import com.zegreatrob.testmints.invoke
 import kotlin.test.Test
 
 private typealias DivideActionDispatcher = (GeneralExecutableActionDispatcherTest.DivideAction) -> Int

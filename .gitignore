@@ -43,6 +43,7 @@ data
 .idea/modules.xml
 .idea/*.iml
 .idea/modules
+.idea/misc.xml
 
 # File-based project format
 *.iws

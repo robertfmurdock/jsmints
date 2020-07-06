@@ -2,6 +2,7 @@ package com.zegreatrob.mindiff
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.testmints.setup
+import com.zegreatrob.testmints.invoke
 import kotlin.test.Test
 
 class DiffTest {
