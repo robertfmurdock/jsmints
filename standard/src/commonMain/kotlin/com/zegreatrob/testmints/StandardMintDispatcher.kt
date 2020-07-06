@@ -5,8 +5,6 @@ import com.zegreatrob.testmints.report.ReporterProvider
 
 interface StandardMintDispatcher : ReporterProvider {
 
-// Vernacular based on http://xunitpatterns.com/Four%20Phase%20Test.html
-
     val setup get() = TestTemplate<Unit>(reporter) { it(Unit) }
 
     fun <SC : Any> testTemplate(wrapper: ((SC) -> Unit) -> Unit): TestTemplate<SC> = TestTemplate(reporter, wrapper)

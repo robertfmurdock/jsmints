@@ -1,7 +1,6 @@
 package com.zegreatrob.testmints.async
 
 import com.zegreatrob.testmints.report.MintReporterConfig
-import com.zegreatrob.testmints.report.MintReporterConfig.reporter
 import com.zegreatrob.testmints.report.ReporterProvider
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -11,24 +10,8 @@ import kotlin.jvm.JvmName
 interface AsyncMintDispatcher : SetupSyntax
 
 interface SetupSyntax : ReporterProvider {
-    fun <C : Any> asyncSetup(context: C, additionalActions: suspend C.() -> Unit = {}) = Setup<C, Unit>(
-        { context },
-        context.chooseTestScope(),
-        additionalActions,
-        reporter,
-        { it(Unit) }
-    )
 
-    fun <C : Any> asyncSetup(
-        contextProvider: suspend () -> C,
-        additionalActions: suspend C.() -> Unit = {}
-    ) = Setup<C, Unit>(
-        { contextProvider() },
-        mintScope(),
-        additionalActions,
-        reporter,
-        { it(Unit) }
-    )
+    val asyncSetup get() = TestTemplate<Unit>(reporter, mintScope()) { it(Unit) }
 
     fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) = TestTemplate<Unit>(
         reporter
@@ -64,7 +47,7 @@ interface SetupSyntax : ReporterProvider {
 
 internal fun Any.chooseTestScope() = if (this is ScopeMint) testScope else mintScope()
 
-val asyncSetup get() = TestTemplate<Unit>(reporter, mintScope()) { it(Unit) }
+val asyncSetup get() = AsyncMints.asyncSetup
 
 fun <SC : Any> asyncTestTemplate(sharedSetup: suspend () -> SC, sharedTeardown: suspend (SC) -> Unit = {}) =
     AsyncMints.asyncTestTemplate(sharedSetup, sharedTeardown)
