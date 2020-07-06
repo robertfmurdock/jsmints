@@ -4,9 +4,6 @@ import com.zegreatrob.testmints.report.MintReporter
 
 class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: ((SC) -> Unit) -> Unit) {
 
-    operator fun <C : Any> invoke(contextProvider: (SC) -> C, additionalSetupActions: C.() -> Unit = {}) =
-        Setup(contextProvider, reporter, additionalSetupActions, wrapper)
-
     fun <SC2 : Any> extend(wrapper: (SC, (SC2) -> Unit) -> Unit) = TestTemplate<SC2>(reporter) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
     }
@@ -27,6 +24,9 @@ class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: ((SC) -> U
             }
         }
     )
+
+    operator fun <C : Any> invoke(contextProvider: (SC) -> C, additionalSetupActions: C.() -> Unit = {}) =
+        Setup(contextProvider, reporter, additionalSetupActions, wrapper)
 
 }
 

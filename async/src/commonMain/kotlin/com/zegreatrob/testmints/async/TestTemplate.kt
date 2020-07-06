@@ -11,32 +11,27 @@ class TestTemplate<SC : Any>(
     val wrapper: suspend (suspend (SC) -> Unit) -> Unit
 ) {
 
-    fun extend(sharedSetup: suspend () -> Unit = {}, sharedTeardown: suspend () -> Unit = {}) =
-        TestTemplate<SC>(
-            reporter = reporter,
-            wrapper = { test ->
-                wrapper {
-                    sharedSetup()
-                    test(it)
-                    sharedTeardown()
-                }
-            }
-        )
-
-    fun <SC2 : Any> extend(
-        wrapper: suspend ((SC, suspend (SC2) -> Unit) -> Unit)
-    ) = TestTemplate<SC2>(reporter) { test ->
+    fun <SC2 : Any> extend(wrapper: suspend (SC, suspend (SC2) -> Unit) -> Unit) = TestTemplate<SC2>(reporter) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
     }
 
-    fun <SC2 : Any> extend(
-        sharedSetup: suspend (SC) -> SC2,
-        sharedTeardown: suspend (SC2) -> Unit = {}
-    ) = extend<SC2> { sc1, test ->
-        val sc2 = sharedSetup(sc1)
-        test(sc2)
-        sharedTeardown(sc2)
-    }
+    fun <SC2 : Any> extend(sharedSetup: suspend (SC) -> SC2, sharedTeardown: suspend (SC2) -> Unit = {}) =
+        extend<SC2> { sc1, test ->
+            val sc2 = sharedSetup(sc1)
+            test(sc2)
+            sharedTeardown(sc2)
+        }
+
+    fun extend(sharedSetup: suspend () -> Unit = {}, sharedTeardown: suspend () -> Unit = {}) = TestTemplate<SC>(
+        reporter = reporter,
+        wrapper = { test ->
+            wrapper {
+                sharedSetup()
+                test(it)
+                sharedTeardown()
+            }
+        }
+    )
 
     fun <BAC : Any> extend(beforeAll: suspend () -> BAC): TestTemplate<BAC> = extend(
         beforeAll = beforeAll,
