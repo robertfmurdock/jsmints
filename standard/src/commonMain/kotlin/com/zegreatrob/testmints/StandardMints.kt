@@ -21,4 +21,3 @@ fun testTemplate(wrapper: SimpleWrapper) = StandardMints.testTemplateSimple(wrap
 fun <SC : Any> testTemplate(wrapper: Wrapper<SC>) = StandardMints.testTemplate(wrapper)
 
 typealias SimpleWrapper = (() -> Unit) -> Unit
-typealias Wrapper<SC> = ((SC) -> Unit) -> Unit

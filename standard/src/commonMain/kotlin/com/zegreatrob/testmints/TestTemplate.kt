@@ -2,9 +2,9 @@ package com.zegreatrob.testmints
 
 import com.zegreatrob.testmints.report.MintReporter
 
-class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: ((SC) -> Unit) -> Unit) {
+class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: (TestFunc<SC>) -> Unit) {
 
-    fun <SC2 : Any> extend(wrapper: (SC, (SC2) -> Unit) -> Unit) = TestTemplate<SC2>(reporter) { test ->
+    fun <SC2 : Any> extend(wrapper: (SC, TestFunc<SC2>) -> Unit) = TestTemplate<SC2>(reporter) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
     }
 

@@ -40,7 +40,7 @@ interface SetupSyntax : ReporterProvider {
         wrapper { it(Unit) }
     }
 
-    fun <SC : Any> asyncTestTemplate(wrapper: suspend (suspend (SC) -> Unit) -> Unit) = TestTemplate(
+    fun <SC : Any> asyncTestTemplate(wrapper: suspend (TestFunc<SC>) -> Unit) = TestTemplate(
         reporter, mintScope(), wrapper
     )
 }
@@ -61,7 +61,7 @@ fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend (
 fun asyncTestTemplate(wrapper: suspend (suspend () -> Unit) -> Unit) = AsyncMints.asyncTestTemplateSimple(wrapper)
 
 @JvmName("asyncTestTemplateSC")
-fun <SC : Any> asyncTestTemplate(wrapper: suspend (suspend (SC) -> Unit) -> Unit) =
+fun <SC : Any> asyncTestTemplate(wrapper: suspend (TestFunc<SC>) -> Unit) =
     AsyncMints.asyncTestTemplate(wrapper)
 
 @Deprecated(

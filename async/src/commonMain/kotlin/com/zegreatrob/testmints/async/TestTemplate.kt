@@ -8,10 +8,10 @@ import kotlinx.coroutines.async
 class TestTemplate<SC : Any>(
     val reporter: MintReporter,
     private val templateScope: CoroutineScope = mintScope(),
-    val wrapper: suspend (suspend (SC) -> Unit) -> Unit
+    val wrapper: suspend (TestFunc<SC>) -> Unit
 ) {
 
-    fun <SC2 : Any> extend(wrapper: suspend (SC, suspend (SC2) -> Unit) -> Unit) = TestTemplate<SC2>(reporter) { test ->
+    fun <SC2 : Any> extend(wrapper: suspend (SC, TestFunc<SC2>) -> Unit) = TestTemplate<SC2>(reporter) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
     }
 

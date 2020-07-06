@@ -13,7 +13,7 @@ class Setup<C : Any, SC : Any>(
     private val scope: CoroutineScope,
     private val additionalActions: suspend C.() -> Unit,
     private val reporter: MintReporter,
-    private val wrapper: suspend (suspend (SC) -> Unit) -> Unit
+    private val wrapper: suspend (TestFunc<SC>) -> Unit
 ) {
     infix fun <R> exercise(exerciseFunc: suspend C.() -> R) = Exercise<C, R> { verifyFunc ->
         { teardownFunc ->
@@ -113,8 +113,8 @@ private fun descriptionMap(
 )
 
 private suspend fun <SC : Any> checkedInvoke(
-    wrapper: suspend (suspend (SC) -> Unit) -> Unit,
-    test: suspend (SC) -> Unit
+    wrapper: suspend (TestFunc<SC>) -> Unit,
+    test: TestFunc<SC>
 ) = captureException {
     var testWasInvoked = false
     wrapper.invoke { sharedContext ->

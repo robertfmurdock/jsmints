@@ -6,7 +6,7 @@ class Setup<C : Any, SC : Any>(
     private val contextProvider: (SC) -> C,
     private val reporter: MintReporter,
     private val additionalSetupActions: C.() -> Unit,
-    private val wrapper: ((SC) -> Unit) -> Unit
+    private val wrapper: (TestFunc<SC>) -> Unit
 ) {
     infix fun <R> exercise(codeUnderTest: C.() -> R) = Exercise<C, R> { verifyFunc ->
         { teardownFunc ->
@@ -91,7 +91,7 @@ private fun exceptionDescriptionMap(
         .mapNotNull { (descriptor, exception) -> exception?.let { descriptor to exception } }
         .toMap()
 
-private fun <SC : Any> checkedInvoke(wrapper: ((SC) -> Unit) -> Unit, test: (SC) -> Unit) = captureException {
+private fun <SC : Any> checkedInvoke(wrapper: (TestFunc<SC>) -> Unit, test: TestFunc<SC>) = captureException {
     var testWasInvoked = false
     wrapper.invoke {
         testWasInvoked = true

@@ -7,7 +7,7 @@ interface StandardMintDispatcher : ReporterProvider {
 
     val setup get() = TestTemplate<Unit>(reporter) { it(Unit) }
 
-    fun <SC : Any> testTemplate(wrapper: ((SC) -> Unit) -> Unit): TestTemplate<SC> = TestTemplate(reporter, wrapper)
+    fun <SC : Any> testTemplate(wrapper: (TestFunc<SC>) -> Unit): TestTemplate<SC> = TestTemplate(reporter, wrapper)
 
     fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit) = testTemplate<SC> { test ->
         sharedSetup()
