@@ -64,18 +64,4 @@ fun asyncTestTemplate(wrapper: suspend (suspend () -> Unit) -> Unit) = AsyncMint
 fun <SC : Any> asyncTestTemplate(wrapper: suspend (TestFunc<SC>) -> Unit) =
     AsyncMints.asyncTestTemplate(wrapper)
 
-@Deprecated(
-    "Ready to promote this use case to normal. Please transition to setupAsync.",
-    ReplaceWith("asyncSetup(context, additionalActions)")
-)
-fun <C : Any> setupAsync2(context: C, additionalActions: suspend C.() -> Unit = {}) =
-    asyncSetup(context, additionalActions)
-
-@Deprecated(
-    "Ready to promote this use case to normal. Please transition to setupAsync.",
-    ReplaceWith("asyncSetup(contextProvider, additionalActions)")
-)
-fun <C : Any> setupAsync2(contextProvider: suspend () -> C, additionalActions: suspend C.() -> Unit = {}) =
-    asyncSetup(contextProvider, additionalActions)
-
 object AsyncMints : AsyncMintDispatcher, ReporterProvider by MintReporterConfig
