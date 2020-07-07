@@ -15,7 +15,13 @@ interface StandardMintDispatcher : ReporterProvider {
             .also(sharedTeardown)
     }
 
-    fun testTemplateSimple(wrapper: (() -> Unit) -> Unit): TestTemplate<Unit> = testTemplate { wrapper { it(Unit) } }
+    fun <SC : Any> testTemplate(beforeAll: () -> SC): TestTemplate<SC> {
+        val lazy by lazy { beforeAll() }
+        return testTemplate(wrapper = { it(lazy) })
+    }
+
+    fun testTemplateSimple(wrapper: (() -> Unit) -> Unit): TestTemplate<Unit> =
+        testTemplate(wrapper = { wrapper { it(Unit) } })
 
 }
 

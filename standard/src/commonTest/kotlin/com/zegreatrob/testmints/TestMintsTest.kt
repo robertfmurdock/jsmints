@@ -60,7 +60,7 @@ class TestMintsTest {
             val expectedValue = Random.nextInt()
             var actualValue: Int? = null
 
-            fun testThatPassesResultToVerify() = setup(object {}) exercise { expectedValue } verify { result ->
+            fun testThatPassesResultToVerify() = setup() exercise { expectedValue } verify { result ->
                 actualValue = result
             }
 
@@ -113,7 +113,7 @@ class TestMintsTest {
             val verifyFailure = AssertionError("Got 'em")
             val teardownException = Exception("Oh man, not good.")
 
-            fun failingTestThatExplodesInTeardown() = setup(object {}) exercise {
+            fun failingTestThatExplodesInTeardown() = setup() exercise {
             } verifyAnd { throw verifyFailure } teardown { throw teardownException }
 
         }) exercise {
@@ -166,7 +166,7 @@ class TestMintsTest {
                     sharedTeardown = { calls.add(Steps.TemplateTeardown) }
                 )
 
-                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                fun testThatSucceeds() = customSetup() { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verifyAnd { calls.add(Steps.Verify) }
                     .teardown { calls.add(Steps.Teardown) }
@@ -185,7 +185,7 @@ class TestMintsTest {
                     sharedTeardown = { calls.add(Steps.TemplateTeardown) }
                 )
 
-                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                fun testThatSucceeds() = customSetup() { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verify { calls.add(Steps.Verify) }
 
@@ -204,7 +204,7 @@ class TestMintsTest {
                     calls.add(Steps.TemplateTeardown)
                 })
 
-                fun testThatSucceeds() = customSetup(object {}) { calls.add(Steps.Setup) }
+                fun testThatSucceeds() = customSetup() { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verify { calls.add(Steps.Verify) }
 
@@ -318,7 +318,7 @@ class TestMintsTest {
             fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFail() = setup(object {
                 val customSetup = testTemplate(wrapper = {})
 
-                fun testThatFailsBecauseOfBadTemplate() = customSetup(object {})
+                fun testThatFailsBecauseOfBadTemplate() = customSetup()
                     .exercise { }
                     .verify { }
 
@@ -335,7 +335,7 @@ class TestMintsTest {
             fun whenWrapperFunctionDoesNotCallTheTestTheTestWillFailIncludingTeardown() = setup(object {
                 val customSetup = testTemplate(wrapper = {})
 
-                fun testThatFailsBecauseOfBadTemplate() = customSetup(object {})
+                fun testThatFailsBecauseOfBadTemplate() = customSetup()
                     .exercise { }
                     .verifyAnd { }
                     .teardown { }
@@ -356,7 +356,7 @@ class TestMintsTest {
                 fun afterAll() = calls.add(Steps.TemplateTeardown).let { Unit }
                 val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
 
-                fun testThatFails() = customSetup(object {}) { calls.add(Steps.Setup) }
+                fun testThatFails() = customSetup() { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verifyAnd { calls.add(Steps.Verify); fail("This test fails.") }
                     .teardown { calls.add(Steps.Teardown) }
@@ -373,7 +373,7 @@ class TestMintsTest {
                 val templateTeardownException = Exception("Now we're really off-road")
                 val customSetup = testTemplate(sharedSetup = {}, sharedTeardown = { throw templateTeardownException })
 
-                fun failingTestThatExplodesInTeardown() = customSetup(object {}) exercise {} verifyAnd {
+                fun failingTestThatExplodesInTeardown() = customSetup() exercise {} verifyAnd {
                 } teardown { throw teardownException }
 
             }) exercise {
@@ -399,11 +399,41 @@ class TestMintsTest {
                     sharedSetup = { calls.add("inner setup") }, sharedTeardown = { calls.add("inner teardown") }
                 )
 
-                fun test() = bolsteredCustomSetup(object {}) exercise {} verify {}
+                fun test() = bolsteredCustomSetup() exercise {} verify {}
             }) exercise {
                 test()
             } verify {
                 assertEquals(listOf("setup", "inner setup", "inner teardown", "teardown"), calls)
+            }
+
+            @Test
+            fun templateCanBeExtendedWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests() = setup(object {
+                var calls = mutableListOf<String>()
+                val customSetup = testTemplate(wrapper = {
+                    calls.add("wrapSetup")
+                    it()
+                    calls.add("wrapTeardown")
+                })
+                    .extend(beforeAll = { calls.add("beforeAll") })
+                val testSuite = (1..3).map {
+                    fun() = customSetup { }
+                        .exercise { }
+                        .verify { }
+                }
+            }) exercise {
+                testSuite.runSuite()
+            } verify {
+                assertEquals(
+                    listOf(
+                        "wrapSetup",
+                        "beforeAll",
+                        "wrapTeardown",
+                        "wrapSetup",
+                        "wrapTeardown",
+                        "wrapSetup",
+                        "wrapTeardown"
+                    ), calls
+                )
             }
 
             @Test
@@ -415,7 +445,7 @@ class TestMintsTest {
                     sharedTeardown = { it: Int -> callArguments.add(it) }
                 )
 
-                fun testThatSucceeds() = customSetup(object {}) { }
+                fun testThatSucceeds() = customSetup() { }
                     .exercise { }
                     .verify { }
 
@@ -424,6 +454,55 @@ class TestMintsTest {
             } verify {
                 assertEquals(listOf<Any>(int), callArguments)
             }
+
+            @Test
+            fun templateCanBeBuiltWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests() = setup(object {
+                var beforeAllCount = 0
+                val customSetup = testTemplate(beforeAll = { beforeAllCount++ })
+                val testSuite = (1..3).map {
+                    fun() = customSetup { }
+                        .exercise { }
+                        .verify { }
+                }
+            }) exercise {
+                testSuite.runSuite()
+            } verify {
+                assertEquals(1, beforeAllCount)
+            }
+
+            @Test
+            fun templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests() = setup(object {
+                var beforeAllCount = 0
+                val customSetup = testTemplate(beforeAll = { beforeAllCount++ })
+                val testSuite: List<() -> Unit> = emptyList()
+            }) exercise {
+                testSuite.runSuite()
+            } verify {
+                assertEquals(0, beforeAllCount)
+            }
+
+            @Test
+            fun templateExtendedByBeforeAllCanMergeSharedContextEasily() = setup(object {
+                val parentSharedContext = "parent shared context"
+                val innerBeforeAllContext = 87
+
+                val customSetup = testTemplate<String>(wrapper = { it(parentSharedContext) })
+                    .extend(beforeAll = { innerBeforeAllContext }, mergeContext = { sc, bac ->
+                        Pair(sc, bac)
+                    })
+
+                var capturedContext: Any? = null
+
+                fun theCoolTest() = customSetup()
+                    .exercise { capturedContext = this }
+                    .verify { }
+            }) exercise {
+                theCoolTest()
+            } verify {
+                assertEquals(Pair(parentSharedContext, innerBeforeAllContext), capturedContext)
+            }
+
+            private fun List<() -> Any?>.runSuite() = forEach { it() }
 
         }
 
@@ -448,7 +527,7 @@ class TestMintsTest {
                 }
 
             }) exercise {
-                fun simpleTest() = setup(object {}) exercise {} verifyAnd {} teardown {}
+                fun simpleTest() = setup() exercise {} verifyAnd {} teardown {}
 
                 simpleTest()
             } verify {
@@ -493,7 +572,7 @@ class TestMintsTest {
                     }
                 }
                 val expectedObject = object {}
-                fun simpleTest() = setup(object {}) exercise { expectedObject } verify {}
+                fun simpleTest() = setup() exercise { expectedObject } verify {}
             }) exercise {
                 simpleTest()
             } verify {

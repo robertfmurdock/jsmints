@@ -25,6 +25,19 @@ class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: (TestFunc<
         }
     )
 
+    fun <BAC : Any> extend(beforeAll: () -> BAC): TestTemplate<BAC> = extend(
+        beforeAll = beforeAll,
+        mergeContext = { _, bac -> bac }
+    )
+
+    fun <BAC : Any, SC2 : Any> extend(beforeAll: () -> BAC, mergeContext: (SC, BAC) -> SC2): TestTemplate<SC2> {
+        val lazy by lazy { beforeAll() }
+        return TestTemplate(
+            reporter = reporter,
+            wrapper = { test -> wrapper { sc -> test(mergeContext(sc, lazy)) } }
+        )
+    }
+
     operator fun <C : Any> invoke(contextProvider: (SC) -> C, additionalSetupActions: C.() -> Unit = {}) =
         Setup(contextProvider, reporter, additionalSetupActions, wrapper)
 
