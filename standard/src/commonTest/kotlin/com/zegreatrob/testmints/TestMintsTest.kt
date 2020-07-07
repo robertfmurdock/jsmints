@@ -29,7 +29,7 @@ class TestMintsTest {
         @Test
         fun verifyShouldThrowErrorWhenFailureOccurs() = setup(object {
 
-            fun simulatedTestThatFailsInVerify() = setup(Unit) exercise {} verify { fail("LOL") }
+            fun simulatedTestThatFailsInVerify() = setup() exercise {} verify { fail("LOL") }
 
         }) exercise {
             captureException { simulatedTestThatFailsInVerify() }
@@ -134,7 +134,7 @@ class TestMintsTest {
             val setupException = Exception("Oh man, not good.")
             var exerciseOrVerifyTriggered = false
 
-            fun testThatExplodeInSetupClosure() = setup(Unit) {
+            fun testThatExplodeInSetupClosure() = setup() {
                 throw setupException
             } exercise { exerciseOrVerifyTriggered = true } verify { exerciseOrVerifyTriggered = true }
 
