@@ -25,13 +25,7 @@ class ReactFunctionTest {
         val expectedFirst = 3948
         val expectedSecond = "9922"
     }) exercise {
-        shallow(
-            component,
-            FunProps(
-                expectedFirst,
-                expectedSecond
-            )
-        )
+        shallow(component, FunProps(expectedFirst, expectedSecond))
     } verify { result ->
         result.find<dynamic>("span")
             .map { it.text() }
