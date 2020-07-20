@@ -16,13 +16,12 @@ class ReactFunctionTest {
 
     @Test
     fun canUseDataObjectAndDestructureDuringRender() = setup(object {
-        val component =
-            reactFunction<FunProps> { (first, second) ->
-                div {
-                    span { +"$first" }
-                    span { +second }
-                }
+        val component = reactFunction<FunProps> { (first, second) ->
+            div {
+                span { +"$first" }
+                span { +second }
             }
+        }
         val expectedFirst = 3948
         val expectedSecond = "9922"
     }) exercise {
