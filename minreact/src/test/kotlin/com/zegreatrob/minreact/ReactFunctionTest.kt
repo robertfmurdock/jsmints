@@ -1,6 +1,8 @@
-import com.zegreatrob.coupling.enzyme.external.shallow
-import com.zegreatrob.coupling.react.external.react.reactFunction
+package com.zegreatrob.minreact
+
 import com.zegreatrob.minassert.assertIsEqualTo
+import com.zegreatrob.minenzyme.external.shallow
+import com.zegreatrob.minreact.external.react.reactFunction
 import com.zegreatrob.testmints.invoke
 import com.zegreatrob.testmints.setup
 import react.RProps
@@ -14,16 +16,23 @@ class ReactFunctionTest {
 
     @Test
     fun canUseDataObjectAndDestructureDuringRender() = setup(object {
-        val component = reactFunction<FunProps> { (first, second) ->
-            div {
-                span { +"$first" }
-                span { +second }
+        val component =
+            reactFunction<FunProps> { (first, second) ->
+                div {
+                    span { +"$first" }
+                    span { +second }
+                }
             }
-        }
         val expectedFirst = 3948
         val expectedSecond = "9922"
     }) exercise {
-        shallow(component, FunProps(expectedFirst, expectedSecond))
+        shallow(
+            component,
+            FunProps(
+                expectedFirst,
+                expectedSecond
+            )
+        )
     } verify { result ->
         result.find<dynamic>("span")
             .map { it.text() }

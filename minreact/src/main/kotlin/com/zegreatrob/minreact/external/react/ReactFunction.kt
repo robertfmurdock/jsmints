@@ -1,6 +1,6 @@
-package com.zegreatrob.coupling.react.external.react
+package com.zegreatrob.minreact.external.react
 
-import com.zegreatrob.coupling.react.external.corejs.objectAssign
+import com.zegreatrob.minreact.external.corejs.objectAssign
 import react.*
 import kotlin.reflect.KClass
 
