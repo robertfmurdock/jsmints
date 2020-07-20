@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
-    kotlin("js") version "1.3.72"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.72"
 }
 
 repositories {
@@ -11,16 +11,24 @@ repositories {
 }
 
 kotlin {
-    target {
-        nodejs()
+    targets {
+        js { nodejs {} }
     }
-}
 
-dependencies {
-    implementation(npm("enzyme", "^3.11.0"))
-    implementation(npm("enzyme-adapter-react-16", "^1.15.2"))
-    implementation("org.jetbrains:kotlin-react:16.13.1-pre.110-kotlin-1.3.72")
-    testImplementation(project(":standard"))
+    sourceSets {
+        val jsMain by getting {
+            dependencies {
+                implementation(npm("enzyme", "^3.11.0"))
+                implementation(npm("enzyme-adapter-react-16", "^1.15.2"))
+                implementation("org.jetbrains:kotlin-react:16.13.1-pre.110-kotlin-1.3.72")
+            }
+        }
+        val jsTest by getting {
+            dependencies {
+                implementation(project(":standard"))
+            }
+        }
+    }
 }
 
 tasks {
