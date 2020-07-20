@@ -1,8 +1,7 @@
 package com.zegreatrob.minreact
 
 import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.minenzyme.external.shallow
-import com.zegreatrob.minreact.external.react.reactFunction
+import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.invoke
 import com.zegreatrob.testmints.setup
 import react.RProps

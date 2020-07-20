@@ -1,4 +1,4 @@
-package com.zegreatrob.minenzyme.external
+package com.zegreatrob.minenzyme
 
 import react.RClass
 import react.RProps

@@ -1,4 +1,4 @@
-package com.zegreatrob.minreact.external.react
+package com.zegreatrob.minreact
 
 import com.zegreatrob.minreact.external.corejs.objectAssign
 import react.*
