@@ -37,6 +37,7 @@ external interface ShallowWrapper<T> {
     fun debug(): String
 
     fun text(): String
+    fun key(): String?
 
     fun simulate(eventName: String)
     fun simulate(eventName: String, event: dynamic)
