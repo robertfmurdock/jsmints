@@ -1,8 +1,6 @@
 package com.zegreatrob.minenzyme
 
-import react.RClass
-import react.RProps
-import react.buildElement
+import react.*
 import kotlin.js.Json
 import kotlin.js.json
 
@@ -65,6 +63,11 @@ fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: Str
 fun <T> ShallowWrapper<T>.findByClass(className: String) = find<T>(".${className}")
 fun <T> ShallowWrapper<T>.findInputByName(inputName: String) = find<T>("input[name='${inputName}']")
 
-fun <P : RProps> shallow(reactFunction: RClass<P>, props: P) = enzyme.shallow(buildElement {
-    child(reactFunction, props) {}
+fun <P : RProps> shallow(reactFunction: RClass<P>, props: P, handler: RHandler<P> = {}) = enzyme.shallow(buildElement {
+    child(reactFunction, props, handler)
 })
+
+fun <P : RProps, T> shallow(reactFunction: FunctionalComponent<P>, props: P, children: RBuilder.(T) -> Unit = {}) =
+    enzyme.shallow(buildElement {
+        childFunction(reactFunction, props, {}, children)
+    })

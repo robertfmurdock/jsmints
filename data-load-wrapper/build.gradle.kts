@@ -9,6 +9,7 @@ repositories {
 }
 
 kotlin {
+
     targets {
         js {
             nodejs {}
@@ -28,6 +29,9 @@ kotlin {
 
         val jsTest by getting {
             dependencies {
+                implementation(project(":async"))
+                implementation(project(":minenzyme"))
+                implementation(project(":minassert"))
                 implementation("org.jetbrains.kotlin:kotlin-test-common")
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
             }
