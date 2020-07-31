@@ -21,13 +21,17 @@ class DataLoaderTest {
     @Test
     fun willStartDataPullAndTransitionThroughNormalStatesCorrectly() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
-    }) exercise {
-        shallow {
-            dataLoader(getDataAsync = { "DATA" }, errorData = { "ERROR" }, scope = exerciseScope) { state ->
-                allRenderedStates.add(state)
-                div { +"state: $state" }
-            }
+
+        fun RBuilder.component() = dataLoader(
+            getDataAsync = { "DATA" },
+            errorData = { "ERROR" },
+            scope = exerciseScope
+        ) { state ->
+            allRenderedStates.add(state)
+            div { +"state: $state" }
         }
+    }) exercise {
+        shallow { component() }
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
@@ -41,13 +45,13 @@ class DataLoaderTest {
         val getDataAsync: suspend (DataLoaderTools) -> Nothing = {
             withContext(exerciseScope.coroutineContext) { throw Exception("NOPE") }
         }
-    }) exercise {
-        shallow {
-            dataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
-                allRenderedStates.add(state)
-                div { +"state: $state" }
-            }
+
+        fun RBuilder.component() = dataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
+            allRenderedStates.add(state)
+            div { +"state: $state" }
         }
+    }) exercise {
+        shallow { component() }
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
@@ -58,17 +62,16 @@ class DataLoaderTest {
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<Result<DataLoaderTools>>>()
 
-        val wrapper = shallow {
-            dataLoader({ Result.success(it) }, { Result.failure(it) }, exerciseScope) { state ->
-                allRenderedStates.add(state)
-                div {
-                    whenResolvedSuccessfully(state) { tools ->
-                        button { attrs { onClickFunction = { tools.reloadData() } } }
-                    }
+        fun RBuilder.component() = dataLoader({ Result.success(it) }, { Result.failure(it) }, exerciseScope) { state ->
+            allRenderedStates.add(state)
+            div {
+                whenResolvedSuccessfully(state) { tools ->
+                    button { attrs { onClickFunction = { tools.reloadData() } } }
                 }
             }
         }
 
+        val wrapper = shallow { component() }
     }) exercise {
         wrapper.find<RProps>("button").simulate("click")
     } verify {
@@ -116,10 +119,7 @@ class DataLoaderTest {
     }
 
     companion object {
-        private fun whenResolvedSuccessfully(
-            state: DataLoadState<Result<DataLoaderTools>>,
-            handler: (DataLoaderTools) -> Unit
-        ) {
+        private fun <D> whenResolvedSuccessfully(state: DataLoadState<Result<D>>, handler: (D) -> Unit) {
             if (state is ResolvedState) {
                 state.result.onSuccess(handler)
             }
