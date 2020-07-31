@@ -5,12 +5,15 @@ import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.async.ScopeMint
 import com.zegreatrob.testmints.async.asyncSetup
 import com.zegreatrob.testmints.async.invoke
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RProps
 import react.dom.button
 import react.dom.div
+import react.useState
 import kotlin.test.Test
 
 class DataLoaderTest {
@@ -102,5 +105,52 @@ class DataLoaderTest {
         )
     }
 
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun childrenCanUseScopeForSuspendableWork() = asyncSetup(object : ScopeMint() {
+        val enzymeWrapper = shallow(
+            dataLoader(),
+            DataLoadWrapperProps({ Result.success(it) }, { Result.failure(it) }, exerciseScope),
+            { state: DataLoadState<Result<DataLoaderTools>> ->
+                div { whenResolvedSuccessfully(state) { buttonWithAsyncAction(it) } }
+            })
+
+        val channel = Channel<Int>()
+
+        suspend fun collectThreeValuesFromChannel() = listOf(channel.receive(), channel.receive(), channel.receive())
+
+        private fun whenResolvedSuccessfully(
+            state: DataLoadState<Result<DataLoaderTools>>,
+            handler: (DataLoaderTools) -> Unit
+        ) {
+            if (state is ResolvedState) {
+                state.result.onSuccess(handler)
+            }
+        }
+
+        private fun RBuilder.buttonWithAsyncAction(tools: DataLoaderTools) {
+            val (buttonClickValues, setValues) = useState<List<Int>?>(null)
+            val onClick = {
+                tools.performAsyncWork(::collectThreeValuesFromChannel, { emptyList() }, { setValues(it) })
+            }
+
+            button { attrs { onClickFunction = { onClick() } } }
+            div(classes = "work-complete-div") {
+                if (buttonClickValues != null)
+                    +"Work Complete ${buttonClickValues.joinToString(separator = ", ")}"
+            }
+        }
+    }) exercise {
+        enzymeWrapper.find<RProps>("button").simulate("click")
+        channel.send(99)
+        channel.send(87)
+        channel.send(53)
+        channel.close()
+    } verify {
+        enzymeWrapper.find<RProps>(".work-complete-div")
+            .text()
+            .assertIsEqualTo("Work Complete 99, 87, 53")
+    }
 
 }
