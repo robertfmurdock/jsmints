@@ -1,4 +1,4 @@
-package com.zegreatrob.coupling.dataloadwrapper
+package com.zegreatrob.react.dataloader
 
 import com.zegreatrob.minreact.reactFunction
 import kotlinx.coroutines.CoroutineScope
@@ -9,12 +9,7 @@ import react.RProps
 import react.RSetState
 import react.useState
 
-sealed class DataLoadState<D>
-data class EmptyState<D>(private val empty: String = "") : DataLoadState<D>()
-data class PendingState<D>(private val empty: String = "") : DataLoadState<D>()
-data class ResolvedState<D>(val result: D) : DataLoadState<D>()
-
-typealias DataLoadFunc<D> = suspend (DataLoadComponentTools) -> D
+typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
 data class DataLoadWrapperProps<D>(
     val getDataAsync: DataLoadFunc<D>,
@@ -34,7 +29,7 @@ private val cachedComponent = reactFunction<DataLoadWrapperProps<out Any>> { pro
     props.children(state)
 }
 
-fun <D> dataLoadWrapper() = cachedComponent.unsafeCast<FunctionalComponent<DataLoadWrapperProps<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionalComponent<DataLoadWrapperProps<D>>>()
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,
@@ -45,7 +40,7 @@ private fun <D> startPendingJob(
     val setEmpty = setState.empty()
     val setPending = setState.pending()
     val setResolved = setState.resolved()
-    val tools = DataLoadComponentTools(scope, setEmpty)
+    val tools = DataLoaderTools(scope, setEmpty)
     setPending(
         scope.launch { getDataAsync(tools).let(setResolved) }
             .also { job -> job.errorOnJobFailure(setResolved, errorData) }
@@ -55,8 +50,14 @@ private fun <D> startPendingJob(
 private fun <D> Job.errorOnJobFailure(setResolved: (D) -> Unit, errorResult: (Throwable) -> D) =
     invokeOnCompletion { cause -> if (cause != null) setResolved(errorResult(cause)) }
 
-private fun <D> RSetState<DataLoadState<D>>.empty(): () -> Unit = { this(EmptyState()) }
+private fun <D> RSetState<DataLoadState<D>>.empty(): () -> Unit = { this(
+    EmptyState()
+) }
 
-private fun <D> RSetState<DataLoadState<D>>.pending(): (Job) -> Unit = { this(PendingState()) }
+private fun <D> RSetState<DataLoadState<D>>.pending(): (Job) -> Unit = { this(
+    PendingState()
+) }
 
-private fun <D> RSetState<DataLoadState<D>>.resolved(): (D) -> Unit = { this(ResolvedState(it)) }
+private fun <D> RSetState<DataLoadState<D>>.resolved(): (D) -> Unit = { this(
+    ResolvedState(it)
+) }

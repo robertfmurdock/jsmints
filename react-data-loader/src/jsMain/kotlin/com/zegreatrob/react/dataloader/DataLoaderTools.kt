@@ -1,13 +1,11 @@
-package com.zegreatrob.coupling.dataloadwrapper
+package com.zegreatrob.react.dataloader
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 
-typealias ReloadFunction = () -> Unit
-
-data class DataLoadComponentTools(val scope: CoroutineScope, val reloadData: ReloadFunction) {
+data class DataLoaderTools(val scope: CoroutineScope, val reloadData: ReloadFunc) {
 
     @ExperimentalCoroutinesApi
     fun <R> performAsyncWork(

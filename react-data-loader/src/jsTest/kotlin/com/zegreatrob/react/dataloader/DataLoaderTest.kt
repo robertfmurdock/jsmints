@@ -1,6 +1,5 @@
-package com.zegreatrob.coupling
+package com.zegreatrob.react.dataloader
 
-import com.zegreatrob.coupling.dataloadwrapper.*
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.async.ScopeMint
@@ -14,60 +13,80 @@ import react.dom.button
 import react.dom.div
 import kotlin.test.Test
 
-class DataLoadWrapperTest {
+class DataLoaderTest {
 
     @Test
     fun willStartDataPullAndTransitionThroughNormalStatesCorrectly() = asyncSetup(object : ScopeMint() {
-        val component = dataLoadWrapper<String>()
+        val component = dataLoader<String>()
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
     }) exercise {
         shallow(
             component,
-            DataLoadWrapperProps({ "DATA" }, { "ERROR" }, exerciseScope), { state: DataLoadState<String> ->
+            DataLoadWrapperProps(
+                { "DATA" },
+                { "ERROR" },
+                exerciseScope
+            ), { state: DataLoadState<String> ->
                 allRenderedStates.add(state)
                 div { +"state: $state" }
             })
     } verify {
         allRenderedStates.assertIsEqualTo(
-            listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
+            listOf(
+                EmptyState(),
+                PendingState(),
+                ResolvedState("DATA")
+            )
         )
     }
 
     @Test
     fun whenDataPullIsCancelledErrorDataIsPushedToChild() = asyncSetup(object : ScopeMint() {
-        val component = dataLoadWrapper<String>()
+        val component = dataLoader<String>()
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
 
-        val getDataAsync: suspend (DataLoadComponentTools) -> Nothing = {
+        val getDataAsync: suspend (DataLoaderTools) -> Nothing = {
             withContext(exerciseScope.coroutineContext) { throw Exception("NOPE") }
         }
     }) exercise {
         shallow(
             component,
-            DataLoadWrapperProps(getDataAsync, { "ERROR" }, exerciseScope),
+            DataLoadWrapperProps(
+                getDataAsync,
+                { "ERROR" },
+                exerciseScope
+            ),
             { state: DataLoadState<String> ->
                 allRenderedStates.add(state)
                 div { +"state: $state" }
             })
     } verify {
         allRenderedStates.assertIsEqualTo(
-            listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
+            listOf(
+                EmptyState(),
+                PendingState(),
+                ResolvedState("ERROR")
+            )
         )
     }
 
     @Test
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
-        val allRenderedStates = mutableListOf<DataLoadState<Result<DataLoadComponentTools>>>()
+        val allRenderedStates = mutableListOf<DataLoadState<Result<DataLoaderTools>>>()
 
         val enzymeWrapper = shallow(
-            dataLoadWrapper(),
-            DataLoadWrapperProps({ Result.success(it) }, { Result.failure(it) }, exerciseScope),
-            { state: DataLoadState<Result<DataLoadComponentTools>> ->
+            dataLoader(),
+            DataLoadWrapperProps(
+                { Result.success(it) },
+                { Result.failure(it) },
+                exerciseScope
+            ),
+            { state: DataLoadState<Result<DataLoaderTools>> ->
                 allRenderedStates.add(state)
                 div { reloadButton(state) }
             })
 
-        private fun RBuilder.reloadButton(state: DataLoadState<Result<DataLoadComponentTools>>) {
+        private fun RBuilder.reloadButton(state: DataLoadState<Result<DataLoaderTools>>) {
             if (state !is ResolvedState)
                 return
             val reloadData = state.result.getOrNull()?.reloadData
