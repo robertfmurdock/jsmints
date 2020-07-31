@@ -8,13 +8,20 @@ import react.*
 
 typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
-data class DataLoadWrapperProps<D>(
+@Deprecated(
+    replaceWith = ReplaceWith("DataLoadWrapperProps"),
+    level = DeprecationLevel.WARNING,
+    message = "Name to be removed."
+)
+typealias DataLoadWrapperProps<D> = DataLoaderProps<D>
+
+data class DataLoaderProps<D>(
     val getDataAsync: DataLoadFunc<D>,
     val errorData: (Throwable) -> D,
     val scope: CoroutineScope? = null
 ) : RProps
 
-private val cachedComponent = reactFunction<DataLoadWrapperProps<out Any>> { props ->
+private val cachedComponent = reactFunction<DataLoaderProps<out Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
     val (state, setState) = useState<DataLoadState<out Any>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")
@@ -26,14 +33,14 @@ private val cachedComponent = reactFunction<DataLoadWrapperProps<out Any>> { pro
     props.children(state)
 }
 
-fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionalComponent<DataLoadWrapperProps<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionalComponent<DataLoaderProps<D>>>()
 
 fun <D> RBuilder.dataLoader(
     getDataAsync: DataLoadFunc<D>,
     errorData: (Throwable) -> D,
     scope: CoroutineScope? = null,
     children: RBuilder.(DataLoadState<D>) -> Unit = {}
-) = childFunction(dataLoader(), DataLoadWrapperProps(getDataAsync, errorData, scope), {}, children)
+) = childFunction(dataLoader(), DataLoaderProps(getDataAsync, errorData, scope), {}, children)
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,

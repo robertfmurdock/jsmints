@@ -1,29 +1,25 @@
 package com.zegreatrob.react.dataloader
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 data class DataLoaderTools(val scope: CoroutineScope, val reloadData: ReloadFunc) {
 
-    @ExperimentalCoroutinesApi
     fun <R> performAsyncWork(
         work: suspend () -> R,
         errorResult: (Throwable) -> R,
         onWorkComplete: (R) -> Unit
-    ) = scope.async { work() }
-        .handleOnCompletion(onWorkComplete, errorResult)
+    ) = scope.launch { work().let(onWorkComplete) }
+        .handleOnCompletion(errorResult, onWorkComplete)
 
-    @ExperimentalCoroutinesApi
-    private fun <R> Deferred<R>.handleOnCompletion(
-        onWorkComplete: (R) -> Unit,
-        errorResult: (Throwable) -> R
+    private fun <R> Job.handleOnCompletion(
+        errorResult: (Throwable) -> R,
+        onWorkComplete: (R) -> Unit
     ) = invokeOnCompletion { throwable ->
-        if (throwable == null)
-            getCompleted().let(onWorkComplete)
-        else
+        if (throwable != null) {
             errorResult(throwable).let(onWorkComplete)
+        }
     }
 
 }
