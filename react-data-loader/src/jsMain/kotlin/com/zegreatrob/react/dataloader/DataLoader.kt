@@ -4,10 +4,7 @@ import com.zegreatrob.minreact.reactFunction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import react.FunctionalComponent
-import react.RProps
-import react.RSetState
-import react.useState
+import react.*
 
 typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
@@ -31,6 +28,13 @@ private val cachedComponent = reactFunction<DataLoadWrapperProps<out Any>> { pro
 
 fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionalComponent<DataLoadWrapperProps<D>>>()
 
+fun <D> RBuilder.dataLoader(
+    getDataAsync: DataLoadFunc<D>,
+    errorData: (Throwable) -> D,
+    scope: CoroutineScope? = null,
+    children: RBuilder.(DataLoadState<D>) -> Unit = {}
+) = childFunction(dataLoader(), DataLoadWrapperProps(getDataAsync, errorData, scope), {}, children)
+
 private fun <D> startPendingJob(
     scope: CoroutineScope,
     setState: RSetState<DataLoadState<D>>,
@@ -50,14 +54,20 @@ private fun <D> startPendingJob(
 private fun <D> Job.errorOnJobFailure(setResolved: (D) -> Unit, errorResult: (Throwable) -> D) =
     invokeOnCompletion { cause -> if (cause != null) setResolved(errorResult(cause)) }
 
-private fun <D> RSetState<DataLoadState<D>>.empty(): () -> Unit = { this(
-    EmptyState()
-) }
+private fun <D> RSetState<DataLoadState<D>>.empty(): () -> Unit = {
+    this(
+        EmptyState()
+    )
+}
 
-private fun <D> RSetState<DataLoadState<D>>.pending(): (Job) -> Unit = { this(
-    PendingState()
-) }
+private fun <D> RSetState<DataLoadState<D>>.pending(): (Job) -> Unit = {
+    this(
+        PendingState()
+    )
+}
 
-private fun <D> RSetState<DataLoadState<D>>.resolved(): (D) -> Unit = { this(
-    ResolvedState(it)
-) }
+private fun <D> RSetState<DataLoadState<D>>.resolved(): (D) -> Unit = {
+    this(
+        ResolvedState(it)
+    )
+}

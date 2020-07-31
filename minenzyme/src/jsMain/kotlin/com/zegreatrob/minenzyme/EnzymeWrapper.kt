@@ -71,3 +71,5 @@ fun <P : RProps, T> shallow(reactFunction: FunctionalComponent<P>, props: P, chi
     enzyme.shallow(buildElement {
         childFunction(reactFunction, props, {}, children)
     })
+
+fun shallow(handler: RBuilder.() -> Unit) = enzyme.shallow(buildElement(handler))

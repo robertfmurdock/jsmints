@@ -20,19 +20,14 @@ class DataLoaderTest {
 
     @Test
     fun willStartDataPullAndTransitionThroughNormalStatesCorrectly() = asyncSetup(object : ScopeMint() {
-        val component = dataLoader<String>()
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
     }) exercise {
-        shallow(
-            component,
-            DataLoadWrapperProps(
-                { "DATA" },
-                { "ERROR" },
-                exerciseScope
-            ), { state: DataLoadState<String> ->
+        shallow {
+            dataLoader(getDataAsync = { "DATA" }, errorData = { "ERROR" }, scope = exerciseScope) { state ->
                 allRenderedStates.add(state)
                 div { +"state: $state" }
-            })
+            }
+        }
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(
@@ -45,24 +40,18 @@ class DataLoaderTest {
 
     @Test
     fun whenDataPullIsCancelledErrorDataIsPushedToChild() = asyncSetup(object : ScopeMint() {
-        val component = dataLoader<String>()
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
 
         val getDataAsync: suspend (DataLoaderTools) -> Nothing = {
             withContext(exerciseScope.coroutineContext) { throw Exception("NOPE") }
         }
     }) exercise {
-        shallow(
-            component,
-            DataLoadWrapperProps(
-                getDataAsync,
-                { "ERROR" },
-                exerciseScope
-            ),
-            { state: DataLoadState<String> ->
+        shallow {
+            dataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
                 allRenderedStates.add(state)
                 div { +"state: $state" }
-            })
+            }
+        }
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(
@@ -77,57 +66,36 @@ class DataLoaderTest {
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<Result<DataLoaderTools>>>()
 
-        val enzymeWrapper = shallow(
-            dataLoader(),
-            DataLoadWrapperProps(
-                { Result.success(it) },
-                { Result.failure(it) },
-                exerciseScope
-            ),
-            { state: DataLoadState<Result<DataLoaderTools>> ->
+        val wrapper = shallow {
+            dataLoader({ Result.success(it) }, { Result.failure(it) }, exerciseScope) { state ->
                 allRenderedStates.add(state)
-                div { reloadButton(state) }
-            })
-
-        private fun RBuilder.reloadButton(state: DataLoadState<Result<DataLoaderTools>>) {
-            if (state !is ResolvedState)
-                return
-            val reloadData = state.result.getOrNull()?.reloadData
-            if (reloadData != null)
-                button { attrs { onClickFunction = { reloadData() } } }
+                div { whenResolvedSuccessfully(state) {  tools ->
+                    button { attrs { onClickFunction = { tools.reloadData() } } } }
+                }
+            }
         }
+
     }) exercise {
-        enzymeWrapper.find<RProps>("button").simulate("click")
+        wrapper.find<RProps>("button").simulate("click")
     } verify {
         allRenderedStates.map { it::class }.assertIsEqualTo(
             listOf(EmptyState::class, PendingState::class, ResolvedState::class)
                     + listOf(EmptyState::class, PendingState::class, ResolvedState::class)
         )
     }
-
-
+    
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun childrenCanUseScopeForSuspendableWork() = asyncSetup(object : ScopeMint() {
-        val enzymeWrapper = shallow(
-            dataLoader(),
-            DataLoadWrapperProps({ Result.success(it) }, { Result.failure(it) }, exerciseScope),
-            { state: DataLoadState<Result<DataLoaderTools>> ->
-                div { whenResolvedSuccessfully(state) { buttonWithAsyncAction(it) } }
-            })
-
+    fun childrenCanUseScopeForSuspendableWorkViaDataLoadTools() = asyncSetup(object : ScopeMint() {
         val channel = Channel<Int>()
 
-        suspend fun collectThreeValuesFromChannel() = listOf(channel.receive(), channel.receive(), channel.receive())
-
-        private fun whenResolvedSuccessfully(
-            state: DataLoadState<Result<DataLoaderTools>>,
-            handler: (DataLoaderTools) -> Unit
-        ) {
-            if (state is ResolvedState) {
-                state.result.onSuccess(handler)
+        val wrapper = shallow {
+            dataLoader({Result.success(it)}, {Result.failure(it)}, exerciseScope) { state ->
+                div { whenResolvedSuccessfully(state) { buttonWithAsyncAction(it) } }
             }
         }
+
+        suspend fun collectThreeValuesFromChannel() = listOf(channel.receive(), channel.receive(), channel.receive())
 
         private fun RBuilder.buttonWithAsyncAction(tools: DataLoaderTools) {
             val (buttonClickValues, setValues) = useState<List<Int>?>(null)
@@ -142,15 +110,26 @@ class DataLoaderTest {
             }
         }
     }) exercise {
-        enzymeWrapper.find<RProps>("button").simulate("click")
+        wrapper.find<RProps>("button").simulate("click")
         channel.send(99)
         channel.send(87)
         channel.send(53)
         channel.close()
     } verify {
-        enzymeWrapper.find<RProps>(".work-complete-div")
+        wrapper.find<RProps>(".work-complete-div")
             .text()
             .assertIsEqualTo("Work Complete 99, 87, 53")
     }
 
+    companion object {
+        private fun whenResolvedSuccessfully(
+            state: DataLoadState<Result<DataLoaderTools>>,
+            handler: (DataLoaderTools) -> Unit
+        ) {
+            if (state is ResolvedState) {
+                state.result.onSuccess(handler)
+            }
+        }
+
+    }
 }
