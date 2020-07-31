@@ -9,7 +9,7 @@ import react.*
 typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
 @Deprecated(
-    replaceWith = ReplaceWith("DataLoadWrapperProps"),
+    replaceWith = ReplaceWith("DataLoaderProps"),
     level = DeprecationLevel.WARNING,
     message = "Name to be removed."
 )
