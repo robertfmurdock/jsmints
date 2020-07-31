@@ -30,11 +30,7 @@ class DataLoaderTest {
         }
     } verify {
         allRenderedStates.assertIsEqualTo(
-            listOf(
-                EmptyState(),
-                PendingState(),
-                ResolvedState("DATA")
-            )
+            listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
         )
     }
 
@@ -54,11 +50,7 @@ class DataLoaderTest {
         }
     } verify {
         allRenderedStates.assertIsEqualTo(
-            listOf(
-                EmptyState(),
-                PendingState(),
-                ResolvedState("ERROR")
-            )
+            listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
         )
     }
 
@@ -69,8 +61,10 @@ class DataLoaderTest {
         val wrapper = shallow {
             dataLoader({ Result.success(it) }, { Result.failure(it) }, exerciseScope) { state ->
                 allRenderedStates.add(state)
-                div { whenResolvedSuccessfully(state) {  tools ->
-                    button { attrs { onClickFunction = { tools.reloadData() } } } }
+                div {
+                    whenResolvedSuccessfully(state) { tools ->
+                        button { attrs { onClickFunction = { tools.reloadData() } } }
+                    }
                 }
             }
         }
@@ -83,15 +77,15 @@ class DataLoaderTest {
                     + listOf(EmptyState::class, PendingState::class, ResolvedState::class)
         )
     }
-    
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun childrenCanUseScopeForSuspendableWorkViaDataLoadTools() = asyncSetup(object : ScopeMint() {
+    fun childrenCanPerformAsyncWorkUsingDataLoaderScopeViaDataLoadTools() = asyncSetup(object : ScopeMint() {
         val channel = Channel<Int>()
 
         val wrapper = shallow {
-            dataLoader({Result.success(it)}, {Result.failure(it)}, exerciseScope) { state ->
-                div { whenResolvedSuccessfully(state) { buttonWithAsyncAction(it) } }
+            dataLoader({ Result.success(it) }, { Result.failure(it) }, exerciseScope) { state ->
+                div { whenResolvedSuccessfully(state) { tools -> buttonWithAsyncAction(tools) } }
             }
         }
 
@@ -130,6 +124,5 @@ class DataLoaderTest {
                 state.result.onSuccess(handler)
             }
         }
-
     }
 }
