@@ -90,7 +90,7 @@ For tests that use Kotlin's coroutine system, the regular mints won't work - for
         val input: Int = Random.nextInt()
         val expected = input + 1
     }) exercise {
-        input.suspendPlusOne() // suspend functions call be called in the all closures
+        input.suspendPlusOne() // suspend functions can be called in the all closures
     } verify { result ->
         assertEquals(expected, result)
     }
