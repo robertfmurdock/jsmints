@@ -21,7 +21,7 @@ data class DataLoaderProps<D>(
     val scope: CoroutineScope? = null
 ) : RProps
 
-private val cachedComponent = reactFunction<DataLoadWrapperProps<out Any>> { props ->
+private val cachedComponent = reactFunction<DataLoaderProps<out Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
     val (state, setState) = useState<DataLoadState<out Any>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")
