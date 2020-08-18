@@ -6,10 +6,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: testmints-cache-5-{{ .Branch }}
+          key: testmints-cache-6-{{ .Branch }}
       - run: "./gradlew check release --stacktrace"
       - save_cache:
-          key: testmints-cache-5-{{ .Branch }}
+          key: testmints-cache-6-{{ .Branch }}
           paths:
             - buildSrc/build
             - "~/.gradle"
@@ -29,11 +29,11 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: testmints-mac-cache-2-{{ .Branch }}
+          key: testmints-mac-cache-3-{{ .Branch }}
       - run: "git tag -d $(git describe) || echo 'no fail'"
       - run: "./gradlew -P release-target=mac release bintrayUpload"
       - save_cache:
-          key: testmints-mac-cache-2-{{ .Branch }}
+          key: testmints-mac-cache-3-{{ .Branch }}
           paths:
             - "~/.gradle"
             - "~/.konan"
