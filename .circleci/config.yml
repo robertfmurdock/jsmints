@@ -2,7 +2,7 @@ version: 2
 jobs:
   build-linux:
     docker:
-      - image: circleci/openjdk
+      - image: cimg/openjdk:14.0
     steps:
       - checkout
       - restore_cache:
