@@ -1,5 +1,4 @@
 import com.zegreatrob.testmints.build.BuildConstants
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform") version "1.4.0"
@@ -60,11 +59,6 @@ kotlin {
 }
 
 tasks {
-    getByName<Kotlin2JsCompile>("compileKotlinJs") {
-        kotlinOptions.moduleKind = "umd"
-        kotlinOptions.sourceMap = true
-        kotlinOptions.sourceMapEmbedSources = "always"
-    }
 }
 
 

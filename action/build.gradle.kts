@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-
 plugins {
     kotlin("multiplatform") version "1.4.0"
 }
@@ -66,19 +64,6 @@ kotlin {
 }
 
 tasks {
-
-    val compileKotlinJs by getting(Kotlin2JsCompile::class) {
-        kotlinOptions.moduleKind = "umd"
-        kotlinOptions.sourceMap = true
-        kotlinOptions.sourceMapEmbedSources = "always"
-        kotlinOptions.freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
-    }
-    val compileTestKotlinJs by getting(Kotlin2JsCompile::class) {
-        kotlinOptions.moduleKind = "commonjs"
-        kotlinOptions.sourceMap = true
-        kotlinOptions.sourceMapEmbedSources = "always"
-        kotlinOptions.freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
-    }
 
     val jvmTest by getting(Test::class) {
         systemProperty("junit.jupiter.extensions.autodetection.enabled", "true")

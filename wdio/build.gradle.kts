@@ -4,9 +4,10 @@ plugins {
 
 kotlin {
     targets {
-        js {
-            nodejs {}
-            useCommonJs()
+        js(LEGACY) {
+            nodejs {
+                useCommonJs()
+            }
         }
     }
 

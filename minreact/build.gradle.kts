@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-
 plugins {
     id("org.jetbrains.kotlin.multiplatform") version "1.4.0"
 }
@@ -12,7 +10,11 @@ repositories {
 
 kotlin {
     targets {
-        js { nodejs {} }
+        js(LEGACY) {
+            nodejs {
+                useCommonJs()
+            }
+        }
     }
 
     sourceSets {
@@ -37,14 +39,4 @@ kotlin {
 }
 
 tasks {
-    val compileKotlinJs by getting(Kotlin2JsCompile::class) {
-        kotlinOptions.moduleKind = "commonjs"
-        kotlinOptions.sourceMap = true
-        kotlinOptions.sourceMapEmbedSources = "always"
-    }
-    val compileTestKotlinJs by getting(Kotlin2JsCompile::class) {
-        kotlinOptions.moduleKind = "commonjs"
-        kotlinOptions.sourceMap = true
-        kotlinOptions.sourceMapEmbedSources = "always"
-    }
 }
