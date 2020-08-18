@@ -34,19 +34,19 @@ class WebdriverElement(
     private fun Element.element(selector: String): Promise<Element> = `$`(selector)
         .unsafeCast<Promise<Element>>()
 
-    suspend fun click() = log(::click) { element().click().await() }
-    suspend fun text() = log(::text) { element().getText().await() }
-    suspend fun attribute(name: String) = log(::attribute) { element().getAttribute(name).await() }
-    suspend fun isPresent() = log(::isPresent) { element().isExisting().await() }
-    suspend fun isEnabled() = log(::isEnabled) { element().isEnabled().await() }
-    suspend fun isDisplayed() = log(::isDisplayed) { element().isDisplayed().await() }
-    suspend fun setValue(value: String) = log(::setValue) { element().setValue(value).await() }
-    suspend fun clearSetValue(value: String) = log(::clearSetValue) {
+    suspend fun click(): Unit = log(::click) { element().click().await() }
+    suspend fun text(): String = log(::text) { element().getText().await() }
+    suspend fun attribute(name: String): String = log(::attribute) { element().getAttribute(name).await() }
+    suspend fun isPresent(): Boolean = log(::isPresent) { element().isExisting().await() }
+    suspend fun isEnabled(): Boolean = log(::isEnabled) { element().isEnabled().await() }
+    suspend fun isDisplayed(): Boolean = log(::isDisplayed) { element().isDisplayed().await() }
+    suspend fun setValue(value: String): Unit = log(::setValue) { element().setValue(value).await() }
+    suspend fun clearSetValue(value: String): Unit = log(::clearSetValue) {
         element().clearValue().await()
         element().setValue(value).await()
     }
 
-    suspend fun waitToExist() = log(::waitToExist) {
+    suspend fun waitToExist(): Unit = log(::waitToExist) {
         element().waitForExist(json()).await()
     }
 

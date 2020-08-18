@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")  version "1.3.72"
+    id("org.jetbrains.kotlin.multiplatform")  version "1.4.0"
 }
 
 repositories {
@@ -22,9 +22,9 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(project(":minreact"))
-                implementation("org.jetbrains:kotlin-react:16.13.1-pre.110-kotlin-1.3.72")
-                implementation("org.jetbrains:kotlin-react-dom:16.13.1-pre.110-kotlin-1.3.72")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
+                implementation("org.jetbrains:kotlin-react:16.13.1-pre.110-kotlin-1.4.0")
+                implementation("org.jetbrains:kotlin-react-dom:16.13.1-pre.110-kotlin-1.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
             }
         }
 

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
-    kotlin("multiplatform") version "1.3.72"
+    kotlin("multiplatform") version "1.4.0"
 }
 
 repositories {
@@ -20,9 +20,8 @@ kotlin {
         getByName("commonMain") {
             dependencies {
                 implementation(project(":action"))
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.3.72")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.8")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
             }
         }
         getByName("commonTest") {
@@ -38,13 +37,13 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.3.72"))
+                implementation(kotlin("reflect", "1.4.0"))
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.3.72"))
+                implementation(kotlin("reflect", "1.4.0"))
                 implementation("org.slf4j:slf4j-simple:1.7.5")
                 implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -56,8 +55,8 @@ kotlin {
 
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.3.72")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.8")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.9")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
         }

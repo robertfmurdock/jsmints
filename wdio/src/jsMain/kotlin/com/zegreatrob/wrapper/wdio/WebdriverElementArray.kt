@@ -13,8 +13,8 @@ class WebdriverElementArray(
         all().map { transform(it) }.toList()
     }
 
-    suspend fun count() = log(::count) { all().count() }
-    suspend fun first() = log(::first) { all().first() }
+    suspend fun count(): Int = log(::count) { all().count() }
+    suspend fun first(): WebdriverElement = log(::first) { all().first() }
 
 }
 
