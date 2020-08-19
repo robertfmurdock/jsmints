@@ -10,11 +10,11 @@ inline fun <reified P : RProps> reactFunction(crossinline function: RBuilder.(P)
     }
 
 fun <P : RProps> buildReactFunction(kClass: KClass<P>, builder: (props: P) -> ReactElement) = { props: P ->
-    ensureKotlinClassProps(props, kClass)
+    ensureKotlinClassProps(props, kClass.js)
         .let(builder)
 }.unsafeCast<RClass<P>>()
 
-private fun <P : RProps> ensureKotlinClassProps(props: P, jsClass: KClass<P>): P = if (props::class == jsClass) {
+private fun <P : RProps> ensureKotlinClassProps(props: P, jsClass: JsClass<P>): P = if (props::class.js == jsClass) {
     props
 } else {
     val newProps = js("new jsClass()")
