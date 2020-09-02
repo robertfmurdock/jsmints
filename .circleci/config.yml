@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build-linux:
     docker:
@@ -6,10 +6,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: testmints-cache-6-{{ .Branch }}
+          key: testmints-cache-7-{{ .Branch }}
       - run: "./gradlew check release --stacktrace"
       - save_cache:
-          key: testmints-cache-6-{{ .Branch }}
+          key: testmints-cache-7-{{ .Branch }}
           paths:
             - buildSrc/build
             - "~/.gradle"
@@ -46,9 +46,39 @@ jobs:
           root: ./
           paths:
             - "*"
+  update-libs:
+    docker:
+      - image: cimg/openjdk:14.0
+    steps:
+      - checkout
+      - run: "./gradlew useLatestVersions"
+      - run: "./gradlew check release --stacktrace"
+      - store_artifacts:
+          path: build/test-output
+      - store_test_results:
+          path: build/test-output
+      - run: "git add ."
+      - run: "git config user.email \"robert.f.murdock@gmail.com\""
+      - run: "git config user.name \"CircleCI in a RoB Suit\""
+      - run: "git commit -m '[patch] Automatic dependency update.' || echo 'Ignoring no changes'"
+      - run: "git push"
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - "*"
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build-linux
       - build-mac
+  update-libs:
+    triggers:
+      - schedule:
+          cron: "0 14 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - update-libs
