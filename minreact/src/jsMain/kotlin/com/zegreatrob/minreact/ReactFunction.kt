@@ -17,7 +17,8 @@ fun <P : RProps> buildReactFunction(kClass: KClass<P>, builder: (props: P) -> Re
 private fun <P : RProps> ensureKotlinClassProps(props: P, jsClass: JsClass<P>): P = if (props::class.js == jsClass) {
     props
 } else {
-    val newProps = js("new jsClass()")
+    @Suppress("UNUSED_VARIABLE") val thing = jsClass
+    val newProps = js("new thing()")
     objectAssign(newProps, props)
     newProps.unsafeCast<P>()
 }

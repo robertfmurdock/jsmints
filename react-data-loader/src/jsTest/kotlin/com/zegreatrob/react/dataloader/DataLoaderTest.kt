@@ -60,9 +60,9 @@ class DataLoaderTest {
 
     @Test
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
-        val allRenderedStates = mutableListOf<DataLoadState<Result<DataLoaderTools>>>()
+        val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
 
-        fun RBuilder.component() = dataLoader({ Result.success(it) }, { Result.failure(it) }, exerciseScope) { state ->
+        fun RBuilder.component() = dataLoader({ it }, { null }, exerciseScope) { state ->
             allRenderedStates.add(state)
             div {
                 whenResolvedSuccessfully(state) { tools ->
@@ -81,23 +81,34 @@ class DataLoaderTest {
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     @Test
     fun childrenCanPerformAsyncWorkUsingDataLoaderScopeViaDataLoadTools() = asyncSetup(object : ScopeMint() {
         val channel = Channel<Int>()
 
         val wrapper = shallow {
-            dataLoader({ Result.success(it) }, { Result.failure(it) }, exerciseScope) { state ->
-                div { whenResolvedSuccessfully(state) { tools -> buttonWithAsyncAction(tools) } }
+            dataLoader({ tools -> tools }, { null }, exerciseScope) { state ->
+                div {
+                    whenResolvedSuccessfully(state) { tools -> buttonWithAsyncAction(tools) }
+                }
             }
         }
 
-        suspend fun collectThreeValuesFromChannel() = listOf(channel.receive(), channel.receive(), channel.receive())
+        suspend fun collectThreeValuesFromChannel(): List<Int> {
+            val e1 = channel.receive()
+            val e2 = channel.receive()
+            val e3 = channel.receive()
+            return listOf(e1, e2, e3)
+        }
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         private fun RBuilder.buttonWithAsyncAction(tools: DataLoaderTools) {
             val (buttonClickValues, setValues) = useState<List<Int>?>(null)
             val onClick = {
-                tools.performAsyncWork(::collectThreeValuesFromChannel, { emptyList() }, { setValues(it) })
+                tools.performAsyncWork(
+                    ::collectThreeValuesFromChannel,
+                    { throw it },
+                    { setValues(it) })
             }
 
             button { attrs { onClickFunction = { onClick() } } }
@@ -111,6 +122,7 @@ class DataLoaderTest {
         channel.send(99)
         channel.send(87)
         channel.send(53)
+
         channel.close()
     } verify {
         wrapper.find<RProps>(".work-complete-div")
@@ -119,9 +131,9 @@ class DataLoaderTest {
     }
 
     companion object {
-        private fun <D> whenResolvedSuccessfully(state: DataLoadState<Result<D>>, handler: (D) -> Unit) {
+        private fun <D> whenResolvedSuccessfully(state: DataLoadState<D?>, handler: (D) -> Unit) {
             if (state is ResolvedState) {
-                state.result.onSuccess(handler)
+                state.result?.let(handler)
             }
         }
     }

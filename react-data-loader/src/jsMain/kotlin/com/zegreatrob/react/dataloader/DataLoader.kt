@@ -33,14 +33,14 @@ private val cachedComponent = reactFunction<DataLoaderProps<out Any>> { props ->
     props.children(state)
 }
 
-fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionalComponent<DataLoadWrapperProps<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionalComponent<DataLoaderProps<D>>>()
 
 fun <D> RBuilder.dataLoader(
     getDataAsync: DataLoadFunc<D>,
     errorData: (Throwable) -> D,
     scope: CoroutineScope? = null,
     children: RBuilder.(DataLoadState<D>) -> Unit = {}
-) = childFunction(dataLoader(), DataLoadWrapperProps(getDataAsync, errorData, scope), {}, children)
+) = childFunction(dataLoader(), DataLoaderProps(getDataAsync, errorData, scope), {}, children)
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,

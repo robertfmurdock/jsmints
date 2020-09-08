@@ -15,7 +15,7 @@ repositories {
 kotlin {
 
     targets {
-        js(KotlinJsCompilerType.LEGACY) {
+        js(KotlinJsCompilerType.BOTH) {
             nodejs {}
             useCommonJs()
         }

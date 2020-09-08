@@ -10,7 +10,7 @@ repositories {
 
 kotlin {
     targets {
-        js(LEGACY) {
+        js(BOTH) {
             nodejs {
                 useCommonJs()
             }
