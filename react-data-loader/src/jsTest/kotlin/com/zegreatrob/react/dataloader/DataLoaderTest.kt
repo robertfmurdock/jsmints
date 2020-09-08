@@ -104,12 +104,7 @@ class DataLoaderTest {
         @OptIn(ExperimentalCoroutinesApi::class)
         private fun RBuilder.buttonWithAsyncAction(tools: DataLoaderTools) {
             val (buttonClickValues, setValues) = useState<List<Int>?>(null)
-            val onClick = {
-                tools.performAsyncWork(
-                    ::collectThreeValuesFromChannel,
-                    { throw it },
-                    { setValues(it) })
-            }
+            val onClick = { tools.performAsyncWork(::collectThreeValuesFromChannel, { throw it }, { setValues(it) }) }
 
             button { attrs { onClickFunction = { onClick() } } }
             div(classes = "work-complete-div") {
