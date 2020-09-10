@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.4.0"
+    kotlin("multiplatform") version "1.4.10"
 }
 
 repositories {
@@ -17,7 +17,7 @@ kotlin {
     sourceSets {
         getByName("commonMain") {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.10")
             }
         }
         getByName("commonTest") {
@@ -33,13 +33,13 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.0"))
+                implementation(kotlin("reflect", "1.4.10"))
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.0"))
+                implementation(kotlin("reflect", "1.4.10"))
                 implementation("org.slf4j:slf4j-simple:2.0.0-alpha1")
                 implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -51,7 +51,7 @@ kotlin {
 
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.4.0")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.4.10")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
         }

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")  version "1.4.0"
+    id("org.jetbrains.kotlin.multiplatform")  version "1.4.10"
 }
 
 repositories {
