@@ -17,7 +17,7 @@ kotlin {
                 implementation(kotlin("stdlib"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.9")
                 implementation("com.soywiz.korlibs.klock:klock:1.12.0")
-                implementation("io.github.microutils:kotlin-logging-js:1.8.3")
+                implementation("io.github.microutils:kotlin-logging-js:1.10.7")
                 implementation(npm("@wdio/cli", "6.4.0"))
             }
         }
