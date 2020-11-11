@@ -39,7 +39,9 @@ plugins {
     id("se.patrikerdes.use-latest-versions") version "0.2.15"
     id("com.github.ben-manes.versions") version "0.33.0"
     id("de.gliderpilot.semantic-release") version "1.4.0"
+    kotlin("multiplatform") version "1.4.10" apply false
 }
+
 
 semanticRelease {
     changeLog(closureOf<SemanticReleaseChangeLogService> {

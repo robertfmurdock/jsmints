@@ -1,7 +1,7 @@
 import com.zegreatrob.testmints.build.BuildConstants
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.4.10"
+    kotlin("multiplatform")
 }
 
 repositories {
