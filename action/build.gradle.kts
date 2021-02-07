@@ -44,8 +44,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
-                implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+                implementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
             }
         }
 
