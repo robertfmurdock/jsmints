@@ -18,7 +18,7 @@ kotlin {
         getByName("commonMain") {
             dependencies {
                 implementation(project(":action"))
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.30")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.31")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
             }
         }
@@ -53,7 +53,7 @@ kotlin {
 
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.4.30")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.4.31")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
