@@ -89,8 +89,8 @@ tasks {
         }
     }
 
-    val publishToSonatype by getting()
-    
+    val publishToSonatype by getting {}
+
     val publish by getting {
         if (!isSnapshot()) {
             dependsOn(publishToSonatype)
