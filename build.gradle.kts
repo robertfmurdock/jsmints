@@ -40,8 +40,19 @@ plugins {
     id("com.github.ben-manes.versions") version "0.36.0"
     id("de.gliderpilot.semantic-release") version "1.4.0"
     kotlin("multiplatform") version "1.4.31" apply false
+    id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
 }
 
+nexusPublishing {
+    repositories {
+        sonatype {
+            username.set(System.getenv("SONATYPE_USERNAME"))
+            password.set(System.getenv("SONATYPE_PASSWORD"))
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}
 
 semanticRelease {
     changeLog(closureOf<SemanticReleaseChangeLogService> {
@@ -71,6 +82,9 @@ tasks {
             enabled = false
         }
         val release by getting {
+            enabled = false
+        }
+        val publishToSonatype by getting {
             enabled = false
         }
     }
@@ -149,9 +163,11 @@ subprojects {
             dependsOn("publishToMavenLocal")
         }
 
+        val publishToSonatype by getting {}
+
         val publish by getting {
             if (!isSnapshot()) {
-                dependsOn(bintrayUpload)
+                dependsOn(bintrayUpload, publishToSonatype)
             }
         }
     }
