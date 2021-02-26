@@ -88,15 +88,6 @@ tasks {
             enabled = false
         }
     }
-
-    val publishToSonatype by getting {}
-
-    val publish by getting {
-        if (!isSnapshot()) {
-            dependsOn(publishToSonatype)
-        }
-    }
-
 }
 
 subprojects {
@@ -171,10 +162,9 @@ subprojects {
 
             dependsOn("publishToMavenLocal")
         }
-
         val publish by getting {
             if (!isSnapshot()) {
-                dependsOn(bintrayUpload)
+                dependsOn(bintrayUpload, "publishToSonatype")
             }
         }
     }
