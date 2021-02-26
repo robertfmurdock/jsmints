@@ -88,6 +88,15 @@ tasks {
             enabled = false
         }
     }
+
+    val publishToSonatype by getting()
+    
+    val publish by getting {
+        if (!isSnapshot()) {
+            dependsOn(publishToSonatype)
+        }
+    }
+
 }
 
 subprojects {
@@ -165,7 +174,7 @@ subprojects {
 
         val publish by getting {
             if (!isSnapshot()) {
-                dependsOn(bintrayUpload, findByPath(":publishToSonatype"))
+                dependsOn(bintrayUpload)
             }
         }
     }
