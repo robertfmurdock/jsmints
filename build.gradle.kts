@@ -163,11 +163,9 @@ subprojects {
             dependsOn("publishToMavenLocal")
         }
 
-        val publishToSonatype by getting {}
-
         val publish by getting {
             if (!isSnapshot()) {
-                dependsOn(bintrayUpload, publishToSonatype)
+                dependsOn(bintrayUpload, ":publishToSonatype")
             }
         }
     }
