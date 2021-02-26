@@ -35,13 +35,13 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.30"))
+                implementation(kotlin("reflect", "1.4.31"))
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.30"))
+                implementation(kotlin("reflect", "1.4.31"))
                 implementation("org.slf4j:slf4j-simple:1.7.5")
                 implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
