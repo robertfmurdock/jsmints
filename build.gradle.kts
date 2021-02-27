@@ -117,9 +117,12 @@ subprojects {
 
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
-//    signing {
-//        sign(publishing.publications)
-//    }
+    signing {
+        val signingKey: String? by project
+        val signingPassword: String? by project
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign(publishing.publications)
+    }
 
     val macTargets = listOf(
         "macosX64",
