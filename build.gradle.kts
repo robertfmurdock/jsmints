@@ -41,6 +41,7 @@ plugins {
     id("de.gliderpilot.semantic-release") version "1.4.0"
     kotlin("multiplatform") version "1.4.31" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
+    signing
 }
 
 nexusPublishing {
@@ -48,8 +49,9 @@ nexusPublishing {
         sonatype {
             username.set(System.getenv("SONATYPE_USERNAME"))
             password.set(System.getenv("SONATYPE_PASSWORD"))
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"))
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            stagingProfileId.set("59331990bed4c")
         }
     }
 }
@@ -93,6 +95,7 @@ tasks {
 subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "com.jfrog.bintray")
+    apply<SigningPlugin>()
 
     group = "com.zegreatrob.testmints"
 
@@ -113,6 +116,10 @@ subprojects {
     }
 
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
+
+//    signing {
+//        sign(publishing.publications)
+//    }
 
     val macTargets = listOf(
         "macosX64",
