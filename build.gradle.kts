@@ -120,7 +120,11 @@ subprojects {
     signing {
         val signingKey: String? by project
         val signingPassword: String? by project
-        useInMemoryPgpKeys(signingKey, signingPassword)
+
+        useInMemoryPgpKeys(
+            java.util.Base64.getDecoder().decode(signingKey).toString(),
+            signingPassword
+        )
         sign(publishing.publications)
     }
 
