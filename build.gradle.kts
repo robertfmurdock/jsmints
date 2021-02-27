@@ -164,7 +164,7 @@ subprojects {
         }
         val publish by getting {
             if (!isSnapshot()) {
-                dependsOn(bintrayUpload, "publishToSonatype", "closeSonatypeStagingRepository")
+                dependsOn(bintrayUpload)
             }
         }
     }
