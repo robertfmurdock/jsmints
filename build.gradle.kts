@@ -3,6 +3,7 @@ import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
+import java.nio.charset.Charset
 
 buildscript {
     repositories {
@@ -121,7 +122,7 @@ subprojects {
         val signingKey: String? by project
         val signingPassword: String? by project
 
-        val decodedKey = java.util.Base64.getDecoder().decode(signingKey).toString()
+        val decodedKey = java.util.Base64.getDecoder().decode(signingKey).toString(Charset.defaultCharset())
 
         println("DECODED KEY $decodedKey")
 
