@@ -121,8 +121,12 @@ subprojects {
         val signingKey: String? by project
         val signingPassword: String? by project
 
+        val decodedKey = java.util.Base64.getDecoder().decode(signingKey).toString()
+
+        println("DECODED KEY $decodedKey")
+
         useInMemoryPgpKeys(
-            java.util.Base64.getDecoder().decode(signingKey).toString(),
+            decodedKey,
             signingPassword
         )
         sign(publishing.publications)
