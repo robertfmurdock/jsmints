@@ -123,7 +123,7 @@ and not
        asyncSetup ...
     } 
 
-In order to write tests safely on all platforms... especially Javascript.
+In order to write tests safely on all platforms... especially KotlinJs.
 
 ## Acknowledgements
 
