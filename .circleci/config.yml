@@ -31,7 +31,7 @@ jobs:
       - restore_cache:
           key: testmints-mac-cache-3-{{ .Branch }}
       - run: "git tag -d $(git describe) || echo 'no fail'"
-      - run: "./gradlew -P release-target=mac release bintrayUpload"
+      - run: "./gradlew -P release-target=mac release closeAndReleaseSonatypeStagingRepository"
       - save_cache:
           key: testmints-mac-cache-3-{{ .Branch }}
           paths:

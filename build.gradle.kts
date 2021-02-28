@@ -177,6 +177,14 @@ subprojects {
         "iosArm64"
     )
 
+    publishing.publications {
+        matching { if (!isMacRelease()) true else !macTargets.contains(it.name) }.forEach { targetPub ->
+            tasks.withType<AbstractPublishToMaven>()
+                .matching { it.publication == targetPub }
+                .configureEach { enabled = false }
+        }
+    }
+
     tasks {
         val javadocJar by creating(Jar::class) {
             archiveClassifier.set("javadoc")
@@ -184,7 +192,7 @@ subprojects {
         }
 
         publishing.publications {
-            matching { it.name == "jvm" }.withType<MavenPublication>() {
+            matching { it.name == "jvm" }.withType<MavenPublication> {
                 artifact(javadocJar)
             }
         }
