@@ -125,6 +125,7 @@ subprojects {
 
         publishing.publications.withType<MavenPublication>().forEach {
             val publicationName = it.name
+
             with(it) {
                 val scmUrl = "https://github.com/robertfmurdock/testmints"
 
@@ -176,20 +177,16 @@ subprojects {
         "iosArm64"
     )
 
-
     tasks {
         val javadocJar by creating(Jar::class) {
             archiveClassifier.set("javadoc")
-            from("README.md")
-        }
-        val moreJavadocJar by creating(Jar::class) {
-            archiveClassifier.set("javadoc")
-            from(absoluteProjectPath("/src"))
+            from("${rootDir.absolutePath}/javadocs")
         }
 
-        artifacts {
-            archives(javadocJar)
-            archives(moreJavadocJar)
+        publishing.publications {
+            matching { it.name == "jvm" }.withType<MavenPublication>() {
+                artifact(javadocJar)
+            }
         }
 
         val bintrayUpload by getting(BintrayUploadTask::class) {
@@ -238,6 +235,8 @@ subprojects {
 //            }
         }
     }
+
+
 }
 
 fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
