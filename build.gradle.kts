@@ -90,9 +90,6 @@ tasks {
         val release by getting {
             enabled = false
         }
-        val publishToSonatype by getting {
-            enabled = false
-        }
     }
 }
 
