@@ -153,7 +153,6 @@ subprojects {
                     connection.set("git@github.com:robertfmurdock/testmints.git")
                     developerConnection.set("git@github.com:robertfmurdock/testmints.git")
                 }
-
             }
         }
     }
@@ -179,7 +178,22 @@ subprojects {
         "iosArm64"
     )
 
+
     tasks {
+        val javadocJar by creating(Jar::class) {
+            archiveClassifier.set("javadoc")
+            from("README.md")
+        }
+        val sourcesJar by creating(Jar::class) {
+            archiveClassifier.set("javadoc")
+            from(absoluteProjectPath("/src"))
+        }
+
+        artifacts {
+            archives(javadocJar)
+            archives(sourcesJar)
+        }
+
         val bintrayUpload by getting(BintrayUploadTask::class) {
 
             doFirst {
