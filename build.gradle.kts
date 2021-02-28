@@ -177,7 +177,7 @@ subprojects {
         println("Disable attempt is scheduled")
         publishing.publications {
             println("publication setup")
-            matching { !macTargets.contains(it.name) }.all { targetPub ->
+            matching { println("consider pub ${it.name}"); !macTargets.contains(it.name) }.all { targetPub ->
                 println("disabling ${targetPub.name}")
                 tasks.withType<AbstractPublishToMaven>()
                     .matching { it.publication == targetPub }
