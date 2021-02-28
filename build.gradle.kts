@@ -173,20 +173,6 @@ subprojects {
         "iosArm64"
     )
 
-    if (isMacRelease()) {
-        println("Disable attempt is scheduled")
-        publishing.publications {
-            println("publication setup")
-            matching { println("consider pub ${it.name}"); !macTargets.contains(it.name) }.all { targetPub ->
-                println("disabling ${targetPub.name}")
-                tasks.withType<AbstractPublishToMaven>()
-                    .matching { it.publication == targetPub }
-                    .configureEach { onlyIf { false } }
-                true
-            }
-        }
-    }
-
     tasks {
         val javadocJar by creating(Jar::class) {
             archiveClassifier.set("javadoc")
@@ -199,6 +185,21 @@ subprojects {
                 artifact(javadocJar)
             }
         }
+
+        if (isMacRelease()) {
+            println("Disable attempt is scheduled")
+            publishing.publications {
+                println("publication setup")
+                matching { println("consider pub ${it.name}"); !macTargets.contains(it.name) }.all { targetPub ->
+                    println("disabling ${targetPub.name}")
+                    withType<AbstractPublishToMaven>()
+                        .matching { it.publication == targetPub }
+                        .configureEach { onlyIf { false } }
+                    true
+                }
+            }
+        }
+
     }
 }
 
