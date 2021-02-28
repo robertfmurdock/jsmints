@@ -122,11 +122,30 @@ subprojects {
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
     afterEvaluate {
+
+        publishing.publications.filterIsInstance(MavenPublication::class.java)
+            .map {
+                it.artifact(file("build/publications/${it.name}/module.json")) {
+                    extension = "module"
+                }
+                it.artifact(file("build/classes/kotlin/${it.name}/main/${project.name}.klib")) {
+                    extension = "klib"
+                }
+            }
+
         publishing.publications.withType<MavenPublication>().forEach {
+            val publicationName = it.name
             with(it) {
                 groupId = "com.zegreatrob.testmints"
                 artifactId = project.name
                 version = "${project.version}"
+
+                artifact(file("build/publications/$publicationName/module.json")) {
+                    extension = "module"
+                }
+                artifact(file("build/classes/kotlin/$publicationName/main/${project.name}.klib")) {
+                    extension = "klib"
+                }
 
                 val scmUrl = "https://github.com/robertfmurdock/testmints"
 
@@ -144,7 +163,7 @@ subprojects {
                 pom.developers {
                     developer {
                         id.set("robertfmurdock")
-                        name.set("Rob Murdock")
+                        publicationName.set("Rob Murdock")
                         email.set("robert.f.murdock@gmail.com")
                     }
                 }
