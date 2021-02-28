@@ -163,7 +163,7 @@ subprojects {
                 pom.developers {
                     developer {
                         id.set("robertfmurdock")
-                        publicationName.set("Rob Murdock")
+                        name.set("Rob Murdock")
                         email.set("robert.f.murdock@gmail.com")
                     }
                 }
