@@ -176,6 +176,7 @@ subprojects {
     if (isMacRelease()) {
         println("Disable attempt is scheduled")
         publishing.publications {
+            println("publication setup")
             matching { !macTargets.contains(it.name) }.all { targetPub ->
                 println("disabling ${targetPub.name}")
                 tasks.withType<AbstractPublishToMaven>()
@@ -192,7 +193,9 @@ subprojects {
             from("${rootDir.absolutePath}/javadocs")
         }
         publishing.publications {
+            println("publication javadoc setup")
             matching { it.name == "jvm" }.withType<MavenPublication> {
+                println("publication javadoc adding artifact")
                 artifact(javadocJar)
             }
         }
