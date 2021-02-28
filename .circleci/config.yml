@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  win: circleci/windows@2.2.0
 jobs:
   build-linux:
     docker:
@@ -46,6 +48,13 @@ jobs:
           root: ./
           paths:
             - "*"
+  build-windows:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - checkout
+      - run: "gradlew.bat --no-daemon -s -i mingwX64Test"
   update-libs:
     docker:
       - image: cimg/openjdk:14.0
