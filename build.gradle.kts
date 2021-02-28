@@ -140,13 +140,6 @@ subprojects {
                 artifactId = project.name
                 version = "${project.version}"
 
-                artifact(file("build/publications/$publicationName/module.json")) {
-                    extension = "module"
-                }
-                artifact(file("build/classes/kotlin/$publicationName/main/${project.name}.klib")) {
-                    extension = "klib"
-                }
-
                 val scmUrl = "https://github.com/robertfmurdock/testmints"
 
                 pom.name.set(project.name)
@@ -199,20 +192,6 @@ subprojects {
 
 
     tasks {
-        val javadocJar by creating(Jar::class) {
-            archiveClassifier.set("javadoc")
-            from("README.md")
-        }
-        val sourcesJar by creating(Jar::class) {
-            archiveClassifier.set("javadoc")
-            from(absoluteProjectPath("/src"))
-        }
-
-        artifacts {
-            archives(javadocJar)
-            archives(sourcesJar)
-        }
-
         val bintrayUpload by getting(BintrayUploadTask::class) {
 
             doFirst {
