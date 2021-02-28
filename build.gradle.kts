@@ -42,8 +42,11 @@ plugins {
     id("de.gliderpilot.semantic-release") version "1.4.0"
     kotlin("multiplatform") version "1.4.31" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
+    maven
     signing
 }
+
+group = "com.zegreatrob.testmints"
 
 nexusPublishing {
     repositories {
@@ -117,6 +120,35 @@ subprojects {
     }
 
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
+
+    publishing.publications.getByName<MavenPublication>("kotlinMultiplatform") {
+        groupId = "com.zegreatrob.testmints"
+        artifactId = project.name
+        version = "${project.version}"
+
+        val scmUrl = "https://github.com/robertfmurdock/testmints"
+        pom.licenses {
+            license {
+                name.set("MIT License")
+                url.set(scmUrl)
+                distribution.set("repo")
+            }
+        }
+        pom.developers {
+            developer {
+                id.set("robertfmurdock")
+                name.set("Rob Murdock")
+                email.set("robert.f.murdock@gmail.com")
+            }
+        }
+        pom.scm {
+            url.set(scmUrl)
+            connection.set("git@github.com:robertfmurdock/testmints.git")
+            developerConnection.set("git@github.com:robertfmurdock/testmints.git")
+        }
+
+    }
+
 
     signing {
         val signingKey: String? by project
