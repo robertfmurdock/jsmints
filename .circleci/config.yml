@@ -81,7 +81,6 @@ workflows:
     jobs:
       - build-linux
       - build-mac
-      - build-windows
   update-libs:
     triggers:
       - schedule:
