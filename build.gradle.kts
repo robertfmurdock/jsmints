@@ -180,7 +180,7 @@ subprojects {
     tasks {
         val javadocJar by creating(Jar::class) {
             archiveClassifier.set("javadoc")
-            from("README.md")
+            from(absoluteProjectPath("/README.md"))
         }
         artifacts {
             archives(javadocJar)
