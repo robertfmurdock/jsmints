@@ -27,13 +27,10 @@ An essay about an attempt to embed those priorities in the test code itself.
 All sugar here is multiplatform compliant and works great in combination with the [standard kotlin.test library](https://kotlinlang.org/api/latest/kotlin.test/index.html). The intention is to also minimize its dependencies as much as possible, to maximize portability.
 
 ## Installation
-Just want to dive right in? Here's the gradle snippets to get going. Basically, drop in the bintray repository and then reference the library. I don't recommend using the gradle plus setting unless you like to *live on the edge*.
-
-*Note: this library is currently undergoing a migration to Maven Central. The latest version currently available at the bintray URL is 3.2.11.
-
+Just want to dive right in? Here's the gradle snippets to get going. Basically, make sure you've loaded maven central and then reference the library. I don't recommend using the gradle plus setting unless you like to *live on the edge*.
 
     repositories {
-        maven { url = uri("https://dl.bintray.com/robertfmurdock/zegreatrob") }
+        mavenCentral()
     }
     
     kotlin {

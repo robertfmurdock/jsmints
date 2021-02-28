@@ -1,4 +1,3 @@
-import com.jfrog.bintray.gradle.BintrayExtension
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
@@ -7,9 +6,6 @@ import java.nio.charset.Charset
 buildscript {
     repositories {
         jcenter()
-    }
-    dependencies {
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
     }
 }
 
@@ -20,7 +16,6 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-        maven { url = uri("https://dl.bintray.com/robertfmurdock/zegreatrob") }
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
     }
 
@@ -94,26 +89,9 @@ tasks {
 
 subprojects {
     apply(plugin = "maven-publish")
-    apply(plugin = "com.jfrog.bintray")
     apply<SigningPlugin>()
 
     group = "com.zegreatrob.testmints"
-
-    extensions.configure(BintrayExtension::class.java) {
-        user = System.getenv("BINTRAY_USER")
-        key = System.getenv("BINTRAY_KEY")
-        override = true
-
-        publish = true
-
-        pkg(closureOf<BintrayExtension.PackageConfig> {
-            repo = "zegreatrob"
-            name = "testmints"
-
-            version(closureOf<BintrayExtension.VersionConfig> {
-            })
-        })
-    }
 
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
@@ -178,13 +156,12 @@ subprojects {
         )
 
         publishing.publications {
-            matching { it.name == "jvm".apply { println("hi ${it.name}") } }.withType<MavenPublication> {
+            matching { it.name == "jvm" }.withType<MavenPublication> {
                 artifact(javadocJar)
             }
             if (isMacRelease()) {
-                matching { println("consider pub ${it.name}"); !macTargets.contains(it.name) }.withType<MavenPublication> {
+                matching { !macTargets.contains(it.name) }.withType<MavenPublication> {
                     val targetPub = this@withType
-                    println("disabling ${targetPub.name}")
                     withType<AbstractPublishToMaven>()
                         .matching { it.publication == targetPub }
                         .configureEach { onlyIf { false } }
