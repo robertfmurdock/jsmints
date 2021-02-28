@@ -122,14 +122,13 @@ subprojects {
         val signingKey: String? by project
         val signingPassword: String? by project
 
-        val decodedKey = java.util.Base64.getDecoder().decode(signingKey).toString(Charset.defaultCharset())
-
-        println("DECODED KEY $decodedKey")
-
-        useInMemoryPgpKeys(
-            decodedKey,
-            signingPassword
-        )
+        if (signingKey != null) {
+            val decodedKey = java.util.Base64.getDecoder().decode(signingKey).toString(Charset.defaultCharset())
+            useInMemoryPgpKeys(
+                decodedKey,
+                signingPassword
+            )
+        }
         sign(publishing.publications)
     }
 
@@ -182,9 +181,9 @@ subprojects {
             dependsOn("publishToMavenLocal")
         }
         val publish by getting {
-            if (!isSnapshot()) {
-                dependsOn(bintrayUpload)
-            }
+//            if (!isSnapshot()) {
+//                dependsOn(bintrayUpload)
+//            }
         }
     }
 }
