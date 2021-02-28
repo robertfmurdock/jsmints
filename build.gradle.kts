@@ -178,6 +178,14 @@ subprojects {
 
 
     tasks {
+        val javadocJar by creating(Jar::class) {
+            archiveClassifier.set("javadoc")
+            from("README.md")
+        }
+        artifacts {
+            archives(javadocJar)
+        }
+
         val bintrayUpload by getting(BintrayUploadTask::class) {
 
             doFirst {
