@@ -195,7 +195,6 @@ fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
     if (open < 0 || close < 0) {
         return null
     }
-
     return fullMessage.subSequence(open + 1, close).toString()
 }
 
