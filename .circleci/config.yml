@@ -7,7 +7,7 @@ jobs:
       - checkout
       - restore_cache:
           key: testmints-cache-7-{{ .Branch }}
-      - run: "./gradlew check release closeSonatypeStagingRepository --stacktrace"
+      - run: "./gradlew check release closeAndReleaseSonatypeStagingRepository --stacktrace"
       - save_cache:
           key: testmints-cache-7-{{ .Branch }}
           paths:
