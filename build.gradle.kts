@@ -174,6 +174,7 @@ subprojects {
     )
 
     if (isMacRelease()) {
+        println("Disable attempt is scheduled")
         publishing.publications {
             matching { !macTargets.contains(it.name) }.forEach { targetPub ->
                 println("disabling ${targetPub.name}")
