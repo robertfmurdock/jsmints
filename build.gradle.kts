@@ -136,10 +136,6 @@ subprojects {
         publishing.publications.withType<MavenPublication>().forEach {
             val publicationName = it.name
             with(it) {
-                groupId = "com.zegreatrob.testmints"
-                artifactId = project.name
-                version = "${project.version}"
-
                 val scmUrl = "https://github.com/robertfmurdock/testmints"
 
                 pom.name.set(project.name)
