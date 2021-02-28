@@ -123,16 +123,6 @@ subprojects {
 
     afterEvaluate {
 
-        publishing.publications.filterIsInstance(MavenPublication::class.java)
-            .map {
-                it.artifact(file("build/publications/${it.name}/module.json")) {
-                    extension = "module"
-                }
-                it.artifact(file("build/classes/kotlin/${it.name}/main/${project.name}.klib")) {
-                    extension = "klib"
-                }
-            }
-
         publishing.publications.withType<MavenPublication>().forEach {
             val publicationName = it.name
             with(it) {
