@@ -24,8 +24,8 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(project(":minreact"))
-                implementation("org.jetbrains:kotlin-react:16.13.1-pre.110-kotlin-1.4.0")
-                implementation("org.jetbrains:kotlin-react-dom:16.13.1-pre.110-kotlin-1.4.0")
+                implementation("org.jetbrains:kotlin-react:17.0.1-pre.148-kotlin-1.4.21")
+                implementation("org.jetbrains:kotlin-react-dom:17.0.1-pre.148-kotlin-1.4.21")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
             }
         }
