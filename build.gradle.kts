@@ -120,8 +120,6 @@ subprojects {
     afterEvaluate {
 
         publishing.publications.withType<MavenPublication>().forEach {
-            val publicationName = it.name
-
             with(it) {
                 val scmUrl = "https://github.com/robertfmurdock/testmints"
 
@@ -166,40 +164,33 @@ subprojects {
         sign(publishing.publications)
     }
 
-    val macTargets = listOf(
-        "macosX64",
-        "iosX64",
-        "iosArm32",
-        "iosArm64"
-    )
 
     tasks {
         val javadocJar by creating(Jar::class) {
             archiveClassifier.set("javadoc")
             from("${rootDir.absolutePath}/javadocs")
         }
+        val macTargets = listOf(
+            "macosX64",
+            "iosX64",
+            "iosArm32",
+            "iosArm64"
+        )
+
         publishing.publications {
-            println("publication javadoc setup")
-            matching { it.name == "jvm" }.withType<MavenPublication> {
-                println("publication javadoc adding artifact")
+            matching { it.name == "jvm".apply { println("hi ${it.name}") } }.withType<MavenPublication> {
                 artifact(javadocJar)
             }
-        }
-
-        if (isMacRelease()) {
-            println("Disable attempt is scheduled")
-            publishing.publications {
-                println("publication setup")
-                matching { println("consider pub ${it.name}"); !macTargets.contains(it.name) }.all { targetPub ->
+            if (isMacRelease()) {
+                matching { println("consider pub ${it.name}"); !macTargets.contains(it.name) }.withType<MavenPublication> {
+                    val targetPub = this@withType
                     println("disabling ${targetPub.name}")
                     withType<AbstractPublishToMaven>()
                         .matching { it.publication == targetPub }
                         .configureEach { onlyIf { false } }
-                    true
                 }
             }
         }
-
     }
 }
 
