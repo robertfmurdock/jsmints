@@ -1,5 +1,4 @@
 import com.jfrog.bintray.gradle.BintrayExtension
-import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
@@ -174,11 +173,14 @@ subprojects {
         "iosArm64"
     )
 
-    publishing.publications {
-        matching { if (!isMacRelease()) true else !macTargets.contains(it.name) }.forEach { targetPub ->
-            tasks.withType<AbstractPublishToMaven>()
-                .matching { it.publication == targetPub }
-                .configureEach { enabled = false }
+    if (isMacRelease()) {
+        publishing.publications {
+            matching { !macTargets.contains(it.name) }.forEach { targetPub ->
+                println("disabling ${targetPub.name}")
+                tasks.withType<AbstractPublishToMaven>()
+                    .matching { it.publication == targetPub }
+                    .configureEach { onlyIf { false } }
+            }
         }
     }
 
@@ -187,52 +189,10 @@ subprojects {
             archiveClassifier.set("javadoc")
             from("${rootDir.absolutePath}/javadocs")
         }
-
         publishing.publications {
             matching { it.name == "jvm" }.withType<MavenPublication> {
                 artifact(javadocJar)
             }
-        }
-
-        val bintrayUpload by getting(BintrayUploadTask::class) {
-
-            doFirst {
-                val publications = publishing.publications
-                    .filterNot {
-                        it.name.contains("-test")
-                    }
-                    .map { it.name }
-                    .filter {
-                        if (isMacRelease()) {
-                            macTargets.contains(it)
-                        } else true
-                    }
-
-                publishing.publications.getByName<MavenPublication>("kotlinMultiplatform") {
-                    groupId = "com.zegreatrob.testmints"
-                    artifactId = project.name
-                    version = "${project.version}"
-                }
-
-                publishing.publications.filterIsInstance(MavenPublication::class.java)
-                    .map {
-                        it.artifact(file("build/publications/${it.name}/module.json")) {
-                            extension = "module"
-                        }
-                        it.artifact(file("build/classes/kotlin/${it.name}/main/${project.name}.klib")) {
-                            extension = "klib"
-                        }
-                    }
-
-                publishing.publications.filterIsInstance(MavenPublication::class.java)
-                    .map { it.artifacts }
-                    .flatten()
-                    .forEach { println("${it.file}") }
-
-                setPublications(* publications.toTypedArray())
-            }
-
-            dependsOn("publishToMavenLocal")
         }
     }
 }
