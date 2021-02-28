@@ -176,11 +176,12 @@ subprojects {
     if (isMacRelease()) {
         println("Disable attempt is scheduled")
         publishing.publications {
-            matching { !macTargets.contains(it.name) }.forEach { targetPub ->
+            matching { !macTargets.contains(it.name) }.all { targetPub ->
                 println("disabling ${targetPub.name}")
                 tasks.withType<AbstractPublishToMaven>()
                     .matching { it.publication == targetPub }
                     .configureEach { onlyIf { false } }
+                true
             }
         }
     }
