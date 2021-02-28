@@ -229,14 +229,7 @@ subprojects {
 
             dependsOn("publishToMavenLocal")
         }
-        val publish by getting {
-//            if (!isSnapshot()) {
-//                dependsOn(bintrayUpload)
-//            }
-        }
     }
-
-
 }
 
 fun org.ajoberstar.grgit.Commit.extractVersion(): String? {

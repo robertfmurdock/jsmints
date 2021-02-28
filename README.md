@@ -29,6 +29,9 @@ All sugar here is multiplatform compliant and works great in combination with th
 ## Installation
 Just want to dive right in? Here's the gradle snippets to get going. Basically, drop in the bintray repository and then reference the library. I don't recommend using the gradle plus setting unless you like to *live on the edge*.
 
+*Note: this library is currently undergoing a migration to Maven Central. The latest version currently available at the bintray URL is 3.2.11.
+
+
     repositories {
         maven { url = uri("https://dl.bintray.com/robertfmurdock/zegreatrob") }
     }
