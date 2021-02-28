@@ -148,24 +148,14 @@ subprojects {
             archiveClassifier.set("javadoc")
             from("${rootDir.absolutePath}/javadocs")
         }
-        val macTargets = listOf(
-            "macosX64",
-            "iosX64",
-            "iosArm32",
-            "iosArm64"
-        )
-
         publishing.publications {
-            matching { it.name == "jvm" }.withType<MavenPublication> {
+            jvmPublication().withType<MavenPublication> {
                 artifact(javadocJar)
             }
+
             if (isMacRelease()) {
-                matching { !macTargets.contains(it.name) }.withType<MavenPublication> {
-                    val targetPub = this@withType
-                    withType<AbstractPublishToMaven>()
-                        .matching { it.publication == targetPub }
-                        .configureEach { onlyIf { false } }
-                }
+                val publishTasks = withType<AbstractPublishToMaven>()
+                nonMacPublications().withType<MavenPublication> { publishTasks.disableTaskForPublication(this) }
             }
         }
     }
@@ -184,3 +174,21 @@ fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
 fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
 
 fun Project.isMacRelease() = findProperty("release-target") == "mac"
+
+fun TaskCollection<AbstractPublishToMaven>.disableTaskForPublication(
+    targetPub: MavenPublication
+) {
+    matching { it.publication == targetPub }
+        .configureEach { this.onlyIf { false } }
+}
+
+val macTargets = listOf(
+    "macosX64",
+    "iosX64",
+    "iosArm32",
+    "iosArm64"
+)
+
+fun PublicationContainer.nonMacPublications() = matching { !macTargets.contains(it.name) }
+
+fun PublicationContainer.jvmPublication(): NamedDomainObjectSet<Publication> = matching { it.name == "jvm" }
