@@ -10,7 +10,7 @@ repositories {
 
 kotlin {
     targets {
-        js(BOTH) {
+        js {
             nodejs {
                 useCommonJs()
             }
@@ -36,7 +36,4 @@ kotlin {
             }
         }
     }
-}
-
-tasks {
 }

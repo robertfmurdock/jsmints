@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
-
 plugins {
     kotlin("multiplatform")
 }
@@ -14,7 +12,7 @@ repositories {
 kotlin {
 
     targets {
-        js(KotlinJsCompilerType.BOTH) {
+        js {
             nodejs {}
             useCommonJs()
         }
