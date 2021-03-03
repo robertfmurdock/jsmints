@@ -1,3 +1,4 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
@@ -20,12 +21,35 @@ allprojects {
     }
 
     tasks {
-        withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
+        withType<DependencyUpdatesTask> {
             checkForGradleUpdate = true
             outputFormatter = "json"
             outputDir = "build/dependencyUpdates"
             reportfileName = "report"
             revision = "release"
+
+            rejectVersionIf {
+                val regex = "^[0-9.]+-M[0-9](-r)?\$".toRegex()
+                regex.matches(candidate.version).also {
+                    if (it)
+                        println("$it considering version ${candidate.version} ${candidate.module}")
+                }
+            }
+
+            resolutionStrategy {
+                componentSelection {
+                    all {
+                        val regex = "^[0-9.]+-M[0-9](-r)?\$".toRegex()
+                        val notStable = regex.matches(candidate.version).also {
+                            if (it)
+                                println("$it considering version ${candidate.version} ${candidate.module}")
+                        }
+                        if (notStable) {
+                            reject("Release candidate")
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ kotlin {
             dependencies {
                 implementation(project(":action"))
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.4.31")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
             }
         }
         getByName("commonTest") {
