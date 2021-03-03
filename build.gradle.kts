@@ -29,26 +29,9 @@ allprojects {
             revision = "release"
 
             rejectVersionIf {
-                val regex = "^[0-9.]+-M[0-9](-r)?\$".toRegex()
-                regex.matches(candidate.version).also {
-                    if (it)
-                        println("$it considering version ${candidate.version} ${candidate.module}")
-                }
-            }
-
-            resolutionStrategy {
-                componentSelection {
-                    all {
-                        val regex = "^[0-9.]+-M[0-9](-r)?\$".toRegex()
-                        val notStable = regex.matches(candidate.version).also {
-                            if (it)
-                                println("$it considering version ${candidate.version} ${candidate.module}")
-                        }
-                        if (notStable) {
-                            reject("Release candidate")
-                        }
-                    }
-                }
+                "^[0-9.]+-M[0-9](-r)?\$"
+                    .toRegex()
+                    .matches(candidate.version)
             }
         }
     }
