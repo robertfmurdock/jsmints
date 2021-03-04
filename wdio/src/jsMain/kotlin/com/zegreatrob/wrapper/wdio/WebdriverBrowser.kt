@@ -51,12 +51,10 @@ object WebdriverBrowser : BrowserLoggingSyntax {
 
     suspend fun setLocation(location: String) {
         val currentUrl = currentUrl()
-        if (currentUrl.pathname == location) {
-            refresh()
-        } else if (currentUrl.isNotFromBaseHost()) {
-            setUrl(location)
-        } else {
-            alternateImplementation(location)
+        when {
+            currentUrl.pathname == location -> refresh()
+            currentUrl.isNotFromBaseHost() -> setUrl(location)
+            else -> alternateImplementation(location)
         }
     }
 

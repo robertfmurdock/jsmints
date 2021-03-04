@@ -39,7 +39,7 @@ class TestMintsTest {
 
         @Test
         fun exerciseShouldHaveAccessToScopeOfSetupObject() = setup(object {
-            val expectedValue: Int? = Random.nextInt()
+            val expectedValue: Int = Random.nextInt()
             var actualValue: Int? = null
 
             fun testThatUsesContextInExercise() = setup(object {
@@ -72,7 +72,7 @@ class TestMintsTest {
 
         @Test
         fun verifyShouldHaveAccessToSetupContext() = setup(object {
-            val expectedValue: Int? = Random.nextInt()
+            val expectedValue: Int = Random.nextInt()
             var actualValue: Int? = null
 
             fun testThatUsesContextInVerify() = setup(object {
@@ -134,7 +134,7 @@ class TestMintsTest {
             val setupException = Exception("Oh man, not good.")
             var exerciseOrVerifyTriggered = false
 
-            fun testThatExplodeInSetupClosure() = setup() {
+            fun testThatExplodeInSetupClosure() = setup {
                 throw setupException
             } exercise { exerciseOrVerifyTriggered = true } verify { exerciseOrVerifyTriggered = true }
 
@@ -166,7 +166,7 @@ class TestMintsTest {
                     sharedTeardown = { calls.add(Steps.TemplateTeardown) }
                 )
 
-                fun testThatSucceeds() = customSetup() { calls.add(Steps.Setup) }
+                fun testThatSucceeds() = customSetup { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verifyAnd { calls.add(Steps.Verify) }
                     .teardown { calls.add(Steps.Teardown) }
@@ -185,7 +185,7 @@ class TestMintsTest {
                     sharedTeardown = { calls.add(Steps.TemplateTeardown) }
                 )
 
-                fun testThatSucceeds() = customSetup() { calls.add(Steps.Setup) }
+                fun testThatSucceeds() = customSetup { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verify { calls.add(Steps.Verify) }
 
@@ -204,7 +204,7 @@ class TestMintsTest {
                     calls.add(Steps.TemplateTeardown)
                 })
 
-                fun testThatSucceeds() = customSetup() { calls.add(Steps.Setup) }
+                fun testThatSucceeds() = customSetup { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verify { calls.add(Steps.Verify) }
 
@@ -352,11 +352,11 @@ class TestMintsTest {
             @Test
             fun whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder() = setup(object {
                 val calls = mutableListOf<Steps>()
-                fun beforeAll() = calls.add(Steps.TemplateSetup).let { Unit }
-                fun afterAll() = calls.add(Steps.TemplateTeardown).let { Unit }
+                fun beforeAll() = calls.add(Steps.TemplateSetup)
+                fun afterAll() = calls.add(Steps.TemplateTeardown)
                 val customSetup = testTemplate(sharedSetup = ::beforeAll, sharedTeardown = ::afterAll)
 
-                fun testThatFails() = customSetup() { calls.add(Steps.Setup) }
+                fun testThatFails() = customSetup { calls.add(Steps.Setup) }
                     .exercise { calls.add(Steps.Exercise) }
                     .verifyAnd { calls.add(Steps.Verify); fail("This test fails.") }
                     .teardown { calls.add(Steps.Teardown) }
@@ -445,7 +445,7 @@ class TestMintsTest {
                     sharedTeardown = { it: Int -> callArguments.add(it) }
                 )
 
-                fun testThatSucceeds() = customSetup() { }
+                fun testThatSucceeds() = customSetup { }
                     .exercise { }
                     .verify { }
 
@@ -515,7 +515,7 @@ class TestMintsTest {
             @Test
             fun willReportTestEventInOrderToReporter() = setup(object : StandardMintDispatcher {
                 val calls = mutableListOf<Call>()
-                private fun record(call: Call) = calls.add(call).let { Unit }
+                private fun record(call: Call) = calls.add(call).let { }
 
                 override val reporter = object : MintReporter {
                     override fun exerciseStart(context: Any) = record(Call.ExerciseStart)

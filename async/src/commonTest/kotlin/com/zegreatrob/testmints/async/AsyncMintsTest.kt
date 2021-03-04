@@ -88,7 +88,7 @@ class AsyncMintsTest {
 
         @Test
         fun exerciseShouldHaveAccessToScopeOfSetupObject() = asyncSetup(object {
-            val expectedValue: Int? = Random.nextInt()
+            val expectedValue: Int = Random.nextInt()
             var actualValue: Int? = null
 
             fun testThatSharesScopeExample() = asyncSetup(object {
@@ -403,8 +403,8 @@ class AsyncMintsTest {
             @Test
             fun wrapperFunctionCanBeUsedAsAlternativeToSharedSetupAndSharedTeardown() = asyncSetup(object {
                 val calls = mutableListOf<Steps>()
-                fun templateSetup() = calls.add(Steps.TemplateSetup).let { Unit }
-                fun templateTeardown() = calls.add(Steps.TemplateTeardown).let { Unit }
+                fun templateSetup() = calls.add(Steps.TemplateSetup)
+                fun templateTeardown() = calls.add(Steps.TemplateTeardown)
                 val customSetup = asyncTestTemplate(wrapper = { runTest ->
                     templateSetup()
                     runTest()
@@ -716,7 +716,7 @@ class AsyncMintsTest {
         @Test
         fun willReportTestEventInOrderToReporter() = asyncSetup(object : AsyncMintDispatcher {
             val calls = mutableListOf<Call>()
-            private fun record(call: Call) = calls.add(call).let { Unit }
+            private fun record(call: Call) = calls.add(call).let { }
 
             override val reporter = object : MintReporter {
                 override fun exerciseStart(context: Any) = record(Call.ExerciseStart)
