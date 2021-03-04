@@ -39,7 +39,7 @@ allprojects {
 
 plugins {
     id("se.patrikerdes.use-latest-versions") version "0.2.15"
-    id("com.github.ben-manes.versions") version "0.36.0"
+    id("com.github.ben-manes.versions") version "0.38.0"
     id("de.gliderpilot.semantic-release") version "1.4.0"
     kotlin("multiplatform") version "1.4.31" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
