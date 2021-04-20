@@ -50,7 +50,7 @@ kotlin {
             dependencies {
                 dependsOn(commonMain)
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.3")
             }
         }
 

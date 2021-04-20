@@ -1,3 +1,5 @@
+import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
+
 plugins {
     kotlin("multiplatform")
 }
@@ -51,7 +53,7 @@ kotlin {
 
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.5.0-RC")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
         }

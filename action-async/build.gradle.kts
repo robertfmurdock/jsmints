@@ -1,3 +1,5 @@
+import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
+
 plugins {
     kotlin("multiplatform")
 }
@@ -18,7 +20,7 @@ kotlin {
         getByName("commonMain") {
             dependencies {
                 implementation(project(":action"))
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.5.0-RC")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
             }
         }
@@ -35,7 +37,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.31"))
+                implementation(kotlin("reflect", kotlinVersion))
             }
         }
 
@@ -53,8 +55,8 @@ kotlin {
 
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:1.5.0-RC")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.2")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
         }
