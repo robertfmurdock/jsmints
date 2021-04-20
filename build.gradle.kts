@@ -4,18 +4,11 @@ import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
 import java.nio.charset.Charset
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 allprojects {
     apply(plugin = "se.patrikerdes.use-latest-versions")
     apply(plugin = "com.github.ben-manes.versions")
     repositories {
         mavenCentral()
-        jcenter()
         maven { url = uri("https://kotlin.bintray.com/kotlinx") }
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
     }
@@ -43,7 +36,7 @@ plugins {
     id("de.gliderpilot.semantic-release") version "1.4.0"
     kotlin("multiplatform") version "1.4.31" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
-    maven
+    `maven-publish`
     signing
 }
 
