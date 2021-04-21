@@ -35,7 +35,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.38.0"
     id("de.gliderpilot.semantic-release") version "1.4.1"
     kotlin("multiplatform") version "1.4.31" apply false
-    id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     `maven-publish`
     signing
 }
