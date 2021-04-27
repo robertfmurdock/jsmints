@@ -35,8 +35,7 @@ kotlin {
                 implementation(project(":async"))
                 implementation(project(":minenzyme"))
                 implementation(project(":minassert"))
-                implementation("org.jetbrains.kotlin:kotlin-test-common")
-                implementation("org.jetbrains.kotlin:kotlin-test-js")
+                implementation("org.jetbrains.kotlin:kotlin-test")
             }
         }
     }

@@ -24,14 +24,12 @@ kotlin {
             dependencies {
                 api(project(":report"))
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlin:kotlin-test-common:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:${BuildConstants.kotlinVersion}")
+                implementation("org.jetbrains.kotlin:kotlin-test:${BuildConstants.kotlinVersion}")
             }
         }
-
-        val jvmMain by getting {
+        val commonTest by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-junit:${BuildConstants.kotlinVersion}")
+                implementation("org.jetbrains.kotlin:kotlin-test:${BuildConstants.kotlinVersion}")
             }
         }
 
@@ -52,7 +50,6 @@ kotlin {
         getByName("jsMain") {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlin:kotlin-test-js")
             }
         }
     }

@@ -31,8 +31,7 @@ kotlin {
                 implementation(project(":minenzyme"))
                 implementation(project(":standard"))
                 implementation(project(":minassert"))
-                implementation("org.jetbrains.kotlin:kotlin-test-common")
-                implementation("org.jetbrains.kotlin:kotlin-test-js")
+                implementation("org.jetbrains.kotlin:kotlin-test")
             }
         }
     }

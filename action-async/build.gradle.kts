@@ -31,7 +31,7 @@ kotlin {
                 implementation(project(":async"))
                 implementation(project(":minassert"))
                 implementation(project(":minspy"))
-                implementation("org.jetbrains.kotlin:kotlin-test-common")
+                implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common")
             }
         }
@@ -44,11 +44,8 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.32"))
+                implementation(kotlin("reflect", "1.5.0"))
                 implementation("org.slf4j:slf4j-simple:1.7.5")
-                implementation("org.jetbrains.kotlin:kotlin-test")
-                implementation("org.jetbrains.kotlin:kotlin-test-junit5")
-
                 implementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
             }
@@ -59,11 +56,6 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
-            }
-        }
-        val jsTest by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-js")
             }
         }
     }

@@ -4,10 +4,10 @@ repositories {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.4.32")
+    id("org.jetbrains.kotlin.jvm").version("1.5.0")
 }
 
-val kotlinVersion = "1.4.32"
+val kotlinVersion = "1.5.0"
 
 dependencies {
     implementation(kotlin("stdlib", kotlinVersion))
