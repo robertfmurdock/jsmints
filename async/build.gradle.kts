@@ -1,4 +1,5 @@
 import com.zegreatrob.testmints.build.BuildConstants
+import com.zegreatrob.testmints.build.BuildConstants.coroutinesVersion
 
 plugins {
     kotlin("multiplatform")
@@ -25,14 +26,14 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-common:${BuildConstants.kotlinVersion}")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }
 
         val jvmMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit:${BuildConstants.kotlinVersion}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }
 
@@ -50,7 +51,7 @@ kotlin {
             dependencies {
                 dependsOn(commonMain)
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
             }
         }
 

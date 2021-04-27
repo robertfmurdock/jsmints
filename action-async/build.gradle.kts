@@ -1,3 +1,4 @@
+import com.zegreatrob.testmints.build.BuildConstants.coroutinesVersion
 import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
 
 plugins {
@@ -21,7 +22,7 @@ kotlin {
             dependencies {
                 implementation(project(":action"))
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }
         getByName("commonTest") {
@@ -43,7 +44,7 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.31"))
+                implementation(kotlin("reflect", "1.4.32"))
                 implementation("org.slf4j:slf4j-simple:1.7.5")
                 implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -56,7 +57,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
         }

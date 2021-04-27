@@ -1,3 +1,5 @@
+import com.zegreatrob.testmints.build.BuildConstants.coroutinesVersion
+
 plugins {
     kotlin("multiplatform")
 }
@@ -24,7 +26,7 @@ kotlin {
                 implementation(project(":minreact"))
                 implementation("org.jetbrains:kotlin-react:17.0.1-pre.148-kotlin-1.4.21")
                 implementation("org.jetbrains:kotlin-react-dom:17.0.1-pre.148-kotlin-1.4.21")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }
 

@@ -19,7 +19,7 @@ kotlin {
     sourceSets {
         getByName("commonMain") {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.5.0-RC")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
             }
         }
         getByName("commonTest") {
@@ -35,13 +35,13 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.31"))
+                implementation(kotlin("reflect", kotlinVersion))
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("reflect", "1.4.31"))
+                implementation(kotlin("reflect", "1.4.32"))
                 implementation("org.slf4j:slf4j-simple:2.0.0-alpha1")
                 implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
