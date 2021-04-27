@@ -96,7 +96,6 @@ subprojects {
     val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
     afterEvaluate {
-
         publishing.publications.withType<MavenPublication>().forEach {
             with(it) {
                 val scmUrl = "https://github.com/robertfmurdock/testmints"
