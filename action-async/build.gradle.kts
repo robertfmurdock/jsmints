@@ -7,7 +7,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 kotlin {
@@ -23,6 +22,7 @@ kotlin {
                 implementation(project(":action"))
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0")
             }
         }
         getByName("commonTest") {
@@ -54,8 +54,6 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0-1.3.70-eap-274-2")
             }
         }
     }

@@ -54,7 +54,6 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 dependsOn(commonMain)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
             }
         }
 
