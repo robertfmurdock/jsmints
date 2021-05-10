@@ -31,14 +31,6 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test:${BuildConstants.kotlinVersion}")
             }
         }
-
-        val nativeCommonMain by creating {
-            dependsOn(commonMain)
-        }
-
-        val macosX64Main by getting { dependsOn(nativeCommonMain) }
-
-        val linuxX64Main by getting { dependsOn(nativeCommonMain) }
     }
 }
 
