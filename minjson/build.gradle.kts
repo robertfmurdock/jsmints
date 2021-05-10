@@ -10,10 +10,10 @@ repositories {
 
 kotlin {
     targets {
-        jvm()
-        js { nodejs {} }
-        macosX64()
-        linuxX64()
+        js {
+            nodejs {}
+            useCommonJs()
+        }
     }
 
     sourceSets {
