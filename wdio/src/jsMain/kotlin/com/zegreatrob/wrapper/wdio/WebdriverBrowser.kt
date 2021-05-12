@@ -1,10 +1,8 @@
 package com.zegreatrob.wrapper.wdio
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.asPromise
-import kotlinx.coroutines.async
-import kotlinx.coroutines.await
+import kotlinx.coroutines.*
 import org.w3c.dom.url.URL
+import kotlin.js.Promise
 import kotlin.js.json
 
 object WebdriverBrowser : BrowserLoggingSyntax {
@@ -24,7 +22,7 @@ object WebdriverBrowser : BrowserLoggingSyntax {
     ): Unit = log(this::waitUntil.name) {
         val options = json("timeoutMsg" to timeoutMessage)
             .let { if (timeout != null) it.add(json("timeout" to timeout)) else it }
-        browser.waitUntil({ GlobalScope.async { condition() }.asPromise() }, options)
+        browser.waitUntil({ MainScope().async { condition() }.asPromise() }, options)
             .await()
     }
 
@@ -61,10 +59,10 @@ object WebdriverBrowser : BrowserLoggingSyntax {
     private fun URL.isNotFromBaseHost() = hostname != baseUrl.hostname
 
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    private suspend fun alternateImplementation(location: String) {
-        executeAsync(location) { loc, done ->
-            js(
-                """
+    private suspend fun alternateImplementation(@Suppress("UNUSED_PARAMETER") location: String) {
+        js(
+            """
+                    browser.executeAsync(function(loc, done) {
                         var wait = function() {
                             window.setTimeout(function() {
                                 if (loc === window.location.pathname) {
@@ -82,9 +80,10 @@ object WebdriverBrowser : BrowserLoggingSyntax {
                             done()
                             window.location.pathname = loc
                         }
+                        }, location);
                     """
-            )
-        }
+        ).unsafeCast<Promise<Unit>>()
+            .await()
     }
 
 }
