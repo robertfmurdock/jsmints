@@ -2,5 +2,5 @@ package com.zegreatrob.testmints.build
 
 object BuildConstants {
     const val kotlinVersion = "1.5.0"
-    const val coroutinesVersion = "1.5.0-RC"
+    const val coroutinesVersion = "1.5.0"
 }
