@@ -65,7 +65,7 @@ object WebdriverBrowser : BrowserLoggingSyntax {
                     browser.executeAsync(function(loc, done) {
                         var wait = function() {
                             window.setTimeout(function() {
-                                if (loc === window.location.pathname) {
+                                if (window.location.pathname.contains(loc)) {
                                     done()
                                 } else {
                                     wait()
