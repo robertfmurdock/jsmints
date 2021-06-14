@@ -22,7 +22,7 @@ allprojects {
             revision = "release"
 
             rejectVersionIf {
-                "^[0-9.]+-M[0-9](-r)?\$"
+                "^[0-9.]+[0-9](-RC|-M[0-9]+)\$"
                     .toRegex()
                     .matches(candidate.version)
             }
@@ -34,7 +34,7 @@ plugins {
     id("se.patrikerdes.use-latest-versions") version "0.2.17"
     id("com.github.ben-manes.versions") version "0.39.0"
     id("de.gliderpilot.semantic-release") version "1.4.2"
-    kotlin("multiplatform") version "1.5.20-RC" apply false
+    kotlin("multiplatform") version "1.5.10" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     `maven-publish`
     signing
