@@ -8,6 +8,7 @@ external class Element {
     fun isExisting(): Promise<Boolean>
     fun isEnabled(): Promise<Boolean>
     fun isDisplayed(): Promise<Boolean>
+    fun isSelected(): Promise<Boolean>
     fun click(): Promise<Unit>
     fun getText(): Promise<String>
     fun `$`(@Suppress("UNUSED_PARAMETER") selector: String): Promise<Element>
