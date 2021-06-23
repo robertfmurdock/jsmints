@@ -7,7 +7,7 @@ fun <P : RProps> RBuilder.child(
     clazz: RClass<P>,
     props: P,
     key: String? = null,
-    ref: RMutableRef<Node?>? = null,
+    ref: RMutableRef<Node>? = null,
     handler: RHandler<P> = {}
 ): ReactElement {
     key?.let { props.key = it }
@@ -22,7 +22,7 @@ fun <P : RProps> RBuilder.child(
 fun RBuilder.child(
     clazz: RClass<EmptyProps>,
     key: String? = null,
-    ref: RMutableRef<Node?>? = null,
+    ref: RMutableRef<Node>? = null,
     handler: RHandler<EmptyProps> = {}
 ): ReactElement {
     val props = EmptyProps()

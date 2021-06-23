@@ -21,9 +21,9 @@ data class DataLoaderProps<D>(
     val scope: CoroutineScope? = null
 ) : RProps
 
-private val cachedComponent = reactFunction<DataLoaderProps<out Any>> { props ->
+private val cachedComponent = reactFunction<DataLoaderProps<Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
-    val (state, setState) = useState<DataLoadState<out Any>> { EmptyState() }
+    val (state, setState) = useState<DataLoadState<Any>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")
 
     if (state is EmptyState) {
@@ -44,7 +44,7 @@ fun <D> RBuilder.dataLoader(
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,
-    setState: RSetState<DataLoadState<D>>,
+    setState: StateSetter<DataLoadState<D>>,
     getDataAsync: DataLoadFunc<D>,
     errorData: (Throwable) -> D
 ) {
@@ -61,19 +61,19 @@ private fun <D> startPendingJob(
 private fun <D> Job.errorOnJobFailure(setResolved: (D) -> Unit, errorResult: (Throwable) -> D) =
     invokeOnCompletion { cause -> if (cause != null) setResolved(errorResult(cause)) }
 
-private fun <D> RSetState<DataLoadState<D>>.empty(): () -> Unit = {
+private fun <D> StateSetter<DataLoadState<D>>.empty(): () -> Unit = {
     this(
         EmptyState()
     )
 }
 
-private fun <D> RSetState<DataLoadState<D>>.pending(): (Job) -> Unit = {
+private fun <D> StateSetter<DataLoadState<D>>.pending(): (Job) -> Unit = {
     this(
         PendingState()
     )
 }
 
-private fun <D> RSetState<DataLoadState<D>>.resolved(): (D) -> Unit = {
+private fun <D> StateSetter<DataLoadState<D>>.resolved(): (D) -> Unit = {
     this(
         ResolvedState(it)
     )

@@ -11,11 +11,13 @@ import kotlinx.coroutines.withContext
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RProps
+import react.dom.attrs
 import react.dom.button
 import react.dom.div
 import react.useState
 import kotlin.test.Test
 
+@ExperimentalCoroutinesApi
 class DataLoaderTest {
 
     @Test
@@ -101,7 +103,6 @@ class DataLoaderTest {
             return listOf(e1, e2, e3)
         }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         private fun RBuilder.buttonWithAsyncAction(tools: DataLoaderTools) {
             val (buttonClickValues, setValues) = useState<List<Int>?>(null)
             val onClick = { tools.performAsyncWork(::collectThreeValuesFromChannel, { throw it }, { setValues(it) }) }
