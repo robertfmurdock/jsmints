@@ -1,13 +1,11 @@
 package com.zegreatrob.react.dataloader
 
 import kotlinx.coroutines.*
-import react.RCleanup
-import react.useEffectWithCleanup
+import react.useEffect
 import react.useState
 
 fun useScope(coroutineName: String): CoroutineScope {
     val (scope) = useState { MainScope() + CoroutineName(coroutineName) }
-    val cleanup: RCleanup = { scope.cancel() }
-    useEffectWithCleanup(dependencies = emptyList()) { cleanup }
+    useEffect { cleanup { scope.cancel() } }
     return scope
 }
