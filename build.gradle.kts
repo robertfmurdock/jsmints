@@ -58,7 +58,7 @@ semanticRelease {
     changeLog(closureOf<SemanticReleaseChangeLogService> {
 
         repo(closureOf<GithubRepo> {
-//            setGhToken(System.getenv("GH_TOKEN"))
+            setGhToken(System.getenv("GH_TOKEN"))
         })
 
         changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({

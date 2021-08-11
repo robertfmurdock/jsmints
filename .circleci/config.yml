@@ -61,6 +61,7 @@ jobs:
     steps:
       - checkout
       - run: "./gradlew useLatestVersions"
+      - run: "./gradlew model"
       - run: "./gradlew check release --stacktrace"
       - store_artifacts:
           path: build/test-output
