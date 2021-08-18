@@ -1,7 +1,6 @@
 package com.zegreatrob.minjson
 
 import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.testmints.invoke
 import com.zegreatrob.testmints.setup
 import kotlin.js.json
 import kotlin.random.Random

@@ -41,12 +41,12 @@ class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: (TestFunc<
     operator fun <C : Any> invoke(contextProvider: (SC) -> C, additionalSetupActions: C.() -> Unit = {}) =
         Setup(contextProvider, reporter, additionalSetupActions, wrapper)
 
+    operator fun <C : Any> invoke(
+        context: C,
+        additionalSetupActions: C.() -> Unit = {}
+    ) = Setup({ context }, reporter, additionalSetupActions, wrapper)
+
+    operator fun invoke(additionalSetupActions: SC.() -> Unit = {}): Setup<SC, SC> =
+        Setup({ it }, reporter, additionalSetupActions, wrapper)
+
 }
-
-operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
-    context: C,
-    additionalSetupActions: C.() -> Unit = {}
-) = Setup({ context }, reporter, additionalSetupActions, wrapper)
-
-operator fun <SC : Any> TestTemplate<SC>.invoke(additionalSetupActions: SC.() -> Unit = {}): Setup<SC, SC> =
-    Setup({ it }, reporter, additionalSetupActions, wrapper)

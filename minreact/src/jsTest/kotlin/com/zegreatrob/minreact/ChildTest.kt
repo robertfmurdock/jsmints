@@ -2,7 +2,6 @@ package com.zegreatrob.minreact
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minenzyme.shallow
-import com.zegreatrob.testmints.invoke
 import com.zegreatrob.testmints.setup
 import react.RProps
 import react.children
