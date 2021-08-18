@@ -1,11 +1,10 @@
 package com.zegreatrob.react.dataloader
 
 import kotlinx.coroutines.*
-import react.useEffect
-import react.useState
+import react.*
 
 fun useScope(coroutineName: String): CoroutineScope {
     val (scope) = useState { MainScope() + CoroutineName(coroutineName) }
-    useEffect { cleanup { scope.cancel() } }
+    useEffectOnce { cleanup { scope.cancel() } }
     return scope
 }
