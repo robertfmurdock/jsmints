@@ -39,6 +39,7 @@ Just want to dive right in? Here's the gradle snippets to get going. Basically, 
                 dependencies {
                     implementation("com.zegreatrob.testmints:standard:+")
                 }
+            }
         }
      }
 
