@@ -4,7 +4,7 @@ Do your tests have a great personality but have bad breath? Just looking for a w
 
 Testmints is here for you.
 
-Testmints is a low-cal solution to bring a tiny bit of sugar to your Kotlin Multiplatform tests, hopefully improving readability and just generally making things less smelly.
+Testmints is a low-cal solution to bring a tiny bit of sugar to your Kotlin tests, hopefully improving readability and just generally making things less smelly.
 
 Don't like the flavor? Submit a PR, or just don't use em. :-D
 
