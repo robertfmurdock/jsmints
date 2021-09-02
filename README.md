@@ -8,20 +8,6 @@ Testmints is a low-cal solution to bring a tiny bit of sugar to your Kotlin test
 
 Don't like the flavor? Submit a PR, or just don't use em. :-D
 
-## Why? What?
-
-Check out the standard mints section below for the basics.
-
-For more on the thinking, read these two essays:
-
-[The Quality of Test](https://medium.com/@robert.f.murdock/the-quality-of-test-52a641cfe0f3)
-
-An essay about what the right priorities should be when writing tests. 
-
-[The Flavor of Mint](https://medium.com/@robert.f.murdock/the-flavor-of-mint-fe3f27dbfd53)
-
-An essay about an attempt to embed those priorities in the test code itself.
-
 ## Requirements
 
 All sugar here is multiplatform compliant and works great in combination with the [standard kotlin.test library](https://kotlinlang.org/api/latest/kotlin.test/index.html). The intention is to also minimize its dependencies as much as possible, to maximize portability.
@@ -125,6 +111,19 @@ and not
     } 
 
 In order to write tests safely on all platforms... especially KotlinJs.
+
+
+## I Still Don't Get It...
+
+For more on the thinking, read these two essays:
+
+[The Quality of Test](https://medium.com/@robert.f.murdock/the-quality-of-test-52a641cfe0f3)
+
+An essay about what the right priorities should be when writing tests. 
+
+[The Flavor of Mint](https://medium.com/@robert.f.murdock/the-flavor-of-mint-fe3f27dbfd53)
+
+An essay about an attempt to embed those priorities in the test code itself.
 
 ## Acknowledgements
 
