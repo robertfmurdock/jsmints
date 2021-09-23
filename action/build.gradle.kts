@@ -46,8 +46,8 @@ kotlin {
                 implementation("org.slf4j:slf4j-simple:2.0.0-alpha5")
                 implementation("org.jetbrains.kotlin:kotlin-test")
 
-                implementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.8.0")
+                implementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.8.1")
             }
         }
 
