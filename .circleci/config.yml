@@ -12,7 +12,7 @@ jobs:
   build-linux:
     executor: standard
     steps:
-      - run: apt-get install libncurses5
+      - run: "apt-get install -y libncurses5"
       - checkout
       - restore_cache:
           key: testmints-cache-7-{{ .Branch }}
