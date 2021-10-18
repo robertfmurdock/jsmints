@@ -64,8 +64,8 @@ jobs:
     docker:
       - image: cimg/openjdk:17.0
     steps:
-      - - run: "sudo apt-get update"
-        - run: "sudo apt-get install libncurses5"
+      - run: "sudo apt-get update"
+      - run: "sudo apt-get install libncurses5"
       - checkout
       - run: "./gradlew useLatestVersions"
       - run: "./gradlew model"
