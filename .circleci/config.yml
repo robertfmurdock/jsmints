@@ -1,18 +1,14 @@
 version: 2.1
 orbs:
   win: circleci/windows@2.2.0
-executors:
-  standard:
-    machine:
-      image: ubuntu-2004:202104-01
-    environment:
-      GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
-      _JAVA_OPTIONS: "-Xmx3g"
 jobs:
   build-linux:
-    executor: standard
+    docker:
+      - image: cimg/openjdk:14.0
+      environment:
+        GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
+        _JAVA_OPTIONS: "-Xmx3g"
     steps:
-      - run: "sudo apt-get install -y libncurses5"
       - checkout
       - restore_cache:
           key: testmints-cache-7-{{ .Branch }}
