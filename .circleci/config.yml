@@ -7,7 +7,7 @@ jobs:
       - image: cimg/openjdk:14.0
         environment:
           GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
-          _JAVA_OPTIONS: "-Xmx3g"
+          _JAVA_OPTIONS: "-Xmx2g"
     steps:
       - checkout
       - restore_cache:
