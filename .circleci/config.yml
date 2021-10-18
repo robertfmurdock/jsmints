@@ -1,13 +1,16 @@
 version: 2.1
 orbs:
   win: circleci/windows@2.2.0
+executors:
+  standard:
+    machine:
+      image: ubuntu-2004:202104-01
+    environment:
+      GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
+      _JAVA_OPTIONS: "-Xmx3g"
 jobs:
   build-linux:
-    docker:
-      - image: cimg/openjdk:14.0
-        environment:
-          GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
-          _JAVA_OPTIONS: "-Xmx3g"
+    executor: standard
     steps:
       - checkout
       - restore_cache:
