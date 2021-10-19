@@ -26,10 +26,6 @@ jobs:
           path: build/test-output
       - store_test_results:
           path: build/test-output
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - "*"
   build-mac:
     macos:
       xcode: "11.3.0"
@@ -49,10 +45,6 @@ jobs:
           path: build/test-output
       - store_test_results:
           path: build/test-output
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - "*"
   build-windows:
     executor:
       name: win/default
@@ -79,10 +71,6 @@ jobs:
       - run: "git config user.name \"CircleCI in a RoB Suit\""
       - run: "git commit -m '[patch] Automatic dependency update.' || echo 'Ignoring no changes'"
       - run: "git push"
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - "*"
 workflows:
   version: 2
   build-deploy:
