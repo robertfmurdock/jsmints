@@ -31,7 +31,7 @@ allprojects {
 }
 
 plugins {
-    id("se.patrikerdes.use-latest-versions") version "0.2.17"
+    id("se.patrikerdes.use-latest-versions") version "0.2.18"
     id("com.github.ben-manes.versions") version "0.39.0"
     id("de.gliderpilot.semantic-release") version "1.4.2"
     kotlin("multiplatform") version "1.5.31" apply false
