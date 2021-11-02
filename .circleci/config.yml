@@ -28,7 +28,7 @@ jobs:
           path: build/test-output
   build-mac:
     macos:
-      xcode: "11.3.0"
+      xcode: "13.1.0"
     steps:
       - checkout
       - restore_cache:
