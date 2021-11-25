@@ -3,27 +3,33 @@ package com.zegreatrob.minreact
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.setup
-import react.RProps
-import react.children
+import react.PropsWithChildren
 import react.dom.div
+import react.functionComponent
 import kotlin.test.Test
+
+external interface BoringProps : PropsWithChildren {
+    var content: String
+}
 
 class ChildTest {
 
-    data class BoringProps(val content: String) : RProps
-
     @Test
     fun childSugarWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
-        val innerComponent = reactFunction<BoringProps> { props ->
+        val innerComponent = functionComponent<BoringProps> { props ->
             props.children()
         }
 
         val outerComponent = reactFunction<EmptyProps> {
             div {
-                child(innerComponent, BoringProps("11"), key = "1") {
+                child(innerComponent) {
+                    key = "1"
+                    attrs.content = "11"
                     +"Hello!"
                 }
-                child(innerComponent, BoringProps("22"), key = "2") {
+                child(innerComponent) {
+                    key = "2"
+                    attrs.content = "22"
                     +"Goodbye!"
                 }
             }
@@ -47,14 +53,14 @@ class ChildTest {
 
     @Test
     fun whenPropsAreEmptyChildWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
-        val innerComponent = reactFunction<EmptyProps> { props ->
+        val innerComponent = functionComponent<PropsWithChildren> { props ->
             props.children()
         }
 
         val outerComponent = reactFunction<EmptyProps> {
             div {
-                child(innerComponent, key = "1") { +"Hello!" }
-                child(innerComponent, key = "2") { +"Goodbye!" }
+                child(innerComponent) { key = "1"; +"Hello!" }
+                child(innerComponent) { key = "2"; +"Goodbye!" }
             }
         }
     }) exercise {

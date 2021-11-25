@@ -22,7 +22,7 @@ kotlin {
             dependencies {
                 implementation(npm("enzyme", "^3.11.0"))
                 implementation(npm("enzyme-adapter-react-16", "^1.15.2"))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.213-kotlin-1.5.10")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.269-kotlin-1.6.0")
             }
         }
         val jsTest by getting {

@@ -1,5 +1,5 @@
 package com.zegreatrob.minreact
 
-import react.RProps
+import react.Props
 
-class EmptyProps : RProps
+class EmptyProps : Props

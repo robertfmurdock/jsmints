@@ -3,14 +3,14 @@ package com.zegreatrob.minreact
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.setup
-import react.RProps
+import react.Props
 import react.dom.div
 import react.dom.span
 import kotlin.test.Test
 
 class ReactFunctionTest {
 
-    data class FunProps(val first: Int, val second: String) : RProps
+    data class FunProps(val first: Int, val second: String) : Props
 
     @Test
     fun canUseDataObjectAndDestructureDuringRender() = setup(object {

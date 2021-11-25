@@ -4,17 +4,17 @@ import com.zegreatrob.minreact.external.corejs.objectAssign
 import react.*
 import kotlin.reflect.KClass
 
-inline fun <reified P : RProps> reactFunction(crossinline function: RBuilder.(P) -> Unit): RClass<P> =
+inline fun <reified P : Props> reactFunction(crossinline function: RBuilder.(P) -> Unit): ElementType<P> =
     buildReactFunction(P::class) { props ->
         buildElement { function(props) }
     }
 
-fun <P : RProps> buildReactFunction(kClass: KClass<P>, builder: (props: P) -> ReactElement) = { props: P ->
+fun <P : Props> buildReactFunction(kClass: KClass<P>, builder: (props: P) -> ReactElement) = { props: P ->
     ensureKotlinClassProps(props, kClass.js)
         .let(builder)
-}.unsafeCast<RClass<P>>()
+}.unsafeCast<ElementType<P>>()
 
-private fun <P : RProps> ensureKotlinClassProps(props: P, jsClass: JsClass<P>): P = if (props::class.js == jsClass) {
+private fun <P : Props> ensureKotlinClassProps(props: P, jsClass: JsClass<P>): P = if (props::class.js == jsClass) {
     props
 } else {
     @Suppress("UNUSED_VARIABLE") val thing = jsClass

@@ -21,8 +21,8 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 api(npm("core-js", "^3.6.5"))
-                api("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.213-kotlin-1.5.10")
-                api("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.213-kotlin-1.5.10")
+                api("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.269-kotlin-1.6.0")
+                api("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.269-kotlin-1.6.0")
             }
         }
 

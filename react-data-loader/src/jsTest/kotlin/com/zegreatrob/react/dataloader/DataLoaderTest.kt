@@ -9,8 +9,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 import kotlinx.html.js.onClickFunction
+import react.Props
 import react.RBuilder
-import react.RProps
 import react.dom.attrs
 import react.dom.button
 import react.dom.div
@@ -75,7 +75,7 @@ class DataLoaderTest {
 
         val wrapper = shallow { component() }
     }) exercise {
-        wrapper.find<RProps>("button").simulate("click")
+        wrapper.find<Props>("button").simulate("click")
     } verify {
         allRenderedStates.map { it::class }.assertIsEqualTo(
             listOf(EmptyState::class, PendingState::class, ResolvedState::class)
@@ -114,14 +114,14 @@ class DataLoaderTest {
             }
         }
     }) exercise {
-        wrapper.find<RProps>("button").simulate("click")
+        wrapper.find<Props>("button").simulate("click")
         channel.send(99)
         channel.send(87)
         channel.send(53)
 
         channel.close()
     } verify {
-        wrapper.find<RProps>(".work-complete-div")
+        wrapper.find<Props>(".work-complete-div")
             .text()
             .assertIsEqualTo("Work Complete 99, 87, 53")
     }

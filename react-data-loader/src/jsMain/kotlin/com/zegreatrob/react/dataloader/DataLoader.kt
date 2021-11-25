@@ -18,8 +18,10 @@ typealias DataLoadWrapperProps<D> = DataLoaderProps<D>
 data class DataLoaderProps<D>(
     val getDataAsync: DataLoadFunc<D>,
     val errorData: (Throwable) -> D,
-    val scope: CoroutineScope? = null
-) : RProps
+    val scope: CoroutineScope? = null,
+    val children: RBuilder.(value: DataLoadState<D>) -> Unit
+) : Props
+
 
 private val cachedComponent = reactFunction<DataLoaderProps<Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
@@ -30,17 +32,17 @@ private val cachedComponent = reactFunction<DataLoaderProps<Any>> { props ->
         startPendingJob(scope, setState, getDataAsync, errorData)
     }
 
-    props.children(state)
+    props.children(this, state)
 }
 
-fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionalComponent<DataLoaderProps<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionComponent<DataLoaderProps<D>>>()
 
 fun <D> RBuilder.dataLoader(
     getDataAsync: DataLoadFunc<D>,
     errorData: (Throwable) -> D,
     scope: CoroutineScope? = null,
     children: RBuilder.(DataLoadState<D>) -> Unit = {}
-) = childFunction(dataLoader(), DataLoaderProps(getDataAsync, errorData, scope), {}, children)
+) = child(dataLoader(), DataLoaderProps(getDataAsync, errorData, scope, children)) {}
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,
