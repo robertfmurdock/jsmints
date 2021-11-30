@@ -6,9 +6,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
 }
 
 kotlin {
@@ -24,8 +21,8 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(project(":minreact"))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.269-kotlin-1.6.0")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.269-kotlin-1.6.0")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.274-kotlin-1.6.0")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.274-kotlin-1.6.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }

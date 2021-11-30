@@ -4,8 +4,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
 }
 
 kotlin {
@@ -21,8 +19,8 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 api(npm("core-js", "^3.6.5"))
-                api("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.269-kotlin-1.6.0")
-                api("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.269-kotlin-1.6.0")
+                api("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.274-kotlin-1.6.0")
+                api("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.274-kotlin-1.6.0")
             }
         }
 
