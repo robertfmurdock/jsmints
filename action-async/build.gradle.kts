@@ -3,6 +3,7 @@ import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
 
 plugins {
     kotlin("multiplatform")
+    id("com.zegreatrob.testmints.build.versioning")
 }
 
 repositories {
@@ -36,13 +37,13 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
+        getByName("jvmMain") {
             dependencies {
                 implementation(kotlin("reflect", kotlinVersion))
             }
         }
 
-        val jvmTest by getting {
+        getByName("jvmTest") {
             dependencies {
                 implementation(kotlin("reflect", "1.5.0"))
                 implementation("org.slf4j:slf4j-simple:2.0.0-alpha5")
@@ -51,7 +52,7 @@ kotlin {
             }
         }
 
-        val jsMain by getting {
+        getByName("jsMain") {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
             }
@@ -60,14 +61,9 @@ kotlin {
 }
 
 tasks {
-
-    val jvmTest by getting(Test::class) {
+    named<Test>("jvmTest") {
         systemProperty("junit.jupiter.extensions.autodetection.enabled", "true")
 
         useJUnitPlatform()
-    }
-
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
     }
 }

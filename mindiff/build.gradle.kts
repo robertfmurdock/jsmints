@@ -2,6 +2,7 @@ import com.zegreatrob.testmints.build.BuildConstants
 
 plugins {
     kotlin("multiplatform")
+    id("com.zegreatrob.testmints.build.versioning")
 }
 
 repositories {
@@ -42,9 +43,3 @@ kotlin {
 
     }
 }
-
-tasks {
-}
-
-
-

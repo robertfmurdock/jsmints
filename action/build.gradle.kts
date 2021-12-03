@@ -2,11 +2,11 @@ import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
 
 plugins {
     kotlin("multiplatform")
+    id("com.zegreatrob.testmints.build.versioning")
 }
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 kotlin {

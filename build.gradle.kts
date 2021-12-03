@@ -1,36 +1,9 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
 import java.nio.charset.Charset
 
-allprojects {
-    apply(plugin = "se.patrikerdes.use-latest-versions")
-    apply(plugin = "com.github.ben-manes.versions")
-    repositories {
-        mavenCentral()
-    }
-
-    tasks {
-        withType<DependencyUpdatesTask> {
-            checkForGradleUpdate = true
-            outputFormatter = "json"
-            outputDir = "build/dependencyUpdates"
-            reportfileName = "report"
-            revision = "release"
-
-            rejectVersionIf {
-                "^[0-9.]+[0-9](-RC|-M[0-9]+|-RC[0-9]+)\$"
-                    .toRegex()
-                    .matches(candidate.version)
-            }
-        }
-    }
-}
-
 plugins {
-    id("se.patrikerdes.use-latest-versions") version "0.2.18"
-    id("com.github.ben-manes.versions") version "0.39.0"
     id("de.gliderpilot.semantic-release") version "1.4.2"
     kotlin("multiplatform") version "1.6.0" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
@@ -91,7 +64,7 @@ subprojects {
 
     group = "com.zegreatrob.testmints"
 
-    val publishing = extensions.findByType(PublishingExtension::class.java)!!
+    val publishing = extensions.findByType(PublishingExtension::class.java)
 
     afterEvaluate {
         publishing.publications.withType<MavenPublication>().forEach {

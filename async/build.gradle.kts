@@ -1,14 +1,14 @@
-import com.zegreatrob.testmints.build.BuildConstants
+
 import com.zegreatrob.testmints.build.BuildConstants.coroutinesVersion
 import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
 
 plugins {
     kotlin("multiplatform")
+    id("com.zegreatrob.testmints.build.versioning")
 }
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 kotlin {
@@ -43,8 +43,6 @@ kotlin {
 
         val nativeCommonMain by creating {
             dependsOn(commonMain)
-            dependencies {
-            }
         }
 
         val macosX64Main by getting { dependsOn(nativeCommonMain) }
@@ -58,8 +56,4 @@ kotlin {
         }
 
     }
-}
-
-tasks {
-
 }
