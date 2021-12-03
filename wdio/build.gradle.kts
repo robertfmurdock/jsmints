@@ -4,7 +4,9 @@ plugins {
     kotlin("multiplatform")
     id("com.zegreatrob.testmints.build.versioning")
 }
-
+repositories {
+    mavenCentral()
+}
 kotlin {
     targets {
         js {
