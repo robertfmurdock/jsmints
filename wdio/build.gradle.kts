@@ -3,6 +3,7 @@ import com.zegreatrob.testmints.build.BuildConstants.coroutinesVersion
 plugins {
     kotlin("multiplatform")
     id("com.zegreatrob.testmints.build.versioning")
+    id("com.zegreatrob.testmints.build.publish")
 }
 repositories {
     mavenCentral()
