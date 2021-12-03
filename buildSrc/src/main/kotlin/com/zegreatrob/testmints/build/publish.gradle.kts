@@ -5,7 +5,6 @@ import java.nio.charset.Charset
 plugins {
     `maven-publish`
     signing
-
 }
 
 group = "com.zegreatrob.testmints"
@@ -75,7 +74,7 @@ tasks {
     }
 }
 
-fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
+fun Project.isSnapshot() = rootProject.version.toString().contains("SNAPSHOT")
 
 fun Project.isMacRelease() = findProperty("release-target") == "mac"
 
