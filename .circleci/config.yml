@@ -7,7 +7,7 @@ jobs:
       - image: cimg/openjdk:17.0
         environment:
           GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
-          _JAVA_OPTIONS: "-Xmx4g"
+          _JAVA_OPTIONS: "-Xmx3g"
     steps:
       - run: "sudo apt-get update"
       - run: "sudo apt-get install libncurses5"
