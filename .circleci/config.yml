@@ -13,10 +13,10 @@ jobs:
       - run: "sudo apt-get install libncurses5"
       - checkout
       - restore_cache:
-          key: testmints-cache-8-{{ .Branch }}
+          key: testmints-cache-9-{{ .Branch }}
       - run: "./gradlew check release closeAndReleaseSonatypeStagingRepository --stacktrace"
       - save_cache:
-          key: testmints-cache-8-{{ .Branch }}
+          key: testmints-cache-9-{{ .Branch }}
           paths:
             - buildSrc/build
             - "~/.gradle"
