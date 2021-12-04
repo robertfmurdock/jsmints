@@ -1,10 +1,10 @@
 
-import com.zegreatrob.testmints.build.BuildConstants.coroutinesVersion
-import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
+import com.zegreatrob.testmints.plugins.BuildConstants.coroutinesVersion
+import com.zegreatrob.testmints.plugins.BuildConstants.kotlinVersion
 
 plugins {
-    id("com.zegreatrob.testmints.build.versioning")
-    id("com.zegreatrob.testmints.build.publish")
+    id("com.zegreatrob.testmints.plugins.versioning")
+    id("com.zegreatrob.testmints.plugins.publish")
 }
 
 kotlin {

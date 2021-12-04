@@ -1,9 +1,9 @@
-import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
+import com.zegreatrob.testmints.plugins.BuildConstants.kotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.zegreatrob.testmints.build.versioning")
-    id("com.zegreatrob.testmints.build.publish")
+    id("com.zegreatrob.testmints.plugins.versioning")
+    id("com.zegreatrob.testmints.plugins.publish")
 }
 
 kotlin {

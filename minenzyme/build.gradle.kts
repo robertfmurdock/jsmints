@@ -1,6 +1,6 @@
 plugins {
-    id("com.zegreatrob.testmints.build.versioning")
-    id("com.zegreatrob.testmints.build.publish")
+    id("com.zegreatrob.testmints.plugins.versioning")
+    id("com.zegreatrob.testmints.plugins.publish")
 }
 
 kotlin {

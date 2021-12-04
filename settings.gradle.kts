@@ -12,3 +12,5 @@ include("minreact")
 include("minenzyme")
 include("react-data-loader")
 include("wdio")
+
+includeBuild("plugins")
