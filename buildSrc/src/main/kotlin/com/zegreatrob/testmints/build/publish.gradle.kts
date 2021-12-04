@@ -11,8 +11,6 @@ plugins {
 
 group = "com.zegreatrob.testmints"
 
-val publishing = extensions.findByType(PublishingExtension::class.java)!!
-
 afterEvaluate {
     publishing.publications.withType<MavenPublication>().forEach {
         with(it) {
@@ -70,9 +68,10 @@ tasks {
             artifact(javadocJar)
         }
 
+        val publishTasks = withType<AbstractPublishToMaven>()
+        val nonMacPublications = nonMacPublications()
         if (isMacRelease()) {
-            val publishTasks = withType<AbstractPublishToMaven>()
-            nonMacPublications().withType<MavenPublication> { publishTasks.disableTaskForPublication(this) }
+            nonMacPublications.withType<MavenPublication> { publishTasks.disableTaskForPublication(this) }
         }
     }
 }
@@ -88,13 +87,13 @@ fun TaskCollection<AbstractPublishToMaven>.disableTaskForPublication(
         .configureEach { this.onlyIf { false } }
 }
 
-val macTargets = listOf(
-    "macosX64",
-    "iosX64",
-    "iosArm32",
-    "iosArm64"
-)
-
-fun PublicationContainer.nonMacPublications() = matching { !macTargets.contains(it.name) }
+fun PublicationContainer.nonMacPublications() = matching {
+    it.name !in listOf(
+        "macosX64",
+        "iosX64",
+        "iosArm32",
+        "iosArm64"
+    )
+}
 
 fun PublicationContainer.jvmPublication(): NamedDomainObjectSet<Publication> = matching { it.name == "jvm" }
