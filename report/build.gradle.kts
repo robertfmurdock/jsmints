@@ -28,8 +28,6 @@ kotlin {
 
         val mingwX64Main by getting { dependsOn(nativeCommonMain) }
 
-        val linuxArm32HfpMain by getting { dependsOn(nativeCommonMain) }
-
         getByName("jsMain") {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js:${BuildConstants.kotlinVersion}")
