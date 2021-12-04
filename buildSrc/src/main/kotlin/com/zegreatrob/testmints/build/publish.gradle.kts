@@ -68,7 +68,13 @@ tasks {
             val nonMacPublications = nonMacPublications()
             println("nonMacPublications $nonMacPublications")
             nonMacPublications.withType<MavenPublication> {
-                publishTasks.matching { it.publication == this }
+                println("inside $name")
+                publishTasks.matching {
+
+                    println("matching $it")
+
+                    it.publication == this
+                }.also { println("and now configure $it") }
                     .configureEach { onlyIf { false } }
             }
             println("mac release prep complete")
