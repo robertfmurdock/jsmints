@@ -3,19 +3,10 @@ import com.zegreatrob.testmints.plugins.BuildConstants
 plugins {
     id("com.zegreatrob.testmints.plugins.versioning")
     id("com.zegreatrob.testmints.plugins.publish")
+    id("com.zegreatrob.testmints.plugins.platforms")
 }
 
 kotlin {
-    targets {
-        jvm()
-        js { nodejs {} }
-        macosX64()
-        iosX64()
-        linuxX64()
-        mingwX64()
-        linuxArm32Hfp()
-    }
-
     sourceSets {
         val commonMain by getting {
             dependencies {

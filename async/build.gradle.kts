@@ -5,15 +5,10 @@ import com.zegreatrob.testmints.plugins.BuildConstants.kotlinVersion
 plugins {
     id("com.zegreatrob.testmints.plugins.versioning")
     id("com.zegreatrob.testmints.plugins.publish")
+    id("com.zegreatrob.testmints.plugins.platforms")
 }
 
 kotlin {
-    targets {
-        jvm()
-        js { nodejs() }
-        macosX64()
-        linuxX64()
-    }
 
     sourceSets {
         val commonMain by getting {
@@ -44,6 +39,10 @@ kotlin {
         val macosX64Main by getting { dependsOn(nativeCommonMain) }
 
         val linuxX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val iosX64Main by getting { dependsOn(nativeCommonMain) }
+
+        val mingwX64Main by getting { dependsOn(nativeCommonMain) }
 
         val jsMain by getting {
             dependencies {
