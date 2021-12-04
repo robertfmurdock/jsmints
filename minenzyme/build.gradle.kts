@@ -1,5 +1,4 @@
 plugins {
-    kotlin("multiplatform")
     id("com.zegreatrob.testmints.build.versioning")
     id("com.zegreatrob.testmints.build.publish")
 }

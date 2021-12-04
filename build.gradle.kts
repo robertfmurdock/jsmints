@@ -5,7 +5,6 @@ import org.ajoberstar.gradle.git.release.semver.ChangeScope
 
 plugins {
     id("de.gliderpilot.semantic-release") version "1.4.2"
-    kotlin("multiplatform") version "1.6.0" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     `maven-publish`
     signing

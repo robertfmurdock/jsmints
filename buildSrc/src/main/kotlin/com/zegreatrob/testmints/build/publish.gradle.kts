@@ -4,32 +4,18 @@ import java.nio.charset.Charset
 import java.util.*
 
 plugins {
+    kotlin("multiplatform")
     `maven-publish`
     signing
 }
 
 group = "com.zegreatrob.testmints"
 
-signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
+val publishing = extensions.findByType(PublishingExtension::class.java)!!
 
-    if (signingKey != null) {
-        val decodedKey = Base64.getDecoder().decode(signingKey).toString(Charset.defaultCharset())
-        useInMemoryPgpKeys(decodedKey, signingPassword)
-    }
-    sign(publishing.publications)
-}
-
-tasks {
-    val javadocJar by creating(Jar::class) {
-        archiveClassifier.set("javadoc")
-        from("${rootDir.absolutePath}/javadocs")
-    }
-
-    publishing.publications {
-
-        withType<MavenPublication> {
+afterEvaluate {
+    publishing.publications.withType<MavenPublication>().forEach {
+        with(it) {
             val scmUrl = "https://github.com/robertfmurdock/testmints"
 
             pom.name.set(project.name)
@@ -56,36 +42,51 @@ tasks {
                 developerConnection.set("git@github.com:robertfmurdock/testmints.git")
             }
         }
+    }
+}
 
+signing {
+    val signingKey: String? by project
+    val signingPassword: String? by project
+
+    if (signingKey != null) {
+        val decodedKey = Base64.getDecoder().decode(signingKey).toString(Charset.defaultCharset())
+        useInMemoryPgpKeys(
+            decodedKey,
+            signingPassword
+        )
+    }
+    sign(publishing.publications)
+}
+
+
+tasks {
+    val javadocJar by creating(Jar::class) {
+        archiveClassifier.set("javadoc")
+        from("${rootDir.absolutePath}/javadocs")
+    }
+    publishing.publications {
         jvmPublication().withType<MavenPublication> {
             artifact(javadocJar)
         }
 
         if (isMacRelease()) {
-            println("mac release prep")
             val publishTasks = withType<AbstractPublishToMaven>()
-            println("publishTasks $publishTasks")
-            val nonMacPublications = nonMacPublications()
-            println("nonMacPublications $nonMacPublications")
-            nonMacPublications.withType<MavenPublication> {
-                println("inside $name")
-                publishTasks.matching {
-
-                    println("matching $it")
-
-                    it.publication == this
-                }.also { println("and now configure $it") }
-                    .configureEach { onlyIf { false } }
-            }
-            println("mac release prep complete")
+            nonMacPublications().withType<MavenPublication> { publishTasks.disableTaskForPublication(this) }
         }
-
     }
 }
 
 fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
 
 fun Project.isMacRelease() = findProperty("release-target") == "mac"
+
+fun TaskCollection<AbstractPublishToMaven>.disableTaskForPublication(
+    targetPub: MavenPublication
+) {
+    matching { it.publication == targetPub }
+        .configureEach { this.onlyIf { false } }
+}
 
 val macTargets = listOf(
     "macosX64",
