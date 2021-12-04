@@ -5,10 +5,6 @@ plugins {
     id("com.zegreatrob.testmints.build.publish")
 }
 
-repositories {
-    mavenCentral()
-}
-
 kotlin {
     targets {
         js {

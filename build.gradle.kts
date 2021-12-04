@@ -45,13 +45,13 @@ semanticRelease {
 
 tasks {
     if (isMacRelease()) {
-        val updateGithubRelease by getting {
+        "updateGithubRelease" {
             enabled = false
         }
-        val prepare by getting {
+        "prepare" {
             enabled = false
         }
-        val release by getting {
+        "release" {
             enabled = false
         }
     }

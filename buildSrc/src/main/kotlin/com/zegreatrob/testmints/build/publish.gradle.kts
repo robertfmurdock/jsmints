@@ -9,6 +9,10 @@ plugins {
     signing
 }
 
+repositories {
+    mavenCentral()
+}
+
 group = "com.zegreatrob.testmints"
 
 afterEvaluate {

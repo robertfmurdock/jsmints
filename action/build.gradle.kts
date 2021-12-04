@@ -1,12 +1,9 @@
 import com.zegreatrob.testmints.build.BuildConstants.kotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.zegreatrob.testmints.build.versioning")
     id("com.zegreatrob.testmints.build.publish")
-}
-
-repositories {
-    mavenCentral()
 }
 
 kotlin {
@@ -67,7 +64,7 @@ tasks {
         useJUnitPlatform()
     }
 
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
     }
 }

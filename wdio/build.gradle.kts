@@ -4,9 +4,7 @@ plugins {
     id("com.zegreatrob.testmints.build.versioning")
     id("com.zegreatrob.testmints.build.publish")
 }
-repositories {
-    mavenCentral()
-}
+
 kotlin {
     targets {
         js {
@@ -26,4 +24,5 @@ kotlin {
             }
         }
     }
+
 }
