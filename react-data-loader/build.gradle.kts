@@ -3,16 +3,10 @@ import com.zegreatrob.testmints.plugins.BuildConstants.coroutinesVersion
 plugins {
     id("com.zegreatrob.testmints.plugins.versioning")
     id("com.zegreatrob.testmints.plugins.publish")
+    id("com.zegreatrob.testmints.plugins.js")
 }
 
 kotlin {
-
-    targets {
-        js {
-            nodejs {}
-            useCommonJs()
-        }
-    }
 
     sourceSets {
         val jsMain by getting {

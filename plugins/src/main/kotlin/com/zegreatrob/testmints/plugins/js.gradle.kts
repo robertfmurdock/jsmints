@@ -12,11 +12,10 @@ plugins {
 
 kotlin {
     targets {
-        jvm()
-        js { nodejs {} }
-        macosX64()
-        iosX64()
-        linuxX64()
-        mingwX64()
+        js {
+            nodejs {
+                useCommonJs()
+            }
+        }
     }
 }
