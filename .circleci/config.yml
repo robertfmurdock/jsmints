@@ -32,11 +32,11 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: testmints-mac-cache-3-{{ .Branch }}
+          key: testmints-mac-cache-4-{{ .Branch }}
       - run: "git tag -d $(git describe) || echo 'no fail'"
       - run: "./gradlew -P release-target=mac release closeAndReleaseSonatypeStagingRepository"
       - save_cache:
-          key: testmints-mac-cache-3-{{ .Branch }}
+          key: testmints-mac-cache-4-{{ .Branch }}
           paths:
             - "~/.gradle"
             - "~/.konan"
