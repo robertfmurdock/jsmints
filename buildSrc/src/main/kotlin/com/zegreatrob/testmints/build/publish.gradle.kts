@@ -62,11 +62,16 @@ tasks {
         }
 
         if (isMacRelease()) {
+            println("mac release prep")
             val publishTasks = withType<AbstractPublishToMaven>()
-            nonMacPublications().withType<MavenPublication> {
+            println("publishTasks $publishTasks")
+            val nonMacPublications = nonMacPublications()
+            println("nonMacPublications $nonMacPublications")
+            nonMacPublications.withType<MavenPublication> {
                 publishTasks.matching { it.publication == this }
                     .configureEach { onlyIf { false } }
             }
+            println("mac release prep complete")
         }
 
     }
