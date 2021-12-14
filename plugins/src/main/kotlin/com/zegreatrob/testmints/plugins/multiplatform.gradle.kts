@@ -6,13 +6,3 @@ import java.util.*
 plugins {
     kotlin("multiplatform")
 }
-
-kotlin {
-    targets {
-        js {
-            nodejs {
-                useCommonJs()
-            }
-        }
-    }
-}

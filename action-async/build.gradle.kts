@@ -2,6 +2,7 @@ import com.zegreatrob.testmints.plugins.BuildConstants.coroutinesVersion
 import com.zegreatrob.testmints.plugins.BuildConstants.kotlinVersion
 
 plugins {
+    id("com.zegreatrob.testmints.plugins.multiplatform")
     id("com.zegreatrob.testmints.plugins.versioning")
     id("com.zegreatrob.testmints.plugins.publish")
 }
