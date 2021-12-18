@@ -14,4 +14,4 @@ include("react-data-loader")
 include("wdio")
 include("testmints-bom")
 
-includeBuild("plugins")
+includeBuild("testmints-plugins")

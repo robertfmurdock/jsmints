@@ -67,7 +67,7 @@ fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandl
     child(reactFunction, props, handler)
 })
 
-fun <P : Props, T> shallow(reactFunction: FunctionComponent<P>, props: P) =
+fun <P : Props, T> shallow(reactFunction: FC<P>, props: P) =
     enzyme.shallow(buildElement {
         child(reactFunction, props, {})
     })

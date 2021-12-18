@@ -35,7 +35,7 @@ private val cachedComponent = reactFunction<DataLoaderProps<Any>> { props ->
     props.children(this, state)
 }
 
-fun <D> dataLoader() = cachedComponent.unsafeCast<FunctionComponent<DataLoaderProps<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<FC<DataLoaderProps<D>>>()
 
 fun <D> RBuilder.dataLoader(
     getDataAsync: DataLoadFunc<D>,

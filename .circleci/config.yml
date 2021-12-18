@@ -59,7 +59,7 @@ jobs:
       - run: "sudo apt-get update"
       - run: "sudo apt-get install libncurses5"
       - checkout
-      - run: "./gradlew :plugins:useLatestVersions useLatestVersions"
+      - run: "./gradlew :testmints-plugins:useLatestVersions useLatestVersions"
       - run: "./gradlew model"
       - run: "./gradlew check release --stacktrace"
       - store_artifacts:

@@ -5,7 +5,7 @@ import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.setup
 import react.PropsWithChildren
 import react.dom.div
-import react.functionComponent
+import react.fc
 import kotlin.test.Test
 
 external interface BoringProps : PropsWithChildren {
@@ -16,7 +16,7 @@ class ChildTest {
 
     @Test
     fun childSugarWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
-        val innerComponent = functionComponent<BoringProps> { props ->
+        val innerComponent = fc<BoringProps> { props ->
             props.children()
         }
 
@@ -53,7 +53,7 @@ class ChildTest {
 
     @Test
     fun whenPropsAreEmptyChildWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
-        val innerComponent = functionComponent<PropsWithChildren> { props ->
+        val innerComponent = fc<PropsWithChildren> { props ->
             props.children()
         }
 
