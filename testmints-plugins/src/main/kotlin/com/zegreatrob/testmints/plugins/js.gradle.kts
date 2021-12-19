@@ -19,5 +19,5 @@ kotlin {
 
 
 dependencies {
-    "commonMainImplementation"(enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.282-kotlin-1.6.10"))
+    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.282-kotlin-1.6.10"))
 }
