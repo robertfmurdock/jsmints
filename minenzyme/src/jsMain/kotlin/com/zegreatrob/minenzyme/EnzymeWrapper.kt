@@ -63,13 +63,13 @@ fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: Str
 fun <T> ShallowWrapper<T>.findByClass(className: String) = find<T>(".${className}")
 fun <T> ShallowWrapper<T>.findInputByName(inputName: String) = find<T>("input[name='${inputName}']")
 
-fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandler<P> = {}) = enzyme.shallow(buildElement {
-    child(reactFunction, props, handler)
-})
-
-fun <P : Props, T> shallow(reactFunction: FC<P>, props: P) =
+fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandler<P> = {}) =
     enzyme.shallow(buildElement {
-        child(reactFunction, props, {})
+        child(reactFunction, props, handler)
     })
 
 fun shallow(handler: RBuilder.() -> Unit) = enzyme.shallow(buildElement(handler))
+
+fun shallow(component: ElementType<*>, handler: ChildrenBuilder.() -> Unit) = enzyme.shallow(
+    component.create(handler)
+)

@@ -10,8 +10,8 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 api(npm("core-js", "^3.6.5"))
-                api("org.jetbrains.kotlin-wrappers:kotlin-react-legacy")
-                api("org.jetbrains.kotlin-wrappers:kotlin-react-dom-legacy")
+                api("org.jetbrains.kotlin-wrappers:kotlin-react")
+                api("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
             }
         }
 

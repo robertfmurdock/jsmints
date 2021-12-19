@@ -3,34 +3,32 @@ package com.zegreatrob.minreact
 import org.w3c.dom.Node
 import react.*
 
-fun <P : Props> RBuilder.child(
+fun <P : PropsWithChildren> ChildrenBuilder.child(
     clazz: ElementType<P>,
     props: P,
     key: String? = null,
     ref: Ref<Node>? = null,
-    handler: RHandler<P> = {}
+    handler: ChildrenBuilder.() -> Unit = {}
 ) {
     key?.let { props.key = it }
     ref?.let { props.ref = ref }
-    return child(
-        type = clazz,
-        props = props,
-        handler = handler
-    )
+    clazz {
+        +props
+        handler()
+    }
 }
 
-fun RBuilder.child(
+fun ChildrenBuilder.child(
     clazz: ElementType<EmptyProps>,
     key: String? = null,
     ref: Ref<Node>? = null,
-    handler: RHandler<EmptyProps> = {}
+    handler: ChildrenBuilder.() -> Unit = {}
 ) {
     val props = EmptyProps()
     key?.let { props.key = it }
     ref?.let { props.ref = ref }
-    return child(
-        type = clazz,
-        props = props,
-        handler = handler
-    )
+    return clazz {
+        +props
+        handler()
+    }
 }

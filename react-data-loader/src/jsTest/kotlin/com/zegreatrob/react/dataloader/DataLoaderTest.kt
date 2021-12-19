@@ -8,12 +8,10 @@ import com.zegreatrob.testmints.async.invoke
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
-import kotlinx.html.js.onClickFunction
+import react.ChildrenBuilder
 import react.Props
-import react.RBuilder
-import react.dom.attrs
-import react.dom.button
-import react.dom.div
+import react.dom.html.ReactHTML.button
+import react.dom.html.ReactHTML.div
 import react.useState
 import kotlin.test.Test
 
@@ -23,8 +21,7 @@ class DataLoaderTest {
     @Test
     fun willStartDataPullAndTransitionThroughNormalStatesCorrectly() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
-
-        fun RBuilder.component() = dataLoader(
+        val dataLoaderProps = DataLoaderProps(
             getDataAsync = { "DATA" },
             errorData = { "ERROR" },
             scope = exerciseScope
@@ -33,7 +30,7 @@ class DataLoaderTest {
             div { +"state: $state" }
         }
     }) exercise {
-        shallow { component() }
+        shallow(dataLoader<String>()) { +dataLoaderProps }
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
@@ -43,17 +40,15 @@ class DataLoaderTest {
     @Test
     fun whenDataPullIsCancelledErrorDataIsPushedToChild() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
-
         val getDataAsync: suspend (DataLoaderTools) -> Nothing = {
             withContext(exerciseScope.coroutineContext) { throw Exception("NOPE") }
         }
-
-        fun RBuilder.component() = dataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
+        val props = DataLoaderProps(getDataAsync, { "ERROR" }, exerciseScope) { state ->
             allRenderedStates.add(state)
             div { +"state: $state" }
         }
     }) exercise {
-        shallow { component() }
+        shallow(dataLoader<String>()) { +props }
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
@@ -63,17 +58,15 @@ class DataLoaderTest {
     @Test
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
-
-        fun RBuilder.component() = dataLoader({ it }, { null }, exerciseScope) { state ->
+        val props = DataLoaderProps({ it }, { null }, exerciseScope) { state ->
             allRenderedStates.add(state)
             div {
                 whenResolvedSuccessfully(state) { tools ->
-                    button { attrs { onClickFunction = { tools.reloadData() } } }
+                    button { onClick = { tools.reloadData() } }
                 }
             }
         }
-
-        val wrapper = shallow { component() }
+        val wrapper = shallow(dataLoader<String>()) { +props }
     }) exercise {
         wrapper.find<Props>("button").simulate("click")
     } verify {
@@ -83,13 +76,12 @@ class DataLoaderTest {
         )
     }
 
-
     @Test
     fun childrenCanPerformAsyncWorkUsingDataLoaderScopeViaDataLoadTools() = asyncSetup(object : ScopeMint() {
         val channel = Channel<Int>()
 
-        val wrapper = shallow {
-            dataLoader({ tools -> tools }, { null }, exerciseScope) { state ->
+        val wrapper = shallow(dataLoader<String>()) {
+            +DataLoaderProps({ tools -> tools }, { null }, exerciseScope) { state ->
                 div {
                     whenResolvedSuccessfully(state) { tools -> buttonWithAsyncAction(tools) }
                 }
@@ -103,12 +95,12 @@ class DataLoaderTest {
             return listOf(e1, e2, e3)
         }
 
-        private fun RBuilder.buttonWithAsyncAction(tools: DataLoaderTools) {
+        private fun ChildrenBuilder.buttonWithAsyncAction(tools: DataLoaderTools) {
             val (buttonClickValues, setValues) = useState<List<Int>?>(null)
             val onClick = { tools.performAsyncWork(::collectThreeValuesFromChannel, { throw it }, { setValues(it) }) }
-
-            button { attrs { onClickFunction = { onClick() } } }
-            div(classes = "work-complete-div") {
+            button { this.onClick = { onClick() } }
+            div {
+                className = "work-complete-div"
                 if (buttonClickValues != null)
                     +"Work Complete ${buttonClickValues.joinToString(separator = ", ")}"
             }

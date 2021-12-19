@@ -4,8 +4,8 @@ import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.setup
 import react.Props
-import react.dom.div
-import react.dom.span
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.span
 import kotlin.test.Test
 
 class ReactFunctionTest {

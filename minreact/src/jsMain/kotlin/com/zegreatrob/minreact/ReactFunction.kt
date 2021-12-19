@@ -1,20 +1,19 @@
 package com.zegreatrob.minreact
 
 import com.zegreatrob.minreact.external.corejs.objectAssign
-import react.*
-import kotlin.reflect.KClass
+import react.ChildrenBuilder
+import react.ElementType
+import react.FC
+import react.Props
 
-inline fun <reified P : Props> reactFunction(crossinline function: RBuilder.(P) -> Unit): ElementType<P> =
-    buildReactFunction(P::class) { props ->
-        buildElement { function(props) }
+inline fun <reified P : Props> reactFunction(crossinline function: ChildrenBuilder.(P) -> Unit): ElementType<P> =
+    FC { props: P ->
+        val newProps = ensureKotlinClassProps(props, P::class.js)
+        +newProps
+        function(newProps)
     }
 
-fun <P : Props> buildReactFunction(kClass: KClass<P>, builder: (props: P) -> ReactElement) = { props: P ->
-    ensureKotlinClassProps(props, kClass.js)
-        .let(builder)
-}.unsafeCast<ElementType<P>>()
-
-private fun <P : Props> ensureKotlinClassProps(props: P, jsClass: JsClass<P>): P = if (props::class.js == jsClass) {
+fun <P : Props> ensureKotlinClassProps(props: P, jsClass: JsClass<P>): P = if (props::class.js == jsClass) {
     props
 } else {
     @Suppress("UNUSED_VARIABLE") val thing = jsClass
