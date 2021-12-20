@@ -1,10 +1,14 @@
 package com.zegreatrob.react.dataloader
 
+import com.zegreatrob.minreact.DataProps
+import com.zegreatrob.minreact.TMFC
 import com.zegreatrob.minreact.tmFC
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import react.*
+import react.ChildrenBuilder
+import react.StateSetter
+import react.useState
 
 typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
@@ -20,7 +24,7 @@ data class DataLoaderProps<D>(
     val errorData: (Throwable) -> D,
     val scope: CoroutineScope? = null,
     val children: ChildrenBuilder.(value: DataLoadState<D>) -> Unit
-) : Props
+) : DataProps
 
 private val cachedComponent = tmFC<DataLoaderProps<Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
@@ -34,7 +38,7 @@ private val cachedComponent = tmFC<DataLoaderProps<Any>> { props ->
     props.children(this, state)
 }
 
-fun <D> dataLoader() = cachedComponent.unsafeCast<FC<DataLoaderProps<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<TMFC<DataLoaderProps<D>>>()
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,

@@ -1,80 +1,46 @@
 package com.zegreatrob.minreact
 
 import com.zegreatrob.minassert.assertIsEqualTo
+import com.zegreatrob.minenzyme.dataprops
+import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.setup
-import react.FC
-import react.PropsWithChildren
 import react.dom.html.ReactHTML.div
-import react.key
 import kotlin.test.Test
 
-external interface BoringProps : PropsWithChildren {
-    var content: String
-}
+data class BoringProps(var content: String) : DataProps
 
 class ChildTest {
 
     @Test
     fun childSugarWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
-        val innerComponent = FC<BoringProps> { props ->
-            props.children()
+        val innerComponent = tmFC<BoringProps> { props ->
+            children(props)
         }
-
         val outerComponent = tmFC<EmptyProps> {
             div {
-                innerComponent {
-                    key = "1"
-                    content = "11"
+                child(innerComponent, BoringProps("11"), key = "1" ) {
                     +"Hello!"
                 }
-                innerComponent {
-                    key = "2"
-                    content = "22"
+                child(innerComponent, BoringProps("22"), key = "2") {
                     +"Goodbye!"
                 }
             }
         }
     }) exercise {
-        com.zegreatrob.minenzyme.shallow(outerComponent, EmptyProps())
+        shallow(outerComponent, EmptyProps())
     } verify { result ->
         val innerComponents = result.find(innerComponent)
 
         innerComponents.at(0).let {
             it.key().assertIsEqualTo("1")
-            it.props().content.assertIsEqualTo("11")
-            it.props().children.assertIsEqualTo("Hello!")
+            it.dataprops().content.assertIsEqualTo("11")
+            it.dataprops().children.assertIsEqualTo("Hello!")
         }
         innerComponents.at(1).let {
             it.key().assertIsEqualTo("2")
-            it.props().content.assertIsEqualTo("22")
-            it.props().children.assertIsEqualTo("Goodbye!")
+            it.dataprops().content.assertIsEqualTo("22")
+            it.dataprops().children.assertIsEqualTo("Goodbye!")
         }
     }
 
-    @Test
-    fun whenPropsAreEmptyChildWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
-        val innerComponent = FC<PropsWithChildren> { props ->
-            props.children()
-        }
-
-        val outerComponent = tmFC<EmptyProps> {
-            div {
-                innerComponent { key = "1"; +"Hello!" }
-                innerComponent { key = "2"; +"Goodbye!" }
-            }
-        }
-    }) exercise {
-        com.zegreatrob.minenzyme.shallow(outerComponent, EmptyProps())
-    } verify { result ->
-        val innerComponents = result.find(innerComponent)
-
-        innerComponents.at(0).let {
-            it.key().assertIsEqualTo("1")
-            it.props().children.assertIsEqualTo("Hello!")
-        }
-        innerComponents.at(1).let {
-            it.key().assertIsEqualTo("2")
-            it.props().children.assertIsEqualTo("Goodbye!")
-        }
-    }
 }

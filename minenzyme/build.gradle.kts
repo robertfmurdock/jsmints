@@ -12,6 +12,7 @@ kotlin {
                 implementation(npm("enzyme-adapter-react-16", "^1.15.2"))
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-legacy")
+                implementation(project(":minreact"))
             }
         }
         val jsTest by getting {

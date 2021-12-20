@@ -1,5 +1,8 @@
 package com.zegreatrob.minenzyme
 
+import com.zegreatrob.minreact.DataProps
+import com.zegreatrob.minreact.DataPropsBridge
+import com.zegreatrob.minreact.TMFC
 import react.*
 import kotlin.js.Json
 import kotlin.js.json
@@ -49,6 +52,10 @@ external interface ShallowWrapper<T> {
     fun shallow(): ShallowWrapper<T>
 }
 
+fun <P : DataProps> ShallowWrapper<DataPropsBridge<P>>.dataprops(): P {
+    return props().unsafeCast<P>()
+}
+
 fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: String) {
     return findInputByName(fieldName)
         .simulate(
@@ -72,4 +79,11 @@ fun shallow(handler: RBuilder.() -> Unit) = enzyme.shallow(buildElement(handler)
 
 fun shallow(component: ElementType<*>, handler: ChildrenBuilder.() -> Unit) = enzyme.shallow(
     component.create(handler)
+)
+
+fun <P : DataProps> shallow(component: TMFC<P>, props: P,  handler: ChildrenBuilder.() -> Unit = {}) = enzyme.shallow(
+    component.create {
+        +props.unsafeCast<DataPropsBridge<P>>()
+        handler()
+    }
 )

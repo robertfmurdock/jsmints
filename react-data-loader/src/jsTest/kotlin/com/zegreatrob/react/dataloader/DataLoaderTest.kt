@@ -30,7 +30,7 @@ class DataLoaderTest {
             div { +"state: $state" }
         }
     }) exercise {
-        shallow(dataLoader<String>()) { +dataLoaderProps }
+        shallow(dataLoader(), dataLoaderProps)
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
@@ -48,7 +48,7 @@ class DataLoaderTest {
             div { +"state: $state" }
         }
     }) exercise {
-        shallow(dataLoader<String>()) { +props }
+        shallow(dataLoader(), props)
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
@@ -66,7 +66,7 @@ class DataLoaderTest {
                 }
             }
         }
-        val wrapper = shallow(dataLoader<String>()) { +props }
+        val wrapper = shallow(dataLoader(), props)
     }) exercise {
         wrapper.find<Props>("button").simulate("click")
     } verify {
@@ -80,13 +80,13 @@ class DataLoaderTest {
     fun childrenCanPerformAsyncWorkUsingDataLoaderScopeViaDataLoadTools() = asyncSetup(object : ScopeMint() {
         val channel = Channel<Int>()
 
-        val wrapper = shallow(dataLoader<String>()) {
-            +DataLoaderProps({ tools -> tools }, { null }, exerciseScope) { state ->
+        val wrapper = shallow(dataLoader(),
+            DataLoaderProps({ tools -> tools }, { null }, exerciseScope) { state ->
                 div {
                     whenResolvedSuccessfully(state) { tools -> buttonWithAsyncAction(tools) }
                 }
             }
-        }
+        )
 
         suspend fun collectThreeValuesFromChannel(): List<Int> {
             val e1 = channel.receive()
