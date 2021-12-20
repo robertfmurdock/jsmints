@@ -6,7 +6,7 @@ import react.ElementType
 import react.FC
 import react.Props
 
-inline fun <reified P : Props> reactFunction(crossinline function: ChildrenBuilder.(P) -> Unit): ElementType<P> =
+inline fun <reified P : Props> tmFC(crossinline function: ChildrenBuilder.(P) -> Unit): ElementType<P> =
     FC { props: P ->
         val newProps = ensureKotlinClassProps(props, P::class.js)
         +newProps

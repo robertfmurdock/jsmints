@@ -1,6 +1,6 @@
 package com.zegreatrob.react.dataloader
 
-import com.zegreatrob.minreact.reactFunction
+import com.zegreatrob.minreact.tmFC
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ data class DataLoaderProps<D>(
     val children: ChildrenBuilder.(value: DataLoadState<D>) -> Unit
 ) : Props
 
-private val cachedComponent = reactFunction<DataLoaderProps<Any>> { props ->
+private val cachedComponent = tmFC<DataLoaderProps<Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
     val (state, setState) = useState<DataLoadState<Any>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")

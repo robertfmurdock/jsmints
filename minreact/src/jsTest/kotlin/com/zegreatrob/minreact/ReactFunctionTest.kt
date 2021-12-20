@@ -14,7 +14,7 @@ class ReactFunctionTest {
 
     @Test
     fun canUseDataObjectAndDestructureDuringRender() = setup(object {
-        val component = reactFunction<FunProps> { (first, second) ->
+        val component = tmFC<FunProps> { (first, second) ->
             div {
                 span { +"$first" }
                 span { +second }

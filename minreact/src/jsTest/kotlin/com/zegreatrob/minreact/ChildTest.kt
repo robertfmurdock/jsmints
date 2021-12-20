@@ -20,7 +20,7 @@ class ChildTest {
             props.children()
         }
 
-        val outerComponent = reactFunction<EmptyProps> {
+        val outerComponent = tmFC<EmptyProps> {
             div {
                 innerComponent {
                     key = "1"
@@ -57,7 +57,7 @@ class ChildTest {
             props.children()
         }
 
-        val outerComponent = reactFunction<EmptyProps> {
+        val outerComponent = tmFC<EmptyProps> {
             div {
                 innerComponent { key = "1"; +"Hello!" }
                 innerComponent { key = "2"; +"Goodbye!" }
