@@ -7,22 +7,25 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
 import kotlin.test.Test
 
-class ReactFunctionTest {
+val funny = tmFC<Funny> { (first, second) ->
+    div {
+        span { +"$first" }
+        span { +second }
+    }
+}
 
-    data class FunProps(val first: Int, val second: String) : DataProps
+data class Funny(val first: Int, val second: String) : DataProps<Funny> {
+    override val component = funny
+}
+
+class ReactFunctionTest {
 
     @Test
     fun canUseDataObjectAndDestructureDuringRender() = setup(object {
-        val component = tmFC<FunProps> { (first, second) ->
-            div {
-                span { +"$first" }
-                span { +second }
-            }
-        }
         val expectedFirst = 3948
         val expectedSecond = "9922"
     }) exercise {
-        shallow(component, FunProps(expectedFirst, expectedSecond))
+        shallow(Funny(expectedFirst, expectedSecond))
     } verify { result ->
         result.find<dynamic>("span")
             .map { it.text() }

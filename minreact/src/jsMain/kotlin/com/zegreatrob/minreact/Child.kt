@@ -18,17 +18,16 @@ fun <P : Props> ChildrenBuilder.child(
     }
 }
 
-fun <P : DataProps> ChildrenBuilder.child(
-    clazz: ElementType<DataPropsBridge<P>>,
-    props: P,
+fun <P : DataProps<P>> ChildrenBuilder.child(
+    dataProps: P,
     key: String? = null,
     ref: Ref<Node>? = null,
     handler: ChildrenBuilder.() -> Unit = {}
 ) {
-    clazz {
+    dataProps.component {
         key?.let { this.key = it }
         ref?.let { this.ref = ref }
-        +props.unsafeCast<Props>()
+        +dataProps.unsafeCast<Props>()
         handler()
     }
 }

@@ -4,32 +4,37 @@ import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minenzyme.dataprops
 import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.setup
+import react.FC
+import react.Props
 import react.dom.html.ReactHTML.div
 import kotlin.test.Test
 
-data class BoringProps(var content: String) : DataProps
+val boringComponent = tmFC<BoringComponent> { props ->
+    children(props)
+}
+
+data class BoringComponent(var content: String) : DataProps<BoringComponent> {
+    override val component = boringComponent
+}
 
 class ChildTest {
 
     @Test
     fun childSugarWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
-        val innerComponent = tmFC<BoringProps> { props ->
-            children(props)
-        }
-        val outerComponent = tmFC<EmptyProps> {
+        val outerComponent = FC<Props> {
             div {
-                child(innerComponent, BoringProps("11"), key = "1" ) {
+                child(BoringComponent("11"), key = "1") {
                     +"Hello!"
                 }
-                child(innerComponent, BoringProps("22"), key = "2") {
+                child(BoringComponent("22"), key = "2") {
                     +"Goodbye!"
                 }
             }
         }
     }) exercise {
-        shallow(outerComponent, EmptyProps())
+        shallow(outerComponent)
     } verify { result ->
-        val innerComponents = result.find(innerComponent)
+        val innerComponents = result.find(boringComponent)
 
         innerComponents.at(0).let {
             it.key().assertIsEqualTo("1")

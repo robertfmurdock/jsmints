@@ -17,16 +17,19 @@ typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
     level = DeprecationLevel.WARNING,
     message = "Name to be removed."
 )
-typealias DataLoadWrapperProps<D> = DataLoaderProps<D>
+typealias DataLoadWrapperProps<D> = DataLoader<D>
+typealias DataLoaderProps<D> = DataLoader<D>
 
-data class DataLoaderProps<D>(
+data class DataLoader<D>(
     val getDataAsync: DataLoadFunc<D>,
     val errorData: (Throwable) -> D,
     val scope: CoroutineScope? = null,
     val children: ChildrenBuilder.(value: DataLoadState<D>) -> Unit
-) : DataProps
+) : DataProps<DataLoader<D>> {
+    override val component = cachedComponent.unsafeCast<TMFC<DataLoader<D>>>()
+}
 
-private val cachedComponent = tmFC<DataLoaderProps<Any>> { props ->
+private val cachedComponent = tmFC<DataLoader<Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
     val (state, setState) = useState<DataLoadState<Any>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")
@@ -38,7 +41,7 @@ private val cachedComponent = tmFC<DataLoaderProps<Any>> { props ->
     props.children(this, state)
 }
 
-fun <D> dataLoader() = cachedComponent.unsafeCast<TMFC<DataLoaderProps<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<TMFC<DataLoader<D>>>()
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,

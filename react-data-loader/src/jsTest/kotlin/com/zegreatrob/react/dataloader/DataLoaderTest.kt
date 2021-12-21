@@ -21,16 +21,15 @@ class DataLoaderTest {
     @Test
     fun willStartDataPullAndTransitionThroughNormalStatesCorrectly() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
-        val dataLoaderProps = DataLoaderProps(
+    }) exercise {
+        shallow(DataLoader(
             getDataAsync = { "DATA" },
             errorData = { "ERROR" },
             scope = exerciseScope
         ) { state ->
             allRenderedStates.add(state)
             div { +"state: $state" }
-        }
-    }) exercise {
-        shallow(dataLoader(), dataLoaderProps)
+        })
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
@@ -43,12 +42,11 @@ class DataLoaderTest {
         val getDataAsync: suspend (DataLoaderTools) -> Nothing = {
             withContext(exerciseScope.coroutineContext) { throw Exception("NOPE") }
         }
-        val props = DataLoaderProps(getDataAsync, { "ERROR" }, exerciseScope) { state ->
+    }) exercise {
+        shallow(DataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
             allRenderedStates.add(state)
             div { +"state: $state" }
-        }
-    }) exercise {
-        shallow(dataLoader(), props)
+        })
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
@@ -58,15 +56,14 @@ class DataLoaderTest {
     @Test
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
-        val props = DataLoaderProps({ it }, { null }, exerciseScope) { state ->
+        val wrapper = shallow(DataLoader({ it }, { null }, exerciseScope) { state ->
             allRenderedStates.add(state)
             div {
                 whenResolvedSuccessfully(state) { tools ->
-                    button { onClick = { tools.reloadData() } }
+                    button { this.onClick = { tools.reloadData() } }
                 }
             }
-        }
-        val wrapper = shallow(dataLoader(), props)
+        })
     }) exercise {
         wrapper.find<Props>("button").simulate("click")
     } verify {
@@ -80,8 +77,8 @@ class DataLoaderTest {
     fun childrenCanPerformAsyncWorkUsingDataLoaderScopeViaDataLoadTools() = asyncSetup(object : ScopeMint() {
         val channel = Channel<Int>()
 
-        val wrapper = shallow(dataLoader(),
-            DataLoaderProps({ tools -> tools }, { null }, exerciseScope) { state ->
+        val wrapper = shallow(
+            DataLoader({ tools -> tools }, { null }, exerciseScope) { state ->
                 div {
                     whenResolvedSuccessfully(state) { tools -> buttonWithAsyncAction(tools) }
                 }
