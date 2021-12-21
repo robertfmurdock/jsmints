@@ -2,6 +2,7 @@ package com.zegreatrob.minenzyme
 
 import com.zegreatrob.minreact.DataProps
 import com.zegreatrob.minreact.DataPropsBridge
+import com.zegreatrob.minreact.TMFC
 import react.*
 import kotlin.js.Json
 import kotlin.js.json
@@ -80,8 +81,12 @@ fun shallow(component: ElementType<*>, handler: ChildrenBuilder.() -> Unit = {})
     component.create(handler)
 )
 
-fun <P : DataProps<P>> shallow(props: P, handler: ChildrenBuilder.() -> Unit = {}) = enzyme.shallow(
-    props.component.create {
+fun <P : DataProps<P>> shallow(
+    props: P,
+    component: TMFC<P> = props.component,
+    handler: ChildrenBuilder.() -> Unit = {}
+) = enzyme.shallow(
+    component.create {
         +props.unsafeCast<DataPropsBridge<P>>()
         handler()
     }
