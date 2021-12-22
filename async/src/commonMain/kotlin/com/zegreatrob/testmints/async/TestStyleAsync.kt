@@ -1,12 +1,11 @@
 package com.zegreatrob.testmints.async
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 
-@Deprecated("testAsync is deprecated, transition to using asyncSetup chaining instead.")
-expect fun <T> testAsync(block: suspend CoroutineScope.() -> T)
-
-expect fun finalTransform(it: () -> Deferred<Unit>)
+@OptIn(ExperimentalCoroutinesApi::class)
+fun finalTransform(deferred: () -> Deferred<Unit>) = runTest { deferred().await() }
 
 expect suspend fun waitForTest(testFunction: () -> Unit)
 
