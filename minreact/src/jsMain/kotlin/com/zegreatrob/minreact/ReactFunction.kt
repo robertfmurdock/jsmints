@@ -33,3 +33,9 @@ val DataProps<*>.children get() = this.unsafeCast<PropsWithChildren>().children
 fun ChildrenBuilder.children(DataProps: DataProps<*>) {
     Children.toArray(DataProps.children).forEach(::child)
 }
+
+fun <P : DataProps<P>> create(dataProps: DataProps<P>) = dataProps.component.create {
+    +dataProps.unsafeCast<Props>()
+}
+
+fun <P : DataProps<P>> DataProps<P>.create() = create(this)
