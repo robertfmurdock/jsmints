@@ -20,7 +20,7 @@ data class BoringComponent(var content: String) : DataProps<BoringComponent> {
 class ChildTest {
 
     @Test
-    fun childSugarWillCorrectlyApplyKeyAndHandler() = setup.invoke(object {
+    fun childSugarWillCorrectlyApplyKeyAndHandler() = setup(object {
         val outerComponent = FC<Props> {
             div {
                 child(BoringComponent("11"), key = "1") {
