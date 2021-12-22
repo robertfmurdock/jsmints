@@ -31,5 +31,5 @@ typealias TMFC <P> = ElementType<DataPropsBridge<P>>
 val DataProps<*>.children get() = this.unsafeCast<PropsWithChildren>().children
 
 fun ChildrenBuilder.children(DataProps: DataProps<*>) {
-    DataProps.children?.forEach { child(it) }
+    Children.toArray(DataProps.children).forEach(::child)
 }
