@@ -1,8 +1,9 @@
 package com.zegreatrob.testmints.plugins
 
-import org.gradle.kotlin.dsl.*
-import java.util.*
-
 plugins {
     kotlin("multiplatform")
+}
+
+dependencies {
+    "commonMainImplementation"(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0"))
 }

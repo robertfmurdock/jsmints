@@ -1,4 +1,3 @@
-import com.zegreatrob.testmints.plugins.BuildConstants.coroutinesVersion
 import com.zegreatrob.testmints.plugins.BuildConstants.kotlinVersion
 
 plugins {
@@ -19,7 +18,7 @@ kotlin {
             dependencies {
                 implementation(project(":action"))
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
             }
         }

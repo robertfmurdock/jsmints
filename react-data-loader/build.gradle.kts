@@ -1,5 +1,3 @@
-import com.zegreatrob.testmints.plugins.BuildConstants.coroutinesVersion
-
 plugins {
     id("com.zegreatrob.testmints.plugins.versioning")
     id("com.zegreatrob.testmints.plugins.publish")
@@ -14,7 +12,7 @@ kotlin {
                 implementation(project(":minreact"))
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
             }
         }
 

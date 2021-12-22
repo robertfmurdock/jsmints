@@ -1,5 +1,3 @@
-import com.zegreatrob.testmints.plugins.BuildConstants.coroutinesVersion
-
 plugins {
     id("com.zegreatrob.testmints.plugins.versioning")
     id("com.zegreatrob.testmints.plugins.publish")
@@ -11,7 +9,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
                 implementation("com.soywiz.korlibs.klock:klock:2.4.10")
                 implementation("io.github.microutils:kotlin-logging:2.1.21")
                 implementation(npm("@wdio/cli", "7.10.0"))
