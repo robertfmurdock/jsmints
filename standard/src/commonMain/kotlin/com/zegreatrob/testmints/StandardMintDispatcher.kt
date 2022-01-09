@@ -5,11 +5,11 @@ import com.zegreatrob.testmints.report.ReporterProvider
 
 interface StandardMintDispatcher : ReporterProvider {
 
-    val setup get() = TestTemplate<Unit>(reporter) { it(Unit) }
+    val setup get() = TestTemplate<Unit>(this) { it(Unit) }
 
-    fun <SC : Any> testTemplate(wrapper: (TestFunc<SC>) -> Unit): TestTemplate<SC> = TestTemplate(reporter, wrapper)
+    fun <SC : Any> testTemplate(wrapper: (TestFunc<SC>) -> Unit): TestTemplate<SC> = TestTemplate(this, wrapper)
 
-    fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit) = testTemplate<SC> { test ->
+    fun <SC : Any> testTemplate(sharedSetup: () -> SC, sharedTeardown: (SC) -> Unit = {}) = testTemplate<SC> { test ->
         sharedSetup()
             .also(test)
             .also(sharedTeardown)

@@ -1,17 +1,17 @@
 package com.zegreatrob.testmints.async
 
-import com.zegreatrob.testmints.report.MintReporter
+import com.zegreatrob.testmints.report.ReporterProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 
 class TestTemplate<SC : Any>(
-    val reporter: MintReporter,
+    val reporterProvider: ReporterProvider,
     private val templateScope: CoroutineScope = mintScope(),
     val wrapper: suspend (TestFunc<SC>) -> Unit
 ) {
 
-    fun <SC2 : Any> extend(wrapper: suspend (SC, TestFunc<SC2>) -> Unit) = TestTemplate<SC2>(reporter) { test ->
+    fun <SC2 : Any> extend(wrapper: suspend (SC, TestFunc<SC2>) -> Unit) = TestTemplate<SC2>(reporterProvider) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
     }
 
@@ -23,15 +23,14 @@ class TestTemplate<SC : Any>(
         }
 
     fun extend(sharedSetup: suspend () -> Unit = {}, sharedTeardown: suspend () -> Unit = {}) = TestTemplate<SC>(
-        reporter = reporter,
-        wrapper = { test ->
-            wrapper {
-                sharedSetup()
-                test(it)
-                sharedTeardown()
-            }
+        reporterProvider
+    ) { test ->
+        wrapper {
+            sharedSetup()
+            test(it)
+            sharedTeardown()
         }
-    )
+    }
 
     fun <BAC : Any> extend(beforeAll: suspend () -> BAC): TestTemplate<BAC> = extend(
         beforeAll = beforeAll,
@@ -51,7 +50,7 @@ class TestTemplate<SC : Any>(
     operator fun <C : Any> invoke(
         contextProvider: suspend (SC) -> C,
         additionalActions: suspend C.() -> Unit = {}
-    ) = Setup(contextProvider, mintScope(), additionalActions, reporter, wrapper)
+    ) = Setup(contextProvider, mintScope(), additionalActions, reporterProvider.reporter, wrapper)
 
 }
 
@@ -70,7 +69,7 @@ operator fun <SC : Any, C : Any> TestTemplate<SC>.invoke(
     { context },
     context.chooseTestScope(),
     additionalActions,
-    reporter,
+    reporterProvider.reporter,
     wrapper
 )
 
@@ -78,6 +77,6 @@ operator fun <C : Any> TestTemplate<C>.invoke(additionalActions: suspend C.() ->
     { it },
     mintScope(),
     additionalActions,
-    reporter,
+    reporterProvider.reporter,
     wrapper
 )

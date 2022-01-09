@@ -746,6 +746,23 @@ class AsyncMintsTest {
         }
 
         @Test
+        fun reporterCanBeConfiguredAfterTemplatesAreDefined() = asyncSetup(object : AsyncMintDispatcher {
+            val templatedSetup = asyncTestTemplate(sharedSetup = {})
+
+            fun simpleTest() = templatedSetup() exercise {} verifyAnd {} teardown {}
+            var exerciseCalled = false
+            override val reporter = object : MintReporter {
+                override fun exerciseStart(context: Any) {
+                    exerciseCalled = true
+                }
+            }
+        }) exercise {
+            waitForTest { simpleTest() }
+        } verify {
+            assertEquals(true, exerciseCalled)
+        }
+
+        @Test
         fun exerciseStartWillLogContext() = asyncSetup(object : AsyncMintDispatcher {
             var exerciseStartPayload: Any? = null
             override val reporter = object : MintReporter {

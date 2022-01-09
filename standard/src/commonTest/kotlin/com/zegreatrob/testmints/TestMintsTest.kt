@@ -517,6 +517,8 @@ class TestMintsTest {
                 val calls = mutableListOf<Call>()
                 private fun record(call: Call) = calls.add(call).let { }
 
+                fun simpleTest() = setup() exercise {} verifyAnd {} teardown {}
+
                 override val reporter = object : MintReporter {
                     override fun exerciseStart(context: Any) = record(Call.ExerciseStart)
                     override fun exerciseFinish() = record(Call.ExerciseFinish)
@@ -527,8 +529,6 @@ class TestMintsTest {
                 }
 
             }) exercise {
-                fun simpleTest() = setup() exercise {} verifyAnd {} teardown {}
-
                 simpleTest()
             } verify {
                 assertEquals(
@@ -542,6 +542,20 @@ class TestMintsTest {
                     ),
                     actual = calls
                 )
+            }
+
+            @Test
+            fun reporterCanBeConfiguredAfterTemplatesAreDefined() = setup(object : StandardMintDispatcher {
+                val templatedSetup = testTemplate(sharedSetup = {})
+                fun simpleTest() = templatedSetup() exercise {} verifyAnd {} teardown {}
+                var exerciseCalled = false
+                override val reporter = object : MintReporter {
+                    override fun exerciseStart(context: Any) {exerciseCalled = true}
+                }
+            }) exercise {
+                simpleTest()
+            } verify {
+                assertEquals(true, exerciseCalled)
             }
 
             @Test

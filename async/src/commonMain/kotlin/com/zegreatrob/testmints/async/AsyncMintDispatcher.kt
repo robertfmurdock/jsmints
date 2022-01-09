@@ -11,10 +11,10 @@ interface AsyncMintDispatcher : SetupSyntax
 
 interface SetupSyntax : ReporterProvider {
 
-    val asyncSetup get() = TestTemplate<Unit>(reporter, mintScope()) { it(Unit) }
+    val asyncSetup get() = TestTemplate<Unit>(this, mintScope()) { it(Unit) }
 
     fun asyncTestTemplate(sharedSetup: suspend () -> Unit, sharedTeardown: suspend () -> Unit) = TestTemplate<Unit>(
-        reporter
+        this
     ) {
         sharedSetup()
         it(Unit)
@@ -24,7 +24,7 @@ interface SetupSyntax : ReporterProvider {
     fun <SC : Any> asyncTestTemplate(
         sharedSetup: suspend () -> SC,
         sharedTeardown: suspend (SC) -> Unit = {}
-    ) = TestTemplate<SC>(reporter) {
+    ) = TestTemplate<SC>(this) {
         val sc = sharedSetup()
         it(sc)
         sharedTeardown(sc)
@@ -33,15 +33,15 @@ interface SetupSyntax : ReporterProvider {
     fun <SC : Any> asyncTestTemplate(beforeAll: suspend () -> SC): TestTemplate<SC> {
         val templateScope = mintScope()
         val deferred: Deferred<SC> = templateScope.async(start = CoroutineStart.LAZY) { beforeAll() }
-        return TestTemplate(reporter) { it(deferred.await()) }
+        return TestTemplate(this) { it(deferred.await()) }
     }
 
-    fun asyncTestTemplateSimple(wrapper: suspend (suspend () -> Unit) -> Unit) = TestTemplate<Unit>(reporter) {
+    fun asyncTestTemplateSimple(wrapper: suspend (suspend () -> Unit) -> Unit) = TestTemplate<Unit>(this) {
         wrapper { it(Unit) }
     }
 
     fun <SC : Any> asyncTestTemplate(wrapper: suspend (TestFunc<SC>) -> Unit) = TestTemplate(
-        reporter, mintScope(), wrapper
+        this, mintScope(), wrapper
     )
 }
 

@@ -1,10 +1,10 @@
 package com.zegreatrob.testmints
 
-import com.zegreatrob.testmints.report.MintReporter
+import com.zegreatrob.testmints.report.ReporterProvider
 
-class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: (TestFunc<SC>) -> Unit) {
+class TestTemplate<SC : Any>(val reporterProvider: ReporterProvider, val wrapper: (TestFunc<SC>) -> Unit) {
 
-    fun <SC2 : Any> extend(wrapper: (SC, TestFunc<SC2>) -> Unit) = TestTemplate<SC2>(reporter) { test ->
+    fun <SC2 : Any> extend(wrapper: (SC, TestFunc<SC2>) -> Unit) = TestTemplate<SC2>(reporterProvider) { test ->
         this.wrapper { sc1 -> wrapper(sc1, test) }
     }
 
@@ -15,15 +15,14 @@ class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: (TestFunc<
     }
 
     fun extend(sharedSetup: () -> Unit = {}, sharedTeardown: () -> Unit = {}) = TestTemplate<SC>(
-        reporter = reporter,
-        wrapper = { test ->
-            wrapper {
-                sharedSetup()
-                test(it)
-                sharedTeardown()
-            }
+        reporterProvider
+    ) { test ->
+        wrapper {
+            sharedSetup()
+            test(it)
+            sharedTeardown()
         }
-    )
+    }
 
     fun <BAC : Any> extend(beforeAll: () -> BAC): TestTemplate<BAC> = extend(
         beforeAll = beforeAll,
@@ -32,21 +31,18 @@ class TestTemplate<SC : Any>(val reporter: MintReporter, val wrapper: (TestFunc<
 
     fun <BAC : Any, SC2 : Any> extend(beforeAll: () -> BAC, mergeContext: (SC, BAC) -> SC2): TestTemplate<SC2> {
         val lazy by lazy { beforeAll() }
-        return TestTemplate(
-            reporter = reporter,
-            wrapper = { test -> wrapper { sc -> test(mergeContext(sc, lazy)) } }
-        )
+        return TestTemplate(reporterProvider) { test -> wrapper { sc -> test(mergeContext(sc, lazy)) } }
     }
 
     operator fun <C : Any> invoke(contextProvider: (SC) -> C, additionalSetupActions: C.() -> Unit = {}) =
-        Setup(contextProvider, reporter, additionalSetupActions, wrapper)
+        Setup(contextProvider, reporterProvider.reporter, additionalSetupActions, wrapper)
 
     operator fun <C : Any> invoke(
         context: C,
         additionalSetupActions: C.() -> Unit = {}
-    ) = Setup({ context }, reporter, additionalSetupActions, wrapper)
+    ) = Setup({ context }, reporterProvider.reporter, additionalSetupActions, wrapper)
 
     operator fun invoke(additionalSetupActions: SC.() -> Unit = {}): Setup<SC, SC> =
-        Setup({ it }, reporter, additionalSetupActions, wrapper)
+        Setup({ it }, reporterProvider.reporter, additionalSetupActions, wrapper)
 
 }
