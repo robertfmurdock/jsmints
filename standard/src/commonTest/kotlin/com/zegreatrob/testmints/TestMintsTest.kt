@@ -550,7 +550,9 @@ class TestMintsTest {
                 fun simpleTest() = templatedSetup() exercise {} verifyAnd {} teardown {}
                 var exerciseCalled = false
                 override val reporter = object : MintReporter {
-                    override fun exerciseStart(context: Any) {exerciseCalled = true}
+                    override fun exerciseStart(context: Any) {
+                        exerciseCalled = true
+                    }
                 }
             }) exercise {
                 simpleTest()
@@ -591,6 +593,30 @@ class TestMintsTest {
                 simpleTest()
             } verify {
                 assertEquals(expectedObject, reporter.verifyStartPayload)
+            }
+
+            @Test
+            fun verifyFinishWillWaitUntilVerifyIsComplete() = setup(object : StandardMintDispatcher {
+                val verifyState = mutableListOf<String>()
+                var result: String? = null
+                override val reporter = object : MintReporter {
+                    override fun verifyFinish() {
+                        result = verifyState.joinToString("")
+                    }
+                }
+                val expectedResult = object {}
+                val expectedException = Exception("end in failure")
+
+                fun simpleTest() = setup() exercise { expectedResult } verify {
+                    verifyState.add("abc")
+                    throw expectedException
+                }
+
+            }) exercise {
+                captureException { simpleTest() }
+            } verify { exception ->
+                assertEquals(expectedException.message, exception?.message)
+                assertEquals("abc", result)
             }
         }
 
