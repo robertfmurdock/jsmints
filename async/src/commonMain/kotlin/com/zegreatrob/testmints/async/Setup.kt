@@ -52,12 +52,16 @@ class Setup<C : Any, SC : Any>(
         return result
     }
 
-    private suspend fun <R> performVerify(context: C, result: R, assertionFunctions: suspend C.(R) -> Unit) =
-        captureException {
-            reporter.verifyStart(result)
-            context.assertionFunctions(result)
+    private suspend fun <R> performVerify(
+        context: C,
+        result: R,
+        assertionFunctions: suspend C.(R) -> Unit
+    ): Throwable? {
+        reporter.verifyStart(result)
+        return captureException { context.assertionFunctions(result) }.also {
             reporter.verifyFinish()
         }
+    }
 
     private suspend fun performSetup(sharedContext: SC): C {
         val context = contextProvider(sharedContext)

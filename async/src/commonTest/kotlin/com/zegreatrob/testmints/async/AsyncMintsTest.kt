@@ -797,6 +797,34 @@ class AsyncMintsTest {
         } verify {
             assertEquals(expectedResult, verifyStartPayload)
         }
+
+        @Test
+        fun verifyFinishWillWaitUntilVerifyIsComplete() = asyncSetup(object : AsyncMintDispatcher {
+            val verifyState = mutableListOf<String>()
+            var result : String? = null
+            override val reporter = object : MintReporter {
+                override fun verifyFinish() {
+                    result = verifyState.joinToString("")
+                }
+            }
+            val expectedResult = object {}
+            val expectedException = Exception("end in failure")
+
+            fun simpleTest() = asyncSetup() exercise { expectedResult } verify {
+                    verifyState.add("a")
+                    delay(20)
+                    verifyState.add("b")
+                    delay(20)
+                    verifyState.add("c")
+                    throw expectedException
+                }
+
+        }) exercise {
+            captureException { waitForTest { simpleTest() } }
+        } verify { exception ->
+            assertEquals(expectedException.message, exception?.message)
+            assertEquals("abc", result)
+        }
     }
 
 }
