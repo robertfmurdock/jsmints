@@ -3,7 +3,6 @@ package com.zegreatrob.testmints
 import com.zegreatrob.testmints.report.MintReporter
 import io.kotest.core.spec.style.FunSpec
 import kotlin.random.Random
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
@@ -23,133 +22,123 @@ class ExampleUsage : FunSpec({
     } verify { result ->
         assertEquals(expected, result)
     })
-
 })
 
 @Suppress("unused")
-class TestMintsTest {
+class Features : FunSpec({
 
-    class Features {
-        @Test
-        fun verifyShouldThrowErrorWhenFailureOccurs() = setup(object {
+    test("verifyShouldThrowErrorWhenFailureOccurs", fun() = setup(object {
 
-            fun simulatedTestThatFailsInVerify() = setup() exercise {} verify { fail("LOL") }
+        fun simulatedTestThatFailsInVerify() = setup() exercise {} verify { fail("LOL") }
 
+    }) exercise {
+        captureException { simulatedTestThatFailsInVerify() }
+    } verify { result ->
+        assertEquals("LOL", result?.message)
+    })
+
+    test("exerciseShouldHaveAccessToScopeOfSetupObject", fun() = setup(object {
+        val expectedValue: Int = Random.nextInt()
+        var actualValue: Int? = null
+
+        fun testThatUsesContextInExercise() = setup(object {
+            val value = expectedValue
         }) exercise {
-            captureException { simulatedTestThatFailsInVerify() }
-        } verify { result ->
-            assertEquals("LOL", result?.message)
-        }
-
-        @Test
-        fun exerciseShouldHaveAccessToScopeOfSetupObject() = setup(object {
-            val expectedValue: Int = Random.nextInt()
-            var actualValue: Int? = null
-
-            fun testThatUsesContextInExercise() = setup(object {
-                val value = expectedValue
-            }) exercise {
-                actualValue = value
-            } verify {
-            }
-
-        }) exercise {
-            testThatUsesContextInExercise()
+            actualValue = value
         } verify {
-            assertEquals(expectedValue, actualValue)
         }
 
-        @Test
-        fun verifyShouldReceiveTheResultOfExerciseAsParameter() = setup(object {
-            val expectedValue = Random.nextInt()
-            var actualValue: Int? = null
+    }) exercise {
+        testThatUsesContextInExercise()
+    } verify {
+        assertEquals(expectedValue, actualValue)
+    })
 
-            fun testThatPassesResultToVerify() = setup() exercise { expectedValue } verify { result ->
-                actualValue = result
-            }
+    test("verifyShouldReceiveTheResultOfExerciseAsParameter", fun() = setup(object {
+        val expectedValue = Random.nextInt()
+        var actualValue: Int? = null
 
+        fun testThatPassesResultToVerify() = setup() exercise { expectedValue } verify { result ->
+            actualValue = result
+        }
+
+    }) exercise {
+        testThatPassesResultToVerify()
+    } verify {
+        assertEquals(expectedValue, actualValue)
+    })
+
+    test("verifyShouldHaveAccessToSetupContext", fun() = setup(object {
+        val expectedValue: Int = Random.nextInt()
+        var actualValue: Int? = null
+
+        fun testThatUsesContextInVerify() = setup(object {
+            val value = expectedValue
+        }) exercise {} verify {
+            actualValue = value
+        }
+
+    }) exercise {
+        testThatUsesContextInVerify()
+    } verify {
+        assertEquals(expectedValue, actualValue)
+    })
+
+    test("tearDownShouldHaveAccessToScopeOfSetupObjectAndResult", fun() = setup(object {
+        val expectedValue: Int = Random.nextInt()
+        val expectedResult: Int = Random.nextInt()
+        var teardownReceived: Pair<Int, Int>? = null
+    }) exercise {
+
+        fun testThatSendsContextToTeardown() = setup(object {
+            val value = expectedValue
         }) exercise {
-            testThatPassesResultToVerify()
-        } verify {
-            assertEquals(expectedValue, actualValue)
+            expectedResult
+        } verifyAnd {
+        } teardown { result ->
+            teardownReceived = value to result
         }
 
-        @Test
-        fun verifyShouldHaveAccessToSetupContext() = setup(object {
-            val expectedValue: Int = Random.nextInt()
-            var actualValue: Int? = null
+        testThatSendsContextToTeardown()
+    } verify {
+        assertEquals(expectedValue to expectedResult, teardownReceived)
+    })
 
-            fun testThatUsesContextInVerify() = setup(object {
-                val value = expectedValue
-            }) exercise {} verify {
-                actualValue = value
-            }
+    test("whenFailureOccursInVerifyAndExceptionOccursInTeardownBothAreReported", fun() = setup(object {
+        val verifyFailure = AssertionError("Got 'em")
+        val teardownException = Exception("Oh man, not good.")
 
-        }) exercise {
-            testThatUsesContextInVerify()
-        } verify {
-            assertEquals(expectedValue, actualValue)
-        }
+        fun failingTestThatExplodesInTeardown() = setup() exercise {
+        } verifyAnd { throw verifyFailure } teardown { throw teardownException }
 
-        @Test
-        fun tearDownShouldHaveAccessToScopeOfSetupObjectAndResult() = setup(object {
-            val expectedValue: Int = Random.nextInt()
-            val expectedResult: Int = Random.nextInt()
-            var teardownReceived: Pair<Int, Int>? = null
-        }) exercise {
+    }) exercise {
+        captureException { failingTestThatExplodesInTeardown() }
+    } verify { result ->
+        assertEquals(
+            CompoundMintTestException(
+                mapOf(
+                    "Failure" to verifyFailure,
+                    "Teardown exception" to teardownException
+                )
+            ), result
+        )
+    })
 
-            fun testThatSendsContextToTeardown() = setup(object {
-                val value = expectedValue
-            }) exercise {
-                expectedResult
-            } verifyAnd {
-            } teardown { result ->
-                teardownReceived = value to result
-            }
+    test("whenExceptionOccursInSetupClosureWillNotRunExerciseOrTeardown", fun() = setup(object {
+        val setupException = Exception("Oh man, not good.")
+        var exerciseOrVerifyTriggered = false
 
-            testThatSendsContextToTeardown()
-        } verify {
-            assertEquals(expectedValue to expectedResult, teardownReceived)
-        }
+        fun testThatExplodeInSetupClosure() = setup {
+            throw setupException
+        } exercise { exerciseOrVerifyTriggered = true } verify { exerciseOrVerifyTriggered = true }
 
-        @Test
-        fun whenFailureOccursInVerifyAndExceptionOccursInTeardownBothAreReported() = setup(object {
-            val verifyFailure = AssertionError("Got 'em")
-            val teardownException = Exception("Oh man, not good.")
+    }) exercise {
+        captureException { testThatExplodeInSetupClosure() }
+    } verify { result ->
+        assertEquals(setupException, result)
+    })
 
-            fun failingTestThatExplodesInTeardown() = setup() exercise {
-            } verifyAnd { throw verifyFailure } teardown { throw teardownException }
-
-        }) exercise {
-            captureException { failingTestThatExplodesInTeardown() }
-        } verify { result ->
-            assertEquals(
-                CompoundMintTestException(
-                    mapOf(
-                        "Failure" to verifyFailure,
-                        "Teardown exception" to teardownException
-                    )
-                ), result
-            )
-        }
-
-        @Test
-        fun whenExceptionOccursInSetupClosureWillNotRunExerciseOrTeardown() = setup(object {
-            val setupException = Exception("Oh man, not good.")
-            var exerciseOrVerifyTriggered = false
-
-            fun testThatExplodeInSetupClosure() = setup {
-                throw setupException
-            } exercise { exerciseOrVerifyTriggered = true } verify { exerciseOrVerifyTriggered = true }
-
-        }) exercise {
-            captureException { testThatExplodeInSetupClosure() }
-        } verify { result ->
-            assertEquals(setupException, result)
-        }
-
-    }
-}
+})
 
 enum class Steps {
     TemplateSetup, TemplateTeardown, Setup, Exercise, Verify, Teardown
@@ -187,7 +176,7 @@ class TestTemplates : FunSpec({
         assertEquals(correctOrder, calls)
     })
 
-    test("whenTestSucceedsEndingWithVerifySharedSetupAndSharedTeardownRunInCorrectOrder", fun () = setup(object {
+    test("whenTestSucceedsEndingWithVerifySharedSetupAndSharedTeardownRunInCorrectOrder", fun() = setup(object {
         val calls = mutableListOf<Steps>()
         val customSetup = testTemplate(
             sharedSetup = { calls.add(Steps.TemplateSetup) },
@@ -204,7 +193,7 @@ class TestTemplates : FunSpec({
         assertEquals(correctOrder - Steps.Teardown, calls)
     })
 
-    test("wrapperFunctionCanBeUsedAsAlternativeToSharedSetupAndSharedTeardown", fun () = setup(object {
+    test("wrapperFunctionCanBeUsedAsAlternativeToSharedSetupAndSharedTeardown", fun() = setup(object {
         val calls = mutableListOf<Steps>()
         val customSetup = testTemplate(wrapper = { runTest: () -> Unit ->
             calls.add(Steps.TemplateSetup)
@@ -222,7 +211,7 @@ class TestTemplates : FunSpec({
         assertEquals(correctOrder - Steps.Teardown, calls)
     })
 
-    test("wrapperFunctionProvideSharedContextAlso", fun () = setup(object {
+    test("wrapperFunctionProvideSharedContextAlso", fun() = setup(object {
         val calls = mutableListOf<Steps>()
 
         val expectedSharedContext = 17
@@ -245,7 +234,7 @@ class TestTemplates : FunSpec({
         assertEquals(expectedSharedContext, sharedContextReceived)
     })
 
-    test("sharedContextCanBeUsedAsContext", fun () = setup(object {
+    test("sharedContextCanBeUsedAsContext", fun() = setup(object {
         val sharedContext = 47
         val customSetup = testTemplate(sharedSetup = { sharedContext })
         var contextReceived: Any? = null
@@ -262,7 +251,7 @@ class TestTemplates : FunSpec({
         assertEquals(1, additionalActionsCallCount)
     })
 
-    test("canExtendToTransformSharedContextUsingSharedSetupAndTeardown", fun () = setup(object {
+    test("canExtendToTransformSharedContextUsingSharedSetupAndTeardown", fun() = setup(object {
         val calls = mutableListOf<Steps>()
 
         val originalSharedContext = 41
@@ -291,7 +280,7 @@ class TestTemplates : FunSpec({
         assertEquals("$originalSharedContext bottles of beer on the wall.", sharedContextReceived)
     })
 
-    test("canExtendToTransformSharedContextUsingWrapper", fun () = setup(object {
+    test("canExtendToTransformSharedContextUsingWrapper", fun() = setup(object {
         val calls = mutableListOf<Steps>()
 
         val originalSharedContext = 67
@@ -318,7 +307,7 @@ class TestTemplates : FunSpec({
         assertEquals("$originalSharedContext bottles of beer on the wall.", sharedContextReceived)
     })
 
-    test("whenWrapperFunctionDoesNotCallTheTestTheTestWillFail", fun () = setup(object {
+    test("whenWrapperFunctionDoesNotCallTheTestTheTestWillFail", fun() = setup(object {
         val customSetup = testTemplate(wrapper = {})
 
         fun testThatFailsBecauseOfBadTemplate() = customSetup()
@@ -334,7 +323,7 @@ class TestTemplates : FunSpec({
         )
     })
 
-    test("whenWrapperFunctionDoesNotCallTheTestTheTestWillFailIncludingTeardown", fun () = setup(object {
+    test("whenWrapperFunctionDoesNotCallTheTestTheTestWillFailIncludingTeardown", fun() = setup(object {
         val customSetup = testTemplate(wrapper = {})
 
         fun testThatFailsBecauseOfBadTemplate() = customSetup()
@@ -351,7 +340,7 @@ class TestTemplates : FunSpec({
         )
     })
 
-    test("whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder", fun () = setup(object {
+    test("whenVerifyFailsSharedSetupAndSharedTeardownRunInCorrectOrder", fun() = setup(object {
         val calls = mutableListOf<Steps>()
         fun beforeAll() = calls.add(Steps.TemplateSetup)
         fun afterAll() = calls.add(Steps.TemplateTeardown)
@@ -368,7 +357,7 @@ class TestTemplates : FunSpec({
         assertEquals(correctOrder, calls)
     })
 
-    test("whenExceptionOccursInTeardownAndInTemplateTeardownBothAreReported", fun () = setup(object {
+    test("whenExceptionOccursInTeardownAndInTemplateTeardownBothAreReported", fun() = setup(object {
         val teardownException = Exception("Oh man, not good.")
         val templateTeardownException = Exception("Now we're really off-road")
         val customSetup = testTemplate(sharedSetup = {}, sharedTeardown = { throw templateTeardownException })
@@ -388,7 +377,7 @@ class TestTemplates : FunSpec({
         assertEquals(expected, result)
     })
 
-    test("testTemplateCanBeExtended", fun () = setup(object {
+    test("testTemplateCanBeExtended", fun() = setup(object {
         val calls = mutableListOf<String>()
         val customSetup = testTemplate(
             sharedSetup = { calls.add("setup") }, sharedTeardown = { calls.add("teardown") }
@@ -405,7 +394,7 @@ class TestTemplates : FunSpec({
         assertEquals(listOf("setup", "inner setup", "inner teardown", "teardown"), calls)
     })
 
-    test("templateCanBeExtendedWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests", fun () = setup(object {
+    test("templateCanBeExtendedWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests", fun() = setup(object {
         var calls = mutableListOf<String>()
         val customSetup = testTemplate(wrapper = {
             calls.add("wrapSetup")
@@ -434,7 +423,7 @@ class TestTemplates : FunSpec({
         )
     })
 
-    test("sharedSetupCanReturnContextThatWillBeProvidedToTheTeardown", fun () = setup(object {
+    test("sharedSetupCanReturnContextThatWillBeProvidedToTheTeardown", fun() = setup(object {
         val int = Random.nextInt()
         val callArguments = mutableListOf<Any>()
         val customSetup = testTemplate(
@@ -452,7 +441,7 @@ class TestTemplates : FunSpec({
         assertEquals(listOf<Any>(int), callArguments)
     })
 
-    test("templateCanBeBuiltWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests", fun () = setup(object {
+    test("templateCanBeBuiltWithBeforeAllFunctionThatWillOnlyRunOnceForAllAttachedTests", fun() = setup(object {
         var beforeAllCount = 0
         val customSetup = testTemplate(beforeAll = { beforeAllCount++ })
         val testSuite = (1..3).map {
@@ -466,7 +455,7 @@ class TestTemplates : FunSpec({
         assertEquals(1, beforeAllCount)
     })
 
-    test("templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests", fun () = setup(object {
+    test("templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests", fun() = setup(object {
         var beforeAllCount = 0
         val testSuite: List<() -> Unit> = emptyList()
     }) {
@@ -477,7 +466,7 @@ class TestTemplates : FunSpec({
         assertEquals(0, beforeAllCount)
     })
 
-    test("templateExtendedByBeforeAllCanMergeSharedContextEasily", fun () = setup(object {
+    test("templateExtendedByBeforeAllCanMergeSharedContextEasily", fun() = setup(object {
         val parentSharedContext = "parent shared context"
         val innerBeforeAllContext = 87
 
