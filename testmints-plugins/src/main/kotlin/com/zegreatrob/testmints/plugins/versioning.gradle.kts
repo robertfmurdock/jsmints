@@ -1,11 +1,14 @@
 package com.zegreatrob.testmints.plugins
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("se.patrikerdes.use-latest-versions")
     id("com.github.ben-manes.versions")
+}
+
+repositories {
+    mavenCentral()
 }
 
 tasks {

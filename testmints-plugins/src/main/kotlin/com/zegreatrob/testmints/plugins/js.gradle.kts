@@ -1,8 +1,5 @@
 package com.zegreatrob.testmints.plugins
 
-import org.gradle.kotlin.dsl.*
-import java.util.*
-
 plugins {
     id("com.zegreatrob.testmints.plugins.multiplatform")
 }

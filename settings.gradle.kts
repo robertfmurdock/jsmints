@@ -1,6 +1,7 @@
 rootProject.name = "testmints"
 include("minassert")
 include("standard")
+include("kotest-example")
 include("async")
 include("action")
 include("action-async")

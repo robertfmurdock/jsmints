@@ -473,9 +473,10 @@ class TestMintsTest {
             @Test
             fun templateWithBeforeAllWillNotPerformBeforeAllWhenThereAreNoTests() = setup(object {
                 var beforeAllCount = 0
-                val customSetup = testTemplate(beforeAll = { beforeAllCount++ })
                 val testSuite: List<() -> Unit> = emptyList()
-            }) exercise {
+            }) {
+                testTemplate(beforeAll = { beforeAllCount++ })
+            } exercise {
                 testSuite.runSuite()
             } verify {
                 assertEquals(0, beforeAllCount)
