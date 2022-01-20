@@ -5,7 +5,6 @@ plugins {
 }
 
 kotlin {
-
     sourceSets {
         val jsMain by getting {
             dependencies {
