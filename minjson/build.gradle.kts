@@ -1,9 +1,9 @@
-import com.zegreatrob.testmints.plugins.BuildConstants
+import com.zegreatrob.jsmints.plugins.BuildConstants
 
 plugins {
-    id("com.zegreatrob.testmints.plugins.versioning")
-    id("com.zegreatrob.testmints.plugins.publish")
-    id("com.zegreatrob.testmints.plugins.js")
+    id("com.zegreatrob.jsmints.plugins.versioning")
+    id("com.zegreatrob.jsmints.plugins.publish")
+    id("com.zegreatrob.jsmints.plugins.js")
 }
 
 kotlin {

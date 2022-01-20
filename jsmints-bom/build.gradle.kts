@@ -1,6 +1,6 @@
 plugins {
     `java-platform`
-    id("com.zegreatrob.testmints.plugins.publish")
+    id("com.zegreatrob.jsmints.plugins.publish")
 }
 
 dependencies {

@@ -4,6 +4,6 @@ include("minreact")
 include("minenzyme")
 include("react-data-loader")
 include("wdio")
-include("testmints-bom")
+include("jsmints-bom")
 
-includeBuild("testmints-plugins")
+includeBuild("jsmints-plugins")

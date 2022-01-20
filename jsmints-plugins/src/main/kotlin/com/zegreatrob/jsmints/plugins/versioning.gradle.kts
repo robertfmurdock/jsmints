@@ -1,4 +1,4 @@
-package com.zegreatrob.testmints.plugins
+package com.zegreatrob.jsmints.plugins
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 

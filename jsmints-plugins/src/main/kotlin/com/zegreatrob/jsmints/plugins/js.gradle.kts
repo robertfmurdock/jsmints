@@ -1,7 +1,7 @@
-package com.zegreatrob.testmints.plugins
+package com.zegreatrob.jsmints.plugins
 
 plugins {
-    id("com.zegreatrob.testmints.plugins.multiplatform")
+    id("com.zegreatrob.jsmints.plugins.multiplatform")
 }
 
 kotlin {

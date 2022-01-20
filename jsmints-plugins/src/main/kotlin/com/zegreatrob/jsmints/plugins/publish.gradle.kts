@@ -1,4 +1,4 @@
-package com.zegreatrob.testmints.plugins
+package com.zegreatrob.jsmints.plugins
 
 import org.gradle.kotlin.dsl.*
 import java.nio.charset.Charset
@@ -13,12 +13,12 @@ repositories {
     mavenCentral()
 }
 
-group = "com.zegreatrob.testmints"
+group = "com.zegreatrob.jsmints"
 
 afterEvaluate {
     publishing.publications.withType<MavenPublication>().forEach {
         with(it) {
-            val scmUrl = "https://github.com/robertfmurdock/testmints"
+            val scmUrl = "https://github.com/robertfmurdock/jsmints"
 
             pom.name.set(project.name)
             pom.description.set(project.name)
@@ -40,8 +40,8 @@ afterEvaluate {
             }
             pom.scm {
                 url.set(scmUrl)
-                connection.set("git@github.com:robertfmurdock/testmints.git")
-                developerConnection.set("git@github.com:robertfmurdock/testmints.git")
+                connection.set("git@github.com:robertfmurdock/jsmints.git")
+                developerConnection.set("git@github.com:robertfmurdock/jsmints.git")
             }
         }
     }
