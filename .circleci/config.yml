@@ -1,22 +1,20 @@
 version: 2.1
-orbs:
-  win: circleci/windows@2.2.0
 jobs:
   build-linux:
     docker:
       - image: cimg/openjdk:17.0
         environment:
-          GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2
+          GRADLE_OPTS: -XX:+HeapDumpOnOutOfMemoryError
           _JAVA_OPTIONS: "-Xmx3g"
     steps:
       - run: "sudo apt-get update"
       - run: "sudo apt-get install libncurses5"
       - checkout
       - restore_cache:
-          key: testmints-cache-10-{{ .Branch }}
+          key: jsmints-cache-10-{{ .Branch }}
       - run: "./gradlew check release closeAndReleaseSonatypeStagingRepository --stacktrace"
       - save_cache:
-          key: testmints-cache-10-{{ .Branch }}
+          key: jsmints-cache-10-{{ .Branch }}
           paths:
             - buildSrc/build
             - "~/.gradle"
@@ -26,32 +24,6 @@ jobs:
           path: build/test-output
       - store_test_results:
           path: build/test-output
-  build-mac:
-    macos:
-      xcode: "13.1.0"
-    steps:
-      - checkout
-      - restore_cache:
-          key: testmints-mac-cache-5-{{ .Branch }}
-      - run: "git tag -d $(git describe) || echo 'no fail'"
-      - run: "./gradlew -P release-target=mac release closeAndReleaseSonatypeStagingRepository"
-      - save_cache:
-          key: testmints-mac-cache-5-{{ .Branch }}
-          paths:
-            - "~/.gradle"
-            - "~/.konan"
-            - ".gradle"
-      - store_artifacts:
-          path: build/test-output
-      - store_test_results:
-          path: build/test-output
-  build-windows:
-    executor:
-      name: win/default
-      shell: powershell.exe
-    steps:
-      - checkout
-      - run: "gradlew.bat --no-daemon -s -i mingwX64Test"
   update-libs:
     docker:
       - image: cimg/openjdk:17.0
@@ -76,7 +48,6 @@ workflows:
   build-deploy:
     jobs:
       - build-linux
-      - build-mac
   update-libs:
     triggers:
       - schedule:

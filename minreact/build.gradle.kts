@@ -18,8 +18,8 @@ kotlin {
         val jsTest by getting {
             dependencies {
                 implementation(project(":minenzyme"))
-                implementation(project(":standard"))
-                implementation(project(":minassert"))
+                implementation("com.zegreatrob.testmints:standard")
+                implementation("com.zegreatrob.testmints:minassert")
                 implementation("org.jetbrains.kotlin:kotlin-test")
             }
         }

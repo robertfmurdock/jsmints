@@ -18,9 +18,9 @@ kotlin {
 
         val jsTest by getting {
             dependencies {
-                implementation(project(":async"))
                 implementation(project(":minenzyme"))
-                implementation(project(":minassert"))
+                implementation("com.zegreatrob.testmints:async")
+                implementation("com.zegreatrob.testmints:minassert")
                 implementation("org.jetbrains.kotlin:kotlin-test")
             }
         }

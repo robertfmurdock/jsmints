@@ -1,14 +1,5 @@
-rootProject.name = "testmints"
-include("minassert")
-include("standard")
-include("kotest-example")
-include("async")
-include("action")
-include("action-async")
-include("minspy")
-include("mindiff")
+rootProject.name = "jsmints"
 include("minjson")
-include("report")
 include("minreact")
 include("minenzyme")
 include("react-data-loader")

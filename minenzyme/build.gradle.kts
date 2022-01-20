@@ -17,7 +17,7 @@ kotlin {
         }
         val jsTest by getting {
             dependencies {
-                implementation(project(":standard"))
+                implementation("com.zegreatrob.testmints:standard")
             }
         }
     }
