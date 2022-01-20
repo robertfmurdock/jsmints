@@ -1,6 +1,4 @@
-# <img src="test-mint-2.png" alt="Logo" width="100"> jsmints [![CircleCI](https://circleci.com/gh/robertfmurdock/jsmints.svg?style=svg)](https://circleci.com/gh/robertfmurdock/jsmints) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.zegreatrob.jsmints/standard/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.zegreatrob/jsmints)
-
-# JsMints
+# jsmints [![CircleCI](https://circleci.com/gh/robertfmurdock/jsmints.svg?style=svg)](https://circleci.com/gh/robertfmurdock/jsmints) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.zegreatrob.jsmints/standard/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.zegreatrob/jsmints)
 
 These are libraries full of sugar for working with Kotlin JS.
 
