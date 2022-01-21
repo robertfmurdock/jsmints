@@ -14,9 +14,7 @@ val funny = tmFC<Funny> { (first, second) ->
     }
 }
 
-data class Funny(val first: Int, val second: String) : DataProps<Funny> {
-    override val component = funny
-}
+data class Funny(val first: Int, val second: String) : DataPropsBind<Funny>(funny)
 
 class ReactFunctionTest {
 

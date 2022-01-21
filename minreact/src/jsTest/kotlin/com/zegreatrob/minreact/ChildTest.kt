@@ -13,9 +13,7 @@ val boringComponent = tmFC<BoringComponent> { props ->
     children(props)
 }
 
-data class BoringComponent(var content: String) : DataProps<BoringComponent> {
-    override val component = boringComponent
-}
+data class BoringComponent(var content: String) : DataPropsBind<BoringComponent>(boringComponent)
 
 class ChildTest {
 
