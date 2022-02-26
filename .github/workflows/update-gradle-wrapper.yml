@@ -1,0 +1,32 @@
+name: Update Gradle Wrapper
+
+on:
+  schedule:
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+jobs:
+  update-gradle-wrapper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '25'
+      - uses: burrunan/gradle-cache-action@v1
+        name: Update Deps
+        with:
+          gradle-version: current
+          arguments: wrapper --distribution-type all
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: "create-pull-request/${{github.job}}/${{github.run_id}}"
+          commit-message: "[patch] ${{github.workflow}}"
+          token: ${{ secrets.TESTMINTS_PAT }}
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v1
+        with:
+          token: ${{ secrets.TESTMINTS_PAT }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: rebase
