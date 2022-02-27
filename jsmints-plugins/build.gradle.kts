@@ -9,7 +9,7 @@ repositories {
 plugins {
     id("org.jetbrains.kotlin.jvm").version("1.6.10")
     `kotlin-dsl`
-    id("com.github.ben-manes.versions") version("0.39.0")
+    id("com.github.ben-manes.versions") version("0.42.0")
     id("se.patrikerdes.use-latest-versions") version("0.2.18")
 }
 
@@ -20,6 +20,7 @@ dependencies {
     implementation(kotlin("gradle-plugin", kotlinVersion))
     implementation("com.github.ben-manes:gradle-versions-plugin:0.42.0")
     implementation("se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18")
+    implementation("org.jmailen.gradle:kotlinter-gradle:3.9.0")
 }
 
 tasks {

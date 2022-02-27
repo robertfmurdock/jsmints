@@ -60,5 +60,4 @@ class JsonExtTest {
     } verify { result: String? ->
         result.assertIsEqualTo(null)
     }
-
 }

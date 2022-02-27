@@ -1,7 +1,12 @@
 package com.zegreatrob.minreact
 
 import org.w3c.dom.Node
-import react.*
+import react.ChildrenBuilder
+import react.ElementType
+import react.Props
+import react.Ref
+import react.key
+import react.ref
 
 fun <P : Props> ChildrenBuilder.child(
     clazz: ElementType<P>,

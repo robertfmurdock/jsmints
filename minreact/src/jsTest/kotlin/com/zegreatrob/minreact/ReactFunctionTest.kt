@@ -32,5 +32,4 @@ class ReactFunctionTest {
                 listOf("$expectedFirst", expectedSecond)
             )
     }
-
 }

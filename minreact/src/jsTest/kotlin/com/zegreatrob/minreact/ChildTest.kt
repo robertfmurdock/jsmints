@@ -45,5 +45,4 @@ class ChildTest {
             it.dataprops().children.assertIsEqualTo("Goodbye!")
         }
     }
-
 }

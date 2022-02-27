@@ -50,7 +50,6 @@ class WebdriverElement(
     suspend fun waitToExist(): Unit = log(::waitToExist) {
         element().waitForExist(json()).await()
     }
-
 }
 
 private fun String.defaultElementFinder(): suspend () -> Element = {

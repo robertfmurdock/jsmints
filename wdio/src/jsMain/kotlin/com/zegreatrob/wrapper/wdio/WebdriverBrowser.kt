@@ -1,6 +1,9 @@
 package com.zegreatrob.wrapper.wdio
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.asPromise
+import kotlinx.coroutines.async
+import kotlinx.coroutines.await
 import org.w3c.dom.url.URL
 import kotlin.js.Promise
 import kotlin.js.json
@@ -81,9 +84,8 @@ object WebdriverBrowser : BrowserLoggingSyntax {
                             window.location.pathname = loc
                         }
                         }, location);
-                    """
+            """
         ).unsafeCast<Promise<Unit>>()
             .await()
     }
-
 }

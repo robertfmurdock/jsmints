@@ -3,7 +3,13 @@ package com.zegreatrob.minenzyme
 import com.zegreatrob.minreact.DataProps
 import com.zegreatrob.minreact.DataPropsBridge
 import com.zegreatrob.minreact.TMFC
-import react.*
+import react.ChildrenBuilder
+import react.ElementType
+import react.Props
+import react.RBuilder
+import react.RHandler
+import react.buildElement
+import react.create
 import kotlin.js.Json
 import kotlin.js.json
 
@@ -67,13 +73,15 @@ fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: Str
         )
 }
 
-fun <T> ShallowWrapper<T>.findByClass(className: String) = find<T>(".${className}")
-fun <T> ShallowWrapper<T>.findInputByName(inputName: String) = find<T>("input[name='${inputName}']")
+fun <T> ShallowWrapper<T>.findByClass(className: String) = find<T>(".$className")
+fun <T> ShallowWrapper<T>.findInputByName(inputName: String) = find<T>("input[name='$inputName']")
 
 fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandler<P> = {}) =
-    enzyme.shallow(buildElement {
-        child(reactFunction, props, handler)
-    })
+    enzyme.shallow(
+        buildElement {
+            child(reactFunction, props, handler)
+        }
+    )
 
 fun shallow(handler: RBuilder.() -> Unit) = enzyme.shallow(buildElement(handler))
 

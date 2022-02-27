@@ -22,14 +22,16 @@ class DataLoaderTest {
     fun willStartDataPullAndTransitionThroughNormalStatesCorrectly() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
     }) exercise {
-        shallow(DataLoader(
-            getDataAsync = { "DATA" },
-            errorData = { "ERROR" },
-            scope = exerciseScope
-        ) { state ->
-            allRenderedStates.add(state)
-            div { +"state: $state" }
-        })
+        shallow(
+            DataLoader(
+                getDataAsync = { "DATA" },
+                errorData = { "ERROR" },
+                scope = exerciseScope
+            ) { state ->
+                allRenderedStates.add(state)
+                div { +"state: $state" }
+            }
+        )
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
@@ -43,10 +45,12 @@ class DataLoaderTest {
             withContext(exerciseScope.coroutineContext) { throw Exception("NOPE") }
         }
     }) exercise {
-        shallow(DataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
-            allRenderedStates.add(state)
-            div { +"state: $state" }
-        })
+        shallow(
+            DataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
+                allRenderedStates.add(state)
+                div { +"state: $state" }
+            }
+        )
     } verify {
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
@@ -56,20 +60,22 @@ class DataLoaderTest {
     @Test
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
-        val wrapper = shallow(DataLoader({ it }, { null }, exerciseScope) { state ->
-            allRenderedStates.add(state)
-            div {
-                whenResolvedSuccessfully(state) { tools ->
-                    button { this.onClick = { tools.reloadData() } }
+        val wrapper = shallow(
+            DataLoader({ it }, { null }, exerciseScope) { state ->
+                allRenderedStates.add(state)
+                div {
+                    whenResolvedSuccessfully(state) { tools ->
+                        button { this.onClick = { tools.reloadData() } }
+                    }
                 }
             }
-        })
+        )
     }) exercise {
         wrapper.find<Props>("button").simulate("click")
     } verify {
         allRenderedStates.map { it::class }.assertIsEqualTo(
-            listOf(EmptyState::class, PendingState::class, ResolvedState::class)
-                    + listOf(EmptyState::class, PendingState::class, ResolvedState::class)
+            listOf(EmptyState::class, PendingState::class, ResolvedState::class) +
+                listOf(EmptyState::class, PendingState::class, ResolvedState::class)
         )
     }
 

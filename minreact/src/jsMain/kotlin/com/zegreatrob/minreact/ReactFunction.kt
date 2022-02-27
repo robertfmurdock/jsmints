@@ -1,10 +1,16 @@
 package com.zegreatrob.minreact
 
 import com.zegreatrob.minreact.external.corejs.objectAssign
-import react.*
+import react.Children
+import react.ChildrenBuilder
+import react.ElementType
+import react.FC
+import react.Props
+import react.PropsWithChildren
+import react.create
 
 inline fun <reified P : DataProps<P>> tmFC(crossinline function: ChildrenBuilder.(P) -> Unit):
-        ElementType<DataPropsBridge<P>> = FC { props: DataPropsBridge<P> ->
+    ElementType<DataPropsBridge<P>> = FC { props: DataPropsBridge<P> ->
     val newProps = ensureKotlinClassProps(props, P::class.js)
     +(newProps.unsafeCast<Props>())
     function(newProps)

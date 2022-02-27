@@ -25,5 +25,4 @@ data class DataLoaderTools(val scope: CoroutineScope, val reloadData: ReloadFunc
         else
             errorResult(throwable).let(onWorkComplete)
     }
-
 }

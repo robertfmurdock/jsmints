@@ -2,6 +2,7 @@ package com.zegreatrob.jsmints.plugins
 
 plugins {
     id("com.zegreatrob.jsmints.plugins.multiplatform")
+    id("org.jmailen.kotlinter")
 }
 
 kotlin {

@@ -15,7 +15,6 @@ class WebdriverElementArray(
 
     suspend fun count(): Int = log(::count) { all().count() }
     suspend fun first(): WebdriverElement = log(::first) { all().first() }
-
 }
 
 private fun String.defaultArrayFinder(): suspend () -> List<WebdriverElement> = {
