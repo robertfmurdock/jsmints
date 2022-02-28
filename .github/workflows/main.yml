@@ -9,7 +9,6 @@ jobs:
   build-job:
     name: "Build"
     runs-on: ubuntu-latest
-    env:
     steps:
       - run: cat /etc/hosts
       - uses: actions/checkout@v2
