@@ -59,7 +59,7 @@ tasks {
     }
 
     val closeAndReleaseSonatypeStagingRepository by getting {
-        mustRunAfter("publishToSonatype")
+        mustRunAfter("publish")
     }
 }
 
