@@ -5,6 +5,7 @@ import org.ajoberstar.gradle.git.release.semver.ChangeScope
 
 plugins {
     id("de.gliderpilot.semantic-release") version "1.4.2"
+    id("net.rdrei.android.buildtimetracker") version "0.11.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     id("com.github.sghill.distribution-sha") version "0.4.0"
     `maven-publish`
@@ -90,3 +91,30 @@ val macTargets = listOf(
 fun PublicationContainer.nonMacPublications() = matching { !macTargets.contains(it.name) }
 
 fun PublicationContainer.jvmPublication(): NamedDomainObjectSet<Publication> = matching { it.name == "jvm" }
+
+
+buildtimetracker {
+    reporters {
+        register("csv") {
+            options.run {
+                put("output", "${buildDir.absolutePath}/times.csv")
+                put("append", "true")
+                put("header", "false")
+            }
+        }
+
+        register("summary") {
+            options.run {
+                put("ordered", "false")
+                put("threshold", "50")
+                put("header", "false")
+            }
+        }
+
+        register("csvSummary") {
+            options.run {
+                put("csv", "${buildDir.absolutePath}/times.csv")
+            }
+        }
+    }
+}
