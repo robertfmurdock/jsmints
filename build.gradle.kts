@@ -1,4 +1,3 @@
-
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
@@ -57,6 +56,10 @@ tasks {
         "release" {
             enabled = false
         }
+    }
+
+    val closeAndReleaseSonatypeStagingRepository by getting {
+        mustRunAfter("release")
     }
 }
 

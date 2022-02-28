@@ -27,11 +27,7 @@ jobs:
       - uses: burrunan/gradle-cache-action@v1
         name: Build
         with:
-          arguments: release check
-      - uses: burrunan/gradle-cache-action@v1
-        name: Build
-        with:
-          arguments: closeAndReleaseSonatypeStagingRepository
+          arguments: release check closeAndReleaseSonatypeStagingRepository
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
