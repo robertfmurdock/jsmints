@@ -1,4 +1,4 @@
-name: Gradle Update
+name: Gradle Libraries Update
 on:
   schedule:
     - cron: "0 15 * * *"
