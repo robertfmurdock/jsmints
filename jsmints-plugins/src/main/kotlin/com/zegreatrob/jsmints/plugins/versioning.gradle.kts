@@ -1,6 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import gradle.kotlin.dsl.accessors._4ad077ad74816558e52d7069eb18a2f7.publish
 
 plugins {
     id("se.patrikerdes.use-latest-versions")
@@ -12,6 +13,7 @@ repositories {
 }
 
 tasks {
+
     withType<DependencyUpdatesTask> {
         checkForGradleUpdate = true
         outputFormatter = "json"
