@@ -16,12 +16,6 @@ repositories {
 group = "com.zegreatrob.jsmints"
 
 afterEvaluate {
-
-    tasks {
-        findByPath("::closeAndReleaseSonatypeStagingRepository")!!
-            .dependsOn(publish)
-    }
-
     publishing.publications.withType<MavenPublication>().forEach {
         with(it) {
             val scmUrl = "https://github.com/robertfmurdock/jsmints"
@@ -69,6 +63,8 @@ signing {
 
 
 tasks {
+    publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
+
     val javadocJar by creating(Jar::class) {
         archiveClassifier.set("javadoc")
         from("${rootDir.absolutePath}/javadocs")
