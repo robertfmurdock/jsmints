@@ -6,6 +6,7 @@
 
 ![Latest Release](https://img.shields.io/github/v/release/robertfmurdock/jsmints)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/robertfmurdock/jsmints)
+![Testspace tests](https://img.shields.io/testspace/passed/robertfmurdock/robertfmurdock:jsmints/master)
 
 These are libraries full of sugar for working with Kotlin JS.
 
