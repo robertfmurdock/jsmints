@@ -35,7 +35,7 @@ jobs:
       - name: Push result to Testspace server
         if: always()
         run: |
-          testspace */**/build/test-results/**/*.xml
+          testspace **/build/test-results/**/*.xml
       - uses: burrunan/gradle-cache-action@v1
         name: Collect Test Results
         with:
