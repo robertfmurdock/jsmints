@@ -32,13 +32,18 @@ jobs:
         name: Build
         with:
           arguments: release check
+      - name: Push result to Testspace server
+        if: always()
+        run: |
+          testspace */**/build/test-results/**/*.xml
+      - uses: burrunan/gradle-cache-action@v1
+        name: Collect Test Results
+        with:
+          execution-only-caches: true
+          arguments: collectResults
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
           name: test-output
           path: |
             build/test-output/
-      - name: Push result to Testspace server
-        if: always()
-        run: |
-          testspace */**/build/test-results/**/*.xml

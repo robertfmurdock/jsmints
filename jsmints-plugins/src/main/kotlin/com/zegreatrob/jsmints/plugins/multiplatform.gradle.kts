@@ -2,6 +2,7 @@ package com.zegreatrob.jsmints.plugins
 
 plugins {
     kotlin("multiplatform")
+    id("com.zegreatrob.jsmints.plugins.reports")
 }
 
 repositories {
