@@ -5,6 +5,7 @@ import com.zegreatrob.minenzyme.shallow
 import com.zegreatrob.testmints.async.ScopeMint
 import com.zegreatrob.testmints.async.asyncSetup
 import com.zegreatrob.testmints.async.invoke
+import csstype.ClassName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
@@ -103,7 +104,7 @@ class DataLoaderTest {
             val onClick = { tools.performAsyncWork(::collectThreeValuesFromChannel, { throw it }, { setValues(it) }) }
             button { this.onClick = { onClick() } }
             div {
-                className = "work-complete-div"
+                className = ClassName("work-complete-div")
                 if (buttonClickValues != null)
                     +"Work Complete ${buttonClickValues.joinToString(separator = ", ")}"
             }
