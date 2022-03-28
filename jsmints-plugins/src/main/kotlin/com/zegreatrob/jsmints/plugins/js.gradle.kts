@@ -16,6 +16,6 @@ kotlin {
 }
 
 dependencies {
-    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.322-kotlin-1.6.10"))
+    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.323-kotlin-1.6.10"))
     "commonMainImplementation"(platform("com.zegreatrob.testmints:testmints-bom:7.0.0"))
 }
