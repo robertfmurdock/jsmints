@@ -1,5 +1,5 @@
 package com.zegreatrob.jsmints.plugins
 
 object BuildConstants {
-    const val kotlinVersion = "1.6.10"
+    const val kotlinVersion = "1.6.20"
 }
