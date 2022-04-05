@@ -3,6 +3,7 @@ package com.zegreatrob.minenzyme
 import com.zegreatrob.minreact.DataProps
 import com.zegreatrob.minreact.DataPropsBridge
 import com.zegreatrob.minreact.TMFC
+import com.zegreatrob.minreact.ensureKotlinClassProps
 import react.ChildrenBuilder
 import react.ElementType
 import react.Props
@@ -58,9 +59,9 @@ external interface ShallowWrapper<T> {
     fun shallow(): ShallowWrapper<T>
 }
 
-fun <P : DataProps<P>> ShallowWrapper<DataPropsBridge<P>>.dataprops(): P {
-    return props().unsafeCast<P>()
-}
+inline fun <reified P : DataProps<P>> ShallowWrapper<DataPropsBridge<P>>.dataprops(): P =
+    ensureKotlinClassProps(props(), P::class.js)
+        .unsafeCast<P>()
 
 fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: String) {
     return findInputByName(fieldName)
