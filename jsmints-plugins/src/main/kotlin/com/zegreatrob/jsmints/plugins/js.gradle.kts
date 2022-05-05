@@ -24,6 +24,10 @@ dependencies {
     implementation(platform("com.zegreatrob.testmints:testmints-bom:7.3.3"))
 }
 
+ktlint {
+    version.set("0.45.2")
+}
+
 tasks.withType(KotlinJsIrLink::class).configureEach {
     outputs.cacheIf { true }
 }

@@ -47,9 +47,9 @@ class DataLoaderTest {
     }) exercise {
         shallow(
             DataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
-            allRenderedStates.add(state)
-            div { +"state: $state" }
-        }
+                allRenderedStates.add(state)
+                div { +"state: $state" }
+            }
         )
     } verify {
         allRenderedStates.assertIsEqualTo(
