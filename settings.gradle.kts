@@ -26,6 +26,6 @@ if (isCiServer) {
 
 buildCache {
     local {
-        isEnabled = !isCiServer
+        isEnabled = true
     }
 }
