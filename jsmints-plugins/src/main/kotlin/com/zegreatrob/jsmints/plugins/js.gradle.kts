@@ -3,7 +3,7 @@ package com.zegreatrob.jsmints.plugins
 plugins {
     kotlin("js")
     id("com.zegreatrob.jsmints.plugins.reports")
-    id("org.jmailen.kotlinter")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 repositories {

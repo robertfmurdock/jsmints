@@ -20,7 +20,7 @@ dependencies {
     implementation(kotlin("gradle-plugin", kotlinVersion))
     implementation("com.github.ben-manes:gradle-versions-plugin:0.42.0")
     implementation("se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18")
-    implementation("org.jmailen.gradle:kotlinter-gradle:3.10.0")
+    implementation("org.jlleitschuh.gradle:ktlint-gradle:10.3.0")
 }
 
 tasks {
