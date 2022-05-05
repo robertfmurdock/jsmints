@@ -27,11 +27,3 @@ kotlin {
         }
     }
 }
-
-tasks {
-    val jvmTest by getting(Test::class) {
-        systemProperty("junit.jupiter.extensions.autodetection.enabled", "true")
-        useJUnitPlatform()
-    }
-
-}

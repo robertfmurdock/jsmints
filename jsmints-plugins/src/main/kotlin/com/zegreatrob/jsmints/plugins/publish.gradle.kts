@@ -61,45 +61,6 @@ signing {
     sign(publishing.publications)
 }
 
-
 tasks {
     publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
-
-    val javadocJar by creating(Jar::class) {
-        archiveClassifier.set("javadoc")
-        from("${rootDir.absolutePath}/javadocs")
-    }
-    publishing.publications {
-        jvmPublication().withType<MavenPublication> {
-            artifact(javadocJar)
-        }
-
-        val publishTasks = withType<AbstractPublishToMaven>()
-        val nonMacPublications = nonMacPublications()
-        if (isMacRelease()) {
-            nonMacPublications.withType<MavenPublication> { publishTasks.disableTaskForPublication(this) }
-        }
-    }
 }
-
-fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
-
-fun Project.isMacRelease() = findProperty("release-target") == "mac"
-
-fun TaskCollection<AbstractPublishToMaven>.disableTaskForPublication(
-    targetPub: MavenPublication
-) {
-    matching { it.publication == targetPub }
-        .configureEach { this.onlyIf { false } }
-}
-
-fun PublicationContainer.nonMacPublications() = matching {
-    it.name !in listOf(
-        "macosX64",
-        "iosX64",
-        "iosArm32",
-        "iosArm64"
-    )
-}
-
-fun PublicationContainer.jvmPublication(): NamedDomainObjectSet<Publication> = matching { it.name == "jvm" }

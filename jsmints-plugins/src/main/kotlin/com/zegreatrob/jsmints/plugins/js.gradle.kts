@@ -1,21 +1,21 @@
 package com.zegreatrob.jsmints.plugins
 
 plugins {
-    id("com.zegreatrob.jsmints.plugins.multiplatform")
+    kotlin("js")
+    id("com.zegreatrob.jsmints.plugins.reports")
     id("org.jmailen.kotlinter")
 }
 
+repositories {
+    mavenCentral()
+}
+
 kotlin {
-    targets {
-        js {
-            nodejs {
-                useCommonJs()
-            }
-        }
-    }
+    js { nodejs { useCommonJs() } }
 }
 
 dependencies {
-    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.333"))
-    "commonMainImplementation"(platform("com.zegreatrob.testmints:testmints-bom:7.3.3"))
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.1"))
+    implementation(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.333"))
+    implementation(platform("com.zegreatrob.testmints:testmints-bom:7.3.3"))
 }
