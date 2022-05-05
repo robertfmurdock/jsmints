@@ -1,6 +1,8 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
+import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
     kotlin("js")
@@ -22,6 +24,12 @@ dependencies {
     implementation(platform("com.zegreatrob.testmints:testmints-bom:7.3.3"))
 }
 
+tasks.withType(KotlinJsIrLink::class).configureEach {
+    outputs.cacheIf { true }
+}
+tasks.withType(Kotlin2JsCompile::class).configureEach {
+    outputs.cacheIf { true }
+}
 tasks.withType(KotlinJsTest::class).configureEach {
     outputs.cacheIf { true }
 }
