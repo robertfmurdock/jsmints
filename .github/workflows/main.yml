@@ -28,19 +28,18 @@ jobs:
       - uses: c-hive/gha-yarn-cache@v2
         with:
           directory: kotlin-js-store
-      - uses: burrunan/gradle-cache-action@v1
-        name: Build
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          arguments: release check
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - name: Build
+        run: ./gradlew release check --scan
       - name: Push result to Testspace server
         if: always()
         run: |
           testspace $(find . -path *test-results* -name *.xml)
-      - uses: burrunan/gradle-cache-action@v1
-        name: Collect Test Results
-        with:
-          execution-only-caches: true
-          arguments: collectResults
+      - name: Collect Test Results
+        run: ./gradlew collectResults
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
