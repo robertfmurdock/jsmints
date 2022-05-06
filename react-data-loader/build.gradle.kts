@@ -4,14 +4,24 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.js")
 }
 
-dependencies {
-    implementation(project(":minreact"))
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+kotlin {
+    sourceSets {
+        val jsMain by getting {
+            dependencies {
+                implementation(project(":minreact"))
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+            }
+        }
 
-    testImplementation(project(":minenzyme"))
-    testImplementation("com.zegreatrob.testmints:async")
-    testImplementation("com.zegreatrob.testmints:minassert")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+        val jsTest by getting {
+            dependencies {
+                implementation(project(":minenzyme"))
+                implementation("com.zegreatrob.testmints:async")
+                implementation("com.zegreatrob.testmints:minassert")
+                implementation("org.jetbrains.kotlin:kotlin-test")
+            }
+        }
+    }
 }

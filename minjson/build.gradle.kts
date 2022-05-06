@@ -6,11 +6,21 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.js")
 }
 
-dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildConstants.kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-test:${BuildConstants.kotlinVersion}")
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-stdlib:${BuildConstants.kotlinVersion}")
+                implementation("org.jetbrains.kotlin:kotlin-test:${BuildConstants.kotlinVersion}")
+            }
+        }
 
-    testImplementation("com.zegreatrob.testmints:standard")
-    testImplementation("com.zegreatrob.testmints:minassert")
-    testImplementation("org.jetbrains.kotlin:kotlin-test:${BuildConstants.kotlinVersion}")
+        val commonTest by getting {
+            dependencies {
+                implementation("com.zegreatrob.testmints:standard")
+                implementation("com.zegreatrob.testmints:minassert")
+                implementation("org.jetbrains.kotlin:kotlin-test:${BuildConstants.kotlinVersion}")
+            }
+        }
+    }
 }

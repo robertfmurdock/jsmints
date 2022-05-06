@@ -61,14 +61,14 @@ class DataLoaderTest {
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
         val wrapper = shallow(
-            DataLoader({ it }, { null }, exerciseScope, { state ->
+            DataLoader({ it }, { null }, exerciseScope) { state ->
                 allRenderedStates.add(state)
                 div {
                     whenResolvedSuccessfully(state) { tools ->
                         button { this.onClick = { tools.reloadData() } }
                     }
                 }
-            })
+            }
         )
     }) exercise {
         wrapper.find<Props>("button").simulate("click")
@@ -84,11 +84,11 @@ class DataLoaderTest {
         val channel = Channel<Int>()
 
         val wrapper = shallow(
-            DataLoader({ tools -> tools }, { null }, exerciseScope, { state ->
+            DataLoader({ tools -> tools }, { null }, exerciseScope) { state ->
                 div {
                     whenResolvedSuccessfully(state) { tools -> buttonWithAsyncAction(tools) }
                 }
-            })
+            }
         )
 
         suspend fun collectThreeValuesFromChannel(): List<Int> {

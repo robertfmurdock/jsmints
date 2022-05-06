@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
-    kotlin("js")
+    kotlin("multiplatform")
     id("com.zegreatrob.jsmints.plugins.reports")
     id("org.jlleitschuh.gradle.ktlint")
 }
@@ -19,9 +19,9 @@ kotlin {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.1"))
-    implementation(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.333"))
-    implementation(platform("com.zegreatrob.testmints:testmints-bom:7.3.3"))
+    "commonMainImplementation"(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.1"))
+    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.334"))
+    "commonMainImplementation"(platform("com.zegreatrob.testmints:testmints-bom:7.3.3"))
 }
 
 ktlint {
