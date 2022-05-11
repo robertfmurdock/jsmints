@@ -20,7 +20,7 @@ kotlin {
 
 dependencies {
     "commonMainImplementation"(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.1"))
-    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:0.0.1-pre.334"))
+    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.336"))
     "commonMainImplementation"(platform("com.zegreatrob.testmints:testmints-bom:7.3.3"))
 }
 
