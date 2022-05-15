@@ -1,7 +1,10 @@
 package com.zegreatrob.jsmints.plugins
 
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
+import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmCachesSetup
+import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinPackageJsonTask
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
+import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
@@ -28,6 +31,15 @@ ktlint {
     version.set("0.45.2")
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.targets.js.npm.PublicPackageJsonTask::class).configureEach {
+    outputs.cacheIf { true }
+}
+tasks.withType(KotlinNpmCachesSetup::class).configureEach {
+    outputs.cacheIf { true }
+}
+tasks.withType(KotlinPackageJsonTask::class).configureEach {
+    outputs.cacheIf { true }
+}
 tasks.withType(KotlinJsIrLink::class).configureEach {
     outputs.cacheIf { true }
 }
@@ -41,5 +53,11 @@ tasks.withType(org.gradle.api.tasks.bundling.Jar::class).configureEach {
     outputs.cacheIf { true }
 }
 tasks.withType(org.gradle.jvm.tasks.Jar::class).configureEach {
+    outputs.cacheIf { true }
+}
+tasks.withType(KotlinJvmTest::class).configureEach {
+    outputs.cacheIf { true }
+}
+tasks.withType(org.jetbrains.kotlin.gradle.plugin.mpp.TransformKotlinGranularMetadata::class).configureEach {
     outputs.cacheIf { true }
 }
