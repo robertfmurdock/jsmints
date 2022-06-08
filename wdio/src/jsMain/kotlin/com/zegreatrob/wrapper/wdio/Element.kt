@@ -17,4 +17,6 @@ external class Element {
     fun clearValue(): Promise<Unit>
     fun keys(keystrokes: String): Promise<Unit>
     fun setValue(value: String): Promise<Unit>
+    fun selectByIndex(index: Int): Promise<Unit>
+    fun selectByVisibleText(text: String): Promise<Unit>
 }

@@ -41,6 +41,8 @@ class WebdriverElement(
     suspend fun isEnabled(): Boolean = log(::isEnabled) { element().isEnabled().await() }
     suspend fun isDisplayed(): Boolean = log(::isDisplayed) { element().isDisplayed().await() }
     suspend fun isSelected(): Boolean = log(::isSelected) { element().isSelected().await() }
+    suspend fun selectByIndex(index: Int): Unit = log(::selectByIndex) { element().selectByIndex(index).await() }
+    suspend fun selectByVisibleText(text: String): Unit = log(::selectByVisibleText) { element().selectByVisibleText(text).await() }
     suspend fun setValue(value: String): Unit = log(::setValue) { element().setValue(value).await() }
     suspend fun clearSetValue(value: String): Unit = log(::clearSetValue) {
         element().clearValue().await()
