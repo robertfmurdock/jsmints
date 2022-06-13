@@ -12,6 +12,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                api("org.jetbrains.kotlinx:atomicfu:0.17.3")
+                api("org.jetbrains.kotlin:atomicfu:1.6.21")
             }
         }
 
