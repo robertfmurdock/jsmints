@@ -10,7 +10,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                api("org.jetbrains.kotlinx:atomicfu:0.17.3")
+                api("org.jetbrains.kotlinx:atomicfu:0.18.0")
                 api("org.jetbrains.kotlin:atomicfu:1.6.21")
                 implementation("com.soywiz.korlibs.klock:klock:2.7.0")
                 implementation("io.github.microutils:kotlin-logging:2.1.23")
