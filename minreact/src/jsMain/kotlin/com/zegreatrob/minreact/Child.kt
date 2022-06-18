@@ -1,5 +1,6 @@
 package com.zegreatrob.minreact
 
+import kotlinx.js.JsoDsl
 import org.w3c.dom.Node
 import react.ChildrenBuilder
 import react.ElementType
@@ -34,6 +35,13 @@ fun <P : DataProps<P>> ChildrenBuilder.child(
     +dataProps.create {
         key?.let { this.key = it }
         ref?.let { this.ref = ref }
+        handler()
+    }
+}
+
+fun <P> ChildrenBuilder.add(dataProps: DataProps<in P>, handler: @JsoDsl P.() -> Unit = {})
+        where P : DataProps<in P>, P : Props, P : ChildrenBuilder {
+    +dataProps.create {
         handler()
     }
 }

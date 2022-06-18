@@ -1,17 +1,24 @@
 package com.zegreatrob.minreact
 
-import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.minenzyme.dataprops
-import com.zegreatrob.minenzyme.shallow
+import com.zegreatrob.minassert.assertIsNotEqualTo
+import com.zegreatrob.minreact.external.testinglibrary.react.getByText
+import com.zegreatrob.minreact.external.testinglibrary.react.render
+import com.zegreatrob.minreact.external.testinglibrary.react.screen
 import com.zegreatrob.testmints.setup
 import react.FC
 import react.Props
+import react.create
 import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.label
+import react.dom.html.ReactHTML.span
 import react.key
 import kotlin.test.Test
 
 val boringComponent = tmFC<BoringComponent> { props ->
-    children(props)
+    label {
+        +props.content
+        children(props)
+    }
 }
 
 data class BoringComponent(var content: String) : DataPropsBind<BoringComponent>(boringComponent)
@@ -22,29 +29,23 @@ class ChildTest {
     fun childSugarWillCorrectlyApplyKeyAndHandler() = setup(object {
         val outerComponent = FC<Props> {
             div {
-                child(BoringComponent("11"), key = "1") {
-                    +"Hello!"
+                add(BoringComponent("11")) {
+                    key = "1"
+                    span { +"Hello!" }
                 }
-                child(BoringComponent("22"), key = "2") {
-                    +"Goodbye!"
+                add(BoringComponent("22")) {
+                    key = "2"
+                    span { +"Goodbye!" }
                 }
             }
         }
     }) exercise {
-        shallow(outerComponent)
-    } verify { result ->
-        val innerComponents = result.find(boringComponent)
-
-        innerComponents.at(0).let {
-            it.key().assertIsEqualTo("1")
-            it.dataprops().content.assertIsEqualTo("11")
-            it.dataprops().children.assertIsEqualTo("Hello!")
-        }
-        innerComponents.at(1).let {
-            it.key().assertIsEqualTo("2")
-            it.dataprops().content.assertIsEqualTo("22")
-            it.dataprops().children.assertIsEqualTo("Goodbye!")
-        }
+        render(outerComponent.create {})
+    } verify {
+        getByText(screen.getByText("11"), "Hello!")
+            .assertIsNotEqualTo(null)
+        getByText(screen.getByText("22"), "Goodbye!")
+            .assertIsNotEqualTo(null)
     }
 
     @Test
@@ -53,28 +54,20 @@ class ChildTest {
             div {
                 +BoringComponent("11").create {
                     key = "1"
-                    +"Hello!"
+                    span { +"Hello!" }
                 }
                 +BoringComponent("22").create {
                     key = "2"
-                    +"Goodbye!"
+                    span { +"Goodbye!" }
                 }
             }
         }
     }) exercise {
-        shallow(outerComponent)
-    } verify { result ->
-        val innerComponents = result.find(boringComponent)
-
-        innerComponents.at(0).let {
-            it.key().assertIsEqualTo("1")
-            it.dataprops().content.assertIsEqualTo("11")
-            it.dataprops().children.assertIsEqualTo("Hello!")
-        }
-        innerComponents.at(1).let {
-            it.key().assertIsEqualTo("2")
-            it.dataprops().content.assertIsEqualTo("22")
-            it.dataprops().children.assertIsEqualTo("Goodbye!")
-        }
+        render(outerComponent.create {})
+    } verify {
+        getByText(screen.getByText("11"), "Hello!")
+            .assertIsNotEqualTo(null)
+        getByText(screen.getByText("22"), "Goodbye!")
+            .assertIsNotEqualTo(null)
     }
 }

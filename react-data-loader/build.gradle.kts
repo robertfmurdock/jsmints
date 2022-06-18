@@ -5,6 +5,21 @@ plugins {
 }
 
 kotlin {
+    js {
+        compilations.named("test") {
+            packageJson {
+                customField("mocha", mapOf("require" to "global-jsdom/register"))
+            }
+            nodejs {
+                testTask {
+                    useMocha {
+                        timeout = "20s"
+                    }
+                }
+            }
+        }
+    }
+
     sourceSets {
         val jsMain by getting {
             dependencies {
@@ -19,7 +34,10 @@ kotlin {
 
         val jsTest by getting {
             dependencies {
-                implementation(project(":minenzyme"))
+                implementation(npm("@testing-library/react", "13.1.1"))
+                implementation(npm("@testing-library/user-event", "14.1.1"))
+                implementation(npm("jsdom", "19.0.0"))
+                implementation(npm("global-jsdom", "8.4.0"))
                 implementation("com.zegreatrob.testmints:async")
                 implementation("com.zegreatrob.testmints:minassert")
                 implementation("org.jetbrains.kotlin:kotlin-test")

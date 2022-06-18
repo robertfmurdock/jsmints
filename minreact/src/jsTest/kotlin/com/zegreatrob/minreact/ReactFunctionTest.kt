@@ -1,7 +1,8 @@
 package com.zegreatrob.minreact
 
-import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.minenzyme.shallow
+import com.zegreatrob.minassert.assertIsNotEqualTo
+import com.zegreatrob.minreact.external.testinglibrary.react.render
+import com.zegreatrob.minreact.external.testinglibrary.react.screen
 import com.zegreatrob.testmints.setup
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
@@ -23,13 +24,11 @@ class ReactFunctionTest {
         val expectedFirst = 3948
         val expectedSecond = "9922"
     }) exercise {
-        shallow(Funny(expectedFirst, expectedSecond))
-    } verify { result ->
-        result.find<dynamic>("span")
-            .map { it.text() }
-            .toList()
-            .assertIsEqualTo(
-                listOf("$expectedFirst", expectedSecond)
-            )
+        render(Funny(expectedFirst, expectedSecond).create())
+    } verify {
+        screen.getByText("$expectedFirst")
+            .assertIsNotEqualTo(null)
+        screen.getByText(expectedSecond)
+            .assertIsNotEqualTo(null)
     }
 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import react.ChildrenBuilder
 import react.StateSetter
 import react.useState
+import kotlin.js.Date
 
 typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
@@ -34,6 +35,8 @@ private val cachedComponent = tmFC<DataLoader<Any>> { props ->
     val (state, setState) = useState<DataLoadState<Any>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")
 
+    println(Date().toTimeString() + " render")
+
     if (state is EmptyState) {
         startPendingJob(scope, setState, getDataAsync, errorData)
     }
@@ -54,13 +57,29 @@ private fun <D> startPendingJob(
     val setResolved = setState.resolved()
     val tools = DataLoaderTools(scope, setEmpty)
     setPending(
-        scope.launch { getDataAsync(tools).let(setResolved) }
-            .also { job -> job.errorOnJobFailure(setResolved, errorData) }
+        scope.launch { getDataOrCatchError(getDataAsync, tools, setResolved, errorData) }
+            .also { job -> job.errorOnTotalJobFailure(setResolved, errorData) }
     )
 }
 
-private fun <D> Job.errorOnJobFailure(setResolved: (D) -> Unit, errorResult: (Throwable) -> D) =
-    invokeOnCompletion { cause -> if (cause != null) setResolved(errorResult(cause)) }
+private suspend fun <D> getDataOrCatchError(
+    getDataAsync: DataLoadFunc<D>,
+    tools: DataLoaderTools,
+    setResolved: (D) -> Unit,
+    errorData: (Throwable) -> D
+) {
+    try {
+        getDataAsync(tools).let(setResolved)
+    } catch (cause: Throwable) {
+        setResolved(errorData(cause))
+    }
+}
+
+private fun <D> Job.errorOnTotalJobFailure(setResolved: (D) -> Unit, errorResult: (Throwable) -> D) =
+    invokeOnCompletion { cause ->
+        if (cause != null)
+            setResolved(errorResult(cause))
+    }
 
 private fun <D> StateSetter<DataLoadState<D>>.empty(): () -> Unit = {
     this(
