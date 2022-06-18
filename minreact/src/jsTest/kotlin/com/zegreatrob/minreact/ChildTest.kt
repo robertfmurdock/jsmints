@@ -7,6 +7,7 @@ import com.zegreatrob.testmints.setup
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.div
+import react.key
 import kotlin.test.Test
 
 val boringComponent = tmFC<BoringComponent> { props ->
@@ -25,6 +26,37 @@ class ChildTest {
                     +"Hello!"
                 }
                 child(BoringComponent("22"), key = "2") {
+                    +"Goodbye!"
+                }
+            }
+        }
+    }) exercise {
+        shallow(outerComponent)
+    } verify { result ->
+        val innerComponents = result.find(boringComponent)
+
+        innerComponents.at(0).let {
+            it.key().assertIsEqualTo("1")
+            it.dataprops().content.assertIsEqualTo("11")
+            it.dataprops().children.assertIsEqualTo("Hello!")
+        }
+        innerComponents.at(1).let {
+            it.key().assertIsEqualTo("2")
+            it.dataprops().content.assertIsEqualTo("22")
+            it.dataprops().children.assertIsEqualTo("Goodbye!")
+        }
+    }
+
+    @Test
+    fun createSugarAlsoWorks() = setup(object {
+        val outerComponent = FC<Props> {
+            div {
+                +BoringComponent("11").create {
+                    key = "1"
+                    +"Hello!"
+                }
+                +BoringComponent("22").create {
+                    key = "2"
                     +"Goodbye!"
                 }
             }

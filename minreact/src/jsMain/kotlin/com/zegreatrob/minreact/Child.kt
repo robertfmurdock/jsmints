@@ -8,6 +8,7 @@ import react.Ref
 import react.key
 import react.ref
 
+@Deprecated("Prefer to use standard DSL")
 fun <P : Props> ChildrenBuilder.child(
     clazz: ElementType<P>,
     props: P,
@@ -15,24 +16,24 @@ fun <P : Props> ChildrenBuilder.child(
     ref: Ref<Node>? = null,
     handler: ChildrenBuilder.() -> Unit = {}
 ) {
-    key?.let { props.key = it }
-    ref?.let { props.ref = ref }
     clazz {
         +props
+        this.key = key
+        this.ref = ref
         handler()
     }
 }
 
+@Deprecated("Prefer to use +.create")
 fun <P : DataProps<P>> ChildrenBuilder.child(
     dataProps: P,
     key: String? = null,
     ref: Ref<Node>? = null,
     handler: ChildrenBuilder.() -> Unit = {}
 ) {
-    dataProps.component {
+    +dataProps.create {
         key?.let { this.key = it }
         ref?.let { this.ref = ref }
-        +dataProps.unsafeCast<Props>()
         handler()
     }
 }

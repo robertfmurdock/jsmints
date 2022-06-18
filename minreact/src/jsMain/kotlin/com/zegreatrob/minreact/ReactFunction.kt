@@ -1,6 +1,7 @@
 package com.zegreatrob.minreact
 
 import com.zegreatrob.minreact.external.corejs.objectAssign
+import kotlinx.js.JsoDsl
 import react.Children
 import react.ChildrenBuilder
 import react.ElementType
@@ -40,8 +41,11 @@ fun ChildrenBuilder.children(DataProps: DataProps<*>) {
     Children.toArray(DataProps.children).forEach(::child)
 }
 
-fun <P : DataProps<P>> create(dataProps: DataProps<P>) = dataProps.component.create {
+fun <P : DataProps<P>, PP> create(dataProps: DataProps<P>, block: @JsoDsl PP.() -> Unit = {})
+        where PP : Props, PP : ChildrenBuilder = dataProps.component.create {
     +dataProps.unsafeCast<Props>()
+    block(unsafeCast<PP>())
 }
 
-fun <P : DataProps<P>> DataProps<P>.create() = create(this)
+fun <P> DataProps<in P>.create(block: @JsoDsl P.() -> Unit = {})
+        where P : DataProps<in P>, P : Props, P : ChildrenBuilder = create(this, block)
