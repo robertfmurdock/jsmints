@@ -35,7 +35,7 @@ class DataLoaderTest {
             ) { state ->
                 allRenderedStates.add(state)
                 div { +"state: $state" }
-            }.create {}
+            }.create()
         )
     } verify {
         screen.findByText("state: ${ResolvedState("DATA")}").await()

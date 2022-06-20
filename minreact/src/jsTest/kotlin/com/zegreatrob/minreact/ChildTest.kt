@@ -26,7 +26,7 @@ data class BoringComponent(var content: String) : DataPropsBind<BoringComponent>
 class ChildTest {
 
     @Test
-    fun childSugarWillCorrectlyApplyKeyAndHandler() = setup(object {
+    fun addSugarWillCorrectlyApplyKeyAndHandler() = setup(object {
         val outerComponent = FC<Props> {
             div {
                 add(BoringComponent("11")) {

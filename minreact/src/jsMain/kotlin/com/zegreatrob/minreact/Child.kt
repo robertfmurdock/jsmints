@@ -32,7 +32,7 @@ fun <P : DataProps<P>> ChildrenBuilder.child(
     ref: Ref<Node>? = null,
     handler: ChildrenBuilder.() -> Unit = {}
 ) {
-    +dataProps.create {
+    add(dataProps) {
         key?.let { this.key = it }
         ref?.let { this.ref = ref }
         handler()
@@ -40,7 +40,7 @@ fun <P : DataProps<P>> ChildrenBuilder.child(
 }
 
 fun <P> ChildrenBuilder.add(dataProps: DataProps<in P>, handler: @JsoDsl P.() -> Unit = {})
-        where P : DataProps<in P>, P : Props, P : ChildrenBuilder {
+    where P : DataProps<in P>, P : Props, P : ChildrenBuilder {
     +dataProps.create {
         handler()
     }

@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import react.ChildrenBuilder
 import react.StateSetter
 import react.useState
-import kotlin.js.Date
 
 typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
@@ -34,8 +33,6 @@ private val cachedComponent = tmFC<DataLoader<Any>> { props ->
     val (getDataAsync, errorData, injectedScope) = props
     val (state, setState) = useState<DataLoadState<Any>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")
-
-    println(Date().toTimeString() + " render")
 
     if (state is EmptyState) {
         startPendingJob(scope, setState, getDataAsync, errorData)
