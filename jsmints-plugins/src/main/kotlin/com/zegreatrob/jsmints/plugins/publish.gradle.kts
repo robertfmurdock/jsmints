@@ -68,9 +68,7 @@ tasks {
         from("${rootDir.absolutePath}/javadocs")
     }
     publishing.publications {
-        jvmPublication().withType<MavenPublication> {
-            artifact(javadocJar)
-        }
+        withType<MavenPublication> { artifact(javadocJar) }
     }
 }
 
