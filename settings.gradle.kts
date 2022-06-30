@@ -7,6 +7,7 @@ include("minjson")
 include("minreact")
 include("minenzyme")
 include("react-data-loader")
+include("js-package-plugin")
 include("wdio")
 include("jsmints-bom")
 
