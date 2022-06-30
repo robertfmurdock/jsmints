@@ -10,6 +10,7 @@ dependencies {
         api(project(":minenzyme"))
         api(project(":react-data-loader"))
         api(project(":wdio"))
+        api(project(":js-package-plugin"))
     }
 }
 

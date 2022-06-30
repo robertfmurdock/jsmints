@@ -9,7 +9,7 @@ include("minenzyme")
 include("react-data-loader")
 include("wdio")
 include("jsmints-bom")
-//include("js-package-plugin")
+include("js-package-plugin")
 
 includeBuild("jsmints-plugins")
 
