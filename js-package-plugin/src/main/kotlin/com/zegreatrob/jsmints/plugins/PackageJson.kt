@@ -1,4 +1,4 @@
-package com.zegreatrob.plugins
+package com.zegreatrob.jsmints.plugins
 
 import com.fasterxml.jackson.databind.JsonNode
 

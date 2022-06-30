@@ -1,4 +1,4 @@
-package com.zegreatrob.plugins
+package com.zegreatrob.jsmints.plugins
 
 plugins {
     kotlin("js")

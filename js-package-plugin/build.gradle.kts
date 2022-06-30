@@ -1,4 +1,3 @@
-
 import java.nio.charset.Charset
 import java.util.*
 
@@ -12,6 +11,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
     `kotlin-dsl`
     id("com.zegreatrob.jsmints.plugins.versioning")
+    id("java-gradle-plugin")
     id("com.gradle.plugin-publish") version "1.0.0"
     signing
 }
@@ -25,10 +25,15 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+val scmUrl = "https://github.com/robertfmurdock/jsmints"
 afterEvaluate {
     publishing.publications.withType<MavenPublication>().forEach {
         with(it) {
-            val scmUrl = "https://github.com/robertfmurdock/jsmints"
 
             pom.name.set(project.name)
             pom.description.set(project.name)
@@ -69,6 +74,14 @@ signing {
         )
     }
     sign(publishing.publications)
+}
+
+pluginBundle {
+    website = scmUrl
+    vcsUrl = scmUrl
+    description = "These plugins are for interacting with package.json when using kotlin js."
+
+    tags = listOf()
 }
 
 tasks {
