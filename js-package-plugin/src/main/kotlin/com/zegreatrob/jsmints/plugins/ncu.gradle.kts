@@ -21,7 +21,6 @@ tasks {
             }
         }
     }
-
 }
 
 dependencies {
