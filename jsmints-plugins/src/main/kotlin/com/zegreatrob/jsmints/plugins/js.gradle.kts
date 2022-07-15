@@ -23,8 +23,8 @@ kotlin {
 
 dependencies {
     "commonMainImplementation"(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"))
-    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.356"))
-    "commonMainImplementation"(platform("com.zegreatrob.testmints:testmints-bom:8.0.3"))
+    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.357"))
+    "commonMainImplementation"(platform("com.zegreatrob.testmints:testmints-bom:8.0.5"))
 }
 
 ktlint {
