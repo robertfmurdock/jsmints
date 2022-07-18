@@ -7,13 +7,13 @@ repositories {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.7.0")
     `kotlin-dsl`
     id("com.github.ben-manes.versions") version("0.42.0")
+    id("java-gradle-plugin")
     id("se.patrikerdes.use-latest-versions") version("0.2.18")
 }
 
-val kotlinVersion = "1.7.0"
+val kotlinVersion = "1.7.10"
 
 dependencies {
     implementation(kotlin("stdlib", kotlinVersion))

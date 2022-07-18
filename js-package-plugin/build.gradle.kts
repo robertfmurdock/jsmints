@@ -16,7 +16,7 @@ plugins {
     signing
 }
 
-val kotlinVersion = "1.7.0"
+val kotlinVersion = "1.7.10"
 group = "com.zegreatrob.jsmints"
 
 dependencies {
