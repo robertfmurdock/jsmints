@@ -9,7 +9,7 @@ plugins {
 val jspackage = extensions.getByName("jspackage") as JsPackageExtension
 
 tasks {
-    if(jspackage.exists) {
+    if (jspackage.exists) {
         kotlin.js().compilations.named("test").configure {
             val packageJson = "${project.projectDir.absolutePath}/package.json"
             NodeJsExec.create(this, "ncuUpgrade") {
@@ -24,7 +24,11 @@ tasks {
 }
 
 dependencies {
-    testImplementation(npm("npm-check-updates", "^15.0.0"))
+    testImplementation(npm("npm-check-updates",
+        jspackage.dependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
+            ?: jspackage.devDependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
+            ?: "^15.0.0")
+    )
 }
 
 val Project.nodeModulesDir get() = rootProject.buildDir.resolve("js/node_modules")
