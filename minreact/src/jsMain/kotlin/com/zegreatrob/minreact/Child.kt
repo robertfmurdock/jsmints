@@ -4,13 +4,11 @@ import kotlinx.js.JsoDsl
 import org.w3c.dom.Node
 import react.ChildrenBuilder
 import react.ElementType
-import react.Props
+import react.PropsWithRef
 import react.Ref
-import react.key
-import react.ref
 
 @Deprecated("Prefer to use standard DSL")
-fun <P : Props> ChildrenBuilder.child(
+fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
     clazz: ElementType<P>,
     props: P,
     key: String? = null,
@@ -40,7 +38,7 @@ fun <P : DataProps<P>> ChildrenBuilder.child(
 }
 
 fun <P> ChildrenBuilder.add(dataProps: DataProps<in P>, handler: @JsoDsl P.() -> Unit = {})
-    where P : DataProps<in P>, P : Props, P : ChildrenBuilder {
+    where P : DataProps<in P>, P : PropsWithRef<Node>, P : ChildrenBuilder {
     +dataProps.create {
         handler()
     }

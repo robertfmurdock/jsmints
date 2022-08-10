@@ -11,7 +11,6 @@ import react.create
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.span
-import react.key
 import kotlin.test.Test
 
 val boringComponent = tmFC<BoringComponent> { props ->
