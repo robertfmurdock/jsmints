@@ -10,7 +10,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                implementation("com.soywiz.korlibs.klock:klock:3.0.0")
+                implementation("com.soywiz.korlibs.klock:klock:3.0.1")
                 implementation("io.github.microutils:kotlin-logging:2.1.23")
                 implementation(npm("@wdio/cli", "7.10.0"))
                 implementation(npm("@wdio/local-runner", "7.10.0"))
