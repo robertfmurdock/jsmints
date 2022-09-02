@@ -1,3 +1,4 @@
+.cache-proxy
 .gradle
 node_modules
 build
