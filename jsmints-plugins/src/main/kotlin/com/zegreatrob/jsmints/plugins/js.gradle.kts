@@ -18,6 +18,13 @@ repositories {
 }
 
 kotlin {
+    targets.all {
+        compilations.all {
+            kotlinOptions {
+                allWarningsAsErrors = true
+            }
+        }
+    }
     js { nodejs { useCommonJs() } }
 }
 
