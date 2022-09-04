@@ -18,13 +18,14 @@ javaPlatform {
 }
 
 dependencies {
-    api(platform("org.jetbrains.kotlin:kotlin-bom:1.7.10"))
-    api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"))
-    api(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.382"))
-    api(platform("com.zegreatrob.testmints:testmints-bom:8.1.13"))
+    api(platform(libs.org.jetbrains.kotlin.kotlin.bom))
+    api(platform(libs.org.jetbrains.kotlinx.kotlinx.coroutines.bom))
+    api(platform(libs.org.jetbrains.kotlin.wrappers.kotlin.wrappers.bom))
+    api(platform(libs.com.zegreatrob.testmints.testmints.bom))
     constraints {
-        api("com.soywiz.korlibs.klock:klock:3.0.1")
-        api("io.github.microutils:kotlin-logging:2.1.23")
+        api(libs.com.soywiz.korlibs.klock)
+        api(libs.io.github.microutils.kotlin.logging)
+        api(libs.com.fasterxml.jackson.core.jackson.databind)
     }
 }
 

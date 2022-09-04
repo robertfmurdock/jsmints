@@ -3,9 +3,10 @@ import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
 
 plugins {
-    id("de.gliderpilot.semantic-release") version "1.4.2"
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
-    id("com.github.sghill.distribution-sha") version "0.4.0"
+    alias(libs.plugins.com.github.sghill.distribution.sha)
+    alias(libs.plugins.de.gliderpilot.semantic.release)
+    alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
+    alias(libs.plugins.nl.littlerobots.version.catalog.update)
     `maven-publish`
     signing
     id("com.zegreatrob.jsmints.plugins.versioning")

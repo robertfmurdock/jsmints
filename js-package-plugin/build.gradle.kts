@@ -12,17 +12,17 @@ plugins {
     `kotlin-dsl`
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("java-gradle-plugin")
-    id("com.gradle.plugin-publish") version "1.0.0"
+    alias(libs.plugins.com.gradle.plugin.publish)
     signing
 }
 
-val kotlinVersion = "1.7.10"
 group = "com.zegreatrob.jsmints"
 
 dependencies {
-    implementation(kotlin("stdlib", kotlinVersion))
-    implementation(kotlin("gradle-plugin", kotlinVersion))
-    api("com.fasterxml.jackson.core:jackson-databind:2.13.4")
+    api(platform(project(":dependency-bom")))
+    api("com.fasterxml.jackson.core:jackson-databind")
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("gradle-plugin"))
 }
 
 java {
