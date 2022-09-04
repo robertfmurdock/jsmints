@@ -22,7 +22,7 @@ group = "com.zegreatrob.jsmints"
 dependencies {
     implementation(kotlin("stdlib", kotlinVersion))
     implementation(kotlin("gradle-plugin", kotlinVersion))
-    api("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+    api("com.fasterxml.jackson.core:jackson-databind:2.13.4")
 }
 
 java {
