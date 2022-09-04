@@ -1,0 +1,16 @@
+[versions]
+org-jetbrains-kotlin = "1.7.10"
+
+[libraries]
+com-github-ben-manes-gradle-versions-plugin = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
+org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.18.0"
+org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
+org-jlleitschuh-gradle-ktlint-gradle = "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
+se-patrikerdes-gradle-use-latest-versions-plugin = "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18"
+
+[plugins]
+com-github-ben-manes-versions = "com.github.ben-manes.versions:0.42.0"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.6.1"
+org-gradle-kotlin-kotlin-dsl = "org.gradle.kotlin.kotlin-dsl:3.0.0"
+se-patrikerdes-use-latest-versions = "se.patrikerdes.use-latest-versions:0.2.18"

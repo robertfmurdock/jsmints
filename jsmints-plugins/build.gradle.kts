@@ -8,19 +8,18 @@ repositories {
 
 plugins {
     `kotlin-dsl`
-    id("com.github.ben-manes.versions") version("0.42.0")
     id("java-gradle-plugin")
-    id("se.patrikerdes.use-latest-versions") version("0.2.18")
+    alias(libs.plugins.com.github.ben.manes.versions)
+    alias(libs.plugins.se.patrikerdes.use.latest.versions)
+    alias(libs.plugins.nl.littlerobots.version.catalog.update)
 }
 
-val kotlinVersion = "1.7.10"
-
 dependencies {
-    implementation(kotlin("stdlib", kotlinVersion))
-    implementation(kotlin("gradle-plugin", kotlinVersion))
-    implementation("com.github.ben-manes:gradle-versions-plugin:0.42.0")
-    implementation("se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18")
-    implementation("org.jlleitschuh.gradle:ktlint-gradle:11.0.0")
+    implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
+    implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
+    implementation(libs.com.github.ben.manes.gradle.versions.plugin)
+    implementation(libs.se.patrikerdes.gradle.use.latest.versions.plugin)
+    implementation(libs.org.jlleitschuh.gradle.ktlint.gradle)
 }
 
 tasks {
