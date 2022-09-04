@@ -29,9 +29,7 @@ kotlin {
 }
 
 dependencies {
-    "commonMainImplementation"(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"))
-    "commonMainImplementation"(platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.382"))
-    "commonMainImplementation"(platform("com.zegreatrob.testmints:testmints-bom:8.1.13"))
+    "commonMainApi"(platform(project(":dependency-bom")))
 }
 
 ktlint {

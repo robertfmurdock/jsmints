@@ -3,13 +3,14 @@ plugins {
 }
 
 rootProject.name = "jsmints"
+include("dependency-bom")
+include("js-package-plugin")
+include("jsmints-bom")
 include("minjson")
 include("minreact")
 include("minenzyme")
 include("react-data-loader")
 include("wdio")
-include("jsmints-bom")
-include("js-package-plugin")
 
 includeBuild("jsmints-plugins")
 
