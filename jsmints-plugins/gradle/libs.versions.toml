@@ -13,4 +13,3 @@ se-patrikerdes-gradle-use-latest-versions-plugin = "se.patrikerdes:gradle-use-la
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.42.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.6.1"
 org-gradle-kotlin-kotlin-dsl = "org.gradle.kotlin.kotlin-dsl:3.0.0"
-se-patrikerdes-use-latest-versions = "se.patrikerdes.use-latest-versions:0.2.18"

@@ -10,7 +10,6 @@ plugins {
     `kotlin-dsl`
     id("java-gradle-plugin")
     alias(libs.plugins.com.github.ben.manes.versions)
-    alias(libs.plugins.se.patrikerdes.use.latest.versions)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
 }
 
@@ -18,7 +17,6 @@ dependencies {
     implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
     implementation(libs.com.github.ben.manes.gradle.versions.plugin)
-    implementation(libs.se.patrikerdes.gradle.use.latest.versions.plugin)
     implementation(libs.org.jlleitschuh.gradle.ktlint.gradle)
 }
 
