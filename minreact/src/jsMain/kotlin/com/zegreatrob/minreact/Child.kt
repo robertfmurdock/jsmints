@@ -4,8 +4,10 @@ import kotlinx.js.JsoDsl
 import org.w3c.dom.Node
 import react.ChildrenBuilder
 import react.ElementType
+import react.Props
 import react.PropsWithRef
 import react.Ref
+import react.create
 
 @Deprecated("Prefer to use standard DSL")
 fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
@@ -24,22 +26,31 @@ fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
 }
 
 @Deprecated("Prefer to use +.create")
-fun <P : DataProps<P>> ChildrenBuilder.child(
-    dataProps: P,
+fun <D : DataProps<D>, P> ChildrenBuilder.child(
+    dataProps: D,
     key: String? = null,
     ref: Ref<Node>? = null,
     handler: ChildrenBuilder.() -> Unit = {}
-) {
-    add(dataProps) {
+) where P : PropsWithRef<Node>,
+        P : ChildrenBuilder {
+    +dataProps.component.create {
+        +dataProps.unsafeCast<Props>()
         key?.let { this.key = it }
         ref?.let { this.ref = ref }
         handler()
     }
 }
 
-fun <P> ChildrenBuilder.add(dataProps: DataProps<in P>, handler: @JsoDsl P.() -> Unit = {})
-    where P : DataProps<in P>, P : PropsWithRef<Node>, P : ChildrenBuilder {
-    +dataProps.create {
+fun <D> ChildrenBuilder.add(
+    dataProps: DataProps<in D>,
+    key: String? = null,
+    ref: Ref<Node>? = null,
+    handler: @JsoDsl ChildrenBuilder.() -> Unit = {}
+) where D : DataProps<in D> {
+    +dataProps.component.create {
+        +dataProps.unsafeCast<Props>()
+        key?.let { this.key = it }
+        ref?.let { this.ref = ref }
         handler()
     }
 }

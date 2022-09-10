@@ -26,7 +26,7 @@ data class DataLoader<D>(
     val scope: CoroutineScope? = null,
     val children: ChildrenBuilder.(value: DataLoadState<D>) -> Unit
 ) : DataProps<DataLoader<D>> {
-    override val component = cachedComponent.unsafeCast<TMFC<DataLoader<D>>>()
+    override val component = cachedComponent.unsafeCast<TMFC>()
 }
 
 private val cachedComponent = tmFC<DataLoader<Any>> { props ->
@@ -41,7 +41,7 @@ private val cachedComponent = tmFC<DataLoader<Any>> { props ->
     props.children(this, state)
 }
 
-fun <D> dataLoader() = cachedComponent.unsafeCast<TMFC<DataLoader<D>>>()
+fun <D> dataLoader() = cachedComponent.unsafeCast<TMFC>()
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,

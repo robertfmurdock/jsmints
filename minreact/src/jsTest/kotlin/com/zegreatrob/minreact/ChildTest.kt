@@ -28,12 +28,10 @@ class ChildTest {
     fun addSugarWillCorrectlyApplyKeyAndHandler() = setup(object {
         val outerComponent = FC<Props> {
             div {
-                add(BoringComponent("11")) {
-                    key = "1"
+                add(BoringComponent("11"), key = "1") {
                     span { +"Hello!" }
                 }
-                add(BoringComponent("22")) {
-                    key = "2"
+                add(BoringComponent("22"), key = "2") {
                     span { +"Goodbye!" }
                 }
             }
@@ -51,12 +49,10 @@ class ChildTest {
     fun createSugarAlsoWorks() = setup(object {
         val outerComponent = FC<Props> {
             div {
-                +BoringComponent("11").create {
-                    key = "1"
+                +BoringComponent("11").create(key = "1") {
                     span { +"Hello!" }
                 }
-                +BoringComponent("22").create {
-                    key = "2"
+                +BoringComponent("22").create(key = "2") {
                     span { +"Goodbye!" }
                 }
             }

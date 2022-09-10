@@ -59,7 +59,7 @@ external interface ShallowWrapper<T> {
     fun shallow(): ShallowWrapper<T>
 }
 
-inline fun <reified P : DataProps<P>> ShallowWrapper<DataPropsBridge<P>>.dataprops(): P =
+inline fun <reified P : DataProps<P>> ShallowWrapper<DataPropsBridge>.dataprops(): P =
     ensureKotlinClassProps(props(), P::class.js)
         .unsafeCast<P>()
 
@@ -92,11 +92,11 @@ fun shallow(component: ElementType<*>, handler: ChildrenBuilder.() -> Unit = {})
 
 fun <P : DataProps<P>> shallow(
     props: P,
-    component: TMFC<P> = props.component,
+    component: TMFC = props.component,
     handler: ChildrenBuilder.() -> Unit = {}
 ) = enzyme.shallow(
     component.create {
-        +props.unsafeCast<DataPropsBridge<P>>()
+        +props.unsafeCast<DataPropsBridge>()
         handler()
     }
 )
