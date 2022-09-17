@@ -1,0 +1,17 @@
+version: '2.4'
+services:
+  caddy:
+    image: caddy:2.4.6-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ~/caddy_data:/data
+      - caddy_config:/config
+    networks:
+      default:
+        aliases:
+          - static.localhost
+volumes:
+  caddy_config:

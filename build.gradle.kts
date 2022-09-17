@@ -1,6 +1,7 @@
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
+import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
     alias(libs.plugins.com.github.sghill.distribution.sha)
@@ -13,6 +14,9 @@ plugins {
 }
 
 group = "com.zegreatrob.jsmints"
+
+// This is in place to enable Chromedriver via npm install. If we find a workaround, we should remove this line.
+yarn.ignoreScripts = false
 
 nexusPublishing {
     repositories {

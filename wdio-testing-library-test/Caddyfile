@@ -1,0 +1,5 @@
+static.localhost {
+    root * /client/build/distributions
+    file_server browse
+    header Access-Control-Allow-Origin "https://localhost"
+}

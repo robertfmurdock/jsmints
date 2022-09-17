@@ -11,6 +11,8 @@ include("minreact")
 include("minenzyme")
 include("react-data-loader")
 include("wdio")
+include("wdio-testing-library")
+include("wdio-testing-library-test")
 
 includeBuild("jsmints-plugins")
 
