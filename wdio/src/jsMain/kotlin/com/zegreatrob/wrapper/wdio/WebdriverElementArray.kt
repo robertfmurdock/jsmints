@@ -7,7 +7,7 @@ class WebdriverElementArray(
 
     private suspend fun all() = finder()
 
-    fun get(index: Int) = WebdriverElement { all()[index].element() }
+    operator fun get(index: Int) = WebdriverElement { all()[index].element() }
 
     suspend fun <T> map(transform: suspend (WebdriverElement) -> T) = log("map") {
         all().map { transform(it) }.toList()
@@ -15,6 +15,8 @@ class WebdriverElementArray(
 
     suspend fun count(): Int = log(::count) { all().count() }
     suspend fun first(): WebdriverElement = log(::first) { all().first() }
+
+    suspend fun asList() = map { it }
 }
 
 private fun String.defaultArrayFinder(): suspend () -> List<WebdriverElement> = {

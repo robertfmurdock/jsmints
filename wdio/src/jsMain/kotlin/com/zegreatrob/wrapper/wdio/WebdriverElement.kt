@@ -35,6 +35,9 @@ class WebdriverElement(
         .unsafeCast<Promise<Element>>()
 
     suspend fun click(): Unit = log(::click) { element().click().await() }
+    suspend fun dragAndDrop(element: WebdriverElement): Unit = log(::dragAndDrop) {
+        element().dragAndDrop(element.element()).await()
+    }
     suspend fun text(): String = log(::text) { element().getText().await() }
     suspend fun attribute(name: String): String = log(::attribute) { element().getAttribute(name).await() }
     suspend fun isPresent(): Boolean = log(::isPresent) { element().isExisting().await() }

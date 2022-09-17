@@ -10,6 +10,7 @@ external class Element {
     fun isDisplayed(): Promise<Boolean>
     fun isSelected(): Promise<Boolean>
     fun click(): Promise<Unit>
+    fun dragAndDrop(target: Element): Promise<Unit>
     fun getText(): Promise<String>
     fun `$`(@Suppress("UNUSED_PARAMETER") selector: String): Promise<Element>
     fun `$$`(@Suppress("UNUSED_PARAMETER") selector: String): Promise<Array<Element>>
