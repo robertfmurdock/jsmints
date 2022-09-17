@@ -23,11 +23,12 @@ kotlin {
 dependencies {
     jsMainImplementation(kotlin("stdlib"))
     jsMainImplementation(project(":wdio-testing-library"))
-    jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation("com.soywiz.korlibs.klock:klock")
     jsMainImplementation("io.github.microutils:kotlin-logging")
+    jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
     "jsE2eTestImplementation"(platform(project(":dependency-bom")))
+    "jsE2eTestImplementation"(project(":wdio-testing-library"))
     "jsE2eTestImplementation"(kotlin("test"))
     "jsE2eTestImplementation"("com.zegreatrob.testmints:async")
     "jsE2eTestImplementation"(jsconstraint("@rpii/wdio-html-reporter"))

@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.slang.dashboard.e2e
+package com.zegreatrob.wrapper.wdio.testing.library
 
 import kotlin.js.Json
 

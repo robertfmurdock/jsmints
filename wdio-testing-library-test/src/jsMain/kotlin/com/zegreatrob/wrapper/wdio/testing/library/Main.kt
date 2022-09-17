@@ -1,4 +1,4 @@
-package com.slang.dashboard.e2e
+package com.zegreatrob.wrapper.wdio.testing.library
 
 import com.zegreatrob.wrapper.wdio.cli.runWebdriverIO
 import kotlinx.coroutines.MainScope

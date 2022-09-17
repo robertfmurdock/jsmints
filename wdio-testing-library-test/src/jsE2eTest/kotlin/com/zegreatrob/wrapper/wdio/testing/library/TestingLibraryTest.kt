@@ -8,6 +8,7 @@ class TestingLibraryTest {
 
     @Test
     fun canUseQueriesToFindElements() = asyncSetup(object : ScopeMint() {
+        val browser = TestingLibraryBrowser
     }) exercise {
     } verify {
     }
