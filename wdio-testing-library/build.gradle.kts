@@ -12,9 +12,10 @@ kotlin {
             dependencies {
                 api(project(":wdio"))
                 implementation(kotlin("stdlib"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
                 implementation("com.soywiz.korlibs.klock:klock")
                 implementation("io.github.microutils:kotlin-logging")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
                 implementation(npmConstrained("@wdio/cli"))
                 implementation(npmConstrained("@wdio/local-runner"))
             }
