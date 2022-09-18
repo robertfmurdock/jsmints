@@ -25,7 +25,12 @@ external interface TestingLibraryBrowser {
     fun queryAllByRole(role: String, options: TestingLibraryRoleOptions): Promise<Array<Element>>
 
     fun getByLabelText(text: String): Promise<Element>
+    fun getAllByLabelText(text: String): Promise<Array<Element>>
     fun findByLabelText(text: String): Promise<Element>
+    fun findAllByLabelText(text: String): Promise<Array<Element>>
+    fun queryByLabelText(text: String): Promise<Element?>
+    fun queryAllByLabelText(text: String): Promise<Array<Element>>
+
     fun findByDisplayValue(value: String): Promise<Element>
 }
 

@@ -19,7 +19,7 @@ class TestingLibraryByRoleTest {
     private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) =
         testingLibrarySetup {
         } exercise {
-            query("button", RoleOptions(name = "Awesome"))
+            query("button", RoleOptions(name = "Press Me"))
         } verify { element ->
             element?.isDisplayed()
                 .assertIsEqualTo(true)
@@ -69,12 +69,12 @@ class TestingLibraryByRoleTest {
     private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) =
         testingLibrarySetup {
         } exercise {
-            kotlin.runCatching { query("button", RoleOptions(name = "Cool"))?.waitToExist() }
+            kotlin.runCatching { query("button", RoleOptions(name = "Chill"))?.waitToExist() }
         } verify { result ->
             result.isFailure
                 .assertIsEqualTo(true)
             result.exceptionOrNull()?.message.apply {
-                this?.startsWith("Found multiple elements with the role \"button\" and name \"Cool\"")
+                this?.startsWith("Found multiple elements with the role \"button\" and name \"Chill\"")
                     .assertIsEqualTo(true, "<$this>")
             }
         }
@@ -94,7 +94,7 @@ class TestingLibraryByRoleTest {
     private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) =
         testingLibrarySetup {
         } exercise {
-            query("button", RoleOptions(name = "Cool"))
+            query("button", RoleOptions(name = "Chill"))
         } verify { elements ->
             elements.map { it.attribute("data-test-info") }
                 .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
@@ -116,7 +116,7 @@ class TestingLibraryByRoleTest {
     private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) =
         testingLibrarySetup {
         } exercise {
-            query("button", RoleOptions(name = "Awesome"))
+            query("button", RoleOptions(name = "Press Me"))
         } verify { elements ->
             elements.map { it.attribute("data-test-info") }
                 .assertIsEqualTo(listOf("pretty-cool"))

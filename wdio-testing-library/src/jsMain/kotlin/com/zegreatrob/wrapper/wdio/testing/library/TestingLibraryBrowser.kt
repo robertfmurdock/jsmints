@@ -4,7 +4,7 @@ import com.zegreatrob.wrapper.wdio.browser
 import com.zegreatrob.wrapper.wdio.testing.library.external.TestingLibraryBrowser
 import com.zegreatrob.wrapper.wdio.testing.library.external.setupBrowser
 
-object TestingLibraryBrowser : ByRole, ByText, BrowserProvider {
+object TestingLibraryBrowser : ByRole, ByText, ByLabelText, BrowserProvider {
     override val extendedWdioBrowser by lazy { setupBrowser(browser) }
 }
 
