@@ -47,9 +47,9 @@ class TestingLibraryTest {
         result.exceptionOrNull()?.message.apply {
             this?.startsWith(
                 "Unable to find an element with the text: Not Awesome. " +
-                        "This could be because the text is broken up by multiple elements. " +
-                        "In this case, you can provide a function for your text matcher to " +
-                        "make your matcher more flexible."
+                    "This could be because the text is broken up by multiple elements. " +
+                    "In this case, you can provide a function for your text matcher to " +
+                    "make your matcher more flexible."
             )
                 .assertIsEqualTo(true, this)
         }

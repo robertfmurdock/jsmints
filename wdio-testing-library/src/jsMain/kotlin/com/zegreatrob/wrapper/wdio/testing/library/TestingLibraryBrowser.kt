@@ -23,7 +23,7 @@ object TestingLibraryBrowser {
         extendedWdioBrowser.getAllByText(text).await().map { WebdriverElement(finder = { it }) }
     })
 
-    suspend fun queryAllByText(text: String)= WebdriverElementArray(finder = {
+    suspend fun queryAllByText(text: String) = WebdriverElementArray(finder = {
         extendedWdioBrowser.queryAllByText(text).await().map { WebdriverElement(finder = { it }) }
     })
 
