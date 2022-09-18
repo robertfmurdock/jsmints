@@ -31,6 +31,7 @@ dependencies {
     "jsE2eTestImplementation"(project(":wdio-testing-library"))
     "jsE2eTestImplementation"(kotlin("test"))
     "jsE2eTestImplementation"("com.zegreatrob.testmints:async")
+    "jsE2eTestImplementation"("com.zegreatrob.testmints:minassert")
     "jsE2eTestImplementation"(jsconstraint("@rpii/wdio-html-reporter"))
     "jsE2eTestImplementation"(jsconstraint("@testing-library/webdriverio"))
     "jsE2eTestImplementation"(jsconstraint("@wdio/cli"))
@@ -86,7 +87,7 @@ tasks {
 
         val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
 
-        environment("BASEURL" to "https://localhost/#/")
+        environment("BASEURL" to "https://static.localhost")
         environment(
             mapOf(
                 "SPEC_FILE" to compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get(),
