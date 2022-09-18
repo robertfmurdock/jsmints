@@ -1,8 +1,6 @@
 package com.zegreatrob.wrapper.wdio.testing.library
 
 import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.testmints.async.asyncSetup
-import com.zegreatrob.wrapper.wdio.WebdriverBrowser
 import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import kotlin.test.Test
@@ -19,8 +17,7 @@ class TestingLibraryByRoleTest {
     fun givenElementExistsCanQueryByRole() = givenElementByRoleWorks(TestingLibraryBrowser::queryByRole)
 
     private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) =
-        asyncSetup {
-            WebdriverBrowser.setUrl("https://static.localhost")
+        testingLibrarySetup {
         } exercise {
             query("button", RoleOptions(name = "Awesome"))
         } verify { element ->
@@ -38,8 +35,7 @@ class TestingLibraryByRoleTest {
 
     private fun givenNoElementByRoleWillFailAsExpected(
         query: suspend (role: String, options: RoleOptions) -> WebdriverElement?
-    ) = asyncSetup {
-        WebdriverBrowser.setUrl("https://static.localhost")
+    ) = testingLibrarySetup {
     } exercise {
         kotlin.runCatching { query("button", RoleOptions(name = "Not Awesome")) }
     } verify { result ->
@@ -48,10 +44,9 @@ class TestingLibraryByRoleTest {
     }
 
     @Test
-    fun givenNoElementExistsQueryByRole() = asyncSetup(object {
+    fun givenNoElementExistsQueryByRole() = testingLibrarySetup(object {
         val browser = TestingLibraryBrowser
     }) {
-        WebdriverBrowser.setUrl("https://static.localhost")
     } exercise {
         browser.queryByRole("button", RoleOptions(name = "Not Awesome"))
     } verify { element ->
@@ -72,8 +67,7 @@ class TestingLibraryByRoleTest {
         givenMultipleElementsByRoleErrors(TestingLibraryBrowser::queryByRole)
 
     private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) =
-        asyncSetup {
-            WebdriverBrowser.setUrl("https://static.localhost")
+        testingLibrarySetup {
         } exercise {
             kotlin.runCatching { query("button", RoleOptions(name = "Cool"))?.waitToExist() }
         } verify { result ->
@@ -98,8 +92,7 @@ class TestingLibraryByRoleTest {
         givenMultipleElementsByRoleSucceeds(TestingLibraryBrowser::queryAllByRole)
 
     private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) =
-        asyncSetup {
-            WebdriverBrowser.setUrl("https://static.localhost")
+        testingLibrarySetup {
         } exercise {
             query("button", RoleOptions(name = "Cool"))
         } verify { elements ->
@@ -121,8 +114,7 @@ class TestingLibraryByRoleTest {
         givenSingleElementsByRoleSucceeds(TestingLibraryBrowser::queryAllByRole)
 
     private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) =
-        asyncSetup {
-            WebdriverBrowser.setUrl("https://static.localhost")
+        testingLibrarySetup {
         } exercise {
             query("button", RoleOptions(name = "Awesome"))
         } verify { elements ->

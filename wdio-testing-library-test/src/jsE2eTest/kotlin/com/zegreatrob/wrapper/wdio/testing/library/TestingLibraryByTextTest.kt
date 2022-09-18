@@ -1,8 +1,6 @@
 package com.zegreatrob.wrapper.wdio.testing.library
 
 import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.testmints.async.asyncSetup
-import com.zegreatrob.wrapper.wdio.WebdriverBrowser
 import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import kotlin.test.Test
@@ -18,8 +16,7 @@ class TestingLibraryByTextTest {
     @Test
     fun givenElementExistsCanQueryByText() = givenElementByTextWorks(TestingLibraryBrowser::queryByText)
 
-    private fun givenElementByTextWorks(query: suspend (text: String) -> WebdriverElement?) = asyncSetup {
-        WebdriverBrowser.setUrl("https://static.localhost")
+    private fun givenElementByTextWorks(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
         query("Awesome")
     } verify { element ->
@@ -37,8 +34,7 @@ class TestingLibraryByTextTest {
 
     private fun givenNoElementByTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?
-    ) = asyncSetup {
-        WebdriverBrowser.setUrl("https://static.localhost")
+    ) = testingLibrarySetup {
     } exercise {
         kotlin.runCatching { query("Not Awesome") }
     } verify { result ->
@@ -56,11 +52,9 @@ class TestingLibraryByTextTest {
     }
 
     @Test
-    fun givenNoElementExistsQueryByText() = asyncSetup(object {
+    fun givenNoElementExistsQueryByText() = testingLibrarySetup(object {
         val browser = TestingLibraryBrowser
-    }) {
-        WebdriverBrowser.setUrl("https://static.localhost")
-    } exercise {
+    }) exercise {
         browser.queryByText("Not Awesome")
     } verify { element ->
         element.isPresent().assertIsEqualTo(false)
@@ -79,18 +73,18 @@ class TestingLibraryByTextTest {
     fun givenMultipleElementExistsErrorsOnQueryByText() =
         givenMultipleElementsByTextErrors(TestingLibraryBrowser::queryByText)
 
-    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) = asyncSetup {
-        WebdriverBrowser.setUrl("https://static.localhost")
-    } exercise {
-        kotlin.runCatching { query("Cool")?.waitToExist() }
-    } verify { result ->
-        result.isFailure
-            .assertIsEqualTo(true)
-        result.exceptionOrNull()?.message.apply {
-            this?.startsWith("Found multiple elements with the text: Cool")
-                .assertIsEqualTo(true, "<$this>")
+    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) =
+        testingLibrarySetup {
+        } exercise {
+            kotlin.runCatching { query("Cool")?.waitToExist() }
+        } verify { result ->
+            result.isFailure
+                .assertIsEqualTo(true)
+            result.exceptionOrNull()?.message.apply {
+                this?.startsWith("Found multiple elements with the text: Cool")
+                    .assertIsEqualTo(true, "<$this>")
+            }
         }
-    }
 
     @Test
     fun givenMultipleElementExistsSucceedsOnGetAllByText() =
@@ -105,8 +99,7 @@ class TestingLibraryByTextTest {
         givenMultipleElementsByTextSucceeds(TestingLibraryBrowser::queryAllByText)
 
     private fun givenMultipleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
-        asyncSetup {
-            WebdriverBrowser.setUrl("https://static.localhost")
+        testingLibrarySetup {
         } exercise {
             query("Cool")
         } verify { elements ->
@@ -127,13 +120,13 @@ class TestingLibraryByTextTest {
     fun givenSingleElementExistsSucceedsOnQueryAllByText() =
         givenSingleElementsByTextSucceeds(TestingLibraryBrowser::queryAllByText)
 
-    private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) = asyncSetup {
-        WebdriverBrowser.setUrl("https://static.localhost")
-    } exercise {
-        query("Awesome")
-    } verify { elements ->
-        elements.map { it.attribute("data-test-info") }
-            .assertIsEqualTo(listOf("pretty-cool"))
-        elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
-    }
+    private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
+        testingLibrarySetup {
+        } exercise {
+            query("Awesome")
+        } verify { elements ->
+            elements.map { it.attribute("data-test-info") }
+                .assertIsEqualTo(listOf("pretty-cool"))
+            elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
+        }
 }
