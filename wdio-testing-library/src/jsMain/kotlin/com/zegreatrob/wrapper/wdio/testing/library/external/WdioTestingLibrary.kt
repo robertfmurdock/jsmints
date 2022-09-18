@@ -17,12 +17,12 @@ external interface TestingLibraryBrowser {
     fun queryByText(text: String): Promise<Element?>
     fun queryAllByText(text: String): Promise<Array<Element>>
 
-    fun getByRole(role: String, options: RoleOptions): Promise<Element>
-    fun getAllByRole(role: String, options: RoleOptions): Promise<Array<Element>>
-    fun findByRole(role: String, options: RoleOptions): Promise<Element>
-    fun findAllByRole(role: String, options: RoleOptions): Promise<Array<Element>>
-    fun queryByRole(role: String, options: RoleOptions): Promise<Element?>
-    fun queryAllByRole(role: String, options: RoleOptions): Promise<Array<Element>>
+    fun getByRole(role: String, options: TestingLibraryRoleOptions): Promise<Element>
+    fun getAllByRole(role: String, options: TestingLibraryRoleOptions): Promise<Array<Element>>
+    fun findByRole(role: String, options: TestingLibraryRoleOptions): Promise<Element>
+    fun findAllByRole(role: String, options: TestingLibraryRoleOptions): Promise<Array<Element>>
+    fun queryByRole(role: String, options: TestingLibraryRoleOptions): Promise<Element?>
+    fun queryAllByRole(role: String, options: TestingLibraryRoleOptions): Promise<Array<Element>>
 
     fun getByLabelText(text: String): Promise<Element>
     fun findByLabelText(text: String): Promise<Element>
@@ -31,6 +31,6 @@ external interface TestingLibraryBrowser {
 
 external fun within(element: Element): TestingLibraryBrowser
 
-external interface RoleOptions {
+external interface TestingLibraryRoleOptions {
     var name: String
 }
