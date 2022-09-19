@@ -5,16 +5,16 @@ import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import kotlin.test.Test
 
-class ByLabelTextTest {
+class ByLabelTextTest : ByLabelText by TestingLibraryBrowser {
 
     @Test
-    fun givenElementExistsCanGetByLabelText() = givenElementByLabelTextWorks(TestingLibraryBrowser::getByLabelText)
+    fun givenElementExistsCanGetByLabelText() = givenElementByLabelTextWorks(::getByLabelText)
 
     @Test
-    fun givenElementExistsCanFindByLabelText() = givenElementByLabelTextWorks(TestingLibraryBrowser::findByLabelText)
+    fun givenElementExistsCanFindByLabelText() = givenElementByLabelTextWorks(::findByLabelText)
 
     @Test
-    fun givenElementExistsCanQueryByLabelText() = givenElementByLabelTextWorks(TestingLibraryBrowser::queryByLabelText)
+    fun givenElementExistsCanQueryByLabelText() = givenElementByLabelTextWorks(::queryByLabelText)
 
     private fun givenElementByLabelTextWorks(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
@@ -27,10 +27,10 @@ class ByLabelTextTest {
     }
 
     @Test
-    fun givenNoElementExistsGetByLabelText() = givenNoElementByLabelTextWillFailAsExpected(TestingLibraryBrowser::getByLabelText)
+    fun givenNoElementExistsGetByLabelText() = givenNoElementByLabelTextWillFailAsExpected(::getByLabelText)
 
     @Test
-    fun givenNoElementExistsFindByLabelText() = givenNoElementByLabelTextWillFailAsExpected(TestingLibraryBrowser::findByLabelText)
+    fun givenNoElementExistsFindByLabelText() = givenNoElementByLabelTextWillFailAsExpected(::findByLabelText)
 
     private fun givenNoElementByLabelTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?
@@ -49,26 +49,23 @@ class ByLabelTextTest {
     }
 
     @Test
-    fun givenNoElementExistsQueryByLabelText() = testingLibrarySetup(object {
-        val browser = TestingLibraryBrowser
-    }) exercise {
-        browser.queryByLabelText("Not Awesome")
+    fun givenNoElementExistsQueryByLabelText() = testingLibrarySetup {
+    } exercise {
+        queryByLabelText("Not Awesome")
     } verify { element ->
         element.isPresent().assertIsEqualTo(false)
         element.isDisplayed().assertIsEqualTo(false)
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnGetByLabelText() =
-        givenMultipleElementsByLabelTextErrors(TestingLibraryBrowser::getByLabelText)
+    fun givenMultipleElementExistsErrorsOnGetByLabelText() = givenMultipleElementsByLabelTextErrors(::getByLabelText)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnFindByLabelText() =
-        givenMultipleElementsByLabelTextErrors(TestingLibraryBrowser::findByLabelText)
+    fun givenMultipleElementExistsErrorsOnFindByLabelText() = givenMultipleElementsByLabelTextErrors(::findByLabelText)
 
     @Test
     fun givenMultipleElementExistsErrorsOnQueryByLabelText() =
-        givenMultipleElementsByLabelTextErrors(TestingLibraryBrowser::queryByLabelText)
+        givenMultipleElementsByLabelTextErrors(::queryByLabelText)
 
     private fun givenMultipleElementsByLabelTextErrors(query: suspend (text: String) -> WebdriverElement?) =
         testingLibrarySetup {
@@ -85,15 +82,15 @@ class ByLabelTextTest {
 
     @Test
     fun givenMultipleElementExistsSucceedsOnGetAllByLabelText() =
-        givenMultipleElementsByLabelTextSucceeds(TestingLibraryBrowser::getAllByLabelText)
+        givenMultipleElementsByLabelTextSucceeds(::getAllByLabelText)
 
     @Test
     fun givenMultipleElementExistsSucceedsOnFindAllByLabelText() =
-        givenMultipleElementsByLabelTextSucceeds(TestingLibraryBrowser::findAllByLabelText)
+        givenMultipleElementsByLabelTextSucceeds(::findAllByLabelText)
 
     @Test
     fun givenMultipleElementExistsSucceedsOnQueryAllByLabelText() =
-        givenMultipleElementsByLabelTextSucceeds(TestingLibraryBrowser::queryAllByLabelText)
+        givenMultipleElementsByLabelTextSucceeds(::queryAllByLabelText)
 
     private fun givenMultipleElementsByLabelTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
         testingLibrarySetup {
@@ -107,15 +104,15 @@ class ByLabelTextTest {
 
     @Test
     fun givenSingleElementExistsSucceedsOnGetAllByLabelText() =
-        givenSingleElementsByLabelTextSucceeds(TestingLibraryBrowser::getAllByLabelText)
+        givenSingleElementsByLabelTextSucceeds(::getAllByLabelText)
 
     @Test
     fun givenSingleElementExistsSucceedsOnFindAllByLabelText() =
-        givenSingleElementsByLabelTextSucceeds(TestingLibraryBrowser::findAllByLabelText)
+        givenSingleElementsByLabelTextSucceeds(::findAllByLabelText)
 
     @Test
     fun givenSingleElementExistsSucceedsOnQueryAllByLabelText() =
-        givenSingleElementsByLabelTextSucceeds(TestingLibraryBrowser::queryAllByLabelText)
+        givenSingleElementsByLabelTextSucceeds(::queryAllByLabelText)
 
     private fun givenSingleElementsByLabelTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
         testingLibrarySetup {
