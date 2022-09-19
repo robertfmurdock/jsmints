@@ -5,7 +5,7 @@ import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import kotlin.test.Test
 
-class TestingLibraryByRoleTest {
+class ByRoleTest {
 
     @Test
     fun givenElementExistsCanGetByRole() = givenElementByRoleWorks(TestingLibraryBrowser::getByRole)

@@ -9,13 +9,13 @@ class WebdriverElement(
     private val finder: suspend () -> Element = selector.defaultElementFinder()
 ) : BrowserLoggingSyntax {
 
-    internal suspend fun element() = finder()
+    suspend fun innerElement() = finder()
 
     fun all() = WebdriverElementArray(selector)
 
     fun all(selector: String) = if (this.selector == "")
         WebdriverElementArray {
-            element().all(selector).await()
+            innerElement().all(selector).await()
                 .map { WebdriverElement { it } }
         }
     else
@@ -23,7 +23,7 @@ class WebdriverElement(
 
     fun element(selector: String): WebdriverElement = if (this.selector == "")
         WebdriverElement {
-            element().element(selector).await()
+            innerElement().element(selector).await()
         }
     else
         WebdriverElement("${this.selector} $selector")
@@ -34,26 +34,47 @@ class WebdriverElement(
     private fun Element.element(selector: String): Promise<Element> = `$`(selector)
         .unsafeCast<Promise<Element>>()
 
-    suspend fun click(): Unit = log(::click) { element().click().await() }
+    suspend fun click(): Unit = log(::click) { innerElement().click().await() }
     suspend fun dragAndDrop(element: WebdriverElement): Unit = log(::dragAndDrop) {
-        element().dragAndDrop(element.element()).await()
+        innerElement().dragAndDrop(element.innerElement()).await()
     }
-    suspend fun text(): String = log(::text) { element().getText().await() }
-    suspend fun attribute(name: String): String = log(::attribute) { element().getAttribute(name).await() }
-    suspend fun isPresent(): Boolean = log(::isPresent) { element().isExisting().await() }
-    suspend fun isEnabled(): Boolean = log(::isEnabled) { element().isEnabled().await() }
-    suspend fun isDisplayed(): Boolean = log(::isDisplayed) { element().isDisplayed().await() }
-    suspend fun isSelected(): Boolean = log(::isSelected) { element().isSelected().await() }
-    suspend fun selectByIndex(index: Int): Unit = log(::selectByIndex) { element().selectByIndex(index).await() }
-    suspend fun selectByVisibleText(text: String): Unit = log(::selectByVisibleText) { element().selectByVisibleText(text).await() }
-    suspend fun setValue(value: String): Unit = log(::setValue) { element().setValue(value).await() }
+
+    suspend fun text(): String = log(::text) { innerElement().getText().await() }
+    suspend fun attribute(name: String): String = log(::attribute) { innerElement().getAttribute(name).await() }
+    suspend fun isPresent(): Boolean = log(::isPresent) { innerElement().isExisting().await() }
+    suspend fun isEnabled(): Boolean = log(::isEnabled) { innerElement().isEnabled().await() }
+    suspend fun isDisplayed(): Boolean = log(::isDisplayed) { innerElement().isDisplayed().await() }
+    suspend fun isSelected(): Boolean = log(::isSelected) { innerElement().isSelected().await() }
+    suspend fun selectByIndex(index: Int): Unit = log(::selectByIndex) { innerElement().selectByIndex(index).await() }
+    suspend fun parentElement(): WebdriverElement = log(::selectByIndex) {
+        WebdriverElement(finder = {
+            innerElement().parentElement().await()
+        })
+    }
+
+    suspend fun nextElement(): WebdriverElement = log(::selectByIndex) {
+        WebdriverElement(finder = {
+            innerElement().nextElement().await()
+        })
+    }
+
+    suspend fun previousElement(): WebdriverElement = log(::selectByIndex) {
+        WebdriverElement(finder = {
+            innerElement().previousElement().await()
+        })
+    }
+
+    suspend fun selectByVisibleText(text: String): Unit =
+        log(::selectByVisibleText) { innerElement().selectByVisibleText(text).await() }
+
+    suspend fun setValue(value: String): Unit = log(::setValue) { innerElement().setValue(value).await() }
     suspend fun clearSetValue(value: String): Unit = log(::clearSetValue) {
-        element().clearValue().await()
-        element().setValue(value).await()
+        innerElement().clearValue().await()
+        innerElement().setValue(value).await()
     }
 
     suspend fun waitToExist(): Unit = log(::waitToExist) {
-        element().waitForExist(json()).await()
+        innerElement().waitForExist(json()).await()
     }
 }
 

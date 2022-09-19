@@ -20,4 +20,7 @@ external class Element {
     fun setValue(value: String): Promise<Unit>
     fun selectByIndex(index: Int): Promise<Unit>
     fun selectByVisibleText(text: String): Promise<Unit>
+    fun parentElement(): Promise<Element>
+    fun nextElement(): Promise<Element>
+    fun previousElement(): Promise<Element>
 }

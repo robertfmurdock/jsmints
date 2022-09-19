@@ -8,6 +8,7 @@ import com.zegreatrob.wrapper.wdio.Element
 import kotlin.js.Promise
 
 external fun setupBrowser(browser: Browser): TestingLibraryBrowser
+external fun within(element: Element): TestingLibraryBrowser
 
 external interface TestingLibraryBrowser {
     fun getByText(text: String): Promise<Element>
@@ -33,8 +34,6 @@ external interface TestingLibraryBrowser {
 
     fun findByDisplayValue(value: String): Promise<Element>
 }
-
-external fun within(element: Element): TestingLibraryBrowser
 
 external interface TestingLibraryRoleOptions {
     var name: String

@@ -7,7 +7,7 @@ class WebdriverElementArray(
 
     private suspend fun all() = finder()
 
-    operator fun get(index: Int) = WebdriverElement { all()[index].element() }
+    operator fun get(index: Int) = WebdriverElement { all()[index].innerElement() }
 
     suspend fun <T> map(transform: suspend (WebdriverElement) -> T) = log("map") {
         all().map { transform(it) }.toList()

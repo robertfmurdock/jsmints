@@ -5,16 +5,19 @@ import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import kotlin.test.Test
 
-class TestingLibraryByTextTest {
+class WithinTest : Within by TestingLibraryBrowser {
+
+    private suspend fun getAwesomeSection() = TestingLibraryBrowser.getByText("Awesome button section").parentElement()
+    private suspend fun getCoolSection() = TestingLibraryBrowser.getByText("Cool button section").parentElement()
 
     @Test
-    fun givenElementExistsCanGetByText() = givenElementByTextWorks(TestingLibraryBrowser::getByText)
+    fun givenElementExistsCanGetByText() = givenElementByTextWorks { within(getAwesomeSection()).getByText(it) }
 
     @Test
-    fun givenElementExistsCanFindByText() = givenElementByTextWorks(TestingLibraryBrowser::findByText)
+    fun givenElementExistsCanFindByText() = givenElementByTextWorks { within(getAwesomeSection()).findByText(it) }
 
     @Test
-    fun givenElementExistsCanQueryByText() = givenElementByTextWorks(TestingLibraryBrowser::queryByText)
+    fun givenElementExistsCanQueryByText() = givenElementByTextWorks { within(getAwesomeSection()).queryByText(it) }
 
     private fun givenElementByTextWorks(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
@@ -27,22 +30,24 @@ class TestingLibraryByTextTest {
     }
 
     @Test
-    fun givenNoElementExistsGetByText() = givenNoElementByTextWillFailAsExpected(TestingLibraryBrowser::getByText)
+    fun givenNoElementExistsGetByText() =
+        givenNoElementByTextWillFailAsExpected { within(getCoolSection()).getByText(it) }
 
     @Test
-    fun givenNoElementExistsFindByText() = givenNoElementByTextWillFailAsExpected(TestingLibraryBrowser::findByText)
+    fun givenNoElementExistsFindByText() =
+        givenNoElementByTextWillFailAsExpected { within(getCoolSection()).findByText(it) }
 
     private fun givenNoElementByTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?
     ) = testingLibrarySetup {
     } exercise {
-        kotlin.runCatching { query("Not Awesome") }
+        kotlin.runCatching { query("Awesome") }
     } verify { result ->
         result.isFailure
             .assertIsEqualTo(true)
         result.exceptionOrNull()?.message.apply {
             this?.startsWith(
-                "Unable to find an element with the text: Not Awesome. " +
+                "Unable to find an element with the text: Awesome. " +
                     "This could be because the text is broken up by multiple elements. " +
                     "In this case, you can provide a function for your text matcher to " +
                     "make your matcher more flexible."
@@ -52,26 +57,28 @@ class TestingLibraryByTextTest {
     }
 
     @Test
-    fun givenNoElementExistsQueryByText() = testingLibrarySetup(object {
-        val browser = TestingLibraryBrowser
-    }) exercise {
-        browser.queryByText("Not Awesome")
+    fun givenNoElementExistsQueryByText() = testingLibrarySetup {
+    } exercise {
+        within(getCoolSection()).queryByText("Awesome")
     } verify { element ->
         element.isPresent().assertIsEqualTo(false)
         element.isDisplayed().assertIsEqualTo(false)
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnGetByText() =
-        givenMultipleElementsByTextErrors(TestingLibraryBrowser::getByText)
+    fun givenMultipleElementExistsErrorsOnGetByText() = givenMultipleElementsByTextErrors {
+        within(getCoolSection()).getByText(it)
+    }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnFindByText() =
-        givenMultipleElementsByTextErrors(TestingLibraryBrowser::findByText)
+    fun givenMultipleElementExistsErrorsOnFindByText() = givenMultipleElementsByTextErrors {
+        within(getCoolSection()).findByText(it)
+    }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnQueryByText() =
-        givenMultipleElementsByTextErrors(TestingLibraryBrowser::queryByText)
+    fun givenMultipleElementExistsErrorsOnQueryByText() = givenMultipleElementsByTextErrors {
+        within(getCoolSection()).queryByText(it)
+    }
 
     private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) =
         testingLibrarySetup {
@@ -87,16 +94,19 @@ class TestingLibraryByTextTest {
         }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnGetAllByText() =
-        givenMultipleElementsByTextSucceeds(TestingLibraryBrowser::getAllByText)
+    fun givenMultipleElementExistsSucceedsOnGetAllByText() = givenMultipleElementsByTextSucceeds {
+        within(getCoolSection()).getAllByText(it)
+    }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnFindAllByText() =
-        givenMultipleElementsByTextSucceeds(TestingLibraryBrowser::findAllByText)
+    fun givenMultipleElementExistsSucceedsOnFindAllByText() = givenMultipleElementsByTextSucceeds {
+        within(getCoolSection()).findAllByText(it)
+    }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnQueryAllByText() =
-        givenMultipleElementsByTextSucceeds(TestingLibraryBrowser::queryAllByText)
+    fun givenMultipleElementExistsSucceedsOnQueryAllByText() = givenMultipleElementsByTextSucceeds {
+        within(getCoolSection()).queryAllByText(it)
+    }
 
     private fun givenMultipleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
         testingLibrarySetup {
@@ -109,16 +119,19 @@ class TestingLibraryByTextTest {
         }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnGetAllByText() =
-        givenSingleElementsByTextSucceeds(TestingLibraryBrowser::getAllByText)
+    fun givenSingleElementExistsSucceedsOnGetAllByText() = givenSingleElementsByTextSucceeds {
+        within(getAwesomeSection()).getAllByText(it)
+    }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnFindAllByText() =
-        givenSingleElementsByTextSucceeds(TestingLibraryBrowser::findAllByText)
+    fun givenSingleElementExistsSucceedsOnFindAllByText() = givenSingleElementsByTextSucceeds {
+        within(getAwesomeSection()).findAllByText(it)
+    }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnQueryAllByText() =
-        givenSingleElementsByTextSucceeds(TestingLibraryBrowser::queryAllByText)
+    fun givenSingleElementExistsSucceedsOnQueryAllByText() = givenSingleElementsByTextSucceeds {
+        within(getAwesomeSection()).queryAllByText(it)
+    }
 
     private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
         testingLibrarySetup {

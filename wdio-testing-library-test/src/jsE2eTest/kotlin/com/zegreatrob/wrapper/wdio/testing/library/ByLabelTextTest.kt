@@ -5,7 +5,7 @@ import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import kotlin.test.Test
 
-class TestingLibraryByLabelTextTest {
+class ByLabelTextTest {
 
     @Test
     fun givenElementExistsCanGetByLabelText() = givenElementByLabelTextWorks(TestingLibraryBrowser::getByLabelText)
