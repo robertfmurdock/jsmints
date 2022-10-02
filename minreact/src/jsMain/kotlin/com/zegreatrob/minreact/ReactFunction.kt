@@ -2,7 +2,6 @@ package com.zegreatrob.minreact
 
 import com.zegreatrob.minreact.external.corejs.objectAssign
 import kotlinx.js.JsoDsl
-import org.w3c.dom.Node
 import react.Children
 import react.ChildrenBuilder
 import react.ElementType
@@ -10,9 +9,7 @@ import react.FC
 import react.Key
 import react.Props
 import react.PropsWithChildren
-import react.PropsWithRef
 import react.ReactNode
-import react.Ref
 import react.create
 
 inline fun <reified P : DataProps<P>> tmFC(crossinline function: ChildrenBuilder.(P) -> Unit):
@@ -36,7 +33,7 @@ interface DataProps<P : DataProps<P>> {
     val component: TMFC
 }
 
-external interface DataPropsBridge : PropsWithRef<Node>
+external interface DataPropsBridge : Props
 
 typealias TMFC = ElementType<DataPropsBridge>
 
@@ -54,14 +51,12 @@ fun <P : DataProps<P>> create(dataProps: DataProps<P>, block: @JsoDsl Props.() -
 
 fun <D : DataProps<in D>> DataProps<in D>.create(
     key: Key? = null,
-    ref: Ref<Node>? = null,
-    block: @JsoDsl ChildrenBuilder.() -> Unit = {},
+    block: @JsoDsl() (ChildrenBuilder.() -> Unit) = {},
 ): ReactNode {
     val dataProps = this
     return component.create {
         +dataProps.unsafeCast<Props>()
         key?.let { this.key = it }
-        ref?.let { this.ref = ref }
 
         block()
     }
