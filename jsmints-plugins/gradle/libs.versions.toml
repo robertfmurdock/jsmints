@@ -11,5 +11,5 @@ org-jlleitschuh-gradle-ktlint-gradle = "org.jlleitschuh.gradle:ktlint-gradle:11.
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.42.0"
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.6.1"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.7.0"
 org-gradle-kotlin-kotlin-dsl = "org.gradle.kotlin.kotlin-dsl:3.1.0"
