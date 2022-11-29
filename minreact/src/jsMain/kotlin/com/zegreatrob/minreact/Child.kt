@@ -1,6 +1,6 @@
 package com.zegreatrob.minreact
 
-import kotlinx.js.JsoDsl
+import js.core.JsoDsl
 import org.w3c.dom.Node
 import react.ChildrenBuilder
 import react.ElementType

@@ -1,7 +1,7 @@
 package com.zegreatrob.minreact
 
 import com.zegreatrob.minreact.external.corejs.objectAssign
-import kotlinx.js.JsoDsl
+import js.core.JsoDsl
 import react.Children
 import react.ChildrenBuilder
 import react.ElementType

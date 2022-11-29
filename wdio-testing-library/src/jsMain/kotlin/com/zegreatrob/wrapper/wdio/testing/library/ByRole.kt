@@ -4,8 +4,8 @@ import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import com.zegreatrob.wrapper.wdio.browser
 import com.zegreatrob.wrapper.wdio.testing.library.external.TestingLibraryRoleOptions
+import js.core.jso
 import kotlinx.coroutines.await
-import kotlinx.js.jso
 
 interface ByRole : BrowserProvider {
     suspend fun getByRole(role: String, options: RoleOptions = RoleOptions()) =
