@@ -23,7 +23,8 @@ fun <P : DataProps<P>> ensureKotlinClassProps(props: DataPropsBridge, jsClass: J
     if (props::class.js == jsClass) {
         props
     } else {
-        @Suppress("UNUSED_VARIABLE") val thing = jsClass
+        @Suppress("UNUSED_VARIABLE")
+        val thing = jsClass
         val newProps = js("new thing()")
         objectAssign(newProps, props)
         newProps
@@ -51,7 +52,8 @@ fun <P : DataProps<P>> create(dataProps: DataProps<P>, block: @JsoDsl Props.() -
 
 fun <D : DataProps<in D>> DataProps<in D>.create(
     key: Key? = null,
-    block: @JsoDsl() (ChildrenBuilder.() -> Unit) = {},
+    block: @JsoDsl
+    (ChildrenBuilder.() -> Unit) = {}
 ): ReactNode {
     val dataProps = this
     return component.create {

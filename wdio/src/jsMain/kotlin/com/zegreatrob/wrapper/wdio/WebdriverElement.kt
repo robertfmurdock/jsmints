@@ -13,20 +13,22 @@ class WebdriverElement(
 
     fun all() = WebdriverElementArray(selector)
 
-    fun all(selector: String) = if (this.selector == "")
+    fun all(selector: String) = if (this.selector == "") {
         WebdriverElementArray {
             innerElement().all(selector).await()
                 .map { WebdriverElement { it } }
         }
-    else
+    } else {
         WebdriverElementArray("${this.selector} $selector")
+    }
 
-    fun element(selector: String): WebdriverElement = if (this.selector == "")
+    fun element(selector: String): WebdriverElement = if (this.selector == "") {
         WebdriverElement {
             innerElement().element(selector).await()
         }
-    else
+    } else {
         WebdriverElement("${this.selector} $selector")
+    }
 
     private fun Element.all(selector: String): Promise<Array<Element>> = `$$`(selector)
         .unsafeCast<Promise<Array<Element>>>()

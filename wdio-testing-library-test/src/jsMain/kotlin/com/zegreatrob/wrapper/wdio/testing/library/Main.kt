@@ -11,8 +11,9 @@ fun main() {
         runWebdriverIO(config)
             .let { result -> process.exit(result) }
     }.invokeOnCompletion { huh ->
-        if (huh != null)
+        if (huh != null) {
             process.exit(reportError(huh))
+        }
     }
 }
 

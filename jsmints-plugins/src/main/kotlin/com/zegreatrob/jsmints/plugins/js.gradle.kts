@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 plugins {
     kotlin("multiplatform")
     id("com.zegreatrob.jsmints.plugins.reports")
-    id("org.jlleitschuh.gradle.ktlint")
+    id("org.jmailen.kotlinter")
 }
 
 repositories {
@@ -35,10 +35,6 @@ dependencies {
 val jspackage = project.extensions.create<JsConstraintExtension>("jsconstraint")
 configure<JsConstraintExtension> {
     json = File(project(":dependency-bom").projectDir, "package.json")
-}
-
-ktlint {
-    version.set("0.45.2")
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.targets.js.npm.PublicPackageJsonTask::class).configureEach {

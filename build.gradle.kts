@@ -15,9 +15,6 @@ plugins {
 
 group = "com.zegreatrob.jsmints"
 
-// This is in place to enable Chromedriver via npm install. If we find a workaround, we should remove this line.
-yarn.ignoreScripts = false
-
 nexusPublishing {
     repositories {
         sonatype {

@@ -107,8 +107,9 @@ class DataLoaderTest {
             val onClick = { tools.performAsyncWork(::collectThreeValuesFromChannel, { throw it }, { setValues(it) }) }
             button { +"Button"; this.onClick = { onClick() } }
             div {
-                if (buttonClickValues != null)
+                if (buttonClickValues != null) {
                     +"Work Complete ${buttonClickValues.joinToString(separator = ", ")}"
+                }
             }
         }
     }) {

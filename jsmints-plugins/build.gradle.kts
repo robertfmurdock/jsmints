@@ -17,7 +17,7 @@ dependencies {
     implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
     implementation(libs.com.github.ben.manes.gradle.versions.plugin)
-    implementation(libs.org.jlleitschuh.gradle.ktlint.gradle)
+    implementation(libs.org.jmailen.gradle.kotlinter.gradle)
     implementation(libs.com.fasterxml.jackson.core.jackson.databind)
 }
 

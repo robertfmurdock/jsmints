@@ -20,9 +20,10 @@ data class DataLoaderTools(val scope: CoroutineScope, val reloadData: ReloadFunc
         onWorkComplete: (R) -> Unit,
         errorResult: (Throwable) -> R
     ) = invokeOnCompletion { throwable ->
-        if (throwable == null)
+        if (throwable == null) {
             getCompleted().let(onWorkComplete)
-        else
+        } else {
             errorResult(throwable).let(onWorkComplete)
+        }
     }
 }

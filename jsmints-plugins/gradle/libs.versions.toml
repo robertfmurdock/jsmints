@@ -1,13 +1,13 @@
 [versions]
-org-jetbrains-kotlin = "1.7.20"
+org-jetbrains-kotlin = "1.8.0"
 
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.14.1"
 com-github-ben-manes-gradle-versions-plugin = "com.github.ben-manes:gradle-versions-plugin:0.44.0"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.19.0"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
-org-jetbrains-kotlin-kotlin-stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.7.22"
-org-jlleitschuh-gradle-ktlint-gradle = "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
+org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
+org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:3.13.0"
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.44.0"

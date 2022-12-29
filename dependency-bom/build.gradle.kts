@@ -2,15 +2,11 @@ plugins {
     `java-platform`
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
-    id("org.jlleitschuh.gradle.ktlint")
+    id("org.jmailen.kotlinter")
 }
 
 repositories {
     mavenCentral()
-}
-
-ktlint {
-    version.set("0.45.2")
 }
 
 javaPlatform {
