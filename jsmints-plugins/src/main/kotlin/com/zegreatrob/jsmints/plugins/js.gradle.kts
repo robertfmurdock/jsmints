@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.jetbrains.kotlin.gradle.plugin.mpp.MetadataDependencyTransformationTask
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmCachesSetup
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinPackageJsonTask
@@ -64,6 +65,6 @@ tasks.withType(org.gradle.jvm.tasks.Jar::class).configureEach {
 tasks.withType(KotlinJvmTest::class).configureEach {
     outputs.cacheIf { true }
 }
-tasks.withType(org.jetbrains.kotlin.gradle.plugin.mpp.TransformKotlinGranularMetadata::class).configureEach {
+tasks.withType(MetadataDependencyTransformationTask::class).configureEach {
     outputs.cacheIf { true }
 }
