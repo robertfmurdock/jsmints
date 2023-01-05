@@ -12,4 +12,4 @@ org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:3.13.
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.44.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.7.0"
-org-gradle-kotlin-kotlin-dsl = "org.gradle.kotlin.kotlin-dsl:4.0.0"
+org-gradle-kotlin-kotlin-dsl = "org.gradle.kotlin.kotlin-dsl:4.0.1"
