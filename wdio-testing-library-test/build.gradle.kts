@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsExec
+import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import java.io.FileOutputStream
 
@@ -19,6 +20,8 @@ kotlin {
         }
     }
 }
+
+rootProject.yarn.ignoreScripts = false
 
 dependencies {
     jsMainImplementation(kotlin("stdlib"))
