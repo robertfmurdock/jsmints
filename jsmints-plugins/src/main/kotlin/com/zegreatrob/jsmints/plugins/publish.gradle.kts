@@ -49,6 +49,9 @@ afterEvaluate {
     tasks.findByName("publishJsPublicationToSonatypeRepository")
         ?.dependsOn("signKotlinMultiplatformPublication")
 
+    tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
+        ?.dependsOn("signJsPublication")
+
 }
 
 signing {
