@@ -64,7 +64,7 @@ signing {
 tasks {
     publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
 
-    "publishJsPublicationToSonatypeRepository" {
+    findByName("publishJsPublicationToSonatypeRepository")?.configure<Task> {
         dependsOn("signKotlinMultiplatformPublication")
     }
 
