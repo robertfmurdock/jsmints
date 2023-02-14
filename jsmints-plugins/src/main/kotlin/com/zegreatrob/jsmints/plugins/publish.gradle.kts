@@ -63,6 +63,11 @@ signing {
 
 tasks {
     publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
+
+    "publishJsPublicationToSonatypeRepository" {
+        dependsOn("signKotlinMultiplatformPublication")
+    }
+
     val javadocJar by creating(Jar::class) {
         archiveClassifier.set("javadoc")
         from("${rootDir.absolutePath}/javadocs")
