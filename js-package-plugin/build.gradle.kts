@@ -18,6 +18,12 @@ plugins {
 
 group = "com.zegreatrob.jsmints"
 
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 dependencies {
     api(platform(project(":dependency-bom")))
     api("com.fasterxml.jackson.core:jackson-databind")
@@ -76,12 +82,10 @@ signing {
     sign(publishing.publications)
 }
 
-pluginBundle {
-    website = scmUrl
-    vcsUrl = scmUrl
+gradlePlugin {
+    website.set(scmUrl)
+    vcsUrl.set(scmUrl)
     description = "These plugins are for interacting with package.json when using kotlin js."
-
-    tags = listOf()
 }
 
 tasks {

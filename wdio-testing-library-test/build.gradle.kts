@@ -74,6 +74,7 @@ tasks {
             productionExecutableCompileSync,
             compileE2eTestProductionExecutableKotlinJs,
             jsTestTestDevelopmentExecutableCompileSync,
+            ":wdio-testing-library:jsTestTestDevelopmentExecutableCompileSync",
             "composeUp"
         )
         val wdioConfig = project.projectDir.resolve("wdio.conf.js")
