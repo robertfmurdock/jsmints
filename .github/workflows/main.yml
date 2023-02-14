@@ -39,6 +39,7 @@ jobs:
         run: |
           testspace $(find . -path *test-results* -name *.xml)
       - name: Collect Test Results
+        if: ${{ always() }}
         run: ./gradlew collectResults
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
