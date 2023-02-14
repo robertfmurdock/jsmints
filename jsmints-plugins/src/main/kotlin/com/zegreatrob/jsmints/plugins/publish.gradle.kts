@@ -45,6 +45,10 @@ afterEvaluate {
             }
         }
     }
+
+    tasks.findByName("publishJsPublicationToSonatypeRepository")
+        ?.dependsOn("signKotlinMultiplatformPublication")
+
 }
 
 signing {
@@ -63,10 +67,6 @@ signing {
 
 tasks {
     publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
-
-    findByName("publishJsPublicationToSonatypeRepository")?.configure<Task> {
-        dependsOn("signKotlinMultiplatformPublication")
-    }
 
     val javadocJar by creating(Jar::class) {
         archiveClassifier.set("javadoc")
