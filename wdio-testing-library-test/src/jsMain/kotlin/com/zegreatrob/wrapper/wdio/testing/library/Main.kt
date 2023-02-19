@@ -8,7 +8,6 @@ fun main() {
     val config = wdioConfig()
 
     MainScope().launch {
-        println("hi")
         runWebdriverIO(config)
             .let { result -> process.exit(result) }
     }.invokeOnCompletion { huh ->

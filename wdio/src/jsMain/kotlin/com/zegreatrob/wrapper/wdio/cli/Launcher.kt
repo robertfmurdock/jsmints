@@ -8,18 +8,15 @@ external interface Launcher {
     fun run(): Promise<Int>
 }
 
-@Suppress("UNUSED_PARAMETER", "UNUSED_VARIABLE")
-suspend fun Launcher(configPath: String, options: Json): Launcher {
-    val constructor = getConstructor()
-    println("he hee")
-    val cp = configPath
-    val o = options
-    return js("new constructor(cp, o)").unsafeCast<Launcher>()
-}
+suspend fun Launcher(configPath: String, options: Json): Launcher = launcher(getConstructor(), configPath, options)
 
-private suspend fun getConstructor(): dynamic = Promise.resolve<Json>(js("import(\"@wdio/cli\")"))
-    .then {
-        println("hi hi")
-        it["Launcher"].asDynamic()
-    }
+@Suppress("UNUSED_PARAMETER")
+private fun launcher(constructor: dynamic, configPath: String, options: Json): Launcher =
+    js("new constructor(configPath, options)")
+        .unsafeCast<Launcher>()
+
+private suspend fun getConstructor(): dynamic = Promise.resolve(
+    js("import(\"@wdio/cli\")").unsafeCast<Promise<Json>>()
+)
+    .then { it["Launcher"].asDynamic() }
     .await()
