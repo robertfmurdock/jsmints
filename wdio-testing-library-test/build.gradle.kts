@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsExec
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import java.io.FileOutputStream
@@ -13,12 +14,18 @@ kotlin {
     js {
         useCommonJs()
         binaries.executable()
-        nodejs { testTask { enabled = false } }
+        nodejs {
+            testTask { enabled = false }
+        }
         compilations {
             val e2eTest by creating
             binaries.executable(e2eTest)
         }
     }
+}
+
+rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
+    it?.nodeVersion = "19.6.0"
 }
 
 rootProject.yarn.ignoreScripts = false
@@ -29,6 +36,9 @@ dependencies {
     jsMainImplementation("com.soywiz.korlibs.klock:klock")
     jsMainImplementation("io.github.microutils:kotlin-logging")
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
 
     "jsE2eTestImplementation"(platform(project(":dependency-bom")))
     "jsE2eTestImplementation"(project(":wdio-testing-library"))
@@ -43,6 +53,7 @@ dependencies {
     "jsE2eTestImplementation"(jsconstraint("@wdio/local-runner"))
     "jsE2eTestImplementation"(jsconstraint("@wdio/mocha-framework"))
     "jsE2eTestImplementation"(jsconstraint("chromedriver"))
+    "jsE2eTestImplementation"(jsconstraint("esm"))
     "jsE2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
 }
 
@@ -77,7 +88,7 @@ tasks {
             ":wdio-testing-library:jsTestTestDevelopmentExecutableCompileSync",
             "composeUp"
         )
-        val wdioConfig = project.projectDir.resolve("wdio.conf.js")
+        val wdioConfig = project.projectDir.resolve("wdio.conf.mjs")
         inputs.files(compileProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(jsTestTestDevelopmentExecutableCompileSync.map { it.outputs.files })
@@ -104,7 +115,6 @@ tasks {
                 ).joinToString(":"),
             )
         )
-
         val logFile = file("$logsDir/run.log")
         logFile.parentFile.mkdirs()
         standardOutput = FileOutputStream(logFile, true)
