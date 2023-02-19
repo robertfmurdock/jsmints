@@ -1,9 +1,9 @@
-// import {HtmlReporter, ReportAggregator} from "@rpii/wdio-html-reporter/lib/index.js";
-// import log4js from "@log4js-node/log4js-api";
+import {HtmlReporter, ReportAggregator} from "wdio-html-nice-reporter";
+import log4js from "@log4js-node/log4js-api";
 import path from "path";
 
-// const logger = log4js.getLogger('default');
-// logger.level = "info";
+const logger = log4js.getLogger('default');
+logger.level = "info";
 const reportDirectory = path.relative('./', process.env.REPORT_DIR) + "/"
 const testResultsDir = path.relative('./', process.env.TEST_RESULTS_DIR) + "/"
 
@@ -46,16 +46,16 @@ export const config = {
             outputDir: testResultsDir,
             outputFileFormat: (options) => `results.xml`
         }],
-        // [HtmlReporter, {
-        //     debug: true,
-        //     outputDir: reportDirectory,
-        //     filename: 'report.html',
-        //     reportTitle: 'Wdio Testing Library E2E Report',
-        //     showInBrowser: true,
-        //     useOnAfterCommandForScreenshot: true,
-        //     LOG: logger
-        // }
-        // ],
+        [HtmlReporter, {
+            debug: true,
+            outputDir: reportDirectory,
+            filename: 'report.html',
+            reportTitle: 'Wdio Testing Library E2E Report',
+            showInBrowser: true,
+            useOnAfterCommandForScreenshot: true,
+            LOG: logger
+        }
+        ],
     ],
     mochaOpts: {
         helpers: [],
@@ -74,19 +74,19 @@ export const config = {
         process.emit('test:screenshot', filepath);
     },
     onPrepare: function (config, capabilities) {
-        // let reportAggregator = new ReportAggregator({
-        //     outputDir: reportDirectory,
-        //     filename: 'main-report.html',
-        //     reportTitle: 'Main Report',
-        //     browserName: capabilities.browserName,
-        // });
-        // reportAggregator.clean();
-        //
-        // global.reportAggregator = reportAggregator;
+        let reportAggregator = new ReportAggregator({
+            outputDir: reportDirectory,
+            filename: 'main-report.html',
+            reportTitle: 'Main Report',
+            browserName: capabilities.browserName,
+        });
+        reportAggregator.clean();
+
+        global.reportAggregator = reportAggregator;
     },
 
     onComplete: async function (exitCode, config, capabilities, results) {
-        // await global.reportAggregator.createReport();
+        await global.reportAggregator.createReport();
     },
 
 };

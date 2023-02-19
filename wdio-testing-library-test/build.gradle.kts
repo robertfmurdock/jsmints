@@ -45,7 +45,7 @@ dependencies {
     "jsE2eTestImplementation"(kotlin("test"))
     "jsE2eTestImplementation"("com.zegreatrob.testmints:async")
     "jsE2eTestImplementation"("com.zegreatrob.testmints:minassert")
-    "jsE2eTestImplementation"(jsconstraint("@rpii/wdio-html-reporter"))
+    "jsE2eTestImplementation"(jsconstraint("wdio-html-nice-reporter"))
     "jsE2eTestImplementation"(jsconstraint("@testing-library/webdriverio"))
     "jsE2eTestImplementation"(jsconstraint("@wdio/cli"))
     "jsE2eTestImplementation"(jsconstraint("@wdio/dot-reporter"))

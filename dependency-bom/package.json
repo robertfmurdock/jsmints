@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "esm": "^3.2.25",
-    "@rpii/wdio-html-reporter": "^7.7.1",
+    "wdio-html-nice-reporter": "8.1.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@testing-library/webdriverio": "^3.2.1",
