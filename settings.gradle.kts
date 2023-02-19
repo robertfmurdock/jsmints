@@ -15,6 +15,7 @@ include("wdio-testing-library")
 include("wdio-testing-library-test")
 
 includeBuild("jsmints-plugins")
+includeBuild("wdio-test-plugin")
 
 val isCiServer = System.getenv().containsKey("CI")
 

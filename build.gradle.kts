@@ -1,7 +1,6 @@
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
-import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
     alias(libs.plugins.com.github.sghill.distribution.sha)
