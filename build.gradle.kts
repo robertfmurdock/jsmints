@@ -50,7 +50,7 @@ tasks {
         mustRunAfter(publish)
     }
     publish {
-        dependsOn(gradle.includedBuilds.map { it.task(":publish") })
+        dependsOn(gradle.includedBuilds.mapNotNull { runCatching { it.task(":publish") }.getOrNull() })
         finalizedBy(closeAndReleaseSonatypeStagingRepository)
     }
     check {
