@@ -27,4 +27,7 @@ tasks {
     named("jsNodeTest") {
         enabled = false
     }
+    named("jsTestTestDevelopmentExecutableCompileSync") {
+        enabled = false
+    }
 }
