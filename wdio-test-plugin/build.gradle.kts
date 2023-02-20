@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.org.jlleitschuh.gradle.ktlint)
     alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
+    base
 }
 
 allprojects {
@@ -41,7 +42,7 @@ tasks.withType<Detekt>().configureEach {
     }
 }
 
-tasks.register("clean", Delete::class.java) {
+tasks.named("clean", Delete::class.java) {
     delete(rootProject.buildDir)
 }
 

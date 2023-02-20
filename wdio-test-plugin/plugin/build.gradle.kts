@@ -2,6 +2,7 @@ import java.nio.charset.Charset
 import java.util.*
 
 plugins {
+    `kotlin-dsl`
     kotlin("jvm")
     `java-gradle-plugin`
     alias(libs.plugins.com.gradle.plugin.publish)
@@ -11,6 +12,8 @@ plugins {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
+    implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
+    implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
 
     testImplementation(libs.junit)
 }

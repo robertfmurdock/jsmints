@@ -18,13 +18,8 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
-
-    versionCatalogs {
-//        create("libs") {
-//            from(files("../gradle/libs.versions.toml"))
-//        }
-    }
 }
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 include(":plugin")
+include(":wdiorunner")

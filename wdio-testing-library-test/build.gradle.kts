@@ -7,6 +7,7 @@ import java.io.FileOutputStream
 plugins {
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.js")
+    id("com.zegreatrob.jsmints.plugins.wdiotest")
     alias(libs.plugins.com.avast.gradle.docker.compose)
 }
 
