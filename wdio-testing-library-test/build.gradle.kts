@@ -11,26 +11,6 @@ plugins {
     alias(libs.plugins.com.avast.gradle.docker.compose)
 }
 
-kotlin {
-    js {
-        useCommonJs()
-        binaries.executable()
-        nodejs {
-            testTask { enabled = false }
-        }
-        compilations {
-            val e2eTest by creating
-            binaries.executable(e2eTest)
-        }
-    }
-}
-
-rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    it?.nodeVersion = "19.6.0"
-}
-
-rootProject.yarn.ignoreScripts = false
-
 dependencies {
     jsMainImplementation(kotlin("stdlib"))
     jsMainImplementation(project(":wdio-testing-library"))

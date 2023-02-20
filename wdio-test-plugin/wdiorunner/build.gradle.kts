@@ -43,7 +43,7 @@ group = "com.zegreatrob.jsmints"
 
 artifacts {
     val task = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
-    add(executable.name, task.map { it.outputFileProperty.also { println("lol output ${it.get()}.") } }) {
+    add(executable.name, task.map { it.outputFileProperty }) {
         builtBy(task)
     }
 }

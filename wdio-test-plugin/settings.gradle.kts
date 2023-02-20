@@ -1,4 +1,4 @@
-rootProject.name="wdio-test-plugin"
+rootProject.name = "wdio-test-plugin"
 
 buildCache {
     local {
@@ -21,5 +21,6 @@ dependencyResolutionManagement {
 }
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+includeBuild("../jsmints-plugins")
 include(":plugin")
 include(":wdiorunner")
