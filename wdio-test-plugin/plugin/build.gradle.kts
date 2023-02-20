@@ -46,3 +46,12 @@ signing {
     }
     sign(publishing.publications)
 }
+
+tasks {
+    formatKotlinMain {
+        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+    }
+    lintKotlinMain {
+        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+    }
+}
