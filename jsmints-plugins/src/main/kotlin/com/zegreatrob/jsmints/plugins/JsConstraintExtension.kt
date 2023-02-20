@@ -23,7 +23,6 @@ abstract class JsConstraintExtension(val project: Project) {
     operator fun invoke(name: String): Dependency = dependencies()!!
         .first { (key, _) -> key == name }
         .let { project.dependencies.npm(name, it.second.asText()) }
-
 }
 
 fun loadPackageJson(file: File): JsonNode {

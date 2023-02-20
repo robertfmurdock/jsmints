@@ -50,10 +50,10 @@ tasks {
         mustRunAfter("publish")
     }
     check {
-        dependsOn(gradle.includedBuild("wdio-test-plugin").task(":check"))
+        dependsOn(gradle.includedBuilds.map { it.task(":check") })
     }
     create("formatKotlin") {
-        dependsOn(gradle.includedBuild("wdio-test-plugin").task(":formatKotlin"))
+        dependsOn(gradle.includedBuilds.map { it.task(":formatKotlin") })
     }
 }
 

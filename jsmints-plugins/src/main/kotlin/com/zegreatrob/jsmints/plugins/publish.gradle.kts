@@ -1,8 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
-import org.gradle.kotlin.dsl.*
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Base64
 
 plugins {
     `maven-publish`
@@ -51,7 +50,6 @@ afterEvaluate {
 
     tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
         ?.dependsOn("signJsPublication")
-
 }
 
 signing {
