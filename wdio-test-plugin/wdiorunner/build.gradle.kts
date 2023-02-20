@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
-    kotlin("js")
+    id("com.zegreatrob.jsmints.plugins.js2")
 }
 
 kotlin {
@@ -36,7 +37,13 @@ dependencies {
     implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-node")
+    implementation(jsconstraint("@wdio/cli"))
+    implementation(jsconstraint("@wdio/dot-reporter"))
+    implementation(jsconstraint("@wdio/junit-reporter"))
+    implementation(jsconstraint("@wdio/local-runner"))
+    implementation(jsconstraint("@wdio/mocha-framework"))
 }
+
 val executable: Configuration by configurations.creating
 
 group = "com.zegreatrob.jsmints"
@@ -46,4 +53,8 @@ artifacts {
     add(executable.name, task.map { it.outputFileProperty }) {
         builtBy(task)
     }
+}
+
+rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
+    it?.nodeVersion = "19.6.0"
 }
