@@ -50,7 +50,7 @@ tasks {
         mustRunAfter(publish)
     }
     publish {
-        dependsOn(gradle.includedBuilds.mapNotNull { runCatching { it.task(":publish") }.getOrNull() })
+        dependsOn(gradle.includedBuild("wdio-test-plugin").task(":publish"))
         finalizedBy(closeAndReleaseSonatypeStagingRepository)
     }
     check {
