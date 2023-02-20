@@ -19,7 +19,6 @@ org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:3.13.
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.45.0"
 com-gradle-plugin-publish = "com.gradle.plugin-publish:1.1.0"
-io-gitlab-arturbosch-detekt = "io.gitlab.arturbosch.detekt:1.22.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.7.0"
 org-jetbrains-kotlin-jvm = "org.jetbrains.kotlin.jvm:1.8.10"
 org-jlleitschuh-gradle-ktlint = "org.jlleitschuh.gradle.ktlint:11.2.0"

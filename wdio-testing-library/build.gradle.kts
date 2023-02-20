@@ -14,8 +14,6 @@ kotlin {
                 implementation("io.github.microutils:kotlin-logging")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                implementation(jsconstraint("@wdio/cli"))
-                implementation(jsconstraint("@wdio/local-runner"))
                 implementation(jsconstraint("@testing-library/webdriverio"))
             }
         }
