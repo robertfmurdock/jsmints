@@ -1,16 +1,37 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
+import de.gliderpilot.gradle.semanticrelease.GithubRepo
+import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
+import org.ajoberstar.gradle.git.release.semver.ChangeScope
+
 plugins {
-    alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
-    alias(libs.plugins.com.gradle.plugin.publish) apply false
-    alias(libs.plugins.org.jlleitschuh.gradle.ktlint)
-    alias(libs.plugins.com.github.ben.manes.versions)
+    alias(libs.plugins.de.gliderpilot.semantic.release)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
-    id("com.zegreatrob.jsmints.plugins.lint")
     `maven-publish`
     signing
     base
+    id("com.zegreatrob.jsmints.plugins.lint")
+    id("com.zegreatrob.jsmints.plugins.versioning")
+}
+
+semanticRelease {
+    changeLog(closureOf<SemanticReleaseChangeLogService> {
+
+        repo(closureOf<GithubRepo> {
+            setGhToken(System.getenv("GH_TOKEN"))
+        })
+
+        changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
+            val version = extractVersion()
+            when (version?.uppercase()) {
+                "MAJOR" -> ChangeScope.MAJOR
+                "MINOR" -> ChangeScope.MINOR
+                "PATCH" -> ChangeScope.PATCH
+                else -> null
+            }
+        })
+    })
 }
 
 nexusPublishing {
@@ -25,32 +46,19 @@ nexusPublishing {
     }
 }
 
-tasks.named("clean", Delete::class.java) {
-    delete(rootProject.buildDir)
-}
-
-tasks.wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-}
-
 tasks {
-    check { dependsOn(getTasksByName("check", true) - this) }
-    create("formatKotlin") { dependsOn(getTasksByName("formatKotlin", true) - this) }
-    publish { dependsOn(getTasksByName("publish", true) - this) }
+    clean { delete(rootProject.buildDir) }
+    check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }
+    create("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
+    publish { dependsOn(provider { (getTasksByName("publish", true) - this).toList() }) }
 }
 
-tasks {
-    withType<DependencyUpdatesTask> {
-        checkForGradleUpdate = true
-        outputFormatter = "json"
-        outputDir = "build/dependencyUpdates"
-        reportfileName = "report"
-        revision = "release"
+fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
+    val open = fullMessage.indexOf("[")
+    val close = fullMessage.indexOf("]")
 
-        rejectVersionIf {
-            "^[0-9.]+[0-9](-RC|-M[0-9]+|-RC[0-9]+|-beta.*|-Beta.*|-alpha.*)\$"
-                .toRegex(RegexOption.IGNORE_CASE)
-                .matches(candidate.version)
-        }
+    if (open < 0 || close < 0) {
+        return null
     }
+    return fullMessage.subSequence(open + 1, close).toString()
 }

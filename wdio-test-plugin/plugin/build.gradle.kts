@@ -59,7 +59,6 @@ gradlePlugin {
 afterEvaluate {
     publishing.publications.withType<MavenPublication>().forEach {
         with(it) {
-
             pom.name.set(project.name)
             pom.description.set(project.name)
             pom.url.set(scmUrl)
