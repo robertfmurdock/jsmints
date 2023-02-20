@@ -5,8 +5,8 @@ import org.ajoberstar.gradle.git.release.semver.ChangeScope
 plugins {
     alias(libs.plugins.com.github.sghill.distribution.sha)
     alias(libs.plugins.de.gliderpilot.semantic.release)
-    alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
+    alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     `maven-publish`
     signing
     id("com.zegreatrob.jsmints.plugins.versioning")
@@ -47,7 +47,11 @@ semanticRelease {
 
 tasks {
     val closeAndReleaseSonatypeStagingRepository by getting {
-        mustRunAfter("publish")
+        mustRunAfter(publish)
+    }
+    publish {
+        dependsOn(gradle.includedBuilds.map { it.task(":publish") })
+        finalizedBy(closeAndReleaseSonatypeStagingRepository)
     }
     check {
         dependsOn(gradle.includedBuilds.map { it.task(":check") })

@@ -87,7 +87,3 @@ gradlePlugin {
     vcsUrl.set(scmUrl)
     description = "These plugins are for interacting with package.json when using kotlin js."
 }
-
-tasks {
-    publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
-}
