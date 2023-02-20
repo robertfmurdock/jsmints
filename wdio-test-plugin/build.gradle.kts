@@ -2,6 +2,8 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
+import de.gliderpilot.gradle.semanticrelease.SemanticReleaseInitialStateService
+import de.gliderpilot.gradle.semanticrelease.SemanticReleaseStrategy
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
 
 plugins {
@@ -17,11 +19,6 @@ plugins {
 
 semanticRelease {
     changeLog(closureOf<SemanticReleaseChangeLogService> {
-
-        repo(closureOf<GithubRepo> {
-            setGhToken(System.getenv("GH_TOKEN"))
-        })
-
         changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
             val version = extractVersion()
             when (version?.uppercase()) {
@@ -32,6 +29,14 @@ semanticRelease {
             }
         })
     })
+}
+
+release {
+    versionStrategy(
+        semanticRelease.releaseStrategy.copyWith(
+            mapOf("selector" to de.gliderpilot.gradle.semanticrelease.SemanticReleaseStrategySelector { true })
+        )
+    )
 }
 
 nexusPublishing {

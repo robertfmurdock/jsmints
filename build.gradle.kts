@@ -56,9 +56,6 @@ tasks {
     check {
         dependsOn(gradle.includedBuilds.map { it.task(":check") })
     }
-    "release" {
-        dependsOn(gradle.includedBuilds.map { it.task(":release") })
-    }
     create("formatKotlin") {
         dependsOn(gradle.includedBuilds.map { it.task(":formatKotlin") })
     }
