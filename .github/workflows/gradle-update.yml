@@ -18,7 +18,7 @@ jobs:
       - name: Update Deps
         run: ./gradlew versionCatalogUpdate
       - name: Update Yarn Lock
-        run: ./gradlew kotlinUpgradeYarnLock
+        run: ./gradlew kotlinUpgradeYarnLock :wdio-test-plugin:kotlinUpgradeYarnLock
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
