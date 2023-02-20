@@ -34,7 +34,10 @@ semanticRelease {
 release {
     versionStrategy(
         semanticRelease.releaseStrategy.copyWith(
-            mapOf("selector" to de.gliderpilot.gradle.semanticrelease.SemanticReleaseStrategySelector { true })
+            mapOf(
+                "selector" to de.gliderpilot.gradle.semanticrelease.SemanticReleaseStrategySelector { true },
+                "createTag" to false
+            )
         )
     )
 }
