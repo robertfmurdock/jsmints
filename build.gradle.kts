@@ -49,6 +49,12 @@ tasks {
     val closeAndReleaseSonatypeStagingRepository by getting {
         mustRunAfter("publish")
     }
+    check {
+        dependsOn(gradle.includedBuild("wdio-test-plugin").task(":check"))
+    }
+    create("formatKotlin") {
+        dependsOn(gradle.includedBuild("wdio-test-plugin").task(":formatKotlin"))
+    }
 }
 
 fun org.ajoberstar.grgit.Commit.extractVersion(): String? {

@@ -21,7 +21,6 @@ dependencies {
     "jsE2eTestImplementation"("com.zegreatrob.testmints:async")
     "jsE2eTestImplementation"("com.zegreatrob.testmints:minassert")
     "jsE2eTestImplementation"(jsconstraint("wdio-html-nice-reporter"))
-    "jsE2eTestImplementation"(jsconstraint("@testing-library/webdriverio"))
     "jsE2eTestImplementation"(jsconstraint("chromedriver"))
     "jsE2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
 }

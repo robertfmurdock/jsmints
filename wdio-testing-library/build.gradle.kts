@@ -1,5 +1,3 @@
-import com.zegreatrob.jsmints.plugins.npmConstrained
-
 plugins {
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
@@ -16,8 +14,9 @@ kotlin {
                 implementation("io.github.microutils:kotlin-logging")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                implementation(npmConstrained("@wdio/cli"))
-                implementation(npmConstrained("@wdio/local-runner"))
+                implementation(jsconstraint("@wdio/cli"))
+                implementation(jsconstraint("@wdio/local-runner"))
+                implementation(jsconstraint("@testing-library/webdriverio"))
             }
         }
     }

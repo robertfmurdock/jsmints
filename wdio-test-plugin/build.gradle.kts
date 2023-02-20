@@ -8,26 +8,13 @@ plugins {
     alias(libs.plugins.org.jlleitschuh.gradle.ktlint)
     alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
+    id("com.zegreatrob.jsmints.plugins.lint")
     base
 }
 
 allprojects {
     apply {
         plugin(rootProject.libs.plugins.io.gitlab.arturbosch.detekt.get().pluginId)
-        plugin(rootProject.libs.plugins.org.jlleitschuh.gradle.ktlint.get().pluginId)
-    }
-
-    ktlint {
-        debug.set(false)
-        verbose.set(true)
-        android.set(false)
-        outputToConsole.set(true)
-        ignoreFailures.set(false)
-        enableExperimentalRules.set(true)
-        filter {
-            exclude("**/generated/**")
-            include("**/kotlin/**")
-        }
     }
 
     detekt {
@@ -48,6 +35,11 @@ tasks.named("clean", Delete::class.java) {
 
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+tasks {
+    check { dependsOn(getTasksByName("check", true) - this) }
+    create("formatKotlin") { dependsOn(getTasksByName("formatKotlin", true) - this) }
 }
 
 tasks {

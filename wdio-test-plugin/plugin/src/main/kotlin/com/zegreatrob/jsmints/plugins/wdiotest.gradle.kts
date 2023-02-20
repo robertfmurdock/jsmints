@@ -93,8 +93,8 @@ tasks {
                 "TEST_RESULTS_DIR" to testResultsDir,
                 "STRICT_SSL" to "false",
                 "NODE_PATH" to listOf(
-                    "${project.rootProject.buildDir.path}/js/node_modules",
-                ).joinToString(":"),
+                    "${project.rootProject.buildDir.path}/js/node_modules"
+                ).joinToString(":")
             )
         )
         val logFile = file("$logsDir/run.log")

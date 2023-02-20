@@ -7,6 +7,7 @@ plugins {
     `java-gradle-plugin`
     alias(libs.plugins.com.gradle.plugin.publish)
     signing
+    id("com.zegreatrob.jsmints.plugins.lint")
 }
 
 dependencies {

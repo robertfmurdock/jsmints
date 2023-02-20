@@ -2,6 +2,7 @@ package com.zegreatrob.jsmints.plugins
 
 import org.jetbrains.kotlin.gradle.plugin.mpp.MetadataDependencyTransformationTask
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
+import org.jetbrains.kotlin.gradle.targets.js.npm.PublicPackageJsonTask
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmCachesSetup
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinPackageJsonTask
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
@@ -11,7 +12,7 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 plugins {
     kotlin("multiplatform")
     id("com.zegreatrob.jsmints.plugins.reports")
-    id("org.jmailen.kotlinter")
+    id("com.zegreatrob.jsmints.plugins.lint")
 }
 
 repositories {
@@ -38,7 +39,7 @@ configure<JsConstraintExtension> {
     json = File(project(":dependency-bom").projectDir, "package.json")
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.targets.js.npm.PublicPackageJsonTask::class).configureEach {
+tasks.withType(PublicPackageJsonTask::class).configureEach {
     outputs.cacheIf { true }
 }
 tasks.withType(KotlinNpmCachesSetup::class).configureEach {

@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
     id("com.zegreatrob.jsmints.plugins.js2")
+    id("com.zegreatrob.jsmints.plugins.lint")
 }
 
 kotlin {
@@ -11,19 +12,6 @@ kotlin {
             useCommonJs()
         }
         binaries.executable()
-    }
-}
-
-ktlint {
-    debug.set(false)
-    verbose.set(true)
-    android.set(false)
-    outputToConsole.set(true)
-    ignoreFailures.set(false)
-    enableExperimentalRules.set(true)
-    filter {
-        exclude("**/generated/**")
-        include("**/kotlin/**")
     }
 }
 
