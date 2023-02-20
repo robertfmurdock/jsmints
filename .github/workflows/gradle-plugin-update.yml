@@ -17,6 +17,8 @@ jobs:
           cache-read-only: true
       - name: Update Plugin Deps
         run: ./gradlew :jsmints-plugins:versionCatalogUpdate :wdio-test-plugin:versionCatalogUpdate
+      - name: Update Yarn Lock
+        run: ./gradlew kotlinUpgradeYarnLock
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
