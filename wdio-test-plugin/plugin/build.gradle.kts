@@ -20,6 +20,7 @@ dependencies {
 }
 
 group = "com.zegreatrob.jsmints"
+version = "1.1.1"
 
 kotlin {
     jvmToolchain {
