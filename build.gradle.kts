@@ -1,6 +1,7 @@
 import de.gliderpilot.gradle.semanticrelease.GithubRepo
 import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
 import org.ajoberstar.gradle.git.release.semver.ChangeScope
+import java.util.Locale
 
 plugins {
     alias(libs.plugins.com.github.sghill.distribution.sha)
@@ -35,7 +36,7 @@ semanticRelease {
 
         changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
             val version = extractVersion()
-            when (version?.toUpperCase()) {
+            when (version?.uppercase()) {
                 "MAJOR" -> ChangeScope.MAJOR
                 "MINOR" -> ChangeScope.MINOR
                 "PATCH" -> ChangeScope.PATCH
