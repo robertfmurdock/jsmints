@@ -4,7 +4,7 @@ import kotlin.js.Json
 import kotlin.js.Promise
 
 external interface Browser {
-    val config: Json
+    val options: Json
     fun `$`(selector: String): Promise<Element>
     fun `$$`(selector: String): Promise<Array<Element>>
     fun waitUntil(condition: () -> Promise<Boolean>, options: Json): Promise<Unit>

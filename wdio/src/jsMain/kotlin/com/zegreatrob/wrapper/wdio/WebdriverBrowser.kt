@@ -29,7 +29,11 @@ object WebdriverBrowser : BrowserLoggingSyntax {
             .await()
     }
 
-    private val baseUrl get() = URL(browser.config["baseUrl"].unsafeCast<String>())
+    private val baseUrl get() = URL(
+        browser.options
+            .also { println("config is ${JSON.stringify(it)}") }
+            .get("baseUrl").unsafeCast<String>()
+    )
 
     suspend fun waitForAlert(): Unit = log(WebdriverBrowser::waitForAlert) {
         waitUntil({ isAlertOpen() })
