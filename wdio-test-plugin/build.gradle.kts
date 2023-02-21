@@ -58,7 +58,7 @@ tasks {
     clean { delete(rootProject.buildDir) }
     check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }
     create("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
-    publish { dependsOn(provider { (getTasksByName("publish", true) - this).toList() }) }
+    // publish { dependsOn(provider { (getTasksByName("publish", true) - this).toList() }) }
 }
 
 // fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
