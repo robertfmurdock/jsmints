@@ -2,25 +2,20 @@
 org-jetbrains-kotlin = "1.8.10"
 
 [libraries]
-com-pinterest-ktlint = "com.pinterest:ktlint:0.48.2"
 io-github-microutils-kotlin-logging = "io.github.microutils:kotlin-logging:3.0.5"
 junit = "junit:junit:4.13.2"
-org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.19.0"
+org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.20.0"
 org-jetbrains-annotations = "org.jetbrains:annotations:13.0"
 org-jetbrains-kotlin-kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-scripting-compiler-embeddable = { module = "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
-org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.500"
+org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.502"
 org-jetbrains-kotlinx-kotlinx-coroutines-bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.4"
-org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:3.13.0"
 
 [plugins]
-com-github-ben-manes-versions = "com.github.ben-manes.versions:0.45.0"
 com-gradle-plugin-publish = "com.gradle.plugin-publish:1.1.0"
+io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:1.2.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.7.0"
 org-jetbrains-kotlin-jvm = "org.jetbrains.kotlin.jvm:1.8.10"
-org-jlleitschuh-gradle-ktlint = "org.jlleitschuh.gradle.ktlint:11.2.0"
-io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:1.1.0"
-de-gliderpilot-semantic-release = "de.gliderpilot.semantic-release:1.4.2"
