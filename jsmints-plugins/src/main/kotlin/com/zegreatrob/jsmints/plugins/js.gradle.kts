@@ -2,6 +2,7 @@ package com.zegreatrob.jsmints.plugins
 
 import org.jetbrains.kotlin.gradle.plugin.mpp.MetadataDependencyTransformationTask
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.PublicPackageJsonTask
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmCachesSetup
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinPackageJsonTask
@@ -37,6 +38,12 @@ dependencies {
 val jspackage = project.extensions.create<JsConstraintExtension>("jsconstraint")
 configure<JsConstraintExtension> {
     json = File(project(":dependency-bom").projectDir, "package.json")
+}
+
+rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
+    if (it?.nodeVersion != "19.6.0") {
+        it?.nodeVersion = "19.6.0"
+    }
 }
 
 tasks.withType(PublicPackageJsonTask::class).configureEach {

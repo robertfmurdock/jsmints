@@ -29,7 +29,9 @@ kotlin {
 }
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    it?.nodeVersion = "19.6.0"
+    if (it?.nodeVersion != "19.6.0") {
+        it?.nodeVersion = "19.6.0"
+    }
 }
 
 rootProject.yarn.ignoreScripts = false
