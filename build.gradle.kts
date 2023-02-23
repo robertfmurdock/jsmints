@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     `maven-publish`
     signing
+    id("com.zegreatrob.jsmints.plugins.js")
     id("com.zegreatrob.jsmints.plugins.versioning")
 }
 
@@ -56,8 +57,13 @@ tasks {
     check {
         dependsOn(gradle.includedBuilds.map { it.task(":check") })
     }
-    create("formatKotlin") {
+    "formatKotlin" {
         dependsOn(gradle.includedBuilds.map { it.task(":formatKotlin") })
+    }
+    "kotlinNpmInstall" {
+        dependsOn(provider {
+            gradle.includedBuild("wdio-test-plugin").task(":kotlinNpmInstall")
+        })
     }
 }
 
