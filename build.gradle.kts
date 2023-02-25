@@ -26,6 +26,11 @@ tasks {
     val closeAndReleaseSonatypeStagingRepository by getting {
         mustRunAfter(publish)
     }
+    release {
+        mustRunAfter(check)
+        finalizedBy(provider { (getTasksByName("publish", true)).toList() })
+    }
+
     publish {
         dependsOn(gradle.includedBuild("wdio-test-plugin").task(":publish"))
         finalizedBy(closeAndReleaseSonatypeStagingRepository)
