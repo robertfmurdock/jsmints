@@ -57,6 +57,7 @@ nexusPublishing {
 tasks {
     clean { delete(rootProject.buildDir) }
     check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }
+    assemble { dependsOn(provider { (getTasksByName("assemble", true) - this).toList() }) }
     create("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
     // publish { dependsOn(provider { (getTasksByName("publish", true) - this).toList() }) }
 }

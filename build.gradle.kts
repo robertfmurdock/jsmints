@@ -43,7 +43,7 @@ tasks {
     }
     "kotlinNpmInstall" {
         dependsOn(provider {
-            gradle.includedBuild("wdio-test-plugin").task(":kotlinNpmInstall")
+            gradle.includedBuild("wdio-test-plugin").task(":assemble")
         })
     }
 }
