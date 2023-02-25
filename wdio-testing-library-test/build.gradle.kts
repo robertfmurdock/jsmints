@@ -25,8 +25,6 @@ dependencies {
     "jsE2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
 }
 
-version = "0.0.0"
-
 dockerCompose {
     setProjectName("wdio-testing-library-test")
     containerLogToDir.set(project.file("build/test-output/containers-logs"))
