@@ -44,3 +44,11 @@ tasks {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
 }
+
+versionCatalogUpdate {
+    sortByKey.set(true)
+    keep {
+        keepUnusedVersions.set(true)
+        keepUnusedLibraries.set(true)
+    }
+}
