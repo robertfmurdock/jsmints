@@ -1,14 +1,9 @@
-import de.gliderpilot.gradle.semanticrelease.GithubRepo
-import de.gliderpilot.gradle.semanticrelease.SemanticReleaseChangeLogService
-import org.ajoberstar.gradle.git.release.semver.ChangeScope
-
 plugins {
-    alias(libs.plugins.com.github.sghill.distribution.sha)
-    alias(libs.plugins.de.gliderpilot.semantic.release)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     `maven-publish`
     signing
+    id("com.zegreatrob.jsmints.plugins.derp")
     id("com.zegreatrob.jsmints.plugins.js")
     id("com.zegreatrob.jsmints.plugins.versioning")
 }
@@ -25,25 +20,6 @@ nexusPublishing {
             stagingProfileId.set("59331990bed4c")
         }
     }
-}
-
-semanticRelease {
-    changeLog(closureOf<SemanticReleaseChangeLogService> {
-
-        repo(closureOf<GithubRepo> {
-            setGhToken(System.getenv("GH_TOKEN"))
-        })
-
-        changeScope = KotlinClosure1<org.ajoberstar.grgit.Commit, ChangeScope>({
-            val version = extractVersion()
-            when (version?.uppercase()) {
-                "MAJOR" -> ChangeScope.MAJOR
-                "MINOR" -> ChangeScope.MINOR
-                "PATCH" -> ChangeScope.PATCH
-                else -> null
-            }
-        })
-    })
 }
 
 tasks {
