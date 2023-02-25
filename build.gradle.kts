@@ -6,6 +6,7 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.derp")
     id("com.zegreatrob.jsmints.plugins.js")
     id("com.zegreatrob.jsmints.plugins.versioning")
+    id("com.zegreatrob.jsmints.plugins.publish")
 }
 
 group = "com.zegreatrob.jsmints"
@@ -46,14 +47,4 @@ tasks {
             gradle.includedBuild("wdio-test-plugin").task(":check")
         })
     }
-}
-
-fun org.ajoberstar.grgit.Commit.extractVersion(): String? {
-    val open = fullMessage.indexOf("[")
-    val close = fullMessage.indexOf("]")
-
-    if (open < 0 || close < 0) {
-        return null
-    }
-    return fullMessage.subSequence(open + 1, close).toString()
 }
