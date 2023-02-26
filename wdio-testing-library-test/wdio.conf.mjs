@@ -24,8 +24,8 @@ export const config = {
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
             'args': [
-                'headless',
                 'no-sandbox',
+                'headless',
                 'show-fps-counter=true',
                 'window-size=800,600',
             ]
