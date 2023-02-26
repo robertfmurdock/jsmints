@@ -45,11 +45,11 @@ afterEvaluate {
         }
     }
 
-    tasks.findByName("publishJsPublicationToSonatypeRepository")
-        ?.dependsOn("signKotlinMultiplatformPublication")
-
-    tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
-        ?.dependsOn("signJsPublication")
+    // tasks.findByName("publishJsPublicationToSonatypeRepository")
+    //     ?.dependsOn("signKotlinMultiplatformPublication")
+    //
+    // tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
+    //     ?.dependsOn("signJsPublication")
 }
 
 signing {
