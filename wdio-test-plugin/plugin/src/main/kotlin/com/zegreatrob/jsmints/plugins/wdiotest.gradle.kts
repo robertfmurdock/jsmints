@@ -97,10 +97,9 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
-
-        environment("BASEURL" to "https://static.localhost")
         environment(
             mapOf(
+                "BASEURL" to "https://static.localhost",
                 "SPEC_FILE" to compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get(),
                 "WDIO_CONFIG" to wdioConfig.absolutePath,
                 "REPORT_DIR" to reportDir,
