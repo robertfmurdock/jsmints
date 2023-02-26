@@ -25,9 +25,6 @@ jobs:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     steps:
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -40,6 +37,9 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - name: Generate Version 🧮
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
       - name: Build 🔨
         run: ./gradlew release check -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
 #      - name: Plugin Publish 🙏
