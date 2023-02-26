@@ -13,6 +13,7 @@ dependencies {
         api(project(":wdio-testing-library"))
         api(project(":js-package-plugin"))
         api("com.zegreatrob.jsmints.plugins.wdiotest:com.zegreatrob.jsmints.plugins.wdiotest.gradle.plugin")
+        api("com.zegreatrob.jsmints:wdiorunner:${rootProject.version}")
     }
 }
 
