@@ -24,7 +24,8 @@ export const config = {
         // },
         browserName: 'firefox',
         'moz:firefoxOptions': {
-            args: ['-headless']
+            args: ['-headless'],
+            binary: process.env.FIREFOX_BINARY
         },
         acceptInsecureCerts: true,
         'goog:chromeOptions': {

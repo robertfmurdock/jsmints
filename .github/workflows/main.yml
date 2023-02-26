@@ -30,6 +30,7 @@ jobs:
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: latest
+      - run: echo "FIREFOX_BINARY=$(which firefox)" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
