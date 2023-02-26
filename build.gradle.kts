@@ -31,7 +31,6 @@ tagger {
 tasks {
     val closeAndReleaseSonatypeStagingRepository by getting {
         mustRunAfter(publish)
-        finalizedBy(gradle.includedBuild("wdio-test-plugin").task(":closeAndReleaseSonatypeStagingRepository"))
     }
     release {
         mustRunAfter(check)
