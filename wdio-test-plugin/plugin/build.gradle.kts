@@ -1,3 +1,4 @@
+import org.apache.tools.ant.filters.ReplaceTokens
 import java.nio.charset.Charset
 import java.util.*
 
@@ -28,12 +29,34 @@ kotlin {
     }
 }
 
+
+
 tasks {
     formatKotlinMain {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
     lintKotlinMain {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+    }
+    val copyTemplates by registering(Copy::class) {
+        filteringCharset = "UTF-8"
+        from(project.projectDir.resolve("src/main/templates")) {
+            filter<ReplaceTokens>(
+                "tokens" to mapOf(
+                    "JSMINTS_BOM_VERSION" to rootProject.version,
+                )
+            )
+        }
+        into(project.buildDir.resolve("generated-sources/templates/kotlin/main"))
+    }
+    compileKotlin {
+        dependsOn(copyTemplates)
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs(copyTemplates)
+        }
     }
 }
 
