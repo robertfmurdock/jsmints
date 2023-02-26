@@ -23,6 +23,8 @@ dependencies {
     "e2eTestImplementation"(jsconstraint("wdio-html-nice-reporter"))
     "e2eTestImplementation"(jsconstraint("chromedriver"))
     "e2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
+    "e2eTestImplementation"(jsconstraint("geckodriver"))
+    "e2eTestImplementation"(jsconstraint("wdio-geckodriver-service"))
 }
 
 dockerCompose {

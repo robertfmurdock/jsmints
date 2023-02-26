@@ -18,9 +18,13 @@ export const config = {
     maxInstances: 1,
     capabilities: [{
         maxInstances: 1,
-        browserName: 'chrome',
-        "goog:loggingPrefs": {
-            "browser": "ALL"
+        // browserName: 'chrome',
+        // "goog:loggingPrefs": {
+        //     "browser": "ALL"
+        // },
+        browserName: 'firefox',
+        'moz:firefoxOptions': {
+            args: ['-headless']
         },
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
@@ -40,7 +44,16 @@ export const config = {
     waitforInterval: 15, //THIS IS INCREDIBLY IMPORTANT FOR PERFORMANCE
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
-    services: [['chromedriver', {outputDir: logDir}]],
+    services: [
+        ['chromedriver', {outputDir: logDir}],
+        [
+            'geckodriver',
+            {
+                args: ['--log=info'],
+                outputDir: logDir
+            }
+        ]
+    ],
     framework: 'mocha',
     reporters: [
         'dot',
