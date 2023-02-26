@@ -24,6 +24,10 @@ nexusPublishing {
     }
 }
 
+tagger {
+    releaseBranch = "master"
+}
+
 tasks {
     val closeAndReleaseSonatypeStagingRepository by getting {
         mustRunAfter(publish)
