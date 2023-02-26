@@ -20,7 +20,6 @@ dependencies {
     implementation(libs.com.github.ben.manes.gradle.versions.plugin)
     implementation(libs.org.jmailen.gradle.kotlinter.gradle)
     implementation(libs.com.fasterxml.jackson.core.jackson.databind)
-    api(libs.com.zegreatrob.tools.tagger.com.zegreatrob.tools.tagger.gradle.plugin)
 }
 
 tasks {
@@ -47,8 +46,4 @@ tasks {
 
 versionCatalogUpdate {
     sortByKey.set(true)
-    keep {
-        keepUnusedVersions.set(true)
-        keepUnusedLibraries.set(true)
-    }
 }
