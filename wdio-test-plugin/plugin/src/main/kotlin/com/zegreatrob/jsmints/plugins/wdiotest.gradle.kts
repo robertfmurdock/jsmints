@@ -45,7 +45,7 @@ dependencies {
         targetConfiguration = "executable"
     }
     implementation("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}")
-    implementation("com.zegreatrob.jsmints:wdio-testing-library")
+    implementation("com.zegreatrob.jsmints:wdio-testing-library:${JsmintsBom.version}")
 }
 
 tasks {
