@@ -41,4 +41,7 @@ tasks {
     named("allTests") {
         enabled = false
     }
+    named("e2eTest") {
+        dependsOn("composeUp")
+    }
 }

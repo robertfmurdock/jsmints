@@ -33,8 +33,8 @@ jobs:
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
       - name: Build 🔨
         run: ./gradlew release check -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
-      - name: Plugin Publish 🙏
-        run: ./gradlew -p wdio-test-plugin publish -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
+#      - name: Plugin Publish 🙏
+#        run: ./gradlew -p wdio-test-plugin publish -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
       - name: Push result to Testspace server
         if: always()
         run: |

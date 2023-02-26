@@ -71,7 +71,6 @@ tasks {
             productionExecutableCompileSync,
             compileE2eTestProductionExecutableKotlinJs,
             jsTestTestDevelopmentExecutableCompileSync,
-            "composeUp"
         )
         setup(project)
         nodeModulesDir = e2eTestProcessResources.get().destinationDir
