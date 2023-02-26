@@ -1,3 +1,4 @@
+
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
@@ -46,4 +47,12 @@ artifacts {
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
     it?.nodeVersion = "19.6.0"
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["kotlin"])
+        }
+    }
 }

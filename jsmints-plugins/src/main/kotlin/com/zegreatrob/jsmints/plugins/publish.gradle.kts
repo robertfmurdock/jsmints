@@ -77,5 +77,3 @@ tasks {
         withType<MavenPublication> { artifact(javadocJar) }
     }
 }
-
-fun PublicationContainer.jvmPublication(): NamedDomainObjectSet<Publication> = matching { it.name == "jvm" }
