@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
-    kotlin("multiplatform")
+    kotlin("js")
 }
 
 repositories {
@@ -44,29 +44,33 @@ dependencies {
     runnerConfiguration("com.zegreatrob.jsmints:wdiorunner") {
         targetConfiguration = "executable"
     }
-    "jsMainImplementation"("com.zegreatrob.jsmints:wdiorunner")
-    "jsMainImplementation"("com.zegreatrob.jsmints:wdio-testing-library")
+    implementation("com.zegreatrob.jsmints:wdiorunner")
+    implementation("com.zegreatrob.jsmints:wdio-testing-library")
 }
 
 tasks {
-    register("runWdio", Exec::class) {
-        dependsOn(runnerConfiguration)
-
-        val executable = runnerConfiguration.resolve().first()
-        commandLine = listOf("node", executable.absolutePath)
-        outputs.cacheIf { true }
+    val runnerJs = provider {
+        project.buildDir.resolve("runner")
+            .resolve("wdio-test-plugin-wdiorunner.js")
     }
-    val productionExecutableCompileSync = named("jsProductionExecutableCompileSync")
-    val jsTestTestDevelopmentExecutableCompileSync = named("jsTestTestDevelopmentExecutableCompileSync")
+    val installRunner by registering(Copy::class) {
+        dependsOn(runnerConfiguration)
+        into(runnerJs.get().parentFile)
+        from(runnerConfiguration.resolve())
+    }
+
+    val productionExecutableCompileSync = named("productionExecutableCompileSync")
+    val jsTestTestDevelopmentExecutableCompileSync = named("testTestDevelopmentExecutableCompileSync")
     val compileProductionExecutableKotlinJs =
         named("compileProductionExecutableKotlinJs", Kotlin2JsCompile::class) {}
     val compileE2eTestProductionExecutableKotlinJs =
         named("compileE2eTestProductionExecutableKotlinJs", Kotlin2JsCompile::class) {}
 
-    val e2eTestProcessResources = named<ProcessResources>("jsE2eTestProcessResources")
+    val e2eTestProcessResources = named<ProcessResources>("e2eTestProcessResources")
 
     val e2eRun = register("e2eRun", NodeExec::class) {
         dependsOn(
+            installRunner,
             compileProductionExecutableKotlinJs,
             productionExecutableCompileSync,
             compileE2eTestProductionExecutableKotlinJs,
@@ -107,6 +111,7 @@ tasks {
                 ).joinToString(":")
             )
         )
+        arguments = listOf(runnerJs.get().absolutePath)
         val logFile = file("$logsDir/run.log")
         logFile.parentFile.mkdirs()
         outputFile = logFile

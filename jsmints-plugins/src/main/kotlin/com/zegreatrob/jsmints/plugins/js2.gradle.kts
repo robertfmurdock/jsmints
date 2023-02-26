@@ -8,5 +8,11 @@ plugins {
 
 val jspackage = project.extensions.create<JsConstraintExtension>("jsconstraint")
 configure<JsConstraintExtension> {
-    json = File(rootDir, "../dependency-bom/package.json")
+    json = File(rootDir, "dependency-bom/package.json").let {
+        if (it.exists()) {
+            it
+        } else {
+            File(rootDir, "../dependency-bom/package.json")
+        }
+    }
 }

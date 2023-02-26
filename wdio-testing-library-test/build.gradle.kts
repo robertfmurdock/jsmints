@@ -1,28 +1,28 @@
 plugins {
     id("com.zegreatrob.jsmints.plugins.versioning")
-    id("com.zegreatrob.jsmints.plugins.js")
+    id("com.zegreatrob.jsmints.plugins.js2")
     id("com.zegreatrob.jsmints.plugins.wdiotest")
     alias(libs.plugins.com.avast.gradle.docker.compose)
 }
 
 dependencies {
-    jsMainImplementation(kotlin("stdlib"))
-    jsMainImplementation(project(":wdio-testing-library"))
-    jsMainImplementation("com.soywiz.korlibs.klock:klock")
-    jsMainImplementation("io.github.microutils:kotlin-logging")
-    jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
-    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
+    implementation(kotlin("stdlib"))
+    implementation(project(":wdio-testing-library"))
+    implementation("com.soywiz.korlibs.klock:klock")
+    implementation("io.github.microutils:kotlin-logging")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-node")
 
-    "jsE2eTestImplementation"(platform(project(":dependency-bom")))
-    "jsE2eTestImplementation"(project(":wdio-testing-library"))
-    "jsE2eTestImplementation"(kotlin("test"))
-    "jsE2eTestImplementation"("com.zegreatrob.testmints:async")
-    "jsE2eTestImplementation"("com.zegreatrob.testmints:minassert")
-    "jsE2eTestImplementation"(jsconstraint("wdio-html-nice-reporter"))
-    "jsE2eTestImplementation"(jsconstraint("chromedriver"))
-    "jsE2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
+    "e2eTestImplementation"(platform(project(":dependency-bom")))
+    "e2eTestImplementation"(project(":wdio-testing-library"))
+    "e2eTestImplementation"(kotlin("test"))
+    "e2eTestImplementation"("com.zegreatrob.testmints:async")
+    "e2eTestImplementation"("com.zegreatrob.testmints:minassert")
+    "e2eTestImplementation"(jsconstraint("wdio-html-nice-reporter"))
+    "e2eTestImplementation"(jsconstraint("chromedriver"))
+    "e2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
 }
 
 dockerCompose {
@@ -32,13 +32,10 @@ dockerCompose {
 }
 
 tasks {
-    named("jsNodeTest") {
+    named("nodeTest") {
         enabled = false
     }
-    named("jsTest") {
-        enabled = false
-    }
-    named("allTests") {
+    named("test") {
         enabled = false
     }
     named("e2eRun") {
