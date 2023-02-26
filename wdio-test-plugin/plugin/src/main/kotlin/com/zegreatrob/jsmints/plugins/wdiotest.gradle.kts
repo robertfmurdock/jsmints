@@ -1,10 +1,9 @@
 package com.zegreatrob.jsmints.plugins
 
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsExec
+import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import java.io.FileOutputStream
 
 plugins {
     kotlin("multiplatform")
@@ -64,7 +63,9 @@ tasks {
     val compileE2eTestProductionExecutableKotlinJs =
         named("compileE2eTestProductionExecutableKotlinJs", Kotlin2JsCompile::class) {}
 
-    val nodeRun = named("jsNodeRun", NodeJsExec::class) {
+    val e2eTestProcessResources = named<ProcessResources>("jsE2eTestProcessResources")
+
+    val e2eRun = register("e2eRun", NodeExec::class) {
         dependsOn(
             compileProductionExecutableKotlinJs,
             productionExecutableCompileSync,
@@ -72,6 +73,14 @@ tasks {
             jsTestTestDevelopmentExecutableCompileSync,
             "composeUp"
         )
+        setup(project)
+        nodeModulesDir = e2eTestProcessResources.get().destinationDir
+        moreNodeDirs = listOf(
+            "${project.rootProject.buildDir.path}/js/node_modules",
+            e2eTestProcessResources.get().destinationDir
+        ).plus(project.relatedResources())
+            .joinToString(":")
+
         val wdioConfig = project.projectDir.resolve("wdio.conf.mjs")
         inputs.files(compileProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
@@ -101,10 +110,38 @@ tasks {
         )
         val logFile = file("$logsDir/run.log")
         logFile.parentFile.mkdirs()
-        standardOutput = FileOutputStream(logFile, true)
-        errorOutput = standardOutput
+        outputFile = logFile
     }
     check {
-        dependsOn(nodeRun)
+        dependsOn(e2eRun)
     }
+}
+
+fun Project.relatedResources() = relatedProjects()
+    .asSequence()
+    .map { it.projectDir }
+    .flatMap {
+        listOf(
+            "src/commonMain/resources",
+            "src/clientCommonMain/resources",
+            "src/jsMain/resources",
+            "src/main/resources"
+        ).asSequence().map(it::resolve)
+    }
+    .filter { it.exists() }
+    .filter { it.isDirectory }
+    .toList()
+
+fun Project.relatedProjects(): Set<Project> {
+    val configuration = configurations.findByName("e2eTestImplementation")
+        ?: return emptySet()
+
+    return configuration
+        .allDependencies
+        .asSequence()
+        .filterIsInstance<DefaultProjectDependency>()
+        .map { it.dependencyProject }
+        .flatMap { sequenceOf(it) + it.relatedProjects() }
+        .plus(this)
+        .toSet()
 }
