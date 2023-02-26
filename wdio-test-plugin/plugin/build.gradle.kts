@@ -2,12 +2,11 @@ import java.nio.charset.Charset
 import java.util.*
 
 plugins {
-    `kotlin-dsl`
-    kotlin("jvm")
     `java-gradle-plugin`
+    `kotlin-dsl`
     alias(libs.plugins.com.gradle.plugin.publish)
-    signing
     id("com.zegreatrob.jsmints.plugins.lint")
+    signing
 }
 
 dependencies {
