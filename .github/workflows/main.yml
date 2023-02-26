@@ -32,7 +32,7 @@ jobs:
       - name: Generate Version 🧮
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
       - name: Build 🔨
-        run: ./gradlew release check -Pversion=${{ env.TAGGER_VERSION }} --scan
+        run: ./gradlew release check -Pversion=${{ env.TAGGER_VERSION }} -Porg.gradle.unsafe.configuration-cache=false --scan
       - name: Push result to Testspace server
         if: always()
         run: |
