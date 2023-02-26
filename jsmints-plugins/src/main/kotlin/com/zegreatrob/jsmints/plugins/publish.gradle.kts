@@ -58,7 +58,6 @@ afterEvaluate {
                 ?.dependsOn("signJsPublication")
         }
     }
-
 }
 
 signing {
