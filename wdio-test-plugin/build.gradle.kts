@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     `maven-publish`
-    `java-gradle-plugin`
     signing
     base
     id("com.zegreatrob.jsmints.plugins.lint")

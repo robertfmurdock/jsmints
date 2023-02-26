@@ -38,7 +38,7 @@ tasks {
     }
 
     publish {
-        // dependsOn(gradle.includedBuild("wdio-test-plugin").task(":publish"))
+        dependsOn(gradle.includedBuild("wdio-test-plugin").task(":publish"))
         finalizedBy(closeAndReleaseSonatypeStagingRepository)
     }
     check {
