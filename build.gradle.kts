@@ -38,10 +38,13 @@ tasks {
     }
 
     publish {
+        mustRunAfter(check)
+        dependsOn(provider { (getTasksByName("publish", true) - this).toList() })
         dependsOn(gradle.includedBuild("wdio-test-plugin").task(":publish"))
         finalizedBy(closeAndReleaseSonatypeStagingRepository)
     }
     check {
+        dependsOn(provider { (getTasksByName("check", true) - this).toList() })
         dependsOn(gradle.includedBuilds.map { it.task(":check") })
     }
     "formatKotlin" {
