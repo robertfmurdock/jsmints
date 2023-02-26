@@ -1,3 +1,4 @@
+
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
@@ -37,9 +38,20 @@ val executable: Configuration by configurations.creating
 
 group = "com.zegreatrob.jsmints"
 
-val task = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
-val executableJs = artifacts.add(executable.name, task.map { it.outputFileProperty.get().parentFile }) {
-    builtBy(task)
+val compileExecutableTask = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
+val executableJs = artifacts.add(executable.name, compileExecutableTask.map { it.outputFileProperty.get().parentFile }) {
+    builtBy(compileExecutableTask)
+}
+
+tasks {
+    val executableJar by creating(Jar::class) {
+        archiveClassifier.set("executable")
+        from(compileExecutableTask.map { it.outputFileProperty.get().parentFile })
+    }
+
+    publishing.publications {
+        withType<MavenPublication> { artifact(executableJar) }
+    }
 }
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
@@ -50,11 +62,6 @@ publishing {
     publications {
         create<MavenPublication>("js") {
             from(components["kotlin"])
-        }
-    }
-    publications {
-        create<MavenPublication>("executable") {
-            artifacts.artifact(executableJs)
         }
     }
 }
