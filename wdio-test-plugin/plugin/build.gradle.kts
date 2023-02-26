@@ -39,6 +39,7 @@ tasks {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
     val copyTemplates by registering(Copy::class) {
+        inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
         from(project.projectDir.resolve("src/main/templates")) {
             filter<ReplaceTokens>(
