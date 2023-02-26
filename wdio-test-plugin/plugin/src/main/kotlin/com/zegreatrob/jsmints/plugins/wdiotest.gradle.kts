@@ -105,6 +105,7 @@ tasks {
                 "WDIO_CONFIG" to wdioConfig.absolutePath,
                 "REPORT_DIR" to reportDir,
                 "TEST_RESULTS_DIR" to testResultsDir,
+                "LOGS_DIR" to logsDir,
                 "STRICT_SSL" to "false",
                 "NODE_PATH" to listOf(
                     "${project.rootProject.buildDir.path}/js/node_modules"

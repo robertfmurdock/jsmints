@@ -6,6 +6,7 @@ const logger = log4js.getLogger('default');
 logger.level = "info";
 const reportDirectory = path.relative('./', process.env.REPORT_DIR) + "/"
 const testResultsDir = path.relative('./', process.env.TEST_RESULTS_DIR) + "/"
+const logDir = path.relative('./', process.env.LOGS_DIR) + "/"
 
 export const config = {
     runner: 'local',
@@ -39,7 +40,7 @@ export const config = {
     waitforInterval: 15, //THIS IS INCREDIBLY IMPORTANT FOR PERFORMANCE
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
-    services: ['chromedriver'],
+    services: [['chromedriver', {outputDir: logDir}]],
     framework: 'mocha',
     reporters: [
         'dot',
