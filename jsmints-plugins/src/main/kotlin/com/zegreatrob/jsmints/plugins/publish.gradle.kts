@@ -45,11 +45,20 @@ afterEvaluate {
         }
     }
 
-    // tasks.findByName("publishJsPublicationToSonatypeRepository")
-    //     ?.dependsOn("signKotlinMultiplatformPublication")
-    //
-    // tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
-    //     ?.dependsOn("signJsPublication")
+    tasks {
+        val signKotlinMultiplatformPublication = findByName("signKotlinMultiplatformPublication")
+        val publishJsPublicationToSonatypeRepository = tasks.findByName("publishJsPublicationToSonatypeRepository")
+        if (signKotlinMultiplatformPublication != null) {
+            publishJsPublicationToSonatypeRepository
+                ?.dependsOn(signKotlinMultiplatformPublication)
+        }
+        val signJsPublication = tasks.findByName("signJsPublication")
+        if (signJsPublication != null) {
+            tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
+                ?.dependsOn("signJsPublication")
+        }
+    }
+
 }
 
 signing {
