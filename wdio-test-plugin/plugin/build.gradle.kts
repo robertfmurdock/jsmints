@@ -29,8 +29,6 @@ kotlin {
     }
 }
 
-
-
 tasks {
     formatKotlinMain {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }

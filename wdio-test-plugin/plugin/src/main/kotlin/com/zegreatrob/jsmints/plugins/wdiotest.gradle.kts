@@ -41,10 +41,10 @@ val runnerConfiguration: Configuration by configurations.creating {
 }
 
 dependencies {
+    implementation("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}")
     runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}") {
         targetConfiguration = "executable"
     }
-    implementation("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}")
     implementation("com.zegreatrob.jsmints:wdio-testing-library:${JsmintsBom.version}")
 }
 
