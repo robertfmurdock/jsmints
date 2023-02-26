@@ -9,6 +9,10 @@ plugins {
     signing
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
@@ -18,11 +22,18 @@ dependencies {
     testImplementation(libs.junit)
 }
 
-group = "com.zegreatrob.jsmints"
-
 kotlin {
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
+tasks {
+    formatKotlinMain {
+        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+    }
+    lintKotlinMain {
+        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
 }
 
@@ -40,20 +51,9 @@ signing {
     sign(publishing.publications)
 }
 
-tasks {
-    formatKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
-    }
-    lintKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
-    }
-}
-val scmUrl = "https://github.com/robertfmurdock/jsmints"
+group = "com.zegreatrob.jsmints"
 
-gradlePlugin {
-    website.set(scmUrl)
-    vcsUrl.set(scmUrl)
-}
+val scmUrl = "https://github.com/robertfmurdock/jsmints"
 
 afterEvaluate {
     publishing.publications.withType<MavenPublication>().forEach {
