@@ -25,6 +25,11 @@ jobs:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     steps:
+      - name: Setup firefox
+        id: setup-firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
