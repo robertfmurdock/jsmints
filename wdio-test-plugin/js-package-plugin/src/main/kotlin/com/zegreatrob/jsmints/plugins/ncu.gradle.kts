@@ -17,8 +17,7 @@ tasks {
                 val nodeCommand = "ncu"
                 val nodeCommandBin = "${project.nodeModulesDir}/.bin/$nodeCommand"
                 val configFile = file("$rootDir/.ncurc.json")
-                inputs.file(configFile)
-                inputs.file(packageJson)
+                inputs.files(provider { listOf(configFile, packageJson).filter { it.exists() } })
                 outputs.file(packageJson)
 
                 arguments = listOf(
@@ -39,7 +38,7 @@ dependencies {
         testImplementation(npm("npm-check-updates",
             jspackage.dependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
                 ?: jspackage.devDependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
-                ?: "^15.0.0")
+                ?: "^16.7.9")
         )
     }
 }

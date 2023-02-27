@@ -11,9 +11,9 @@ dependencies {
         api(project(":react-data-loader"))
         api(project(":wdio"))
         api(project(":wdio-testing-library"))
-        api(project(":js-package-plugin"))
         api("com.zegreatrob.jsmints.plugins.wdiotest:com.zegreatrob.jsmints.plugins.wdiotest.gradle.plugin")
         api("com.zegreatrob.jsmints:wdiorunner:${rootProject.version}")
+        api("com.zegreatrob.jsmints:js-package-plugin:${rootProject.version}")
     }
 }
 

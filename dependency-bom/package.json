@@ -18,6 +18,7 @@
     "jsdom": "^21.1.0",
     "wdio-chromedriver-service": "8.1.1",
     "wdio-geckodriver-service": "^4.1.0",
-    "wdio-html-nice-reporter": "8.1.0"
+    "wdio-html-nice-reporter": "8.1.0",
+    "npm-check-updates": "^16.7.9"
   }
 }

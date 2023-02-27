@@ -25,8 +25,7 @@ kotlin {
 }
 
 dependencies {
-    api(platform(project(":dependency-bom")))
-    api("com.fasterxml.jackson.core:jackson-databind")
+    api("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     implementation(kotlin("stdlib"))
     implementation(kotlin("gradle-plugin"))
 }
