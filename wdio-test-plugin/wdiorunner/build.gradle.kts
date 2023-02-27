@@ -39,14 +39,17 @@ val executable: Configuration by configurations.creating
 group = "com.zegreatrob.jsmints"
 
 val compileExecutableTask = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
-val executableJs = artifacts.add(executable.name, compileExecutableTask.map { it.outputFileProperty.get().parentFile }) {
-    builtBy(compileExecutableTask)
-}
 
 tasks {
-    val executableJar by creating(Jar::class) {
+    val executableJar by registering(Jar::class) {
+        dependsOn(compileExecutableTask)
         archiveClassifier.set("executable")
         from(compileExecutableTask.map { it.outputFileProperty.get().parentFile })
+    }
+
+    artifacts.add(executable.name, executableJar) {
+        classifier = executable.name
+        builtBy(executableJar)
     }
 
     publishing.publications {

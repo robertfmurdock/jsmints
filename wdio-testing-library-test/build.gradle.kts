@@ -5,6 +5,10 @@ plugins {
     alias(libs.plugins.com.avast.gradle.docker.compose)
 }
 
+wdioTest {
+    includedBuild = true
+}
+
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":wdio-testing-library"))

@@ -35,6 +35,8 @@ rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
 
 rootProject.yarn.ignoreScripts = false
 
+val wdioTest = project.extensions.create<WdioTestExtension>("wdioTest")
+
 val runnerConfiguration: Configuration by configurations.creating {
     isCanBeResolved = true
     isCanBeConsumed = false
@@ -42,10 +44,19 @@ val runnerConfiguration: Configuration by configurations.creating {
 
 dependencies {
     implementation("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}")
-    runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}") {
-        targetConfiguration = "executable"
-    }
     implementation("com.zegreatrob.jsmints:wdio-testing-library:${JsmintsBom.version}")
+}
+
+afterEvaluate {
+    dependencies {
+        runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}") {
+            if (wdioTest.includedBuild) {
+                targetConfiguration = "executable"
+            } else {
+                artifact { classifier = "executable" }
+            }
+        }
+    }
 }
 
 tasks {
@@ -56,7 +67,12 @@ tasks {
     val installRunner by registering(Copy::class) {
         dependsOn(runnerConfiguration)
         into(runnerJs.get().parentFile)
-        from(runnerConfiguration.resolve())
+        from(
+            zipTree(
+                runnerConfiguration.resolve()
+                    .first()
+            )
+        )
     }
 
     val productionExecutableCompileSync = named("productionExecutableCompileSync")
