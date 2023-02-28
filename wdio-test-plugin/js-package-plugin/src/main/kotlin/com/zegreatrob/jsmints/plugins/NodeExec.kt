@@ -9,6 +9,7 @@ import org.gradle.api.tasks.OutputFile
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Locale
 
 open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
@@ -77,7 +78,7 @@ private fun Project.goGetNodeBinDir(): File {
     val sunos = "sunos"
 
     val platform: String = run {
-        val name = property("os.name").toLowerCase()
+        val name = property("os.name").lowercase()
         when {
             name.contains("windows") -> win
             name.contains("mac") -> darwin
@@ -92,7 +93,7 @@ private fun Project.goGetNodeBinDir(): File {
     val arm64 = "arm64"
 
     val architecture: String = run {
-        val arch = property("os.arch").toLowerCase()
+        val arch = property("os.arch").lowercase()
         when {
             arch.contains("64") -> x64
             arch == "arm" -> {

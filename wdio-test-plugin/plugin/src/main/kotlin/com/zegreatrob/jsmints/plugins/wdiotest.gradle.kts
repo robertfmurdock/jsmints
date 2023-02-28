@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
+import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
@@ -141,13 +142,11 @@ tasks {
     }
 
     afterEvaluate {
-        val copyWdio by registering(Copy::class) {
+        register("copyWdio", Copy::class) {
             mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
             val wdioConfFile: File = wdioTest.wdioConfigFile ?: let {
-                val resource =
-                    NodeExec::class.java.getResource("/com/zegreatrob/jsmints/plugins/wdiotest/wdio.conf.mjs")
                 project.resources.text
-                    .fromUri(resource!!)
+                    .fromString(WdioTemplate.wdioTemplateText)
                     .asFile()
             }
 
