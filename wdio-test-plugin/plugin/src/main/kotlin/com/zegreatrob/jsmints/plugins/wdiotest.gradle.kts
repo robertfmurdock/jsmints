@@ -3,6 +3,7 @@ package com.zegreatrob.jsmints.plugins
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
@@ -61,9 +62,13 @@ afterEvaluate {
     }
 }
 
+val npmProjectDir = kotlin.js().compilations.getByName("test").npmProject.dir
+
+val wdioConfig = npmProjectDir.resolve("wdio.conf.mjs")
+
 tasks {
     val runnerJs = provider {
-        project.buildDir.resolve("runner")
+        npmProjectDir.resolve("runner")
             .resolve("wdio-test-plugin-wdiorunner.js")
     }
     val installRunner by registering(Copy::class) {
@@ -103,7 +108,6 @@ tasks {
         ).plus(project.relatedResources())
             .joinToString(":")
 
-        val wdioConfig = project.buildDir.resolve("wdio/wdio.conf.mjs")
         inputs.files(compileProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(jsTestTestDevelopmentExecutableCompileSync.map { it.outputs.files })
@@ -138,6 +142,7 @@ tasks {
 
     afterEvaluate {
         val copyWdio by registering(Copy::class) {
+            mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
             val wdioConfFile: File = wdioTest.wdioConfigFile ?: let {
                 val resource =
                     NodeExec::class.java.getResource("/com/zegreatrob/jsmints/plugins/wdiotest/wdio.conf.mjs")
@@ -151,7 +156,7 @@ tasks {
                     "tokens" to mapOf<String, String>()
                 )
             }
-            into(project.buildDir.resolve("wdio/"))
+            into(wdioConfig.parentFile)
             rename { "wdio.conf.mjs" }
         }
     }
