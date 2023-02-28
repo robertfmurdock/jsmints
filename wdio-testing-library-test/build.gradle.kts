@@ -7,6 +7,7 @@ plugins {
 
 wdioTest {
     includedBuild = true
+    wdioConfigFile = projectDir.resolve("wdio.conf.mjs")
 }
 
 dependencies {

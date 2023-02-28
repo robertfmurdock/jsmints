@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
@@ -7,6 +8,7 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
     kotlin("js")
+    base
 }
 
 repositories {
@@ -86,6 +88,7 @@ tasks {
 
     val e2eRun = register("e2eRun", NodeExec::class) {
         dependsOn(
+            "copyWdio",
             installRunner,
             compileProductionExecutableKotlinJs,
             productionExecutableCompileSync,
@@ -94,13 +97,13 @@ tasks {
         )
         setup(project)
         nodeModulesDir = e2eTestProcessResources.get().destinationDir
-        moreNodeDirs = listOf(
+        moreNodeDirs = listOfNotNull(
             "${project.rootProject.buildDir.path}/js/node_modules",
             e2eTestProcessResources.get().destinationDir
         ).plus(project.relatedResources())
             .joinToString(":")
 
-        val wdioConfig = project.projectDir.resolve("wdio.conf.mjs")
+        val wdioConfig = project.buildDir.resolve("wdio/wdio.conf.mjs")
         inputs.files(compileProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(jsTestTestDevelopmentExecutableCompileSync.map { it.outputs.files })
@@ -132,6 +135,27 @@ tasks {
         logFile.parentFile.mkdirs()
         outputFile = logFile
     }
+
+    afterEvaluate {
+        val copyWdio by registering(Copy::class) {
+            val wdioConfFile: File = wdioTest.wdioConfigFile ?: let {
+                val resource =
+                    NodeExec::class.java.getResource("/com/zegreatrob/jsmints/plugins/wdiotest/wdio.conf.mjs")
+                project.resources.text
+                    .fromUri(resource!!)
+                    .asFile()
+            }
+
+            from(wdioConfFile) {
+                filter<ReplaceTokens>(
+                    "tokens" to mapOf<String, String>()
+                )
+            }
+            into(project.buildDir.resolve("wdio/"))
+            rename { "wdio.conf.mjs" }
+        }
+    }
+
     check {
         dependsOn(e2eRun)
     }
