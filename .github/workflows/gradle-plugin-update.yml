@@ -18,7 +18,7 @@ jobs:
       - name: Update Plugin Deps
         run: ./gradlew :jsmints-plugins:versionCatalogUpdate :wdio-test-plugin:versionCatalogUpdate --no-configuration-cache
       - name: Update Yarn Lock
-        run: ./gradlew kotlinUpgradeYarnLock :wdio-test-plugin:kotlinUpgradeYarnLock  --no-configuration-cache
+        run: ./gradlew :wdio-test-plugin:kotlinUpgradeYarnLock kotlinUpgradeYarnLock  --no-configuration-cache
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3

@@ -74,11 +74,8 @@ if (options.useChrome) {
         },
         'goog:chromeOptions': {
             'args': [
-                'no-sandbox',
                 'headless',
-                'disable-dev-shm-usage',
                 'show-fps-counter=true',
-                'window-size=800,600',
             ]
         },
     })
