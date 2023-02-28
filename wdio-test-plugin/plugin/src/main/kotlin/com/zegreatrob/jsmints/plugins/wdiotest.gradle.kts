@@ -154,16 +154,22 @@ tasks {
             from(wdioConfFile) {
                 filter<ReplaceTokens>(
                     "tokens" to mapOf(
-                        "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter}"
+                        "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter}",
+                        "USE_CHROME" to "${wdioTest.useChrome}"
                     )
                 )
             }
             into(wdioConfig.parentFile)
             rename { "wdio.conf.mjs" }
         }
-
         dependencies {
-            implementation(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
+            if (wdioTest.htmlReporter) {
+                implementation(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
+            }
+            if (wdioTest.useChrome) {
+                implementation(npm("chromedriver", PluginVersions.chromedriverVersion))
+                implementation(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
+            }
         }
     }
 

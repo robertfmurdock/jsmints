@@ -17,4 +17,8 @@ abstract class WdioTestExtension(val project: Project) {
     @Input
     @Optional
     var htmlReporter: Boolean = true
+
+    @Input
+    @Optional
+    var useChrome: Boolean = true
 }

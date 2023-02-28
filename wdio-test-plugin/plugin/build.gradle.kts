@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.nio.charset.Charset
@@ -41,15 +42,15 @@ tasks {
         inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
         val mapper = ObjectMapper()
-        val wdioHtmlReporterVersion = mapper.readTree(rootDir.resolve("../dependency-bom/package.json"))
-            .at("/dependencies/wdio-html-nice-reporter")
-            .textValue()
+        val packageJson = mapper.readTree(rootDir.resolve("../dependency-bom/package.json"))
 
         from(project.projectDir.resolve("src/main/templates")) {
             filter<ReplaceTokens>(
                 "tokens" to mapOf(
                     "JSMINTS_BOM_VERSION" to rootProject.version,
-                    "WDIO_NICE_HTML_REPORTER_VERSION" to wdioHtmlReporterVersion,
+                    "WDIO_NICE_HTML_REPORTER_VERSION" to packageJson.dependency("wdio-html-nice-reporter"),
+                    "CHROMEDRIVER_VERSION" to packageJson.dependency("chromedriver"),
+                    "WDIO_CHROMEDRIVER_SERVICE_VERSION" to packageJson.dependency("wdio-chromedriver-service"),
                 )
             )
         }
@@ -113,3 +114,6 @@ afterEvaluate {
         }
     }
 }
+
+fun JsonNode.dependency(name: String) = at("/dependencies/$name")
+    .textValue()

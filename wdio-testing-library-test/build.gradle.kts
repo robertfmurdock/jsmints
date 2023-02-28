@@ -8,6 +8,7 @@ plugins {
 wdioTest {
     includedBuild = true
     wdioConfigFile = projectDir.resolve("wdio.conf.mjs")
+    useChrome = false
 }
 
 dependencies {
@@ -25,8 +26,6 @@ dependencies {
     "e2eTestImplementation"(kotlin("test"))
     "e2eTestImplementation"("com.zegreatrob.testmints:async")
     "e2eTestImplementation"("com.zegreatrob.testmints:minassert")
-    "e2eTestImplementation"(jsconstraint("chromedriver"))
-    "e2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
     "e2eTestImplementation"(jsconstraint("geckodriver"))
     "e2eTestImplementation"(jsconstraint("wdio-geckodriver-service"))
 }

@@ -8,7 +8,8 @@ const testResultsDir = path.relative('./', process.env.TEST_RESULTS_DIR) + "/"
 const logDir = path.relative('./', process.env.LOGS_DIR) + "/"
 
 const options = {
-    enableHtmlReporter: @ENABLE_HTML_REPORTER@
+    enableHtmlReporter: @ENABLE_HTML_REPORTER@,
+    useChrome: @USE_CHROME@,
 }
 
 const reporters = [
@@ -27,23 +28,7 @@ export const config = {
     sync: false,
     exclude: [],
     maxInstances: 1,
-    capabilities: [{
-        maxInstances: 1,
-        browserName: 'chrome',
-        "goog:loggingPrefs": {
-            "browser": "ALL"
-        },
-        acceptInsecureCerts: true,
-        'goog:chromeOptions': {
-            'args': [
-                'no-sandbox',
-                'headless',
-                'disable-dev-shm-usage',
-                'show-fps-counter=true',
-                'window-size=800,600',
-            ]
-        },
-    }],
+    capabilities: [],
     logLevel: 'warn',
     bail: 0,
     baseUrl: `${process.env.BASEURL}`,
@@ -51,16 +36,7 @@ export const config = {
     waitforInterval: 15, //THIS IS INCREDIBLY IMPORTANT FOR PERFORMANCE
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
-    services: [
-        ['chromedriver', {outputDir: logDir}],
-        [
-            'geckodriver',
-            {
-                args: ['--log=info'],
-                outputDir: logDir
-            }
-        ]
-    ],
+    services: [],
     framework: 'mocha',
     reporters: reporters,
     mochaOpts: {
@@ -84,6 +60,29 @@ export const config = {
     },
 
 };
+
+if (options.useChrome) {
+    config.services.push(
+        ['chromedriver', {outputDir: logDir}],
+    )
+    config.capabilities.push({
+        maxInstances: 1,
+        acceptInsecureCerts: true,
+        browserName: 'chrome',
+        "goog:loggingPrefs": {
+            "browser": "ALL"
+        },
+        'goog:chromeOptions': {
+            'args': [
+                'no-sandbox',
+                'headless',
+                'disable-dev-shm-usage',
+                'show-fps-counter=true',
+                'window-size=800,600',
+            ]
+        },
+    })
+}
 
 if (options.enableHtmlReporter) {
     const {HtmlReporter, ReportAggregator} = await import("wdio-html-nice-reporter")

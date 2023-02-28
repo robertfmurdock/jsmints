@@ -3995,7 +3995,7 @@ npm-bundled@^3.0.0:
   dependencies:
     npm-normalize-package-bin "^3.0.0"
 
-npm-check-updates@^16.7.9:
+npm-check-updates@16.7.9:
   version "16.7.9"
   resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.7.9.tgz#b30e21eb27a9b9f590f96ef9eb0f128a09aaf216"
   integrity sha512-2/T9PB0W1uABB1N11jdnPauqNLXMhPUyC0DBeeGlUktcGl/412f40iqFsnNGCqIAag/C37SjLNiW2/yuD7Salw==
@@ -5708,7 +5708,7 @@ wdio-chromedriver-service@8.1.1:
     split2 "^4.1.0"
     tcp-port-used "^1.0.2"
 
-wdio-geckodriver-service@^4.1.0:
+wdio-geckodriver-service@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/wdio-geckodriver-service/-/wdio-geckodriver-service-4.1.0.tgz#b184ffdbd54b05eb8de01526a3e6904951f548dc"
   integrity sha512-7XuHNDGP4z4aJnpd9e1KshgfWYJqWk17Qt0oPqtovG805ld8L1loJ1MLRLHK4qMHamGKwc73Aivc1VcKC+iuLg==
