@@ -46,13 +46,13 @@ val runnerConfiguration: Configuration by configurations.creating {
 }
 
 dependencies {
-    implementation("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}")
-    implementation("com.zegreatrob.jsmints:wdio-testing-library:${JsmintsBom.version}")
+    implementation("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
+    implementation("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
 }
 
 afterEvaluate {
     dependencies {
-        runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${JsmintsBom.version}") {
+        runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}") {
             if (wdioTest.includedBuild) {
                 targetConfiguration = "executable"
             } else {
@@ -153,11 +153,17 @@ tasks {
 
             from(wdioConfFile) {
                 filter<ReplaceTokens>(
-                    "tokens" to mapOf<String, String>()
+                    "tokens" to mapOf(
+                        "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter}"
+                    )
                 )
             }
             into(wdioConfig.parentFile)
             rename { "wdio.conf.mjs" }
+        }
+
+        dependencies {
+            implementation(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
         }
     }
 

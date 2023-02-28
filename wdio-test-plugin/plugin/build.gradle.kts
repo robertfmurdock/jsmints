@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.nio.charset.Charset
 import java.util.*
@@ -39,10 +40,16 @@ tasks {
     val copyTemplates by registering(Copy::class) {
         inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
+        val mapper = ObjectMapper()
+        val wdioHtmlReporterVersion = mapper.readTree(rootDir.resolve("../dependency-bom/package.json"))
+            .at("/dependencies/wdio-html-nice-reporter")
+            .textValue()
+
         from(project.projectDir.resolve("src/main/templates")) {
             filter<ReplaceTokens>(
                 "tokens" to mapOf(
                     "JSMINTS_BOM_VERSION" to rootProject.version,
+                    "WDIO_NICE_HTML_REPORTER_VERSION" to wdioHtmlReporterVersion,
                 )
             )
         }

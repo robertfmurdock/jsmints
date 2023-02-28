@@ -13,4 +13,8 @@ abstract class WdioTestExtension(val project: Project) {
     @Input
     @Optional
     var wdioConfigFile: File? = null
+
+    @Input
+    @Optional
+    var htmlReporter: Boolean = true
 }

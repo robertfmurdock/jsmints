@@ -25,7 +25,6 @@ dependencies {
     "e2eTestImplementation"(kotlin("test"))
     "e2eTestImplementation"("com.zegreatrob.testmints:async")
     "e2eTestImplementation"("com.zegreatrob.testmints:minassert")
-    "e2eTestImplementation"(jsconstraint("wdio-html-nice-reporter"))
     "e2eTestImplementation"(jsconstraint("chromedriver"))
     "e2eTestImplementation"(jsconstraint("wdio-chromedriver-service"))
     "e2eTestImplementation"(jsconstraint("geckodriver"))

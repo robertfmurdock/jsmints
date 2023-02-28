@@ -1,4 +1,3 @@
-import {HtmlReporter, ReportAggregator} from "wdio-html-nice-reporter";
 import log4js from "@log4js-node/log4js-api";
 import path from "path";
 
@@ -7,6 +6,18 @@ logger.level = "info";
 const reportDirectory = path.relative('./', process.env.REPORT_DIR) + "/"
 const testResultsDir = path.relative('./', process.env.TEST_RESULTS_DIR) + "/"
 const logDir = path.relative('./', process.env.LOGS_DIR) + "/"
+
+const options = {
+    enableHtmlReporter: @ENABLE_HTML_REPORTER@
+}
+
+const reporters = [
+    'dot',
+    ['junit', {
+        outputDir: testResultsDir,
+        outputFileFormat: (options) => `results.xml`
+    }],
+];
 
 export const config = {
     runner: 'local',
@@ -51,23 +62,7 @@ export const config = {
         ]
     ],
     framework: 'mocha',
-    reporters: [
-        'dot',
-        ['junit', {
-            outputDir: testResultsDir,
-            outputFileFormat: (options) => `results.xml`
-        }],
-        [HtmlReporter, {
-            debug: true,
-            outputDir: reportDirectory,
-            filename: 'report.html',
-            reportTitle: 'Wdio Testing Library E2E Report',
-            showInBrowser: true,
-            useOnAfterCommandForScreenshot: true,
-            LOG: logger
-        }
-        ],
-    ],
+    reporters: reporters,
     mochaOpts: {
         helpers: [],
         timeout: 60000,
@@ -85,19 +80,41 @@ export const config = {
         process.emit('test:screenshot', filepath);
     },
     onPrepare: function (config, capabilities) {
-        let reportAggregator = new ReportAggregator({
+        console.log("onPrepare old")
+    },
+
+};
+
+if (options.enableHtmlReporter) {
+    const {HtmlReporter, ReportAggregator} = await import("wdio-html-nice-reporter")
+
+    reporters.push(
+        [HtmlReporter, {
+            debug: true,
+            outputDir: reportDirectory,
+            filename: 'report.html',
+            reportTitle: 'Wdio Testing Library E2E Report',
+            showInBrowser: true,
+            useOnAfterCommandForScreenshot: true,
+            LOG: logger
+        }]
+    )
+    let reportAggregator;
+
+    const oldPrepare = config.onPrepare
+    config.onPrepare = function (c, capabilities) {
+        oldPrepare(c, capabilities)
+        reportAggregator = new ReportAggregator({
             outputDir: reportDirectory,
             filename: 'main-report.html',
             reportTitle: 'Main Report',
             browserName: capabilities.browserName,
         });
         reportAggregator.clean();
+    }
 
-        global.reportAggregator = reportAggregator;
-    },
+    config.onComplete = async function (exitCode, config, capabilities, results) {
+        await reportAggregator.createReport();
+    }
 
-    onComplete: async function (exitCode, config, capabilities, results) {
-        await global.reportAggregator.createReport();
-    },
-
-};
+}
