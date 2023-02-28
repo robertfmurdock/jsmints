@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.tools.ant.filters.ReplaceTokens
 import java.nio.charset.Charset
 import java.util.*
 
@@ -33,6 +35,34 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks {
+    val mapper = ObjectMapper()
+    val ncuVersion = mapper.readTree(rootDir.resolve("../dependency-bom/package.json"))
+        .at("/dependencies/npm-check-updates")
+        .textValue()
+    val copyTemplates by registering(Copy::class) {
+        inputs.property("version", rootProject.version)
+        filteringCharset = "UTF-8"
+        from(project.projectDir.resolve("src/main/templates")) {
+            filter<ReplaceTokens>(
+                "tokens" to mapOf(
+                    "NCU_VERSION" to ncuVersion,
+                )
+            )
+        }
+        into(project.buildDir.resolve("generated-sources/templates/kotlin/main"))
+    }
+    compileKotlin {
+        dependsOn(copyTemplates)
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs(copyTemplates)
+        }
+    }
 }
 
 val scmUrl = "https://github.com/robertfmurdock/jsmints"

@@ -38,7 +38,7 @@ dependencies {
         testImplementation(npm("npm-check-updates",
             jspackage.dependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
                 ?: jspackage.devDependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
-                ?: "^16.7.9")
+                ?: Versions.ncuVersion)
         )
     }
 }
