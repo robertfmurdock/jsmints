@@ -159,6 +159,9 @@ tasks {
         val logFile = file("$logsDir/run.log")
         logFile.parentFile.mkdirs()
         outputFile = logFile
+
+        verificationErrorMessage =
+            "e2e tests failed.\n- report: file://${reportDir}main-report.html\n- logs: file://${logFile.absolutePath}"
     }
 
     check {

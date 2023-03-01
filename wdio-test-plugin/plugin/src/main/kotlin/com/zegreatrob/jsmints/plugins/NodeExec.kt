@@ -6,6 +6,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.VerificationException
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import java.io.File
 import java.io.FileOutputStream
@@ -40,6 +41,10 @@ open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     var nodeCommand: String? = null
 
     @Input
+    @Optional
+    var verificationErrorMessage: String? = null
+
+    @Input
     var arguments: List<String> = emptyList()
 
     override fun exec() {
@@ -58,7 +63,15 @@ open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
             errorOutput = standardOutput
         }
 
-        super.exec()
+        kotlin.runCatching { super.exec() }
+            .getOrElse { exception ->
+                val message = verificationErrorMessage
+                if (message != null) {
+                    throw VerificationException(message)
+                } else {
+                    throw exception
+                }
+            }
     }
 }
 
@@ -105,6 +118,7 @@ private fun Project.goGetNodeBinDir(): File {
                     else -> systemArch
                 }
             }
+
             else -> x86
         }
     }
