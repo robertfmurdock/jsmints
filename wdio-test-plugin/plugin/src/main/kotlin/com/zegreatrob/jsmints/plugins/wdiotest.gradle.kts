@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
@@ -81,6 +82,7 @@ tasks {
             )
         )
     }
+    val wdioConfDirectory = projectDir.resolve("wdio.conf.d")
 
     val copyWdio by registering(Copy::class) {
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
@@ -90,11 +92,20 @@ tasks {
                 .asFile()
         }
 
+        val mapper = ObjectMapper()
+
+        inputs.dir(wdioConfDirectory)
+
         from(wdioConfFile) {
             filter<ReplaceTokens>(
                 "tokens" to mapOf(
-                    "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter}",
-                    "USE_CHROME" to "${wdioTest.useChrome}"
+                    "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter.get()}",
+                    "USE_CHROME" to "${wdioTest.useChrome.get()}",
+                    "CONFIG_MODIFIER_FILES" to mapper.writeValueAsString(
+                        wdioConfDirectory
+                            .listFiles()
+                            .map { it.absolutePath }
+                    )
                 )
             )
         }
@@ -132,6 +143,7 @@ tasks {
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(jsTestTestDevelopmentExecutableCompileSync.map { it.outputs.files })
         inputs.files(wdioConfig)
+        inputs.files(wdioConfDirectory)
 
         val reportDir = "${project.buildDir.absolutePath}/reports/e2e/"
         val testResultsDir = "${project.buildDir.absolutePath}/test-results/"

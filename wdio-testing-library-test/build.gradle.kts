@@ -7,7 +7,6 @@ plugins {
 
 wdioTest {
     includedBuild.set(true)
-    wdioConfigFile.set(projectDir.resolve("wdio.conf.mjs"))
     useChrome.set(false)
 }
 

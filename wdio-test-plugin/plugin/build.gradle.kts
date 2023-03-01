@@ -19,6 +19,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
 

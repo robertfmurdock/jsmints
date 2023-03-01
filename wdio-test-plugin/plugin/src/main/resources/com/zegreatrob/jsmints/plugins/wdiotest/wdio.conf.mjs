@@ -10,6 +10,13 @@ const logDir = path.relative('./', process.env.LOGS_DIR) + "/"
 const options = {
     enableHtmlReporter: @ENABLE_HTML_REPORTER@,
     useChrome: @USE_CHROME@,
+    configModifierFiles: @CONFIG_MODIFIER_FILES@,
+}
+
+const directories = {
+    reports: reportDirectory,
+    testResults: testResultsDir,
+    logs: logDir,
 }
 
 const reporters = [
@@ -20,7 +27,7 @@ const reporters = [
     }],
 ];
 
-export const config = {
+let incubatingConfig = {
     runner: 'local',
     specs: [
         process.env.SPEC_FILE
@@ -56,16 +63,15 @@ export const config = {
         process.emit('test:screenshot', filepath);
     },
     onPrepare: function (config, capabilities) {
-        console.log("onPrepare old")
     },
 
 };
 
 if (options.useChrome) {
-    config.services.push(
+    incubatingConfig.services.push(
         ['chromedriver', {outputDir: logDir}],
     )
-    config.capabilities.push({
+    incubatingConfig.capabilities.push({
         maxInstances: 1,
         acceptInsecureCerts: true,
         browserName: 'chrome',
@@ -97,8 +103,8 @@ if (options.enableHtmlReporter) {
     )
     let reportAggregator;
 
-    const oldPrepare = config.onPrepare
-    config.onPrepare = function (c, capabilities) {
+    const oldPrepare = incubatingConfig.onPrepare
+    incubatingConfig.onPrepare = function (c, capabilities) {
         oldPrepare(c, capabilities)
         reportAggregator = new ReportAggregator({
             outputDir: reportDirectory,
@@ -109,8 +115,19 @@ if (options.enableHtmlReporter) {
         reportAggregator.clean();
     }
 
-    config.onComplete = async function (exitCode, config, capabilities, results) {
+    incubatingConfig.onComplete = async function (exitCode, config, capabilities, results) {
         await reportAggregator.createReport();
     }
 
 }
+
+await Promise.all(options.configModifierFiles.map(async (file) => {
+    const modifierModule = await import(file);
+    if(modifierModule.configure) {
+        incubatingConfig = modifierModule.configure(incubatingConfig, directories)
+    } else {
+        throw Error("Please export a function named configure from " + file)
+    }
+}))
+
+export const config = incubatingConfig
