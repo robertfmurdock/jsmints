@@ -49,18 +49,17 @@ val runnerConfiguration: Configuration by configurations.creating {
 dependencies {
     implementation("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
     implementation("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
-}
-
-afterEvaluate {
-    dependencies {
-        runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}") {
-            if (wdioTest.includedBuild) {
-                targetConfiguration = "executable"
-            } else {
-                artifact { classifier = "executable" }
+    runnerConfiguration(
+        wdioTest.includedBuild.map { isIncludedBuild ->
+            create("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}") {
+                if (isIncludedBuild) {
+                    targetConfiguration = "executable"
+                } else {
+                    artifact { classifier = "executable" }
+                }
             }
         }
-    }
+    )
 }
 
 val npmProjectDir = kotlin.js().compilations.getByName("test").npmProject.dir
@@ -83,6 +82,26 @@ tasks {
         )
     }
 
+    val copyWdio by registering(Copy::class) {
+        mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
+        val wdioConfFile = wdioTest.wdioConfigFile.orElse {
+            project.resources.text
+                .fromString(WdioTemplate.wdioTemplateText)
+                .asFile()
+        }
+
+        from(wdioConfFile) {
+            filter<ReplaceTokens>(
+                "tokens" to mapOf(
+                    "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter}",
+                    "USE_CHROME" to "${wdioTest.useChrome}"
+                )
+            )
+        }
+        into(wdioConfig.parentFile)
+        rename { "wdio.conf.mjs" }
+    }
+
     val productionExecutableCompileSync = named("productionExecutableCompileSync")
     val jsTestTestDevelopmentExecutableCompileSync = named("testTestDevelopmentExecutableCompileSync")
     val compileProductionExecutableKotlinJs =
@@ -94,7 +113,7 @@ tasks {
 
     val e2eRun = register("e2eRun", NodeExec::class) {
         dependsOn(
-            "copyWdio",
+            copyWdio,
             installRunner,
             compileProductionExecutableKotlinJs,
             productionExecutableCompileSync,
@@ -141,39 +160,21 @@ tasks {
         outputFile = logFile
     }
 
-    afterEvaluate {
-        register("copyWdio", Copy::class) {
-            mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
-            val wdioConfFile: File = wdioTest.wdioConfigFile ?: let {
-                project.resources.text
-                    .fromString(WdioTemplate.wdioTemplateText)
-                    .asFile()
-            }
-
-            from(wdioConfFile) {
-                filter<ReplaceTokens>(
-                    "tokens" to mapOf(
-                        "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter}",
-                        "USE_CHROME" to "${wdioTest.useChrome}"
-                    )
-                )
-            }
-            into(wdioConfig.parentFile)
-            rename { "wdio.conf.mjs" }
-        }
-        dependencies {
-            if (wdioTest.htmlReporter) {
-                implementation(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
-            }
-            if (wdioTest.useChrome) {
-                implementation(npm("chromedriver", PluginVersions.chromedriverVersion))
-                implementation(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
-            }
-        }
-    }
-
     check {
         dependsOn(e2eRun)
+    }
+}
+
+afterEvaluate {
+    dependencies {
+        if (wdioTest.htmlReporter.get()) {
+            implementation(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
+        }
+
+        if (wdioTest.useChrome.get()) {
+            implementation(npm("chromedriver", PluginVersions.chromedriverVersion))
+            implementation(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
+        }
     }
 }
 
