@@ -9,6 +9,9 @@ import org.gradle.kotlin.dsl.property
 abstract class WdioTestExtension(val project: Project, private val objectFactory: ObjectFactory) {
 
     @Input
+    val baseUrl = objectFactory.property<String>()
+
+    @Input
     var includedBuild = objectFactory.property<Boolean>().convention(false)
 
     @Input

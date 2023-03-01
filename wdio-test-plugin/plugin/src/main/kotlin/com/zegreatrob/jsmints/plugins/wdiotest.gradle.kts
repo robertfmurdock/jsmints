@@ -56,6 +56,15 @@ dependencies {
             }
         }
     )
+
+    if (wdioTest.htmlReporter.get()) {
+        "e2eTestImplementation"(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
+    }
+
+    if (wdioTest.useChrome.get()) {
+        "e2eTestImplementation"(npm("chromedriver", PluginVersions.chromedriverVersion))
+        "e2eTestImplementation"(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
+    }
 }
 
 val npmProjectDir = kotlin.js().compilations.getByName("e2eTest").npmProject.dir
@@ -143,7 +152,7 @@ tasks {
         val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
         environment(
             mapOf(
-                "BASEURL" to "https://static.localhost",
+                "BASEURL" to wdioTest.baseUrl.get(),
                 "SPEC_FILE" to compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get(),
                 "WDIO_CONFIG" to wdioConfig.absolutePath,
                 "REPORT_DIR" to reportDir,
@@ -166,19 +175,6 @@ tasks {
 
     check {
         dependsOn(e2eRun)
-    }
-}
-
-afterEvaluate {
-    dependencies {
-        if (wdioTest.htmlReporter.get()) {
-            implementation(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
-        }
-
-        if (wdioTest.useChrome.get()) {
-            implementation(npm("chromedriver", PluginVersions.chromedriverVersion))
-            implementation(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
-        }
     }
 }
 

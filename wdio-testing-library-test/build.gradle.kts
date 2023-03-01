@@ -18,6 +18,7 @@ kotlin {
 wdioTest {
     includedBuild.set(true)
     useChrome.set(false)
+    baseUrl.set("https://static.localhost")
 }
 
 dependencies {
