@@ -1,5 +1,8 @@
 package com.zegreatrob.jsmints.plugins
 
+import com.zegreatrob.jsmints.plugins.jspackage.NodeExec
+import com.zegreatrob.jsmints.plugins.jspackage.setup
+
 plugins {
     id("com.zegreatrob.jsmints.plugins.jspackage")
 }

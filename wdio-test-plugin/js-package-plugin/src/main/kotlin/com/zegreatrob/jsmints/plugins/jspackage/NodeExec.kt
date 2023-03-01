@@ -1,4 +1,4 @@
-package com.zegreatrob.jsmints.plugins
+package com.zegreatrob.jsmints.plugins.jspackage
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.AbstractExecTask
@@ -9,7 +9,6 @@ import org.gradle.api.tasks.OutputFile
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import java.io.File
 import java.io.FileOutputStream
-import java.util.Locale
 
 open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
@@ -118,7 +117,5 @@ private fun Project.goGetNodeBinDir(): File {
 }
 
 val Project.nodeModulesDir get() = rootProject.buildDir.resolve("js/node_modules")
-
 private val Project.nodeExecPath get() = "$nodeBinDir/node"
-
 private val Project.nodeBinDir get() = project.rootProject.goGetNodeBinDir()

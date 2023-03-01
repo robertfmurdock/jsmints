@@ -98,7 +98,9 @@ tasks {
 
         val mapper = ObjectMapper()
 
-        inputs.dir(wdioConfDirectory)
+        if (wdioConfDirectory.exists()) {
+            inputs.dir(wdioConfDirectory)
+        }
 
         from(wdioConfFile) {
             filter<ReplaceTokens>(
@@ -108,7 +110,8 @@ tasks {
                     "CONFIG_MODIFIER_FILES" to mapper.writeValueAsString(
                         wdioConfDirectory
                             .listFiles()
-                            .map { it.absolutePath }
+                            ?.map { it.absolutePath }
+                            ?: emptyList<String>()
                     )
                 )
             )
