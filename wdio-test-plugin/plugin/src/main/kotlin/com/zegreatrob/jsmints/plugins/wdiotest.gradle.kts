@@ -20,11 +20,6 @@ repositories {
 
 kotlin {
     js {
-        nodejs {
-            testTask { enabled = false }
-        }
-        useCommonJs()
-        binaries.executable()
         compilations {
             val e2eTest by creating
             binaries.executable(e2eTest)
@@ -48,8 +43,8 @@ val runnerConfiguration: Configuration by configurations.creating {
 }
 
 dependencies {
-    implementation("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
-    implementation("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
+    "e2eTestImplementation"("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
+    "e2eTestImplementation"("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
     runnerConfiguration(
         wdioTest.includedBuild.map { isIncludedBuild ->
             create("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}") {
@@ -63,7 +58,7 @@ dependencies {
     )
 }
 
-val npmProjectDir = kotlin.js().compilations.getByName("test").npmProject.dir
+val npmProjectDir = kotlin.js().compilations.getByName("e2eTest").npmProject.dir
 
 val wdioConfig = npmProjectDir.resolve("wdio.conf.mjs")
 
@@ -113,23 +108,19 @@ tasks {
         rename { "wdio.conf.mjs" }
     }
 
-    val productionExecutableCompileSync = named("productionExecutableCompileSync")
-    val jsTestTestDevelopmentExecutableCompileSync = named("testTestDevelopmentExecutableCompileSync")
-    val compileProductionExecutableKotlinJs =
-        named("compileProductionExecutableKotlinJs", Kotlin2JsCompile::class) {}
     val compileE2eTestProductionExecutableKotlinJs =
         named("compileE2eTestProductionExecutableKotlinJs", Kotlin2JsCompile::class) {}
 
     val e2eTestProcessResources = named<ProcessResources>("e2eTestProcessResources")
 
-    val e2eRun = register("e2eRun", NodeExec::class) {
+    val e2eRun by registering(NodeExec::class) {
+        group = "Verification"
+        description = "This task will run WDIO end to end tests."
+
         dependsOn(
             copyWdio,
             installRunner,
-            compileProductionExecutableKotlinJs,
-            productionExecutableCompileSync,
-            compileE2eTestProductionExecutableKotlinJs,
-            jsTestTestDevelopmentExecutableCompileSync
+            compileE2eTestProductionExecutableKotlinJs
         )
         setup(project)
         nodeModulesDir = e2eTestProcessResources.get().destinationDir
@@ -139,9 +130,7 @@ tasks {
         ).plus(project.relatedResources())
             .joinToString(":")
 
-        inputs.files(compileProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
-        inputs.files(jsTestTestDevelopmentExecutableCompileSync.map { it.outputs.files })
         inputs.files(wdioConfig)
         inputs.files(wdioConfDirectory)
 

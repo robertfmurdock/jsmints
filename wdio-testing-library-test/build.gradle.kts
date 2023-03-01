@@ -5,6 +5,16 @@ plugins {
     alias(libs.plugins.com.avast.gradle.docker.compose)
 }
 
+kotlin {
+    js {
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
+    }
+}
+
 wdioTest {
     includedBuild.set(true)
     useChrome.set(false)
@@ -20,13 +30,13 @@ dependencies {
     implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-node")
 
-    "e2eTestImplementation"(platform(project(":dependency-bom")))
-    "e2eTestImplementation"(project(":wdio-testing-library"))
-    "e2eTestImplementation"(kotlin("test"))
-    "e2eTestImplementation"("com.zegreatrob.testmints:async")
-    "e2eTestImplementation"("com.zegreatrob.testmints:minassert")
-    "e2eTestImplementation"(jsconstraint("geckodriver"))
-    "e2eTestImplementation"(jsconstraint("wdio-geckodriver-service"))
+    e2eTestImplementation(platform(project(":dependency-bom")))
+    e2eTestImplementation(project(":wdio-testing-library"))
+    e2eTestImplementation(kotlin("test"))
+    e2eTestImplementation("com.zegreatrob.testmints:async")
+    e2eTestImplementation("com.zegreatrob.testmints:minassert")
+    e2eTestImplementation(jsconstraint("geckodriver"))
+    e2eTestImplementation(jsconstraint("wdio-geckodriver-service"))
 }
 
 dockerCompose {
@@ -36,13 +46,7 @@ dockerCompose {
 }
 
 tasks {
-    named("nodeTest") {
-        enabled = false
-    }
-    named("test") {
-        enabled = false
-    }
-    named("e2eRun") {
+    e2eRun {
         dependsOn("composeUp")
     }
 }
