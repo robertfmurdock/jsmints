@@ -1,6 +1,5 @@
 package com.zegreatrob.jsmints.plugins
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
@@ -8,6 +7,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
+import java.net.URL
 
 plugins {
     kotlin("js")
@@ -86,33 +86,32 @@ tasks {
             )
         )
     }
-    val wdioConfDirectory = projectDir.resolve("wdio.conf.d")
+    val wdioConfDirectory = wdioConfig.parentFile.resolve("wdio.conf.d")
 
+    val copyWdioConfDir by registering(Copy::class) {
+        mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
+        dependsOn("cleanCopyWdioConfDir")
+        from(projectDir.resolve("wdio.conf.d"))
+        from(wdioTest.htmlReporter.whenEnabledUseFile(WdioTemplate.htmlReporterPluginText)) {
+            rename { "html-reporter.mjs" }
+        }
+        into(wdioConfDirectory)
+    }
     val copyWdio by registering(Copy::class) {
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
-        val wdioConfFile = wdioTest.wdioConfigFile.orElse {
-            project.resources.text
-                .fromString(WdioTemplate.wdioTemplateText)
-                .asFile()
-        }
+        dependsOn(copyWdioConfDir)
+        val wdioConfFile = wdioTest.wdioConfigFile
+            .map { it.asFile.toURI().toURL() }
+            .orElse(WdioTemplate.wdioTemplateText)
+            .map { resources.text.fromUri(it) }
 
-        val mapper = ObjectMapper()
-
-        if (wdioConfDirectory.exists()) {
-            inputs.dir(wdioConfDirectory)
-        }
+        inputs.dir(wdioConfDirectory)
 
         from(wdioConfFile) {
             filter<ReplaceTokens>(
                 "tokens" to mapOf(
                     "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter.get()}",
-                    "USE_CHROME" to "${wdioTest.useChrome.get()}",
-                    "CONFIG_MODIFIER_FILES" to mapper.writeValueAsString(
-                        wdioConfDirectory
-                            .listFiles()
-                            ?.map { it.absolutePath }
-                            ?: emptyList<String>()
-                    )
+                    "USE_CHROME" to "${wdioTest.useChrome.get()}"
                 )
             )
         }
@@ -208,4 +207,14 @@ fun Project.relatedProjects(): Set<Project> {
         .flatMap { sequenceOf(it) + it.relatedProjects() }
         .plus(this)
         .toSet()
+}
+
+fun Property<Boolean>.whenEnabledUseFile(pluginFile: URL) = zip(
+    provider { resources.text.fromUri(pluginFile) }
+) { shouldUse, htmlReporterFile ->
+    if (shouldUse) {
+        listOf(htmlReporterFile)
+    } else {
+        emptyList()
+    }
 }

@@ -1,7 +1,6 @@
-import log4js from "@log4js-node/log4js-api";
 import path from "path";
+import fs from "fs";
 
-const logger = log4js.getLogger('default');
 const reportDirectory = path.relative('./', process.env.REPORT_DIR) + "/"
 const testResultsDir = path.relative('./', process.env.TEST_RESULTS_DIR) + "/"
 const logDir = path.relative('./', process.env.LOGS_DIR) + "/"
@@ -9,7 +8,6 @@ const logDir = path.relative('./', process.env.LOGS_DIR) + "/"
 const options = {
     enableHtmlReporter: @ENABLE_HTML_REPORTER@,
     useChrome: @USE_CHROME@,
-    configModifierFiles: @CONFIG_MODIFIER_FILES@,
 }
 
 const directories = {
@@ -86,43 +84,11 @@ if (options.useChrome) {
     })
 }
 
-if (options.enableHtmlReporter) {
-    const {HtmlReporter, ReportAggregator} = await import("wdio-html-nice-reporter")
+const wdioConfDir = new URL('wdio.conf.d', import.meta.url)
 
-    reporters.push(
-        [HtmlReporter, {
-            debug: true,
-            outputDir: reportDirectory,
-            filename: 'report.html',
-            reportTitle: 'Wdio Testing Library E2E Report',
-            showInBrowser: true,
-            useOnAfterCommandForScreenshot: true,
-            LOG: logger
-        }]
-    )
-    let reportAggregator;
-
-    const oldPrepare = incubatingConfig.onPrepare
-    incubatingConfig.onPrepare = function (c, capabilities) {
-        oldPrepare(c, capabilities)
-        reportAggregator = new ReportAggregator({
-            outputDir: reportDirectory,
-            filename: 'main-report.html',
-            reportTitle: 'Main Report',
-            browserName: capabilities.browserName,
-        });
-        reportAggregator.clean();
-    }
-
-    incubatingConfig.onComplete = async function (exitCode, config, capabilities, results) {
-        await reportAggregator.createReport();
-    }
-
-}
-
-await Promise.all(options.configModifierFiles.map(async (file) => {
-    const modifierModule = await import(file);
-    if(modifierModule.configure) {
+await Promise.all(fs.readdirSync(wdioConfDir).map(async (file) => {
+    const modifierModule = await import(new URL(wdioConfDir +'/' + file, ));
+    if (modifierModule.configure) {
         incubatingConfig = modifierModule.configure(incubatingConfig, directories)
     } else {
         throw Error("Please export a function named configure from " + file)
