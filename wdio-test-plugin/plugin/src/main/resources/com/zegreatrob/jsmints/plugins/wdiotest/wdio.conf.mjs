@@ -2,7 +2,6 @@ import log4js from "@log4js-node/log4js-api";
 import path from "path";
 
 const logger = log4js.getLogger('default');
-logger.level = "info";
 const reportDirectory = path.relative('./', process.env.REPORT_DIR) + "/"
 const testResultsDir = path.relative('./', process.env.TEST_RESULTS_DIR) + "/"
 const logDir = path.relative('./', process.env.LOGS_DIR) + "/"
