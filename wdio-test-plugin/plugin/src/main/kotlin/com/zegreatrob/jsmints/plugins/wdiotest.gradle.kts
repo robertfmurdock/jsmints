@@ -92,9 +92,14 @@ tasks {
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
         from(projectDir.resolve("wdio.conf.d"))
-        from(wdioTest.htmlReporter.whenEnabledUseFile(WdioTemplate.htmlReporterPluginText)) {
-            rename { "html-reporter.mjs" }
+        fun addPlugin(option: Property<Boolean>, pluginResource: URL) {
+            from(option.whenEnabledUseFile(pluginResource)) {
+                rename { pluginResource.path.split("/").last() }
+            }
         }
+        addPlugin(wdioTest.useChrome, WdioTemplate.chromePlugin)
+        addPlugin(wdioTest.htmlReporter, WdioTemplate.htmlReporterPlugin)
+        addPlugin(wdioTest.screenshotsOnFailure, WdioTemplate.screenshotsOnFailurePlugin)
         into(wdioConfDirectory)
     }
     val copyWdio by registering(Copy::class) {
@@ -102,7 +107,7 @@ tasks {
         dependsOn(copyWdioConfDir)
         val wdioConfFile = wdioTest.wdioConfigFile
             .map { it.asFile.toURI().toURL() }
-            .orElse(WdioTemplate.wdioTemplateText)
+            .orElse(WdioTemplate.wdioTemplate)
             .map { resources.text.fromUri(it) }
 
         inputs.dir(wdioConfDirectory)
@@ -110,8 +115,7 @@ tasks {
         from(wdioConfFile) {
             filter<ReplaceTokens>(
                 "tokens" to mapOf(
-                    "ENABLE_HTML_REPORTER" to "${wdioTest.htmlReporter.get()}",
-                    "USE_CHROME" to "${wdioTest.useChrome.get()}"
+                    "BASE_URL" to wdioTest.baseUrl.get()
                 )
             )
         }
@@ -172,7 +176,15 @@ tasks {
         outputFile = logFile
 
         verificationErrorMessage =
-            "e2e tests failed.\n- report: file://${reportDir}main-report.html\n- logs: file://${logFile.absolutePath}"
+            listOfNotNull(
+                "e2e tests failed.",
+                if (wdioTest.htmlReporter.get()) {
+                    "- report: file://${reportDir}html/main-report.html"
+                } else {
+                    null
+                },
+                "- logs: file://${logFile.absolutePath}"
+            ).joinToString("\n")
     }
 
     check {

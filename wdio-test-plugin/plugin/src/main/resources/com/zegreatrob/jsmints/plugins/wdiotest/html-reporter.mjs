@@ -17,9 +17,7 @@ export function configure(config, directories) {
     )
     let reportAggregator;
 
-    const oldPrepare = config.onPrepare
     config.onPrepare = function (c, capabilities) {
-        oldPrepare(c, capabilities)
         reportAggregator = new ReportAggregator({
             outputDir: outputDir,
             filename: 'main-report.html',

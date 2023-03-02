@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$/wdio-test-plugin/plugin/build/generated-sources/kotlin-dsl-accessors/kotlin" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/wdio-test-plugin/plugin/build/generated-sources/kotlin-dsl-external-plugin-spec-builders/kotlin" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/wdio-test-plugin/plugin/build/generated-sources/kotlin-dsl-plugins/kotlin" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/wdio-test-plugin/plugin/build/generated-sources/templates/kotlin/main" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/wdio-test-plugin/plugin/src/main" libraries="{Node.js Core}" />
+  </component>
+</project>

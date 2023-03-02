@@ -4,10 +4,12 @@ import org.gradle.api.GradleException
 
 object WdioTemplate {
 
-    val wdioTemplateText get() = loadResouce("wdio.conf.mjs")
-    val htmlReporterPluginText get() = loadResouce("html-reporter.mjs")
+    val wdioTemplate get() = loadResource("wdio.conf.mjs")
+    val htmlReporterPlugin get() = loadResource("html-reporter.mjs")
+    val chromePlugin get() = loadResource("chrome.mjs")
+    val screenshotsOnFailurePlugin get() = loadResource("screenshots-on-failure.mjs")
 
-    private fun loadResouce(resourceName: String) = (
+    private fun loadResource(resourceName: String) = (
         this::class.java
             .getResource("/com/zegreatrob/jsmints/plugins/wdiotest/$resourceName")
             ?: throw GradleException("Could not load $resourceName")
