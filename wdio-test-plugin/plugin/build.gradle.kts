@@ -49,6 +49,7 @@ tasks {
             filter<ReplaceTokens>(
                 "tokens" to mapOf(
                     "JSMINTS_BOM_VERSION" to rootProject.version,
+                    "NCU_VERSION" to packageJson.dependency("npm-check-updates"),
                     "WDIO_NICE_HTML_REPORTER_VERSION" to packageJson.dependency("wdio-html-nice-reporter"),
                     "CHROMEDRIVER_VERSION" to packageJson.dependency("chromedriver"),
                     "WDIO_CHROMEDRIVER_SERVICE_VERSION" to packageJson.dependency("wdio-chromedriver-service"),

@@ -38,10 +38,13 @@ tasks {
 
 dependencies {
     if (jspackage.exists) {
-        testImplementation(npm("npm-check-updates",
-            jspackage.dependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
-                ?: jspackage.devDependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
-                ?: Versions.ncuVersion)
+        testImplementation(
+            npm(
+                "npm-check-updates",
+                jspackage.dependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
+                    ?: jspackage.devDependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
+                    ?: PluginVersions.ncuVersion
+            )
         )
     }
 }
