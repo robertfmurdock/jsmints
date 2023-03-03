@@ -13,7 +13,7 @@ export function configure(config, directories) {
             'args': [
                 '--no-sandbox',
                 'headless',
-                'show-fps-counter=true',
+                'disable-dev-shm-usage',
             ]
         },
     })
