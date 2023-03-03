@@ -11,10 +11,7 @@ export function configure(config, directories) {
         },
         'goog:chromeOptions': {
             'args': [
-                '--no-sandbox',
                 'headless',
-                'disable-dev-shm-usage',
-                'window-size=800,600',
             ]
         },
     })
