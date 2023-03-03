@@ -14,6 +14,7 @@ export function configure(config, directories) {
                 '--no-sandbox',
                 'headless',
                 'disable-dev-shm-usage',
+                'window-size=800,600',
             ]
         },
     })
