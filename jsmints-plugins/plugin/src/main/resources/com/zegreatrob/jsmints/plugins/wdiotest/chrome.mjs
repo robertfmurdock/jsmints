@@ -11,6 +11,7 @@ export function configure(config, directories) {
         },
         'goog:chromeOptions': {
             'args': [
+                '--no-sandbox',
                 'headless',
                 'show-fps-counter=true',
             ]
