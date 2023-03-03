@@ -31,6 +31,10 @@ jobs:
         with:
           firefox-version: latest
       - run: echo "FIREFOX_BINARY=$(which firefox)" >> $GITHUB_ENV
+      - uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+      - run: sudo rm /usr/bin/google-chrome && sudo ln -s $(which chrome) /usr/bin/google-chrome
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
