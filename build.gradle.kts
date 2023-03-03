@@ -51,7 +51,7 @@ tasks {
     }
     "kotlinNpmInstall" {
         dependsOn(provider {
-            gradle.includedBuild("wdio-test-plugin").task(":check")
+            gradle.includedBuild("jsmints-plugins").task(":check")
         })
     }
 }

@@ -1,49 +1,29 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-
-repositories {
-    maven { url = uri("https://plugins.gradle.org/m2/") }
-    mavenCentral()
-    gradlePluginPortal()
-}
-
 plugins {
-    `kotlin-dsl`
-    id("java-gradle-plugin")
-    alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
-    alias(libs.plugins.org.jmailen.kotlinter)
+    alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
+    `maven-publish`
+    signing
+    base
+    id("com.zegreatrob.jsmints.plugins.lint")
+    id("com.zegreatrob.jsmints.plugins.versioning")
 }
 
-dependencies {
-    implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
-    implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
-    implementation(libs.com.github.ben.manes.gradle.versions.plugin)
-    implementation(libs.org.jmailen.gradle.kotlinter.gradle)
-    implementation(libs.com.fasterxml.jackson.core.jackson.databind)
+nexusPublishing {
+    repositories {
+        sonatype {
+            username.set(System.getenv("SONATYPE_USERNAME"))
+            password.set(System.getenv("SONATYPE_PASSWORD"))
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            stagingProfileId.set("59331990bed4c")
+        }
+    }
 }
 
 tasks {
-    withType<DependencyUpdatesTask> {
-        checkForGradleUpdate = true
-        outputFormatter = "json"
-        outputDir = "build/dependencyUpdates"
-        reportfileName = "report"
-        revision = "release"
-
-        rejectVersionIf {
-            "^[0-9.]+[0-9](-RC|-M[0-9]+|-RC[0-9]+|-beta.*|-Beta.*|-alpha.*)\$"
-                .toRegex(RegexOption.IGNORE_CASE)
-                .matches(candidate.version)
-        }
-    }
-    formatKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
-    }
-    lintKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
-    }
-}
-
-versionCatalogUpdate {
-    sortByKey.set(true)
+    clean { delete(rootProject.buildDir) }
+    check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }
+    assemble { dependsOn(provider { (getTasksByName("assemble", true) - this).toList() }) }
+    create("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
+    publish { dependsOn(provider { (getTasksByName("publish", true) - this).toList() }) }
 }

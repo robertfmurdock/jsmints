@@ -1,4 +1,4 @@
-rootProject.name="jsmints-plugins"
+rootProject.name = "jsmints-plugins"
 
 buildCache {
     local {
@@ -6,4 +6,21 @@ buildCache {
     }
 }
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+includeBuild("../jsmints-convention-plugins")
+include(":plugin")
+include(":wdiorunner")
