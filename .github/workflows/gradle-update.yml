@@ -16,9 +16,9 @@ jobs:
         with:
           cache-read-only: true
       - name: Update Deps
-        run: ./gradlew versionCatalogUpdate ncu --no-configuration-cache
+        run: ./gradlew -P yarnAutoReplace versionCatalogUpdate ncu --no-configuration-cache
       - name: Update Yarn Lock
-        run: ./gradlew -P yarnAutoReplace :jsmints-plugins:kotlinUpgradeYarnLock kotlinUpgradeYarnLock  --no-configuration-cache
+        run: ./gradlew :jsmints-plugins:kotlinUpgradeYarnLock kotlinUpgradeYarnLock  --no-configuration-cache
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
