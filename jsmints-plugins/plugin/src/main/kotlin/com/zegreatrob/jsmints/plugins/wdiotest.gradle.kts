@@ -131,13 +131,12 @@ tasks {
     val e2eRun by registering(NodeExec::class) {
         group = "Verification"
         description = "This task will run WDIO end to end tests."
-
+        setup(kotlin.js().compilations["e2eTest"])
         dependsOn(
             copyWdio,
             installRunner,
             compileE2eTestProductionExecutableKotlinJs
         )
-        setup(project)
         nodeModulesDir = e2eTestProcessResources.get().destinationDir
         moreNodeDirs = listOfNotNull(
             "${project.rootProject.buildDir.path}/js/node_modules",

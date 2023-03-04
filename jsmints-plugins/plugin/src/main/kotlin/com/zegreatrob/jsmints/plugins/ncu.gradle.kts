@@ -1,8 +1,5 @@
 package com.zegreatrob.jsmints.plugins
 
-import com.zegreatrob.jsmints.plugins.jspackage.NodeExec
-import com.zegreatrob.jsmints.plugins.jspackage.setup
-
 plugins {
     id("com.zegreatrob.jsmints.plugins.jspackage")
 }
@@ -15,7 +12,7 @@ tasks {
 
             register("ncuUpgrade", NodeExec::class) {
                 dependsOn("publicPackageJson")
-                setup(project)
+                setup(this@configure)
                 val packageJson = File(project.projectDir, "package.json")
                 val nodeCommand = "ncu"
                 val nodeCommandBin = "${project.nodeModulesDir}/.bin/$nodeCommand"
