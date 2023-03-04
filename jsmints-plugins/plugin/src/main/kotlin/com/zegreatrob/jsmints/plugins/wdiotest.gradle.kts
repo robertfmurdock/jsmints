@@ -5,6 +5,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import java.net.URL
@@ -36,7 +37,13 @@ rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
 rootProject.yarn.ignoreScripts = false
 
 val yarnAutoReplace: String? by project
+
 rootProject.yarn.yarnLockAutoReplace = yarnAutoReplace != null
+rootProject.yarn.yarnLockMismatchReport = if (yarnAutoReplace != null) {
+    YarnLockMismatchReport.WARNING
+} else {
+    YarnLockMismatchReport.FAIL
+}
 
 val wdioTest = project.extensions.create<WdioTestExtension>("wdioTest")
 
