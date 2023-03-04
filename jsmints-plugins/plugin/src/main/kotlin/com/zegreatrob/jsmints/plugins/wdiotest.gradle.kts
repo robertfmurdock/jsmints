@@ -2,7 +2,6 @@ package com.zegreatrob.jsmints.plugins
 
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
@@ -199,20 +198,6 @@ tasks {
     check {
         dependsOn(e2eRun)
     }
-}
-
-fun Project.relatedProjects(): Set<Project> {
-    val configuration = configurations.findByName("e2eTestImplementation")
-        ?: return emptySet()
-
-    return configuration
-        .allDependencies
-        .asSequence()
-        .filterIsInstance<DefaultProjectDependency>()
-        .map { it.dependencyProject }
-        .flatMap { sequenceOf(it) + it.relatedProjects() }
-        .plus(this)
-        .toSet()
 }
 
 fun Property<Boolean>.whenEnabledUseFile(pluginFile: URL) = zip(
