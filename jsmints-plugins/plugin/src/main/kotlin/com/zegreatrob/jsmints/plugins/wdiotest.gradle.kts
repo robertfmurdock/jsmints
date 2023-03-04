@@ -141,18 +141,14 @@ tasks {
     val e2eRun by registering(NodeExec::class) {
         group = "Verification"
         description = "This task will run WDIO end to end tests."
-        setup(kotlin.js().compilations["e2eTest"])
+        val kotlinJsCompilation = kotlin.js().compilations["e2eTest"]
+        setup(kotlinJsCompilation)
         dependsOn(
             copyWdio,
             installRunner,
+            e2eTestProcessResources,
             compileE2eTestProductionExecutableKotlinJs
         )
-        nodeModulesDir = e2eTestProcessResources.get().destinationDir
-        moreNodeDirs = listOfNotNull(
-            "${project.rootProject.buildDir.path}/js/node_modules",
-            e2eTestProcessResources.get().destinationDir
-        ).plus(project.relatedResources())
-            .joinToString(":")
 
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
         inputs.files(wdioConfig)
@@ -165,10 +161,14 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
+
+        val thing = kotlinJsCompilation.npmProject.dist.resolve(
+            compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get().name
+        )
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),
-                "SPEC_FILE" to compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get(),
+                "SPEC_FILE" to thing,
                 "WDIO_CONFIG" to wdioConfig.absolutePath,
                 "REPORT_DIR" to reportDir,
                 "TEST_RESULTS_DIR" to testResultsDir,
@@ -200,21 +200,6 @@ tasks {
         dependsOn(e2eRun)
     }
 }
-
-fun Project.relatedResources() = relatedProjects()
-    .asSequence()
-    .map { it.projectDir }
-    .flatMap {
-        listOf(
-            "src/commonMain/resources",
-            "src/clientCommonMain/resources",
-            "src/jsMain/resources",
-            "src/main/resources"
-        ).asSequence().map(it::resolve)
-    }
-    .filter { it.exists() }
-    .filter { it.isDirectory }
-    .toList()
 
 fun Project.relatedProjects(): Set<Project> {
     val configuration = configurations.findByName("e2eTestImplementation")

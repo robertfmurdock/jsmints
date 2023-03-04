@@ -36,7 +36,7 @@ let incubatingConfig = {
     bail: 0,
     baseUrl: options.baseUrl,
     waitforTimeout: 6000,
-    waitforInterval: 15, //THIS IS INCREDIBLY IMPORTANT FOR PERFORMANCE
+    waitforInterval: 15,
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
     services: [],

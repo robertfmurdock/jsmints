@@ -1,6 +1,5 @@
 package com.zegreatrob.jsmints.plugins
 
-import org.gradle.api.Project
 import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
@@ -25,13 +24,6 @@ open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     lateinit var nodeExecPath: String
 
     @Internal
-    var nodeModulesDir: File? = null
-
-    @Input
-    @Optional
-    var moreNodeDirs: String? = null
-
-    @Internal
     var npmProjectDir: File? = null
 
     @OutputFile
@@ -50,12 +42,6 @@ open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     var arguments: List<String> = emptyList()
 
     override fun exec() {
-        // environment(
-        //     "NODE_PATH",
-        //     listOfNotNull(nodeModulesDir, projectNodeModulesDir, moreNodeDirs)
-        //         .joinToString(":")
-        // )
-        // environment("PATH", "$nodeBinDir")
         npmProjectDir?.let { workingDir = it }
         val commandFromBin = nodeCommand?.let { listOf("$projectNodeModulesDir/.bin/$nodeCommand") } ?: emptyList()
         commandLine = listOf(nodeExecPath) + commandFromBin + arguments
@@ -83,5 +69,3 @@ fun NodeExec.setup(compilation: KotlinJsCompilation) {
     nodeExecPath = nodeJs.requireConfigured().nodeExecutable
     projectNodeModulesDir = compilation.npmProject.nodeModulesDir
 }
-
-val Project.nodeModulesDir get() = rootProject.buildDir.resolve("js/node_modules")
