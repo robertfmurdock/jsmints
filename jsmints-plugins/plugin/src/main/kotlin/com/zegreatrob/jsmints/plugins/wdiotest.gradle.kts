@@ -35,6 +35,9 @@ rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
 
 rootProject.yarn.ignoreScripts = false
 
+val yarnAutoReplace by project.properties
+rootProject.yarn.yarnLockAutoReplace = yarnAutoReplace != null
+
 val wdioTest = project.extensions.create<WdioTestExtension>("wdioTest")
 
 val runnerConfiguration: Configuration by configurations.creating {
