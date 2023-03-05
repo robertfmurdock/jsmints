@@ -8,7 +8,7 @@ jobs:
   update-gradle-wrapper:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '25'
       - uses: burrunan/gradle-cache-action@v1
@@ -25,7 +25,7 @@ jobs:
           token: ${{ secrets.TESTMINTS_PAT }}
       - name: Enable Pull Request Automerge
         if: steps.cpr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v1
+        uses: peter-evans/enable-pull-request-automerge@v2
         with:
           token: ${{ secrets.TESTMINTS_PAT }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}

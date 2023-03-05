@@ -44,14 +44,22 @@ tasks {
     }
     check {
         dependsOn(provider { (getTasksByName("check", true) - this).toList() })
-        dependsOn(gradle.includedBuilds.map { it.task(":check") })
+        dependsOn(provider { gradle.includedBuilds.map { it.task(":check") } })
     }
     "formatKotlin" {
-        dependsOn(gradle.includedBuilds.map { it.task(":formatKotlin") })
+        dependsOn(provider { gradle.includedBuilds.map { it.task(":formatKotlin") } })
+    }
+    "versionCatalogUpdate" {
+        dependsOn(provider { gradle.includedBuilds.map { it.task(":versionCatalogUpdate") } })
     }
     "kotlinNpmInstall" {
         dependsOn(provider {
-            gradle.includedBuild("jsmints-plugins").task(":check")
+            gradle.includedBuild("jsmints-plugins").task(":kotlinNpmInstall")
+        })
+    }
+    "kotlinUpgradeYarnLock" {
+        dependsOn(provider {
+            gradle.includedBuild("jsmints-plugins").task(":kotlinUpgradeYarnLock")
         })
     }
 }

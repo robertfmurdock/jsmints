@@ -1,5 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
+import com.zegreatrob.jsmints.plugins.jspackage.JsPackageExtension
+
 plugins {
     id("com.zegreatrob.jsmints.plugins.jspackage")
 }

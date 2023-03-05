@@ -19,7 +19,7 @@ kotlin {
     sourceSets {
         val jsMain by getting {
             dependencies {
-                api(npm("core-js", "^3.6.5"))
+                api(npmConstrained("core-js"))
                 api("org.jetbrains.kotlin-wrappers:kotlin-react")
                 api("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
             }

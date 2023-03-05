@@ -1,4 +1,4 @@
-package com.zegreatrob.jsmints.plugins
+package com.zegreatrob.jsmints.plugins.jspackage
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper

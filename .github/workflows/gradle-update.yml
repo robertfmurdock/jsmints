@@ -8,7 +8,7 @@ jobs:
     name: "Create Update Branch"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '25'
       - name: Setup Gradle
@@ -18,7 +18,7 @@ jobs:
       - name: Update Deps
         run: ./gradlew -P yarnAutoReplace versionCatalogUpdate ncu --no-configuration-cache
       - name: Update Yarn Lock
-        run: ./gradlew :jsmints-plugins:kotlinUpgradeYarnLock kotlinUpgradeYarnLock  --no-configuration-cache
+        run: ./gradlew kotlinUpgradeYarnLock  --no-configuration-cache
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.TESTMINTS_PAT }}
       - name: Enable Pull Request Automerge
         if: steps.cpr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v1
+        uses: peter-evans/enable-pull-request-automerge@v2
         with:
           token: ${{ secrets.TESTMINTS_PAT }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}

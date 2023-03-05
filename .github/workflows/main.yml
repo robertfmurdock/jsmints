@@ -5,13 +5,6 @@ on:
       - '**'
     tags-ignore:
       - '**'
-  workflow_dispatch:
-    inputs:
-      debug_enabled:
-        type: boolean
-        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
-        required: false
-        default: false
 jobs:
   build-job:
     name: "Build"
@@ -35,7 +28,7 @@ jobs:
         with:
           chrome-version: stable
       - run: sudo rm /usr/bin/google-chrome && sudo ln -s $(which chrome) /usr/bin/google-chrome
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: testspace-com/setup-testspace@v1
@@ -45,11 +38,8 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
-      - name: Generate Version 🧮
+      - name: Generate Version 🔢
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
       - name: Build 🔨
         run: ./gradlew release check -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
       - name: Plugin Publish 🙏
@@ -61,7 +51,7 @@ jobs:
       - name: Collect Test Results
         if: ${{ always() }}
         run: ./gradlew collectResults
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
           name: test-output

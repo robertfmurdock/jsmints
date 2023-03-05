@@ -1,6 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
+import com.zegreatrob.jsmints.plugins.wdiotest.WdioTestExtension
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject

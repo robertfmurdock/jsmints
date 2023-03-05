@@ -1,4 +1,4 @@
-package com.zegreatrob.jsmints.plugins
+package com.zegreatrob.jsmints.plugins.wdiotest
 
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory

@@ -1,5 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
+import com.zegreatrob.jsmints.plugins.jspackage.JsPackageExtension
+import com.zegreatrob.jsmints.plugins.jspackage.loadPackageJson
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 
 plugins {
