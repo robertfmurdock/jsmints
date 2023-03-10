@@ -17,6 +17,8 @@ jobs:
           cache-read-only: true
       - name: Update Deps
         run: ./gradlew -P yarnAutoReplace versionCatalogUpdate ncu --no-configuration-cache
+      - name: Remove Kotlin JS Store
+        run: rm -r kotlin-js-store
       - name: Update Yarn Lock
         run: ./gradlew kotlinUpgradeYarnLock  --no-configuration-cache
       - name: Create Pull Request
