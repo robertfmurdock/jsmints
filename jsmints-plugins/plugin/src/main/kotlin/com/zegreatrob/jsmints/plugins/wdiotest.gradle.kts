@@ -133,6 +133,10 @@ tasks {
         rename { "wdio.conf.mjs" }
     }
 
+    named("compileE2eTestKotlinJs") {
+        dependsOn(copyWdio)
+    }
+
     val compileE2eTestProductionExecutableKotlinJs =
         named("compileE2eTestProductionExecutableKotlinJs", Kotlin2JsCompile::class) {}
 
