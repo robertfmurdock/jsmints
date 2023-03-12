@@ -16,7 +16,7 @@
     "enzyme-adapter-react-16": "^1.15.7",
     "geckodriver": "^3.2.0",
     "global-jsdom": "^8.7.0",
-    "jsdom": "^21.1.0",
+    "jsdom": "^21.1.1",
     "wdio-chromedriver-service": "8.1.1",
     "wdio-geckodriver-service": "4.1.0",
     "wdio-html-nice-reporter": "8.1.0",
