@@ -13,6 +13,6 @@ external interface UserEvent {
     fun click(
         element: Node?,
         eventInit: dynamic = definedExternally,
-        options: dynamic = definedExternally
+        options: dynamic = definedExternally,
     ): Promise<Unit>
 }

@@ -14,7 +14,7 @@ private fun launcher(constructor: dynamic, configPath: String, options: Json): L
         .unsafeCast<Launcher>()
 
 private suspend fun getConstructor(): dynamic = Promise.resolve(
-    js("import(\"@wdio/cli\")").unsafeCast<Promise<Json>>()
+    js("import(\"@wdio/cli\")").unsafeCast<Promise<Json>>(),
 )
     .then { it["Launcher"].asDynamic() }
     .await()

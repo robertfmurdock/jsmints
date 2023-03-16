@@ -33,7 +33,7 @@ class ByLabelTextTest : ByLabelText by TestingLibraryBrowser {
     fun givenNoElementExistsFindByLabelText() = givenNoElementByLabelTextWillFailAsExpected(::findByLabelText)
 
     private fun givenNoElementByLabelTextWillFailAsExpected(
-        query: suspend (text: String) -> WebdriverElement?
+        query: suspend (text: String) -> WebdriverElement?,
     ) = testingLibrarySetup {
     } exercise {
         kotlin.runCatching { query("Not Awesome") }
@@ -42,7 +42,7 @@ class ByLabelTextTest : ByLabelText by TestingLibraryBrowser {
             .assertIsEqualTo(true)
         result.exceptionOrNull()?.message.apply {
             this?.startsWith(
-                "Unable to find a label with the text of: Not Awesome"
+                "Unable to find a label with the text of: Not Awesome",
             )
                 .assertIsEqualTo(true, this)
         }

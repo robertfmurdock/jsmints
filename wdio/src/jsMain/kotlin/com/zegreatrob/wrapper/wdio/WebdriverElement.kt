@@ -6,7 +6,7 @@ import kotlin.js.json
 
 class WebdriverElement(
     val selector: String = "",
-    private val finder: suspend () -> Element = selector.defaultElementFinder()
+    private val finder: suspend () -> Element = selector.defaultElementFinder(),
 ) : BrowserLoggingSyntax {
 
     suspend fun innerElement() = finder()
@@ -82,6 +82,6 @@ class WebdriverElement(
 
 private fun String.defaultElementFinder(): suspend () -> Element = {
     WebdriverBrowser.element(
-        this
+        this,
     )
 }

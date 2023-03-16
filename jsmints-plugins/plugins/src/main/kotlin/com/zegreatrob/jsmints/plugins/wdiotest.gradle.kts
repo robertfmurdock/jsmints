@@ -64,7 +64,7 @@ dependencies {
                     artifact { classifier = "executable" }
                 }
             }
-        }
+        },
     )
 
     if (wdioTest.htmlReporter.get()) {
@@ -92,8 +92,8 @@ tasks {
         from(
             zipTree(
                 runnerConfiguration.resolve()
-                    .first()
-            )
+                    .first(),
+            ),
         )
     }
     val wdioConfDirectory = wdioConfig.parentFile.resolve("wdio.conf.d")
@@ -125,8 +125,8 @@ tasks {
         from(wdioConfFile) {
             filter<ReplaceTokens>(
                 "tokens" to mapOf(
-                    "BASE_URL" to wdioTest.baseUrl.get()
-                )
+                    "BASE_URL" to wdioTest.baseUrl.get(),
+                ),
             )
         }
         into(wdioConfig.parentFile)
@@ -151,7 +151,7 @@ tasks {
             copyWdio,
             installRunner,
             e2eTestProcessResources,
-            compileE2eTestProductionExecutableKotlinJs
+            compileE2eTestProductionExecutableKotlinJs,
         )
 
         inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
@@ -167,7 +167,7 @@ tasks {
         val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
 
         val thing = kotlinJsCompilation.npmProject.dist.resolve(
-            compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get().name
+            compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get().name,
         )
         environment(
             mapOf(
@@ -179,9 +179,9 @@ tasks {
                 "LOGS_DIR" to logsDir,
                 "STRICT_SSL" to "false",
                 "NODE_PATH" to listOf(
-                    "${project.rootProject.buildDir.path}/js/node_modules"
-                ).joinToString(":")
-            )
+                    "${project.rootProject.buildDir.path}/js/node_modules",
+                ).joinToString(":"),
+            ),
         )
         arguments = listOf(runnerJs.get().absolutePath)
         val logFile = file("$logsDir/run.log")
@@ -196,7 +196,7 @@ tasks {
                 } else {
                     null
                 },
-                "- logs: file://${logFile.absolutePath}"
+                "- logs: file://${logFile.absolutePath}",
             ).joinToString("\n")
     }
 
@@ -206,7 +206,7 @@ tasks {
 }
 
 fun Property<Boolean>.whenEnabledUseFile(pluginFile: URL) = zip(
-    provider { resources.text.fromUri(pluginFile) }
+    provider { resources.text.fromUri(pluginFile) },
 ) { shouldUse, htmlReporterFile ->
     if (shouldUse) {
         listOf(htmlReporterFile)

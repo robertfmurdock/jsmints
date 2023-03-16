@@ -31,16 +31,16 @@ class DataLoaderTest {
             DataLoader(
                 getDataAsync = { "DATA" },
                 errorData = { "ERROR" },
-                scope = exerciseScope
+                scope = exerciseScope,
             ) { state ->
                 allRenderedStates.add(state)
                 div { +"state: $state" }
-            }.create()
+            }.create(),
         )
     } verify {
         screen.findByText("state: ${ResolvedState("DATA")}").await()
         allRenderedStates.assertIsEqualTo(
-            listOf(EmptyState(), PendingState(), ResolvedState("DATA"))
+            listOf(EmptyState(), PendingState(), ResolvedState("DATA")),
         )
     }
 
@@ -55,12 +55,12 @@ class DataLoaderTest {
             DataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
                 allRenderedStates.add(state)
                 div { +"state: $state" }
-            }.create()
+            }.create(),
         )
     } verify {
         screen.findByText("state: ${ResolvedState("ERROR")}").await()
         allRenderedStates.assertIsEqualTo(
-            listOf(EmptyState(), PendingState(), ResolvedState("ERROR"))
+            listOf(EmptyState(), PendingState(), ResolvedState("ERROR")),
         )
     }
 
@@ -77,7 +77,7 @@ class DataLoaderTest {
                         button { +"Button"; this.onClick = { tools.reloadData() } }
                     }
                 }
-            }.create()
+            }.create(),
         )
     } exercise {
         userEvent.click(screen.findByText("Button").await())
@@ -86,7 +86,7 @@ class DataLoaderTest {
 
         allRenderedStates.map { it::class }.assertIsEqualTo(
             listOf(EmptyState::class, PendingState::class, ResolvedState::class) +
-                listOf(EmptyState::class, PendingState::class, ResolvedState::class)
+                listOf(EmptyState::class, PendingState::class, ResolvedState::class),
         )
     }
 
@@ -122,7 +122,7 @@ class DataLoaderTest {
                         }
                     }
                 }
-            }.create()
+            }.create(),
         )
     } exercise {
         userEvent.click(screen.findByText("Button").await())

@@ -28,7 +28,7 @@ tasks {
                     "--packageFile",
                     packageJson.absolutePath,
                     "--configFilePath",
-                    configFile.absolutePath
+                    configFile.absolutePath,
                 )
             }
         }
@@ -42,8 +42,8 @@ dependencies {
                 "npm-check-updates",
                 jspackage.dependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
                     ?: jspackage.devDependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }
-                    ?: PluginVersions.ncuVersion
-            )
+                    ?: PluginVersions.ncuVersion,
+            ),
         )
     }
 }

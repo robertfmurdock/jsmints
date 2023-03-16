@@ -38,7 +38,7 @@ class WithinTest : Within by TestingLibraryBrowser {
         givenNoElementByTextWillFailAsExpected { within(getCoolSection()).findByText(it) }
 
     private fun givenNoElementByTextWillFailAsExpected(
-        query: suspend (text: String) -> WebdriverElement?
+        query: suspend (text: String) -> WebdriverElement?,
     ) = testingLibrarySetup {
     } exercise {
         kotlin.runCatching { query("Awesome") }
@@ -50,7 +50,7 @@ class WithinTest : Within by TestingLibraryBrowser {
                 "Unable to find an element with the text: Awesome. " +
                     "This could be because the text is broken up by multiple elements. " +
                     "In this case, you can provide a function for your text matcher to " +
-                    "make your matcher more flexible."
+                    "make your matcher more flexible.",
             )
                 .assertIsEqualTo(true, this)
         }
