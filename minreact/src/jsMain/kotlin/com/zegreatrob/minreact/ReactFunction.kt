@@ -53,7 +53,7 @@ fun <P : DataProps<P>> create(dataProps: DataProps<P>, block: @JsoDsl Props.() -
 fun <D : DataProps<in D>> DataProps<in D>.create(
     key: Key? = null,
     block: @JsoDsl
-    (ChildrenBuilder.() -> Unit) = {}
+    (ChildrenBuilder.() -> Unit) = {},
 ): ReactNode {
     val dataProps = this
     return component.create {

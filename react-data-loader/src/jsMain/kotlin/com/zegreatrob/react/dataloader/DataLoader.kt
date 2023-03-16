@@ -15,7 +15,7 @@ typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 @Deprecated(
     replaceWith = ReplaceWith("DataLoaderProps"),
     level = DeprecationLevel.WARNING,
-    message = "Name to be removed."
+    message = "Name to be removed.",
 )
 typealias DataLoadWrapperProps<D> = DataLoader<D>
 typealias DataLoaderProps<D> = DataLoader<D>
@@ -24,7 +24,7 @@ data class DataLoader<D>(
     val getDataAsync: DataLoadFunc<D>,
     val errorData: (Throwable) -> D,
     val scope: CoroutineScope? = null,
-    val children: ChildrenBuilder.(value: DataLoadState<D>) -> Unit
+    val children: ChildrenBuilder.(value: DataLoadState<D>) -> Unit,
 ) : DataProps<DataLoader<D>> {
     override val component = cachedComponent.unsafeCast<TMFC>()
 }
@@ -47,7 +47,7 @@ private fun <D> startPendingJob(
     scope: CoroutineScope,
     setState: StateSetter<DataLoadState<D>>,
     getDataAsync: DataLoadFunc<D>,
-    errorData: (Throwable) -> D
+    errorData: (Throwable) -> D,
 ) {
     val setEmpty = setState.empty()
     val setPending = setState.pending()
@@ -55,7 +55,7 @@ private fun <D> startPendingJob(
     val tools = DataLoaderTools(scope, setEmpty)
     setPending(
         scope.launch { getDataOrCatchError(getDataAsync, tools, setResolved, errorData) }
-            .also { job -> job.errorOnTotalJobFailure(setResolved, errorData) }
+            .also { job -> job.errorOnTotalJobFailure(setResolved, errorData) },
     )
 }
 
@@ -63,7 +63,7 @@ private suspend fun <D> getDataOrCatchError(
     getDataAsync: DataLoadFunc<D>,
     tools: DataLoaderTools,
     setResolved: (D) -> Unit,
-    errorData: (Throwable) -> D
+    errorData: (Throwable) -> D,
 ) {
     try {
         getDataAsync(tools).let(setResolved)
@@ -81,18 +81,18 @@ private fun <D> Job.errorOnTotalJobFailure(setResolved: (D) -> Unit, errorResult
 
 private fun <D> StateSetter<DataLoadState<D>>.empty(): () -> Unit = {
     this(
-        EmptyState()
+        EmptyState(),
     )
 }
 
 private fun <D> StateSetter<DataLoadState<D>>.pending(): (Job) -> Unit = {
     this(
-        PendingState()
+        PendingState(),
     )
 }
 
 private fun <D> StateSetter<DataLoadState<D>>.resolved(): (D) -> Unit = {
     this(
-        ResolvedState(it)
+        ResolvedState(it),
     )
 }

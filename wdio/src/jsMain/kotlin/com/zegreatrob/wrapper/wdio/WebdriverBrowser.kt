@@ -15,13 +15,13 @@ object WebdriverBrowser : BrowserLoggingSyntax {
     }
 
     suspend fun all(selector: String): Array<Element> = log(
-        WebdriverBrowser::all
+        WebdriverBrowser::all,
     ) { browser.`$$`(selector).await() }
 
     suspend fun waitUntil(
         condition: suspend () -> Boolean,
         timeout: Int? = null,
-        timeoutMessage: String = ""
+        timeoutMessage: String = "",
     ): Unit = log(this::waitUntil.name) {
         val options = json("timeoutMsg" to timeoutMessage)
             .let { if (timeout != null) it.add(json("timeout" to timeout)) else it }
@@ -31,7 +31,7 @@ object WebdriverBrowser : BrowserLoggingSyntax {
 
     private val baseUrl get() = URL(
         browser.options
-            .get("baseUrl").unsafeCast<String>()
+            .get("baseUrl").unsafeCast<String>(),
     )
 
     suspend fun waitForAlert(): Unit = log(WebdriverBrowser::waitForAlert) {
@@ -87,7 +87,7 @@ object WebdriverBrowser : BrowserLoggingSyntax {
                             window.location.pathname = loc
                         }
                         }, location);
-            """
+            """,
         ).unsafeCast<Promise<Unit>>()
             .await()
     }

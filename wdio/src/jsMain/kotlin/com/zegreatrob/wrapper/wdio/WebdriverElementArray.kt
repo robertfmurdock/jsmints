@@ -2,7 +2,7 @@ package com.zegreatrob.wrapper.wdio
 
 class WebdriverElementArray(
     val selector: String = "",
-    private val finder: suspend () -> List<WebdriverElement> = selector.defaultArrayFinder()
+    private val finder: suspend () -> List<WebdriverElement> = selector.defaultArrayFinder(),
 ) : BrowserLoggingSyntax {
 
     private suspend fun all() = finder()

@@ -34,7 +34,7 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     fun givenNoElementExistsFindByRole() = givenNoElementByRoleWillFailAsExpected(::findByRole)
 
     private fun givenNoElementByRoleWillFailAsExpected(
-        query: suspend (role: String, options: RoleOptions) -> WebdriverElement?
+        query: suspend (role: String, options: RoleOptions) -> WebdriverElement?,
     ) = testingLibrarySetup {
     } exercise {
         kotlin.runCatching { query("button", RoleOptions(name = "Not Awesome")) }

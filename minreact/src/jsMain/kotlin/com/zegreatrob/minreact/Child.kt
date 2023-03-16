@@ -13,7 +13,7 @@ fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
     clazz: ElementType<P>,
     props: P,
     key: String? = null,
-    handler: ChildrenBuilder.() -> Unit = {}
+    handler: ChildrenBuilder.() -> Unit = {},
 ) {
     clazz {
         +props
@@ -26,9 +26,9 @@ fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
 fun <D : DataProps<D>, P> ChildrenBuilder.child(
     dataProps: D,
     key: String? = null,
-    handler: ChildrenBuilder.() -> Unit = {}
+    handler: ChildrenBuilder.() -> Unit = {},
 ) where P : PropsWithRef<Node>,
-        P : ChildrenBuilder {
+      P : ChildrenBuilder {
     +dataProps.component.create {
         +dataProps.unsafeCast<Props>()
         key?.let { this.key = it }
@@ -40,7 +40,7 @@ fun <D> ChildrenBuilder.add(
     dataProps: DataProps<in D>,
     key: String? = null,
     handler: @JsoDsl
-    (ChildrenBuilder.() -> Unit) = {}
+    (ChildrenBuilder.() -> Unit) = {},
 ) where D : DataProps<in D> {
     +dataProps.component.create {
         +dataProps.unsafeCast<Props>()

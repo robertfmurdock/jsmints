@@ -69,8 +69,8 @@ fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: Str
             "change",
             json(
                 "target" to json("name" to fieldName, "value" to fieldValue),
-                "persist" to {}
-            )
+                "persist" to {},
+            ),
         )
 }
 
@@ -81,22 +81,22 @@ fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandl
     enzyme.shallow(
         buildElement {
             child(reactFunction, props, handler)
-        }
+        },
     )
 
 fun shallow(handler: RBuilder.() -> Unit) = enzyme.shallow(buildElement(handler))
 
 fun shallow(component: ElementType<*>, handler: ChildrenBuilder.() -> Unit = {}) = enzyme.shallow(
-    component.create(handler)
+    component.create(handler),
 )
 
 fun <P : DataProps<P>> shallow(
     props: P,
     component: TMFC = props.component,
-    handler: ChildrenBuilder.() -> Unit = {}
+    handler: ChildrenBuilder.() -> Unit = {},
 ) = enzyme.shallow(
     component.create {
         +props.unsafeCast<DataPropsBridge>()
         handler()
-    }
+    },
 )

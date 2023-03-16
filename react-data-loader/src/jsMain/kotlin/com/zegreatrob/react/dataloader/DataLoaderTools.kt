@@ -11,14 +11,14 @@ data class DataLoaderTools(val scope: CoroutineScope, val reloadData: ReloadFunc
     fun <R> performAsyncWork(
         work: suspend () -> R,
         errorResult: (Throwable) -> R,
-        onWorkComplete: (R) -> Unit
+        onWorkComplete: (R) -> Unit,
     ) = scope.async { work() }
         .handleOnCompletion(onWorkComplete, errorResult)
 
     @ExperimentalCoroutinesApi
     private fun <R> Deferred<R>.handleOnCompletion(
         onWorkComplete: (R) -> Unit,
-        errorResult: (Throwable) -> R
+        errorResult: (Throwable) -> R,
     ) = invokeOnCompletion { throwable ->
         if (throwable == null) {
             getCompleted().let(onWorkComplete)

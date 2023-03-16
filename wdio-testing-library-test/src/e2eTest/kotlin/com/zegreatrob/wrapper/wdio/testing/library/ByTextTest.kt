@@ -33,7 +33,7 @@ class ByTextTest : ByText by TestingLibraryBrowser {
     fun givenNoElementExistsFindByText() = givenNoElementByTextWillFailAsExpected(::findByText)
 
     private fun givenNoElementByTextWillFailAsExpected(
-        query: suspend (text: String) -> WebdriverElement?
+        query: suspend (text: String) -> WebdriverElement?,
     ) = testingLibrarySetup {
     } exercise {
         kotlin.runCatching { query("Not Awesome") }
@@ -45,7 +45,7 @@ class ByTextTest : ByText by TestingLibraryBrowser {
                 "Unable to find an element with the text: Not Awesome. " +
                     "This could be because the text is broken up by multiple elements. " +
                     "In this case, you can provide a function for your text matcher to " +
-                    "make your matcher more flexible."
+                    "make your matcher more flexible.",
             )
                 .assertIsEqualTo(true, this)
         }
