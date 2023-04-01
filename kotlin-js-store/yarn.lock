@@ -632,7 +632,7 @@
     loglevel-plugin-prefix "^0.8.4"
     strip-ansi "^6.0.0"
 
-"@wdio/logger@8.6.6":
+"@wdio/logger@8.6.6", "@wdio/logger@^8.6.6":
   version "8.6.6"
   resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-8.6.6.tgz#6f3844a2506730ae1e4151dca0ed0242b5b69b63"
   integrity sha512-MS+Y5yqFGx2zVXMOfuBQAVdFsP4DuYz+/hM552xwiDWjGg6EZHoccqUYgH3J5zpu3JFpYV3R/a5jExFiGGck6g==
@@ -1976,14 +1976,6 @@ dot-prop@^6.0.1:
   dependencies:
     is-obj "^2.0.0"
 
-dukat@0.5.8-rc.4:
-  version "0.5.8-rc.4"
-  resolved "https://registry.yarnpkg.com/dukat/-/dukat-0.5.8-rc.4.tgz#90384dcb50b14c26f0e99dae92b2dea44f5fce21"
-  integrity sha512-ZnMt6DGBjlVgK2uQamXfd7uP/AxH7RqI0BL9GLrrJb2gKdDxvJChWy+M9AQEaL+7/6TmxzJxFOsRiInY9oGWTA==
-  dependencies:
-    google-protobuf "3.12.2"
-    typescript "3.9.5"
-
 eastasianwidth@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
@@ -2452,6 +2444,15 @@ fs-extra@^11.1.0:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
+fs-extra@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.1.tgz#da69f7c39f3b002378b0954bb6ae7efdc0876e2d"
+  integrity sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
 fs-minipass@^2.0.0, fs-minipass@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-2.1.0.tgz#7f5036fdbf12c63c169190cbe4199c852271f9fb"
@@ -2679,11 +2680,6 @@ globule@^1.0.0:
     glob "~7.1.1"
     lodash "^4.17.21"
     minimatch "~3.0.2"
-
-google-protobuf@3.12.2:
-  version "3.12.2"
-  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.12.2.tgz#50ce9f9b6281235724eb243d6a83e969a2176e53"
-  integrity sha512-4CZhpuRr1d6HjlyrxoXoocoGFnRYgKULgMtikMddA9ztRyYR59Aondv2FioyxWVamRo0rF2XpYawkTCBEQOSkA==
 
 gopd@^1.0.1:
   version "1.0.1"
@@ -5528,6 +5524,11 @@ split2@^4.1.0:
   resolved "https://registry.yarnpkg.com/split2/-/split2-4.1.0.tgz#101907a24370f85bb782f08adaabe4e281ecf809"
   integrity sha512-VBiJxFkxiXRlUIeyMQi8s4hgvKCSjtknJv/LVYbrgALPwf5zSKmEwV9Lst25AkvMDnvxODugjdl6KZgwKM1WYQ==
 
+split2@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/split2/-/split2-4.2.0.tgz#c9c5920904d148bab0b9f67145f245a86aadbfa4"
+  integrity sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==
+
 ssri@^10.0.0:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/ssri/-/ssri-10.0.1.tgz#c61f85894bbc6929fc3746f05e31cf5b44c030d5"
@@ -5894,11 +5895,6 @@ typescript-string-operations@^1.5.0:
   resolved "https://registry.yarnpkg.com/typescript-string-operations/-/typescript-string-operations-1.5.0.tgz#7add21af652cc4ef46e9acdbcf054b4d0640a943"
   integrity sha512-96dP74lhNF4UmTbGcgjb9KELkdhbHFv/aKyRmrEg60X1e76KYDJK7V7Y91yEYWH5tfTDPqUVb2MVOnESDu81cA==
 
-typescript@3.9.5:
-  version "3.9.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.5.tgz#586f0dba300cde8be52dd1ac4f7e1009c1b13f36"
-  integrity sha512-hSAifV3k+i6lEoCJ2k6R2Z/rp/H3+8sdmcn5NrS3/3kE7+RyZXm9aqvxWqjEXHAd8b0pShatpcdMTvEdvAJltQ==
-
 typescript@4.7.4:
   version "4.7.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"
@@ -6059,15 +6055,15 @@ wdio-chromedriver-service@8.1.1:
     split2 "^4.1.0"
     tcp-port-used "^1.0.2"
 
-wdio-geckodriver-service@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/wdio-geckodriver-service/-/wdio-geckodriver-service-4.1.0.tgz#b184ffdbd54b05eb8de01526a3e6904951f548dc"
-  integrity sha512-7XuHNDGP4z4aJnpd9e1KshgfWYJqWk17Qt0oPqtovG805ld8L1loJ1MLRLHK4qMHamGKwc73Aivc1VcKC+iuLg==
+wdio-geckodriver-service@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/wdio-geckodriver-service/-/wdio-geckodriver-service-4.1.1.tgz#d38b285a845a100fc6ea04b2e34e9ba97174ab53"
+  integrity sha512-VKn08Z+h9RJ20FrZSf3W696GYawh8B1+3aRJwKZm9dnHEQaVRxhW7bySpfdCV7VQp9mNGBFZ/1U6vEGIMvH4ZQ==
   dependencies:
-    "@wdio/logger" "^8.1.0"
-    fs-extra "^11.1.0"
+    "@wdio/logger" "^8.6.6"
+    fs-extra "^11.1.1"
     get-port "^6.1.2"
-    split2 "^4.1.0"
+    split2 "^4.2.0"
     tcp-port-used "^1.0.2"
 
 wdio-html-nice-reporter@8.1.0:
