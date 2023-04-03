@@ -13,7 +13,7 @@ tasks {
         kotlin.js().compilations.named("test").configure {
 
             register("ncuUpgrade", NodeExec::class) {
-                dependsOn("publicPackageJson")
+                dependsOn("publicPackageJson", ":kotlinNpmInstall")
                 setup(this@configure)
                 val packageJson = File(project.projectDir, "package.json")
                 val nodeCommand = "ncu"
