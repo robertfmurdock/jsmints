@@ -1595,10 +1595,10 @@ copyfiles@^2.3.0:
     untildify "^4.0.0"
     yargs "^16.1.0"
 
-core-js@^3.29.1:
-  version "3.29.1"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.29.1.tgz#40ff3b41588b091aaed19ca1aa5cb111803fa9a6"
-  integrity sha512-+jwgnhg6cQxKYIIjGtAHq2nwUOolo9eoFZ4sHfUH09BLXBgxnH4gA0zEd+t+BO2cNB8idaBtZFcFTRjQJRJmAw==
+core-js@^3.30.0:
+  version "3.30.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.30.0.tgz#64ac6f83bc7a49fd42807327051701d4b1478dea"
+  integrity sha512-hQotSSARoNh1mYPi9O2YaWeiq/cEB95kOrFb4NCrO4RIFt1qqNpKsaE+vy/L3oiqvND5cThqXzUU3r9F7Efztg==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -4257,10 +4257,10 @@ npm-bundled@^3.0.0:
   dependencies:
     npm-normalize-package-bin "^3.0.0"
 
-npm-check-updates@16.10.0:
-  version "16.10.0"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.10.0.tgz#6bd5c76eedd231248a4d8cf5c1b20cd6f19d5164"
-  integrity sha512-xtTm38/94u9BhFbIuq1yxjKs+lmXQK+RnzxgfMVzRhz9vRXgcuC9ZsSw8hormmrmVtIZ8yG0At80d1R5vRf6rQ==
+npm-check-updates@16.10.1:
+  version "16.10.1"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.10.1.tgz#e69c20fdf4d1262273312a7eb3a33503ac28e355"
+  integrity sha512-s5CNxtaCjiFR8ns4DkZJuukMaiXodeYyoHQ4XYp0WfRuqU+NfSODbW9jQDTtwZFIhrzX0d4/YJXL32BteX+ujw==
   dependencies:
     chalk "^5.2.0"
     cli-table3 "^0.6.3"
