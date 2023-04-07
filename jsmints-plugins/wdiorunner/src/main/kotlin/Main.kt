@@ -5,7 +5,7 @@ fun main() {
     val config = wdioConfig()
 
     MainScope().launch {
-        runWebdriverIO(config)
+        runWebdriverIO(config, fgrepString())
             .let { result -> process.exit(result) }
     }.invokeOnCompletion { huh ->
         if (huh != null) {
@@ -13,6 +13,8 @@ fun main() {
         }
     }
 }
+
+private fun fgrepString() = process.envString("FGREP")
 
 private fun Process.envString(key: String) = env[key].unsafeCast<String>()
 

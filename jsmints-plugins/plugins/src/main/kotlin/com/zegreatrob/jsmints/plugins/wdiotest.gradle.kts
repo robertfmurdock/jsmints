@@ -142,7 +142,7 @@ tasks {
 
     val e2eTestProcessResources = named<ProcessResources>("e2eTestProcessResources")
 
-    val e2eRun by registering(NodeExec::class) {
+    val e2eRun by registering(WdioTest::class) {
         group = "Verification"
         description = "This task will run WDIO end to end tests."
         val kotlinJsCompilation = kotlin.js().compilations["e2eTest"]
@@ -166,16 +166,17 @@ tasks {
 
         val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
 
-        val thing = kotlinJsCompilation.npmProject.dist.resolve(
+        val specFile = kotlinJsCompilation.npmProject.dist.resolve(
             compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get().name,
         )
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),
-                "SPEC_FILE" to thing,
+                "SPEC_FILE" to specFile,
                 "WDIO_CONFIG" to wdioConfig.absolutePath,
                 "REPORT_DIR" to reportDir,
                 "TEST_RESULTS_DIR" to testResultsDir,
+
                 "LOGS_DIR" to logsDir,
                 "STRICT_SSL" to "false",
                 "NODE_PATH" to listOf(
