@@ -7,7 +7,7 @@ export function configure(config, directories) {
             return;
         }
         const timestamp = new Date().getUTCMilliseconds();
-        const filepath = path.join(directories.reports, 'screenshots/', timestamp + '.png');
+        const filepath = path.join(directories.reports, 'html/screenshots/', timestamp + '.png');
         browser.saveScreenshot(filepath);
         process.emit('test:screenshot', filepath);
     }

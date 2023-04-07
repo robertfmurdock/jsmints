@@ -3,7 +3,7 @@ import {HtmlReporter, ReportAggregator} from "wdio-html-nice-reporter"
 
 export function configure(config, directories) {
     const logger = log4js.getLogger('default');
-    const outputDir = directories.reports + "/html";
+    const outputDir = directories.reports + "/html/";
     config.reporters.push(
         [HtmlReporter, {
             debug: true,
@@ -11,7 +11,8 @@ export function configure(config, directories) {
             filename: 'report.html',
             reportTitle: 'Wdio Testing Library E2E Report',
             showInBrowser: true,
-            useOnAfterCommandForScreenshot: true,
+            useOnAfterCommandForScreenshot: false,
+            linkScreenshots: true,
             LOG: logger
         }]
     )
