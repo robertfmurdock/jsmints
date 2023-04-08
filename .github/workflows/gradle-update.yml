@@ -20,7 +20,7 @@ jobs:
       - name: Clean
         run: ./gradlew clean
       - name: Update Yarn Lock
-        run: ./gradlew kotlinUpgradeYarnLock  --no-configuration-cache
+        run: ./gradlew kotlinUpgradeYarnLock  --no-configuration-cache --no-build-cache
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
