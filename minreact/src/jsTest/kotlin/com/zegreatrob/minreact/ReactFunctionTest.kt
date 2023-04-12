@@ -8,7 +8,7 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
 import kotlin.test.Test
 
-val funny = tmFC<Funny> { (first, second) ->
+val funny by ntmFC<Funny> { (first, second) ->
     div {
         span { +"$first" }
         span { +second }

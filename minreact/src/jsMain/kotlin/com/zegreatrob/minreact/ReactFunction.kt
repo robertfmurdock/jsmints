@@ -11,12 +11,31 @@ import react.Props
 import react.PropsWithChildren
 import react.ReactNode
 import react.create
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 inline fun <reified P : DataProps<P>> tmFC(crossinline function: ChildrenBuilder.(P) -> Unit):
     ElementType<DataPropsBridge> = FC { props: DataPropsBridge ->
     val newProps = ensureKotlinClassProps(props, P::class.js)
     +newProps.unsafeCast<Props>()
     function(newProps)
+}
+
+inline fun <reified T : DataProps<T>> ntmFC(noinline function: ChildrenBuilder.(T) -> Unit) =
+    NamedTmFC(T::class, function)
+
+class NamedTmFC<T : DataProps<T>>(private val clazz: KClass<T>, private val function: ChildrenBuilder.(T) -> Unit) {
+    operator fun getValue(t: Any?, property: KProperty<*>) = FC(property.name) { props: DataPropsBridge ->
+        val newProps = ensureKotlinClassProps(props, clazz.js)
+        +newProps.unsafeCast<Props>()
+        function(newProps)
+    }
+}
+
+fun <T : Props> nfc(function: ChildrenBuilder.(T) -> Unit) = NamedFC(function)
+
+class NamedFC<T : Props>(private val function: ChildrenBuilder.(T) -> Unit) {
+    operator fun <A> getValue(t: A?, property: KProperty<*>) = FC(property.name, function)
 }
 
 fun <P : DataProps<P>> ensureKotlinClassProps(props: DataPropsBridge, jsClass: JsClass<P>): P =

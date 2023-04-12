@@ -5,7 +5,6 @@ import com.zegreatrob.minreact.external.testinglibrary.react.getByText
 import com.zegreatrob.minreact.external.testinglibrary.react.render
 import com.zegreatrob.minreact.external.testinglibrary.react.screen
 import com.zegreatrob.testmints.setup
-import react.FC
 import react.Props
 import react.create
 import react.dom.html.ReactHTML.div
@@ -13,7 +12,7 @@ import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.span
 import kotlin.test.Test
 
-val boringComponent = tmFC<BoringComponent> { props ->
+val boringComponent by ntmFC<BoringComponent> { props ->
     label {
         +props.content
         children(props)
@@ -26,7 +25,7 @@ class ChildTest {
 
     @Test
     fun addSugarWillCorrectlyApplyKeyAndHandler() = setup(object {
-        val outerComponent = FC<Props> {
+        val outerComponent by nfc<Props> {
             div {
                 add(BoringComponent("11"), key = "1") {
                     span { +"Hello!" }
@@ -47,7 +46,7 @@ class ChildTest {
 
     @Test
     fun createSugarAlsoWorks() = setup(object {
-        val outerComponent = FC<Props> {
+        val outerComponent by nfc<Props> {
             div {
                 +BoringComponent("11").create(key = "1") {
                     span { +"Hello!" }
