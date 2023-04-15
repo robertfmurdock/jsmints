@@ -529,10 +529,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@wdio/cli@8.8.2":
-  version "8.8.2"
-  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.8.2.tgz#0c32e12a590b40287632a1c4a469495cc5a3351b"
-  integrity sha512-cw0XFom5E/zBFQcBmDk4ki2prPkw/aH6+gD2TBhno7DHlGw8u7X3WazKZYzB7FtCkcmsqp3lDQ5FggnjOa78vQ==
+"@wdio/cli@8.8.3":
+  version "8.8.3"
+  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.8.3.tgz#5ab9db64c4c86e95566852d05ab7c5ba85b8e893"
+  integrity sha512-ddn2APizGuf9TBVhA0l9HTsD//nEYC/Znocx633ZZcU7ZM7Z8HMxho617EAHoWN1rmWaKfApwjnsBlNCB8o9gA==
   dependencies:
     "@types/node" "^18.0.0"
     "@wdio/config" "8.8.0"
@@ -1608,10 +1608,10 @@ copyfiles@^2.3.0:
     untildify "^4.0.0"
     yargs "^16.1.0"
 
-core-js@^3.30.0:
-  version "3.30.0"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.30.0.tgz#64ac6f83bc7a49fd42807327051701d4b1478dea"
-  integrity sha512-hQotSSARoNh1mYPi9O2YaWeiq/cEB95kOrFb4NCrO4RIFt1qqNpKsaE+vy/L3oiqvND5cThqXzUU3r9F7Efztg==
+core-js@^3.30.1:
+  version "3.30.1"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.30.1.tgz#fc9c5adcc541d8e9fa3e381179433cbf795628ba"
+  integrity sha512-ZNS5nbiSwDTq4hFosEDqm65izl2CWmLz0hARJMyNQBgkUZMIF51cQiMvIQKA6hvuaeWxQDP3hEedM1JZIgTldQ==
 
 core-util-is@~1.0.0:
   version "1.0.3"
