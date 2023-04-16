@@ -36,8 +36,8 @@ class ReactFunctionTest {
     @Test
     fun alwaysUsesTheSameReactFunction() = setup(object {
     }) exercise {
-        funny
+        Funny(1, "2").component
     } verify { result ->
-        result.assertIsEqualTo(funny)
+        result.assertIsEqualTo(Funny(3, "4").component)
     }
 }

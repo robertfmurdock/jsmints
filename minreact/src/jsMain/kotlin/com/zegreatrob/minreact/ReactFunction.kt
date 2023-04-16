@@ -24,27 +24,24 @@ inline fun <reified P : DataProps<P>> tmFC(crossinline function: ChildrenBuilder
 inline fun <reified T : DataProps<T>> ntmFC(noinline function: ChildrenBuilder.(T) -> Unit) =
     NamedTmFC(T::class, function)
 
-val lol = lazy { "" }
-
 class NamedTmFC<T : DataProps<T>>(private val clazz: KClass<T>, private val function: ChildrenBuilder.(T) -> Unit) {
 
-    var fc: FC<DataPropsBridge>? = null
+    private var fc: FC<DataPropsBridge>? = null
 
-    operator fun getValue(t: Any?, property: KProperty<*>): FC<DataPropsBridge> {
-        return fc ?: FC(property.name) { props: DataPropsBridge ->
+    operator fun getValue(t: Any?, property: KProperty<*>): FC<DataPropsBridge> =
+        fc ?: FC(property.name) { props: DataPropsBridge ->
             val newProps = ensureKotlinClassProps(props, clazz.js)
             +newProps.unsafeCast<Props>()
             function(newProps)
         }.also {
             fc = it
         }
-    }
 }
 
 fun <T : Props> nfc(function: ChildrenBuilder.(T) -> Unit) = NamedFC(function)
 
 class NamedFC<T : Props>(private val function: ChildrenBuilder.(T) -> Unit) {
-    var fc: FC<T>? = null
+    private var fc: FC<T>? = null
     operator fun <A> getValue(t: A?, property: KProperty<*>): FC<T> =
         fc ?: FC(property.name, function).also { fc = it }
 }
