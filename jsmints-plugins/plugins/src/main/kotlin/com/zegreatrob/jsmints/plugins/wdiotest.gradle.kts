@@ -137,8 +137,11 @@ tasks {
         dependsOn(copyWdio)
     }
 
-    val compileE2eTestProductionExecutableKotlinJs =
-        named("compileE2eTestProductionExecutableKotlinJs", Kotlin2JsCompile::class) {}
+    val wdioTestModuleName = "wdio-dev-tests"
+    val compileE2eTestDevelopmentExecutableKotlinJs =
+        named("compileE2eTestDevelopmentExecutableKotlinJs", Kotlin2JsCompile::class) {
+            compilerOptions { moduleName.set(wdioTestModuleName) }
+        }
 
     val e2eTestProcessResources = named<ProcessResources>("e2eTestProcessResources")
 
@@ -151,10 +154,10 @@ tasks {
             copyWdio,
             installRunner,
             e2eTestProcessResources,
-            compileE2eTestProductionExecutableKotlinJs,
+            compileE2eTestDevelopmentExecutableKotlinJs,
         )
 
-        inputs.files(compileE2eTestProductionExecutableKotlinJs.map { it.outputs.files })
+        inputs.files(compileE2eTestDevelopmentExecutableKotlinJs.map { it.outputs.files })
         inputs.files(wdioConfig)
         inputs.files(wdioConfDirectory)
 
@@ -165,10 +168,7 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
-
-        val specFile = kotlinJsCompilation.npmProject.dist.resolve(
-            compileE2eTestProductionExecutableKotlinJs.get().outputFileProperty.get().name,
-        )
+        val specFile = kotlinJsCompilation.npmProject.dist.resolve("$wdioTestModuleName.js")
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),
