@@ -1,5 +1,6 @@
 package com.zegreatrob.minreact
 
+import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
 import com.zegreatrob.minreact.external.testinglibrary.react.getByText
 import com.zegreatrob.minreact.external.testinglibrary.react.render
@@ -63,5 +64,23 @@ class ChildTest {
             .assertIsNotEqualTo(null)
         getByText(screen.getByText("22"), "Goodbye!")
             .assertIsNotEqualTo(null)
+    }
+
+    @Test
+    fun nfcAlwaysUsesSameReactFunction() = setup(object {
+        val outerComponent by nfc<Props> {
+            div {
+                +BoringComponent("11").create(key = "1") {
+                    span { +"Hello!" }
+                }
+                +BoringComponent("22").create(key = "2") {
+                    span { +"Goodbye!" }
+                }
+            }
+        }
+    }) exercise {
+        outerComponent
+    } verify { result ->
+        result.assertIsEqualTo(outerComponent)
     }
 }

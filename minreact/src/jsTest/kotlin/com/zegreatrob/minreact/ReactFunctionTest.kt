@@ -1,5 +1,6 @@
 package com.zegreatrob.minreact
 
+import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
 import com.zegreatrob.minreact.external.testinglibrary.react.render
 import com.zegreatrob.minreact.external.testinglibrary.react.screen
@@ -30,5 +31,13 @@ class ReactFunctionTest {
             .assertIsNotEqualTo(null)
         screen.getByText(expectedSecond)
             .assertIsNotEqualTo(null)
+    }
+
+    @Test
+    fun alwaysUsesTheSameReactFunction() = setup(object {
+    }) exercise {
+        funny
+    } verify { result ->
+        result.assertIsEqualTo(funny)
     }
 }
