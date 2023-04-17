@@ -46,6 +46,9 @@ tasks {
         dependsOn(provider { (getTasksByName("check", true) - this).toList() })
         dependsOn(provider { gradle.includedBuilds.map { it.task(":check") } })
     }
+    clean {
+        dependsOn(provider { gradle.includedBuilds.map { it.task(":clean") } })
+    }
     "formatKotlin" {
         dependsOn(provider { gradle.includedBuilds.map { it.task(":formatKotlin") } })
     }
