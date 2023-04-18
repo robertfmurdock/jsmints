@@ -1,14 +1,15 @@
 import allure from "allure-commandline";
 import fs from "fs";
+import path from "path";
 
 export function configure(config, directories) {
-    const outputDir = directories.reports + "allure/data";
-    if (fs.existsSync(outputDir)) {
-        fs.rmSync(outputDir, {recursive: true})
+    const allureDataDir = path.resolve(directories.reports, "../../allure-data");
+    if (fs.existsSync(allureDataDir)) {
+        fs.rmSync(allureDataDir, {recursive: true})
     }
 
     config.reporters.push(['allure', {
-        outputDir: outputDir,
+        outputDir: allureDataDir,
     }]);
     const previousAfterTest = config.afterTest
     config.afterTest = async function (test, context, result) {
@@ -22,7 +23,7 @@ export function configure(config, directories) {
     }
     config.onComplete = function () {
         const generation = allure(
-            ['generate', outputDir, '--clean', '--output', directories.reports + "allure/report"]
+            ['generate', allureDataDir, '--clean', '--output', directories.reports + "allure/report"]
         )
         return new Promise((resolve, reject) => {
             const generationTimeout = setTimeout(
