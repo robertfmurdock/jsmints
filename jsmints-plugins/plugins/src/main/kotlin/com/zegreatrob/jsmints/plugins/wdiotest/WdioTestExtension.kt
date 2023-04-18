@@ -20,6 +20,12 @@ abstract class WdioTestExtension(val project: Project, private val objectFactory
     var htmlReporter = objectFactory.property<Boolean>().convention(true)
 
     @Input
+    var timelineReporter = objectFactory.property<Boolean>().convention(false)
+
+    @Input
+    val allureReporter = objectFactory.property<Boolean>().convention(false)
+
+    @Input
     var useChrome = objectFactory.property<Boolean>().convention(true)
 
     @Input

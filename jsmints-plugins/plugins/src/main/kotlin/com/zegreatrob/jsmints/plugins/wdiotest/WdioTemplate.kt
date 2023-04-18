@@ -8,6 +8,8 @@ object WdioTemplate {
     val htmlReporterPlugin get() = loadResource("html-reporter.mjs")
     val chromePlugin get() = loadResource("chrome.mjs")
     val screenshotsOnFailurePlugin get() = loadResource("screenshots-on-failure.mjs")
+    val timelineReporterPlugin get() = loadResource("timeline-reporter.mjs")
+    val allureReporterPlugin get() = loadResource("allure-reporter.mjs")
 
     private fun loadResource(resourceName: String) = (
         this::class.java

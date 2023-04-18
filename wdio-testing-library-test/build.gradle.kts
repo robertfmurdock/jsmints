@@ -18,6 +18,8 @@ kotlin {
 wdioTest {
     includedBuild.set(true)
     useChrome.set(true)
+    htmlReporter.set(false)
+    allureReporter.set(true)
     baseUrl.set("https://static.localhost")
 }
 

@@ -1,8 +1,11 @@
 import path from 'path'
 
 export function configure(config, directories) {
-
-    config.afterTest = function (test, context, result) {
+    const previousAfterTest = config.afterTest
+    config.afterTest = async function (test, context, result) {
+        if (previousAfterTest) {
+            await previousAfterTest.apply(this, arguments)
+        }
         if (result.passed) {
             return;
         }

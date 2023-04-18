@@ -1,8 +1,9 @@
+
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Base64
 
 plugins {
     `java-gradle-plugin`
@@ -51,6 +52,7 @@ tasks {
                     "JSMINTS_BOM_VERSION" to rootProject.version,
                     "NCU_VERSION" to packageJson.dependency("npm-check-updates"),
                     "WDIO_NICE_HTML_REPORTER_VERSION" to packageJson.dependency("wdio-html-nice-reporter"),
+                    "WDIO_TIMELINE_REPORTER_VERSION" to packageJson.dependency("wdio-timeline-reporter"),
                     "CHROMEDRIVER_VERSION" to packageJson.dependency("chromedriver"),
                     "WDIO_CHROMEDRIVER_SERVICE_VERSION" to packageJson.dependency("wdio-chromedriver-service"),
                 )

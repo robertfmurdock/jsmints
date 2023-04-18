@@ -70,6 +70,13 @@ dependencies {
     if (wdioTest.htmlReporter.get()) {
         "e2eTestImplementation"(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
     }
+    if (wdioTest.timelineReporter.get()) {
+        "e2eTestImplementation"(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion))
+    }
+    if (wdioTest.allureReporter.get()) {
+        "e2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioTimelineReporterVersion))
+        "e2eTestImplementation"(npm("allure-commandline", PluginVersions.wdioTimelineReporterVersion))
+    }
 
     if (wdioTest.useChrome.get()) {
         "e2eTestImplementation"(npm("chromedriver", PluginVersions.chromedriverVersion))
@@ -109,6 +116,8 @@ tasks {
         }
         addPlugin(wdioTest.useChrome, WdioTemplate.chromePlugin)
         addPlugin(wdioTest.htmlReporter, WdioTemplate.htmlReporterPlugin)
+        addPlugin(wdioTest.timelineReporter, WdioTemplate.timelineReporterPlugin)
+        addPlugin(wdioTest.allureReporter, WdioTemplate.allureReporterPlugin)
         addPlugin(wdioTest.screenshotsOnFailure, WdioTemplate.screenshotsOnFailurePlugin)
         into(wdioConfDirectory)
     }
