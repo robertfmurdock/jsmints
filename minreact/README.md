@@ -8,4 +8,4 @@ In a build.gradle.kts, the dependency can be installed with (replace + with the 
     implementation("com.zegreatrob.testmints:minreact:+")
 
 
-Examples are [here](https://github.com/robertfmurdock/testmints/blob/master/minreact/src/jsTest/kotlin/com/zegreatrob/minreact/ReactFunctionTest.kt).
+Examples are [here](https://github.com/robertfmurdock/jsmints/blob/master/minreact/src/jsTest/kotlin/com/zegreatrob/minreact/ReactFunctionTest.kt).
