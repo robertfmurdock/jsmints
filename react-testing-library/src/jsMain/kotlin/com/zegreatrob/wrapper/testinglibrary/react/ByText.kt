@@ -1,14 +1,17 @@
 package com.zegreatrob.wrapper.testinglibrary.react
 
-import com.zegreatrob.wrapper.testinglibrary.react.external.Screen
-import kotlinx.coroutines.await
+import org.w3c.dom.HTMLElement
 
 interface ByText {
-    val screen: Screen
-    suspend fun getByText(text: String) = screen.getByText(text)
-    suspend fun getAllByText(text: String) = screen.getAllByText(text)
-    suspend fun queryByText(text: String) = screen.queryByText(text)
-    suspend fun queryAllByText(text: String) = screen.queryAllByText(text)
-    suspend fun findByText(text: String) = screen.findByText(text).await()
-    suspend fun findAllByText(text: String) = screen.findAllByText(text).await()
+    suspend fun getByText(text: String): HTMLElement
+
+    suspend fun getAllByText(text: String): Array<HTMLElement>
+
+    suspend fun queryByText(text: String): HTMLElement?
+
+    suspend fun queryAllByText(text: String): Array<HTMLElement>
+
+    suspend fun findByText(text: String): HTMLElement
+
+    suspend fun findAllByText(text: String): Array<HTMLElement>
 }

@@ -15,11 +15,11 @@ external interface ReactTestingLibrary {
     fun within(element: Element?): Screen
     fun render(node: ReactNode, options: Json = definedExternally): Result
 
-    interface ByTextOptions {
-        var selector: String
-    }
-
     fun getByText(element: Element, s: String, options: ByTextOptions = definedExternally): HTMLElement
+}
+
+interface ByTextOptions {
+    var selector: String
 }
 
 external class Result {
@@ -27,8 +27,8 @@ external class Result {
 }
 
 external class Screen {
-    fun getByText(s: String, options: ReactTestingLibrary.ByTextOptions = definedExternally): HTMLElement
-    fun getAllByText(s: String, options: ReactTestingLibrary.ByTextOptions = definedExternally): Array<HTMLElement>
+    fun getByText(s: String, options: ByTextOptions = definedExternally): HTMLElement
+    fun getAllByText(s: String, options: ByTextOptions = definedExternally): Array<HTMLElement>
     fun getByLabelText(s: String): HTMLElement
     fun getAllByLabelText(s: String): Array<HTMLElement>
     fun findByLabelText(s: String): Promise<HTMLElement>
@@ -39,6 +39,15 @@ external class Screen {
     fun queryByLabelText(s: String): HTMLElement?
     fun queryAllByLabelText(s: String): Array<HTMLElement>
     fun queryAllByAltText(s: String): Array<HTMLElement>
-    fun getByRole(role: String, options: Json = definedExternally): HTMLElement
     fun findByText(text: String): Promise<HTMLElement>
+    fun getByRole(role: String, options: TestingLibraryRoleOptions = definedExternally): HTMLElement
+    fun getAllByRole(s: String, options: TestingLibraryRoleOptions = definedExternally): Array<HTMLElement>
+    fun queryByRole(s: String, options: TestingLibraryRoleOptions = definedExternally): HTMLElement?
+    fun queryAllByRole(s: String, options: TestingLibraryRoleOptions = definedExternally): Array<HTMLElement>
+    fun findByRole(text: String, options: TestingLibraryRoleOptions = definedExternally): Promise<HTMLElement>
+    fun findAllByRole(s: String, options: TestingLibraryRoleOptions): Promise<Array<HTMLElement>>
+}
+
+external interface TestingLibraryRoleOptions {
+    var name: String
 }

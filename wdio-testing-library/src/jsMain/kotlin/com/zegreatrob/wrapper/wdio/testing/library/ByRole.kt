@@ -40,5 +40,3 @@ interface ByRole : BrowserProvider {
         options.name?.let { this.name = it }
     }
 }
-
-data class RoleOptions(val name: String? = null)
