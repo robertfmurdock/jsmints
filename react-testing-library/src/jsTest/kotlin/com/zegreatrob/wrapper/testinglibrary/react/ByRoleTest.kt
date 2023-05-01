@@ -4,7 +4,7 @@ import com.zegreatrob.minassert.assertIsEqualTo
 import org.w3c.dom.HTMLElement
 import kotlin.test.Test
 
-class ByRoleTest : ByRole by TestingLibraryReact {
+class ByRoleTest : ByRole by TestingLibraryReact.screen {
 
     @Test
     fun givenElementExistsCanGetByRole() = givenElementByRoleWorks(::getByRole)

@@ -3,14 +3,13 @@ package com.zegreatrob.react.dataloader
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
 import com.zegreatrob.minreact.create
-import com.zegreatrob.react.dataloader.external.testinglibrary.react.render
-import com.zegreatrob.react.dataloader.external.testinglibrary.react.screen
-import com.zegreatrob.react.dataloader.external.testinglibrary.react.waitFor
 import com.zegreatrob.react.dataloader.external.testinglibrary.userevent.userEvent
 import com.zegreatrob.testmints.async.ScopeMint
 import com.zegreatrob.testmints.async.asyncSetup
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.waitFor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.await
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 import react.FC
@@ -38,7 +37,7 @@ class DataLoaderTest {
             }.create(),
         )
     } verify {
-        screen.findByText("state: ${ResolvedState("DATA")}").await()
+        screen.findByText("state: ${ResolvedState("DATA")}")
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("DATA")),
         )
@@ -58,7 +57,7 @@ class DataLoaderTest {
             }.create(),
         )
     } verify {
-        screen.findByText("state: ${ResolvedState("ERROR")}").await()
+        screen.findByText("state: ${ResolvedState("ERROR")}")
         allRenderedStates.assertIsEqualTo(
             listOf(EmptyState(), PendingState(), ResolvedState("ERROR")),
         )
@@ -80,9 +79,9 @@ class DataLoaderTest {
             }.create(),
         )
     } exercise {
-        userEvent.click(screen.findByText("Button").await())
+        userEvent.click(screen.findByText("Button"))
     } verify {
-        screen.findByText("allStatesCount: 6").await()
+        screen.findByText("allStatesCount: 6")
 
         allRenderedStates.map { it::class }.assertIsEqualTo(
             listOf(EmptyState::class, PendingState::class, ResolvedState::class) +
@@ -125,7 +124,7 @@ class DataLoaderTest {
             }.create(),
         )
     } exercise {
-        userEvent.click(screen.findByText("Button").await())
+        userEvent.click(screen.findByText("Button"))
 
         channel.send(99)
         channel.send(87)
@@ -136,7 +135,7 @@ class DataLoaderTest {
         waitFor {
             screen.getByText("Work Complete 99, 87, 53")
                 .assertIsNotEqualTo(null)
-        }.await()
+        }
     }
 
     companion object {

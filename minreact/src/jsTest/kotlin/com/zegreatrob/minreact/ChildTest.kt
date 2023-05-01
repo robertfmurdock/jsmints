@@ -2,10 +2,10 @@ package com.zegreatrob.minreact
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
-import com.zegreatrob.minreact.external.testinglibrary.react.getByText
-import com.zegreatrob.minreact.external.testinglibrary.react.render
-import com.zegreatrob.minreact.external.testinglibrary.react.screen
 import com.zegreatrob.testmints.setup
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.within
 import react.Props
 import react.create
 import react.dom.html.ReactHTML.div
@@ -39,9 +39,11 @@ class ChildTest {
     }) exercise {
         render(outerComponent.create {})
     } verify {
-        getByText(screen.getByText("11"), "Hello!")
+        within(screen.getByText("11"))
+            .getByText("Hello!")
             .assertIsNotEqualTo(null)
-        getByText(screen.getByText("22"), "Goodbye!")
+        within(screen.getByText("22"))
+            .getByText("Goodbye!")
             .assertIsNotEqualTo(null)
     }
 
@@ -60,9 +62,11 @@ class ChildTest {
     }) exercise {
         render(outerComponent.create {})
     } verify {
-        getByText(screen.getByText("11"), "Hello!")
+        within(screen.getByText("11"))
+            .getByText("Hello!")
             .assertIsNotEqualTo(null)
-        getByText(screen.getByText("22"), "Goodbye!")
+        within(screen.getByText("22"))
+            .getByText("Goodbye!")
             .assertIsNotEqualTo(null)
     }
 

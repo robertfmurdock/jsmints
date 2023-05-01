@@ -1,39 +1,24 @@
-import com.zegreatrob.jsmints.plugins.npmConstrained
-
 plugins {
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
     id("com.zegreatrob.jsmints.plugins.js")
 }
 
-kotlin {
-
-    js {
-        compilations.named("test") {
-            packageJson {
-                customField("mocha", mapOf("require" to "global-jsdom/register"))
-            }
-        }
+kotlin.js().compilations.named("test") {
+    packageJson {
+        customField("mocha", mapOf("require" to "global-jsdom/register"))
     }
+}
 
-    sourceSets {
-        val jsMain by getting {
-            dependencies {
-                api(npmConstrained("core-js"))
-                api("org.jetbrains.kotlin-wrappers:kotlin-react")
-                api("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
-            }
-        }
+dependencies {
+    jsMainApi(jsconstraint("core-js"))
+    jsMainApi("org.jetbrains.kotlin-wrappers:kotlin-react")
+    jsMainApi("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
 
-        val jsTest by getting {
-            dependencies {
-                implementation(npmConstrained("@testing-library/react"))
-                implementation(npmConstrained("jsdom"))
-                implementation(npmConstrained("global-jsdom"))
-                implementation("org.jetbrains.kotlin:kotlin-test")
-                implementation("com.zegreatrob.testmints:standard")
-                implementation("com.zegreatrob.testmints:minassert")
-            }
-        }
-    }
+    jsTestImplementation(project(":react-testing-library"))
+    jsTestImplementation(jsconstraint("jsdom"))
+    jsTestImplementation(jsconstraint("global-jsdom"))
+    jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
+    jsTestImplementation("com.zegreatrob.testmints:standard")
+    jsTestImplementation("com.zegreatrob.testmints:minassert")
 }

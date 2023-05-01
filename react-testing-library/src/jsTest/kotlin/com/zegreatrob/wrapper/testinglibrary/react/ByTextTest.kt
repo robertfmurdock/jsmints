@@ -4,7 +4,7 @@ import com.zegreatrob.minassert.assertIsEqualTo
 import org.w3c.dom.HTMLElement
 import kotlin.test.Test
 
-class ByTextTest : ByText by TestingLibraryReact {
+class ByTextTest : ByText by TestingLibraryReact.screen {
 
     @Test
     fun givenElementExistsCanGetByText() = givenElementByTextWorks(::getByText)

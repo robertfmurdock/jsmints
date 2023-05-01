@@ -2,9 +2,9 @@ package com.zegreatrob.minreact
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
-import com.zegreatrob.minreact.external.testinglibrary.react.render
-import com.zegreatrob.minreact.external.testinglibrary.react.screen
 import com.zegreatrob.testmints.setup
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
 import kotlin.test.Test

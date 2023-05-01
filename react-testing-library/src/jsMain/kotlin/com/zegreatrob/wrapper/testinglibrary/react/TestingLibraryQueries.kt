@@ -1,3 +1,3 @@
 package com.zegreatrob.wrapper.testinglibrary.react
 
-interface TestingLibraryQueries : ByRole, ByText, ByLabelText, Within
+interface TestingLibraryQueries : ByRole, ByText, ByLabelText
