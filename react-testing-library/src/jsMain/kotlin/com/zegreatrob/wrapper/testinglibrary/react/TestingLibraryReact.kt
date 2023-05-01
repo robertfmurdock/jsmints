@@ -7,4 +7,7 @@ object TestingLibraryReact : TestingLibraryFunctions by ScreenTestingLibraryFunc
     val screen = object : TestingLibraryQueries by ScreenTestingLibraryQueries {}
 
     suspend fun <T : Any> waitFor(callback: () -> T?): Unit = reactTestingLibrary.waitFor(callback).await()
+
+    fun act(block: () -> Unit) = reactTestingLibrary.act(block)
+    val fireEvent = reactTestingLibrary.fireEvent
 }

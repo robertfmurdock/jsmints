@@ -6,7 +6,8 @@ internal interface ScreenTestingLibraryQueries :
     TestingLibraryQueries,
     ScreenByRole,
     ScreenByText,
-    ScreenByLabelText {
+    ScreenByLabelText,
+    ScreenByAltText {
     companion object : ScreenTestingLibraryQueries {
         override val screen = reactTestingLibrary.screen
     }

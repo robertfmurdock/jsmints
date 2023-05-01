@@ -10,6 +10,7 @@ plugins {
 }
 
 rootProject.name = "jsmints"
+
 include("dependency-bom")
 include("jsmints-bom")
 include("minjson")
