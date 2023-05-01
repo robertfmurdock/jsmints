@@ -17,6 +17,7 @@ include("minreact")
 include("minenzyme")
 include("react-data-loader")
 include("wdio")
+include("react-testing-library")
 include("wdio-testing-library")
 include("wdio-testing-library-test")
 
