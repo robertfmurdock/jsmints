@@ -30,10 +30,14 @@ external class Screen {
     fun getByText(s: String, options: ReactTestingLibrary.ByTextOptions = definedExternally): HTMLElement
     fun getAllByText(s: String, options: ReactTestingLibrary.ByTextOptions = definedExternally): Array<HTMLElement>
     fun getByLabelText(s: String): HTMLElement
+    fun getAllByLabelText(s: String): Array<HTMLElement>
+    fun findByLabelText(s: String): Promise<HTMLElement>
     fun queryByText(s: String): HTMLElement?
     fun queryAllByText(s: String): Array<HTMLElement>
     fun findAllByText(s: String): Promise<Array<HTMLElement>>
+    fun findAllByLabelText(s: String): Promise<Array<HTMLElement>>
     fun queryByLabelText(s: String): HTMLElement?
+    fun queryAllByLabelText(s: String): Array<HTMLElement>
     fun queryAllByAltText(s: String): Array<HTMLElement>
     fun getByRole(role: String, options: Json = definedExternally): HTMLElement
     fun findByText(text: String): Promise<HTMLElement>

@@ -1,9 +1,7 @@
 package com.zegreatrob.wrapper.testinglibrary.react
 
 import com.zegreatrob.minassert.assertIsEqualTo
-import com.zegreatrob.testmints.async.asyncTestTemplate
 import org.w3c.dom.HTMLElement
-import react.create
 import kotlin.test.Test
 
 class ByTextTest : ByText by TestingLibraryReact {
@@ -120,7 +118,3 @@ class ByTextTest : ByText by TestingLibraryReact {
             elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
         }
 }
-
-val testingLibrarySetup = asyncTestTemplate(sharedSetup = {
-    com.zegreatrob.wrapper.testinglibrary.react.external.reactTestingLibrary.render(TestComponent.create())
-})
