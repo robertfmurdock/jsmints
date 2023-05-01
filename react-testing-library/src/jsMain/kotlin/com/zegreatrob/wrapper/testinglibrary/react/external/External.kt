@@ -68,5 +68,6 @@ external class Screen {
 }
 
 external interface TestingLibraryRoleOptions {
-    var name: String
+    var name: String?
+    var selected: Boolean?
 }

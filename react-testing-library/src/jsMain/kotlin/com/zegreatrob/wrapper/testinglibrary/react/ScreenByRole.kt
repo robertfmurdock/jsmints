@@ -29,5 +29,6 @@ interface ScreenByRole : ByRole {
 
     private fun toTestingLibraryOptions(options: RoleOptions): TestingLibraryRoleOptions = jso {
         options.name?.let { this.name = it }
+        options.selected?.let { this.selected = it }
     }
 }

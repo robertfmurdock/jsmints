@@ -18,7 +18,7 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> HTMLElement?) =
         testingLibrarySetup {
         } exercise {
-            query("button", RoleOptions(name = "Press Me", selected = true))
+            query("button", RoleOptions(name = "Press Me"))
         } verify { element ->
             element?.isConnected
                 .assertIsEqualTo(true)
@@ -36,7 +36,7 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
         query: suspend (role: String, options: RoleOptions) -> HTMLElement?,
     ) = testingLibrarySetup {
     } exercise {
-        runCatching { query("button", RoleOptions(name = "Not Awesome", selected = true)) }
+        runCatching { query("button", RoleOptions(name = "Not Awesome")) }
     } verify { result ->
         result.isFailure
             .assertIsEqualTo(true)
@@ -45,7 +45,7 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     @Test
     fun givenNoElementExistsQueryByRole() = testingLibrarySetup {
     } exercise {
-        queryByRole("button", RoleOptions(name = "Not Awesome", selected = true))
+        queryByRole("button", RoleOptions(name = "Not Awesome"))
     } verify { element ->
         element.assertIsEqualTo(null)
     }
@@ -62,7 +62,7 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> HTMLElement?) =
         testingLibrarySetup {
         } exercise {
-            runCatching { query("button", RoleOptions(name = "Chill", selected = true)) }
+            runCatching { query("button", RoleOptions(name = "Chill")) }
         } verify { result ->
             result.isFailure
                 .assertIsEqualTo(true)
@@ -84,7 +84,7 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> Array<HTMLElement>) =
         testingLibrarySetup {
         } exercise {
-            query("button", RoleOptions(name = "Chill", selected = true))
+            query("button", RoleOptions(name = "Chill"))
         } verify { elements ->
             elements.map { it.getAttribute("data-test-info") }
                 .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
@@ -103,7 +103,7 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> Array<HTMLElement>) =
         testingLibrarySetup {
         } exercise {
-            query("button", RoleOptions(name = "Press Me", selected = true))
+            query("button", RoleOptions(name = "Press Me"))
         } verify { elements ->
             elements.map { it.getAttribute("data-test-info") }
                 .assertIsEqualTo(listOf("pretty-cool"))
