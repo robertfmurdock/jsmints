@@ -55,7 +55,10 @@ class BasicEventsTest {
 
             label {
                 +"Data"
-                input { value = data }
+                input {
+                    readOnly = true
+                    value = data
+                }
             }
         }
         val input get() = screen.getByLabelText("Input")
