@@ -20,6 +20,8 @@ dependencies {
     implementation(libs.com.github.ben.manes.gradle.versions.plugin)
     implementation(libs.org.jmailen.gradle.kotlinter.gradle)
     implementation(libs.com.fasterxml.jackson.core.jackson.databind)
+    implementation(platform(libs.com.zegreatrob.testmints.testmints.bom))
+    implementation("com.zegreatrob.testmints:mint-logs-plugin")
 }
 
 tasks {
