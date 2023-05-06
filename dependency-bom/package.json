@@ -24,6 +24,6 @@
     "wdio-geckodriver-service": "4.1.1",
     "wdio-html-nice-reporter": "8.1.0",
     "wdio-timeline-reporter": "^5.1.4",
-    "npm-check-updates": "16.10.9"
+    "npm-check-updates": "16.10.10"
   }
 }
