@@ -1,6 +1,6 @@
 package com.zegreatrob.wrapper.wdio
 
-import com.soywiz.klock.measureTimeWithResult
+import korlibs.time.measureTimeWithResult
 import mu.KotlinLogging
 import kotlin.reflect.KCallable
 
