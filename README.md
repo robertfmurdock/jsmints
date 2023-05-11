@@ -42,4 +42,3 @@ A gradle plugin that allows you use a package.json file to define your Javascrip
 A gradle plugin that will automatically include [npm-check-updates](https://github.com/raineorshine/npm-check-updates) and tasks that take advantage of it.
 
 Requires use of the Jspackage plugin.
-
