@@ -6640,10 +6640,10 @@ wdio-chromedriver-service@8.1.1:
     split2 "^4.1.0"
     tcp-port-used "^1.0.2"
 
-wdio-geckodriver-service@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/wdio-geckodriver-service/-/wdio-geckodriver-service-4.1.1.tgz#d38b285a845a100fc6ea04b2e34e9ba97174ab53"
-  integrity sha512-VKn08Z+h9RJ20FrZSf3W696GYawh8B1+3aRJwKZm9dnHEQaVRxhW7bySpfdCV7VQp9mNGBFZ/1U6vEGIMvH4ZQ==
+wdio-geckodriver-service@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/wdio-geckodriver-service/-/wdio-geckodriver-service-4.1.2.tgz#e4a820cb8b2a26fd79397b041a0b4ceed162bf4d"
+  integrity sha512-ySEPjmA3eTxs2E99JG7yD1QBa0lwPnvMgfFPtQ2GlBvufQ9iOf+7TJxxMa0dJjkhxYhP9aRNLwF2d0FTVOGOZw==
   dependencies:
     "@wdio/logger" "^8.6.6"
     fs-extra "^11.1.1"
