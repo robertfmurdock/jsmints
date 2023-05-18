@@ -17,11 +17,11 @@
     "chromedriver": "^113.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.7",
-    "geckodriver": "^3.2.0",
+    "geckodriver": "^4.0.0",
     "global-jsdom": "^9.0.1",
     "jsdom": "^22.0.0",
     "wdio-chromedriver-service": "8.1.1",
-    "wdio-geckodriver-service": "4.1.2",
+    "wdio-geckodriver-service": "5.0.0",
     "wdio-html-nice-reporter": "8.1.0",
     "wdio-timeline-reporter": "^5.1.4",
     "npm-check-updates": "16.10.12"
