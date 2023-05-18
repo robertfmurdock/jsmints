@@ -22,6 +22,8 @@ export function configure(config, directories) {
         await browser.takeScreenshot();
     }
     config.onComplete = function () {
+        const timeLabel = "allure report generation";
+        console.time(timeLabel)
         const generation = allure(
             ['generate', allureDataDir, '--clean', '--output', directories.reports + "allure/report"]
         )
@@ -35,7 +37,7 @@ export function configure(config, directories) {
                 if (exitCode !== 0) {
                     return reject(new Error('Could not generate Allure report - exit code ' + exitCode))
                 }
-
+                console.timeEnd(timeLabel)
                 console.log('Allure report successfully generated')
                 resolve()
             })

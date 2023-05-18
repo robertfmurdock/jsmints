@@ -216,6 +216,7 @@ tasks {
                 },
                 if (wdioTest.allureReporter.get()) {
                     wdioTest.allureReportHint.get()
+                        .ifEmpty { null }
                 } else {
                     null
                 },
