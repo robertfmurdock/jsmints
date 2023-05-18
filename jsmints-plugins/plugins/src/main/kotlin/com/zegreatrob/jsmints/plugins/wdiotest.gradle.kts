@@ -66,21 +66,24 @@ dependencies {
             }
         },
     )
+}
+afterEvaluate {
+    dependencies {
+        if (wdioTest.htmlReporter.get()) {
+            "e2eTestImplementation"(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
+        }
+        if (wdioTest.timelineReporter.get()) {
+            "e2eTestImplementation"(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion))
+        }
+        if (wdioTest.allureReporter.get()) {
+            "e2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion))
+            "e2eTestImplementation"(npm("allure-commandline", PluginVersions.allureCLIVersion))
+        }
 
-    if (wdioTest.htmlReporter.get()) {
-        "e2eTestImplementation"(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
-    }
-    if (wdioTest.timelineReporter.get()) {
-        "e2eTestImplementation"(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion))
-    }
-    if (wdioTest.allureReporter.get()) {
-        "e2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion))
-        "e2eTestImplementation"(npm("allure-commandline", PluginVersions.allureCLIVersion))
-    }
-
-    if (wdioTest.useChrome.get()) {
-        "e2eTestImplementation"(npm("chromedriver", PluginVersions.chromedriverVersion))
-        "e2eTestImplementation"(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
+        if (wdioTest.useChrome.get()) {
+            "e2eTestImplementation"(npm("chromedriver", PluginVersions.chromedriverVersion))
+            "e2eTestImplementation"(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
+        }
     }
 }
 
