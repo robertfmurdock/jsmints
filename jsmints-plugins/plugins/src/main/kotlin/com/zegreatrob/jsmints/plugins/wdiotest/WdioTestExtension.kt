@@ -26,6 +26,9 @@ abstract class WdioTestExtension(val project: Project, private val objectFactory
     val allureReporter = objectFactory.property<Boolean>().convention(false)
 
     @Input
+    val allureReportHint = objectFactory.property<String?>().convention(null)
+
+    @Input
     var useChrome = objectFactory.property<Boolean>().convention(true)
 
     @Input

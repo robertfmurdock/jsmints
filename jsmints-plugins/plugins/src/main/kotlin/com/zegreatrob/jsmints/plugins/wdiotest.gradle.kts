@@ -206,6 +206,16 @@ tasks {
                 } else {
                     null
                 },
+                if (wdioTest.allureReporter.get()) {
+                    "- report: file://${reportDir}allure/report/index.html\n    This report must be viewed via a server in most browsers.\n    You can use IntelliJ to serve the file for viewing, or run your own server."
+                } else {
+                    null
+                },
+                if (wdioTest.allureReporter.get()) {
+                    wdioTest.allureReportHint.get()
+                } else {
+                    null
+                },
                 "- logs: file://${logFile.absolutePath}",
             ).joinToString("\n")
     }
