@@ -74,8 +74,8 @@ dependencies {
         "e2eTestImplementation"(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion))
     }
     if (wdioTest.allureReporter.get()) {
-        "e2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioTimelineReporterVersion))
-        "e2eTestImplementation"(npm("allure-commandline", PluginVersions.wdioTimelineReporterVersion))
+        "e2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion))
+        "e2eTestImplementation"(npm("allure-commandline", PluginVersions.allureCLIVersion))
     }
 
     if (wdioTest.useChrome.get()) {

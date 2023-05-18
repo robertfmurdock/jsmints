@@ -53,6 +53,8 @@ tasks {
                     "NCU_VERSION" to packageJson.dependency("npm-check-updates"),
                     "WDIO_NICE_HTML_REPORTER_VERSION" to packageJson.dependency("wdio-html-nice-reporter"),
                     "WDIO_TIMELINE_REPORTER_VERSION" to packageJson.dependency("wdio-timeline-reporter"),
+                    "WDIO_ALLURE_REPORTER_VERSION" to (packageJson.dependency("@wdio/allure-reporter") ?: throw Exception("allure reporter")),
+                    "ALLURE_CLI_VERSION" to packageJson.dependency("allure-commandline")!!,
                     "CHROMEDRIVER_VERSION" to packageJson.dependency("chromedriver"),
                     "WDIO_CHROMEDRIVER_SERVICE_VERSION" to packageJson.dependency("wdio-chromedriver-service"),
                 )
@@ -119,5 +121,5 @@ afterEvaluate {
     }
 }
 
-fun JsonNode.dependency(name: String) = at("/dependencies/$name")
+fun JsonNode.dependency(name: String) = at("/dependencies/${name.replace("/", "~1")}")
     .textValue()
