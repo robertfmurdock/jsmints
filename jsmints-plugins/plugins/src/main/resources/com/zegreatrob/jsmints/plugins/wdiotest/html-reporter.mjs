@@ -27,8 +27,11 @@ export function configure(config, directories) {
         });
         reportAggregator.clean();
     }
-
+    const previousOnComplete = config.onComplete
     config.onComplete = async function () {
+        if(previousOnComplete) {
+            await previousOnComplete.apply(this, arguments)
+        }
         await reportAggregator.createReport();
     }
 
