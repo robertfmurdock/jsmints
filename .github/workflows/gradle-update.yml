@@ -19,8 +19,10 @@ jobs:
         run: ./gradlew versionCatalogUpdate ncu --no-configuration-cache
       - name: Clean
         run: ./gradlew clean
+      - name: Remove old store
+        run: rm -r kotlin-js-store
       - name: Update Yarn Lock
-        run: ./gradlew kotlinUpgradeYarnLock  --no-configuration-cache --no-build-cache
+        run: ./gradlew kotlinUpgradeYarnLock check  --no-configuration-cache --no-build-cache
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
