@@ -5,7 +5,7 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
 import org.gradle.kotlin.dsl.property
 
-abstract class WdioTestExtension(val project: Project, private val objectFactory: ObjectFactory) {
+abstract class WdioTestExtension(val project: Project, objectFactory: ObjectFactory) {
 
     @Input
     val baseUrl = objectFactory.property<String>()

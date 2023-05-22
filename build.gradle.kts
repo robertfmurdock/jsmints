@@ -26,6 +26,7 @@ nexusPublishing {
 
 tagger {
     releaseBranch = "master"
+    githubReleaseEnabled.set(true)
 }
 
 tasks {

@@ -6,7 +6,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val jsMain by getting {
+        getByName("jsMain") {
             dependencies {
                 api(project(":wdio"))
                 implementation(kotlin("stdlib"))
