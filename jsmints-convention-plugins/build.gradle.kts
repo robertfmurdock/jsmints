@@ -44,6 +44,10 @@ tasks {
     lintKotlinMain {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
+    clean {
+        delete(rootProject.buildDir)
+        dependsOn(provider { (getTasksByName("clean", true) - this).toList() })
+    }
 }
 
 versionCatalogUpdate {

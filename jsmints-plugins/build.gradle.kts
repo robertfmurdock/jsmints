@@ -21,7 +21,10 @@ nexusPublishing {
 }
 
 tasks {
-    clean { delete(rootProject.buildDir) }
+    clean {
+        delete(rootProject.buildDir)
+        dependsOn(provider { (getTasksByName("clean", true) - this).toList() })
+    }
     check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }
     assemble { dependsOn(provider { (getTasksByName("assemble", true) - this).toList() }) }
     create("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
