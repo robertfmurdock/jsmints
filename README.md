@@ -15,6 +15,12 @@ Included:
 
 A kotlin wrapper for [react testing library](https://testing-library.com/docs/react-testing-library/intro/). Coroutine sugar included to help avoid common errors, like forgetting to "await" a returned promise.
 
+Most functions are available from the "TestingLibraryReact" singleton object. Import and play.
+
+    import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact
+
+- [examples](react-testing-library/src/jsTest/kotlin/com/zegreatrob/wrapper/testinglibrary/react/ByLabelTextTest.kt)
+
 ### user-event-testing-library
 
 A kotlin wrapper for [user event](https://testing-library.com/docs/user-event/intro). Similar to react-testing-library, coroutine sugar included to help avoid common errors, like forgetting to "await" a returned promise.
