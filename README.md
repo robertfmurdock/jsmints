@@ -11,14 +11,6 @@ These are libraries full of sugar for working with Kotlin JS.
 
 Included:
 
-### React Data Loader
-
-A Kotlin-based react component for handling simple data-loading state. For people who want extremely simple and clear data-loading behavior, and find other React solutions too *quirky*.
-
-### [minreact](minreact/README.md)
-
-Sugar for React functional components that allows them to use Kotlin data classes as props. This helps avoid the 'forgotten mandatory prop' issue that can happen when using the base Kotlin DSL.
-
 ### react-testing-library
 
 A kotlin wrapper for [react testing library](https://testing-library.com/docs/react-testing-library/intro/). Coroutine sugar included to help avoid common errors, like forgetting to "await" a returned promise.
@@ -50,6 +42,16 @@ A gradle plugin that allows you use a package.json file to define your Javascrip
 A gradle plugin that will automatically include [npm-check-updates](https://github.com/raineorshine/npm-check-updates) and tasks that take advantage of it.
 
 Requires use of the Jspackage plugin.
+
+### React Data Loader
+
+A Kotlin-based react component for handling simple data-loading state. For people who want extremely simple and clear data-loading behavior, and find other React solutions too *quirky*.
+
+### [minreact](minreact/README.md)
+
+Sugar for React functional components that allows them to use Kotlin data classes as props. This helps avoid the 'forgotten mandatory prop' issue that can happen when using the base Kotlin DSL.
+
+If you choose to use this library, please share feedback! The API is strange and could use some love regarding what's good and what stinks.
 
 ### minenzyme
 
