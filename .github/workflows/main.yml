@@ -42,7 +42,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: 'yarn'
-          cache-dependency-path: kotlin-js-store/yarn.lock jsmints-plugins/kotlin-js-store
+          cache-dependency-path: |
+            kotlin-js-store/yarn.lock
+            jsmints-plugins/kotlin-js-store
       - name: Generate Version 🔢
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
       - name: Build 🔨
