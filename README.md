@@ -19,13 +19,21 @@ A Kotlin-based react component for handling simple data-loading state. For peopl
 
 Sugar for React functional components that allows them to use Kotlin data classes as props. This helps avoid the 'forgotten mandatory prop' issue that can happen when using the base Kotlin DSL.
 
+### react-testing-library
+
+A kotlin wrapper for [react testing library](https://testing-library.com/docs/react-testing-library/intro/). Coroutine sugar included to help avoid common errors, like forgetting to "await" a returned promise.
+
+### user-event-testing-library
+
+A kotlin wrapper for [user event](https://testing-library.com/docs/user-event/intro). Similar to react-testing-library, coroutine sugar included to help avoid common errors, like forgetting to "await" a returned promise.
+
 ### wdio
 
 Kotlin wrapper + convenience functions for the wdio js project, to allow node js kotlin code to operate a web browser via wdio. This allows for writing webdriver tests with Kotlin Test.
 
 ### wdio-testing-library
 
-Kotlin wrapper + convenience functions for [wdio testing library](https://testing-library.com/docs/webdriverio-testing-library/intro/) 
+Kotlin wrapper + convenience functions for [wdio testing library](https://testing-library.com/docs/webdriverio-testing-library/intro/).
 
 ### WDIO Gradle Plugin
 
@@ -42,3 +50,7 @@ A gradle plugin that allows you use a package.json file to define your Javascrip
 A gradle plugin that will automatically include [npm-check-updates](https://github.com/raineorshine/npm-check-updates) and tasks that take advantage of it.
 
 Requires use of the Jspackage plugin.
+
+### minenzyme
+
+A wrapper for the enzyme library. I am not actively supporting this module any more. In future versions it may be removed from the suite.
