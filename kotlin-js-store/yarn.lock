@@ -2852,10 +2852,10 @@ gaze@^1.1.2:
   dependencies:
     globule "^1.0.0"
 
-geckodriver@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.0.0.tgz#e078518f1b259b9c746bc4cea440dc9480abdbb2"
-  integrity sha512-1R1cuqqz+gqZ4Eux//TSbYDBpyYHHs9xLzG6BWJolORlaGkKWbg5qN3415fIi/5IkS7kTA2BEYvplB2GjH8oyw==
+geckodriver@^4.0.0, geckodriver@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.0.1.tgz#d1b904d24e2ce2173b70ea2a57ab9b90366b12ca"
+  integrity sha512-ISScRefqO0+8G2o57/PZEDoqthXU++djxSpgnB/eYSKg0acOuxhqSoLFvRnlCfiMQ519vpOLkNeE/VCpVWxWFQ==
   dependencies:
     "@wdio/logger" "^8.6.6"
     decamelize "^6.0.0"
@@ -3741,9 +3741,9 @@ jackspeak@^2.0.3:
     "@pkgjs/parseargs" "^0.11.0"
 
 jake@^10.8.5:
-  version "10.8.6"
-  resolved "https://registry.yarnpkg.com/jake/-/jake-10.8.6.tgz#227a96786a1e035214e0ba84b482d6223d41ef04"
-  integrity sha512-G43Ub9IYEFfu72sua6rzooi8V8Gz2lkfk48rW20vEWCGizeaEPlKB1Kh8JIA84yQbiAEfqlPmSpGgCKKxH3rDA==
+  version "10.8.7"
+  resolved "https://registry.yarnpkg.com/jake/-/jake-10.8.7.tgz#63a32821177940c33f356e0ba44ff9d34e1c7d8f"
+  integrity sha512-ZDi3aP+fG/LchyBzUM804VjddnwfSfsdeYkwt8NcbKRvo4rFkjhs456iLFn3k2ZUWvNe4i48WACDbza8fhq2+w==
   dependencies:
     async "^3.2.3"
     chalk "^4.0.2"
@@ -4774,9 +4774,9 @@ nunjucks@^3.2.3:
     commander "^5.1.0"
 
 nwsapi@^2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.4.tgz#fd59d5e904e8e1f03c25a7d5a15cfa16c714a1e5"
-  integrity sha512-NHj4rzRo0tQdijE9ZqAx6kYDcoRwYwSYzCA8MY3JzfxlrvEU0jhnhJT9BhqhJs7I/dKcrDm6TyulaRqZPIhN5g==
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.5.tgz#a52744c61b3889dd44b0a158687add39b8d935e2"
+  integrity sha512-6xpotnECFy/og7tKSBVmUNft7J3jyXAka4XvG6AUhFWRz+Q/Ljus7znJAA3bxColfQLdS+XsjoodtJfCgeTEFQ==
 
 object-assign@^4.1.1:
   version "4.1.1"
@@ -6074,9 +6074,9 @@ strip-ansi@^3.0.0:
     ansi-regex "^2.0.0"
 
 strip-ansi@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-7.0.1.tgz#61740a08ce36b61e50e65653f07060d000975fb2"
-  integrity sha512-cXNxvT8dFNRVfhVME3JAe98mkXDYN2O1l7jmcwMnOslDeESg1rF/OZMtK0nRAhiari1unG5cD4jG3rapUAkLbw==
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-7.1.0.tgz#d5b6568ca689d8561370b0707685d22434faff45"
+  integrity sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==
   dependencies:
     ansi-regex "^6.0.1"
 
