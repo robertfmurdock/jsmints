@@ -17,7 +17,7 @@
     "chromedriver": "^113.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.7",
-    "geckodriver": "^4.0.0",
+    "geckodriver": "^4.0.2",
     "global-jsdom": "^9.0.1",
     "jsdom": "^22.1.0",
     "wdio-chromedriver-service": "8.1.1",
