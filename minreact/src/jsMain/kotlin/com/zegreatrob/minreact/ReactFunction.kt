@@ -14,8 +14,7 @@ import react.create
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
-inline fun <reified P : DataProps<P>> tmFC(crossinline function: ChildrenBuilder.(P) -> Unit):
-    ElementType<DataPropsBridge> = FC { props: DataPropsBridge ->
+inline fun <reified P : DataProps<P>> tmFC(crossinline function: ChildrenBuilder.(P) -> Unit): ElementType<DataPropsBridge> = FC { props: DataPropsBridge ->
     val newProps = ensureKotlinClassProps(props, P::class.js)
     +newProps.unsafeCast<Props>()
     function(newProps)

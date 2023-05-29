@@ -8,9 +8,9 @@ com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.20.0"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
-org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:3.14.0"
+org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:3.15.0"
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.46.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.0"
-org-jmailen-kotlinter = "org.jmailen.kotlinter:3.14.0"
+org-jmailen-kotlinter = "org.jmailen.kotlinter:3.15.0"
