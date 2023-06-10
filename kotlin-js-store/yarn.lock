@@ -745,9 +745,9 @@
   integrity sha512-/fvYntiO1GeICvqbQ3doGDIP97vWmvFt83GKguJ6prmQM2iXZfFcq6YE8KteFyRtX2/h5Hf91BYvPodJKFYv5Q==
 
 "@types/node@*", "@types/node@^20.1.0", "@types/node@^20.1.1":
-  version "20.2.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.2.5.tgz#26d295f3570323b2837d322180dfbf1ba156fefb"
-  integrity sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==
+  version "20.2.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.2.6.tgz#f8f4cdcf9bc74fffcb44a9e1e3f3586d583dac24"
+  integrity sha512-GQBWUtGoefMEOx/vu+emHEHU5aw6JdDoEtZhoBrHFPZbA/YNRFfN996XbBASEWdvmLSLyv9FKYppYGyZjCaq/g==
 
 "@types/node@16.9.1":
   version "16.9.1"
@@ -760,9 +760,9 @@
   integrity sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==
 
 "@types/node@^18.16.3":
-  version "18.16.16"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.16.tgz#3b64862856c7874ccf7439e6bab872d245c86d8e"
-  integrity sha512-NpaM49IGQQAUlBhHMF82QH80J08os4ZmyF9MkpCzWAGuOHqE4gTEbhzd7L3l5LmWuZ6E0OiC1FweQ4tsiW35+g==
+  version "18.16.17"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.17.tgz#d2512c03313db6329f7cb515fc8b508e658230c4"
+  integrity sha512-QAkjjRA1N7gPJeAP4WLXZtYv6+eMXFNviqktCDt4GLcmCugMr5BcRHfkOjCQzvCsnMp+L79a54zBkbw356xv9Q==
 
 "@types/normalize-package-data@^2.4.1":
   version "2.4.1"
@@ -782,9 +782,9 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "18.2.9"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.9.tgz#9207f8571afdc59a9c9c30df50e8ad2591ecefaf"
-  integrity sha512-pL3JAesUkF7PEQGxh5XOwdXGV907te6m1/Qe1ERJLgomojS6Ne790QiA7GUl434JEkFA2aAaB6qJ5z4e1zJn/w==
+  version "18.2.11"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.11.tgz#168f7dbb421ed214fcf8c5fe8e587765a3e02fd1"
+  integrity sha512-+hsJr9hmwyDecSMQAmX7drgbDpyE+EgSF6t7+5QEBAn1tQK7kl1vWZ4iRf6SjQ8lk7dyEULxUmZOIpN0W5baZA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1332,7 +1332,7 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-axios@^1.2.1:
+axios@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.4.0.tgz#38a7bf1224cd308de271146038b551d725f0be1f"
   integrity sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==
@@ -1708,14 +1708,14 @@ chrome-launcher@^0.15.0:
     is-wsl "^2.2.0"
     lighthouse-logger "^1.0.0"
 
-chromedriver@^114.0.1:
-  version "114.0.1"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-114.0.1.tgz#6b781922e74e2f6520cbd3e363dfabc41c4347f5"
-  integrity sha512-Srkyt7xv+RL9aSNVkmARm0tAfw84fIBKge9c1MCTiHfW0tjuNFdhKVlgD0TmPmwSKOeFJrTdd1Flf2hGWWKsUw==
+chromedriver@^114.0.2:
+  version "114.0.2"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-114.0.2.tgz#1ddaa6738f2b60e6b832a39f791c8c54bf840837"
+  integrity sha512-v0qrXRBknbxqmtklG7RWOe3TJ/dLaHhtB0jVxE7BAdYERxUjEaNRyqBwoGgVfQDibHCB0swzvzsj158nnfPgZw==
   dependencies:
     "@testim/chrome-version" "^1.1.3"
-    axios "^1.2.1"
-    compare-versions "^5.0.1"
+    axios "^1.4.0"
+    compare-versions "^5.0.3"
     extract-zip "^2.0.1"
     https-proxy-agent "^5.0.1"
     proxy-from-env "^1.1.0"
@@ -1853,7 +1853,7 @@ commondir@^1.0.1:
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
   integrity sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==
 
-compare-versions@^5.0.1:
+compare-versions@^5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-5.0.3.tgz#a9b34fea217472650ef4a2651d905f42c28ebfd7"
   integrity sha512-4UZlZP8Z99MGEY+Ovg/uJxJuvoXuN4M6B3hKaiackiHrgzQFEe3diJi1mf1PNHbFujM7FvLrK2bpgIaImbtZ1A==
