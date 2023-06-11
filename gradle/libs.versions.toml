@@ -1,10 +1,10 @@
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.15.2"
 com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.3"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:9.3.35"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:9.3.36"
 io-github-microutils-kotlin-logging = "io.github.microutils:kotlin-logging:3.0.5"
 org-jetbrains-kotlin-kotlin-bom = "org.jetbrains.kotlin:kotlin-bom:1.8.22"
-org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.564"
+org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.565"
 org-jetbrains-kotlinx-kotlinx-coroutines-bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.1"
 
 [plugins]
