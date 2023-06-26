@@ -5,9 +5,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-afterEvaluate {
-
-    dependencies {
-        add("kspJs", project(":minreact-processor"))
-    }
+dependencies {
+    add("kspJs", project(":minreact-processor"))
+    add("kspJsTest", project(":minreact-processor"))
 }

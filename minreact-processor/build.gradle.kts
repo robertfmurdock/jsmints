@@ -1,26 +1,19 @@
 plugins {
-    id("com.zegreatrob.jsmints.plugins.versioning")
-    id("com.zegreatrob.jsmints.plugins.publish")
-    id("com.zegreatrob.jsmints.plugins.js")
+    kotlin("multiplatform")
 }
 
-kotlin.js().compilations.named("test") {
-    packageJson {
-        customField("mocha", mapOf("require" to "global-jsdom/register"))
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    jvm()
+    sourceSets {
+        val jvmMain by getting {
+            dependencies {
+                implementation("com.squareup:javapoet:1.12.1")
+                implementation(libs.com.google.devtools.ksp.symbol.processing.api)
+            }
+        }
     }
-}
-
-dependencies {
-    jsMainApi(jsconstraint("core-js"))
-    jsMainApi("org.jetbrains.kotlin-wrappers:kotlin-react")
-    jsMainApi("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
-
-    jsTestImplementation(project(":react-testing-library"))
-    jsTestImplementation(project(":user-event-testing-library"))
-    jsTestImplementation(jsconstraint("jsdom"))
-    jsTestImplementation(jsconstraint("global-jsdom"))
-    jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
-    jsTestImplementation("com.zegreatrob.testmints:standard")
-    jsTestImplementation("com.zegreatrob.testmints:async")
-    jsTestImplementation("com.zegreatrob.testmints:minassert")
 }
