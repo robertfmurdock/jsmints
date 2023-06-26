@@ -822,7 +822,7 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@wdio/allure-reporter@^8.11.0":
+"@wdio/allure-reporter@^8.10.7", "@wdio/allure-reporter@^8.11.0":
   version "8.11.0"
   resolved "https://registry.yarnpkg.com/@wdio/allure-reporter/-/allure-reporter-8.11.0.tgz#689d13fc70bfb4b71eca9f05cb5da63bfc8d5b35"
   integrity sha512-ahF4Q/ibxDnJgfLQWSqnvgWLDsps8CCD1nHkMCXWPAtIx0p9m2YhLlzZRBSFz06AmVYsKCLiL4YngWBLi2husg==
@@ -1089,7 +1089,7 @@ airbnb-prop-types@^2.16.0:
     prop-types-exact "^1.2.0"
     react-is "^16.13.1"
 
-allure-commandline@^2.22.4:
+allure-commandline@^2.22.1, allure-commandline@^2.22.4:
   version "2.22.4"
   resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.22.4.tgz#58d0cf7bc2b25c2c72501f4046e1ab51e8171dc3"
   integrity sha512-BK5jgvf0tv+Ofi9vJHmXD3CJLQxP57dt0yHmkBxbEFoNeYqZXTZePr+TUaAVUvqVHSsdxT7zsBPsPyC0f5evMw==
@@ -1670,7 +1670,7 @@ chrome-launcher@^0.15.0:
     is-wsl "^2.2.0"
     lighthouse-logger "^1.0.0"
 
-chromedriver@^114.0.2:
+chromedriver@^114.0.1, chromedriver@^114.0.2:
   version "114.0.2"
   resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-114.0.2.tgz#1ddaa6738f2b60e6b832a39f791c8c54bf840837"
   integrity sha512-v0qrXRBknbxqmtklG7RWOe3TJ/dLaHhtB0jVxE7BAdYERxUjEaNRyqBwoGgVfQDibHCB0swzvzsj158nnfPgZw==
