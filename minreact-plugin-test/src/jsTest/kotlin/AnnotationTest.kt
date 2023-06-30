@@ -1,3 +1,4 @@
+
 import com.example.CoolThing
 import com.zegreatrob.minassert.assertIsNotEqualTo
 import com.zegreatrob.testmints.setup
@@ -25,6 +26,22 @@ class AnnotationTest {
         render(normal.create())
     } verify {
         screen.queryByText("Cool Thing Hi")
+            .assertIsNotEqualTo(null)
+    }
+
+    @Test
+    fun canUseComponent2() = setup(object {
+        val normal = FC<Props> {
+            NiceThing(
+                a = "Hi",
+                b = 7,
+                c = { println("DO IT") },
+            )
+        }
+    }) exercise {
+        render(normal.create())
+    } verify {
+        screen.queryByText("Nice Thing Hi")
             .assertIsNotEqualTo(null)
     }
 }

@@ -11,7 +11,7 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation("com.squareup:javapoet:1.12.1")
+                implementation("com.squareup:kotlinpoet-ksp:1.14.2")
                 implementation(libs.com.google.devtools.ksp.symbol.processing.api)
             }
         }
