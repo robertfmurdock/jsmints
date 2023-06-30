@@ -1,8 +1,12 @@
+
 import com.zegreatrob.minreact.Minreact
+import com.zegreatrob.minreact.nfc
 import react.ChildrenBuilder
 import react.FC
 import react.Props
+import react.PropsWithChildren
 import react.dom.html.ReactHTML.div
+import react.useEffectOnce
 
 @Minreact
 @Suppress("unused")
@@ -28,15 +32,23 @@ external interface NiceThingProps : Props {
     var c: () -> Unit
 }
 
-// fun ChildrenBuilder.NiceThing(a: String, b: Int?, c: () -> Unit) {
-//     NiceThing {
-//         this.a = a
-//         this.b = b
-//         this.c = c
-//     }
-// }
-
 @Minreact
 val NiceThing = FC<NiceThingProps> {
     +"Nice Thing ${it.a}"
+}
+
+@Minreact
+val ZanyThing by nfc<NiceThingProps> {
+    +"Zany Thing ${it.a}"
+    useEffectOnce { it.c() }
+}
+
+external interface WrapperProps : PropsWithChildren {
+    var a: String
+}
+
+@Minreact
+val WrapperThing by nfc<WrapperProps> {
+    +"Wrapper Thing ${it.a}"
+    +it.children
 }

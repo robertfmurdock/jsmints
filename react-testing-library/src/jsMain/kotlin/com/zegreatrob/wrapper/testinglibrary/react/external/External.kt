@@ -33,6 +33,7 @@ interface ByTextOptions {
 }
 
 external class Result {
+    fun rerender(node: ReactNode, options: RenderOptions = definedExternally)
     val container: HTMLElement
     val baseElement: HTMLElement
 }

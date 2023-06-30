@@ -1,5 +1,3 @@
-
-import com.google.devtools.ksp.getDeclaredProperties
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
@@ -18,7 +16,10 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.LambdaTypeName
+import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.ksp.TypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
@@ -64,7 +65,8 @@ class MinreactProcessor(val codeGenerator: CodeGenerator, val logger: KSPLogger)
     }
 }
 
-class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGenerator) : KSTopDownVisitor<OutputStreamWriter, Unit>() {
+class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGenerator) :
+    KSTopDownVisitor<OutputStreamWriter, Unit>() {
     override fun defaultHandler(node: KSNode, data: OutputStreamWriter) {
     }
 
@@ -82,10 +84,10 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
 
             resolvedType.arguments.forEach {
                 val propsType = it.type?.resolve()
-            logger.warn("props declaration: ${propsType?.declaration} ")
+                logger.warn("props declaration: ${propsType?.declaration} ")
                 val classDeclaration = propsType?.declaration as? KSClassDeclaration
                     ?: return@forEach
-                val params = classDeclaration.getDeclaredProperties()
+                val params = classDeclaration.getAllProperties()
                     .joinToString(", ") { "${it.simpleName.getShortName()}: ${it.type}" }
                 logger.warn("class: $params ")
 
@@ -94,28 +96,29 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
 //         this.b = b
 //         this.c = c
 //     }
-                val paramsAssignments = classDeclaration.getDeclaredProperties()
+                var paramsAssignments = classDeclaration.getAllProperties()
+                    .filterNot(::isChildrenNode)
                     .joinToString("\n") { "this.${it.simpleName.getShortName()} = ${it.simpleName.getShortName()}" }
+
+                val childrenNode = classDeclaration.getAllProperties().find(::isChildrenNode)
+                if (childrenNode != null) {
+                    paramsAssignments += "\n+%T.%M{ children() }\n"
+                }
 
                 val body = """$targetName {
                     |       $paramsAssignments
                     |       }
                 """.trimMargin()
 
-                // data.write("fun react.ChildrenBuilder.$targetName( $params ) { \n$body\n }\n")
-
                 val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
 
                 FileSpec.builder(property.packageName.asString(), "${targetName}Kt")
                     .addFunction(
                         FunSpec.builder(targetName)
-                            .addParameters(
-                                classDeclaration.getDeclaredProperties().map { parameterSpec(it, resolver) }
-                                    .asIterable()
-                            )
+                            .addParameters(parameterSpecs(classDeclaration, resolver))
                             .receiver(ClassName("react", "ChildrenBuilder"))
                             .returns(Unit::class)
-                            .addCode(CodeBlock.of(body))
+                            .addCode(CodeBlock.of(body, ClassName("react", "Fragment"), MemberName("react", "create")))
                             .build()
                     )
                     .build()
@@ -123,15 +126,53 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
             }
 
             logger.warn("property-element: ${property.type} ")
-
         }
     }
+
+    private fun parameterSpecs(
+        classDeclaration: KSClassDeclaration,
+        resolver: TypeParameterResolver
+    ): Iterable<ParameterSpec> {
+
+        val childrenNode = classDeclaration.getAllProperties().find(::isChildrenNode)
+
+        return classDeclaration.getAllProperties()
+            .filterNot(::isChildrenNode)
+            .map { parameterSpec(it, resolver) }
+            .let {
+                if (childrenNode == null) it else {
+                    it + childrenParameter()
+                }
+            }
+            .asIterable()
+    }
+
+    private fun childrenParameter() = ParameterSpec.builder(
+        "children", LambdaTypeName.get(
+            receiver = ClassName("react", "ChildrenBuilder"),
+            parameters = emptyList(),
+            returnType = UNIT
+        )
+    )
+        .defaultValue("{}")
+        .build()
+
+    private fun isChildrenNode(it: KSPropertyDeclaration) = it.simpleName.asString() == "children"
 
     private fun parameterSpec(
         it: KSPropertyDeclaration,
         resolver: TypeParameterResolver
-    ) = ParameterSpec.builder(it.simpleName.getShortName(), it.type.toTypeName(resolver))
-        .build()
+    ): ParameterSpec {
+        val typeName = it.type.toTypeName(resolver)
+        val builder = ParameterSpec.builder(it.simpleName.getShortName(), typeName)
+
+        if (typeName.isNullable) {
+            builder.defaultValue(CodeBlock.of("null"))
+        }
+
+        return builder
+            .build()
+    }
 
     override fun visitClassDeclaration(
         classDeclaration: KSClassDeclaration,
