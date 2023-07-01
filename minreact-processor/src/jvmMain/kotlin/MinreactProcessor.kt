@@ -26,30 +26,14 @@ import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
 import com.squareup.kotlinpoet.ksp.writeTo
 import java.io.OutputStreamWriter
 
-class MinreactProcessor(val codeGenerator: CodeGenerator, val logger: KSPLogger) : SymbolProcessor {
+class MinreactProcessor(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) : SymbolProcessor {
     var invoked = false
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val allFiles = resolver.getAllFiles().map { it.fileName }
-        logger.warn(allFiles.toList().toString())
         if (invoked) {
             return emptyList()
         }
         invoked = true
-
-        codeGenerator.createNewFile(Dependencies.ALL_FILES, "", "Foo", "kt").use { output ->
-            OutputStreamWriter(output).use { writer ->
-                writer.write("package com.example\n\n")
-                writer.write("class Foo {\n")
-
-                val visitor = ClassVisitor()
-                resolver.getAllFiles().forEach {
-                    it.accept(visitor, writer)
-                }
-
-                writer.write("}\n")
-            }
-        }
 
         codeGenerator.createNewFile(Dependencies.ALL_FILES, "", "Components", "kt").use { output ->
             OutputStreamWriter(output).use { writer ->
@@ -74,31 +58,15 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
         super.visitPropertyDeclaration(property, data)
         val targetName = property.simpleName.getShortName()
         if (property.annotations.any(::isMinreact)) {
-            logger.warn("property: $targetName ")
-
             val resolvedType: KSType = property.type.resolve()
-            logger.warn("property-type-resolved: $resolvedType ")
-            logger.warn("property-type-resolved-declaration: ${resolvedType.declaration} ")
-            logger.warn("property-type-resolved-arguments: ${resolvedType.arguments} ")
-            logger.warn("property-type-resolved-star: ${resolvedType.starProjection()} ")
 
             resolvedType.arguments.forEach {
                 val propsType = it.type?.resolve()
-                logger.warn("props declaration: ${propsType?.declaration} ")
                 val classDeclaration = propsType?.declaration as? KSClassDeclaration
                     ?: return@forEach
-                val params = classDeclaration.getAllProperties()
-                    .joinToString(", ") { "${it.simpleName.getShortName()}: ${it.type}" }
-                logger.warn("class: $params ")
-
-//     NiceThing {
-//         this.a = a
-//         this.b = b
-//         this.c = c
-//     }
                 var paramsAssignments = classDeclaration.getAllProperties()
                     .filterNot(::isChildrenNode)
-                    .joinToString("\n") { "this.${it.simpleName.getShortName()} = ${it.simpleName.getShortName()}" }
+                    .joinToString("\n", transform = ::assignPropByParameter)
 
                 val childrenNode = classDeclaration.getAllProperties().find(::isChildrenNode)
                 if (childrenNode != null) {
@@ -124,10 +92,11 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
                     .build()
                     .writeTo(codeGenerator, false)
             }
-
-            logger.warn("property-element: ${property.type} ")
         }
     }
+
+    private fun assignPropByParameter(property: KSPropertyDeclaration) =
+        "this.${property.simpleName.getShortName()} = ${property.simpleName.getShortName()}"
 
     private fun parameterSpecs(
         classDeclaration: KSClassDeclaration,
@@ -184,11 +153,8 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
         if (parentClassDeclaration?.annotations?.any(::isMinreact) == true) {
             val targetName = parentClassDeclaration.simpleName.getShortName()
 
-            logger.warn("class: $targetName ")
-
             val params = classDeclaration.primaryConstructor?.parameters
                 ?.joinToString(", ") { "${it.name?.getShortName()}: ${it.type}" }
-            logger.warn("class: $params ")
 
             data.write("fun react.ChildrenBuilder.$targetName( $params ) {  }\n")
         }
