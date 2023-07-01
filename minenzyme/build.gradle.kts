@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val jsMain by getting {
+        jsMain {
             dependencies {
                 implementation(project(":minreact"))
                 implementation(npmConstrained("enzyme"))
@@ -17,7 +17,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-legacy")
             }
         }
-        val jsTest by getting {
+        jsTest {
             dependencies {
                 implementation("com.zegreatrob.testmints:standard")
             }

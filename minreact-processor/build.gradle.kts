@@ -9,7 +9,7 @@ repositories {
 kotlin {
     jvm()
     sourceSets {
-        val jvmMain by getting {
+        named("jvmMain") {
             dependencies {
                 implementation("com.squareup:kotlinpoet-ksp:1.14.2")
                 implementation(libs.com.google.devtools.ksp.symbol.processing.api)
