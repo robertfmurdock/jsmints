@@ -44,7 +44,7 @@ tasks {
     val executableJar by registering(Jar::class) {
         dependsOn(compileExecutableTask)
         archiveClassifier.set("executable")
-        from(compileExecutableTask.map { it.outputFileProperty.get().parentFile })
+        from(compileExecutableTask.map { it.destinationDirectory.asFile })
     }
 
     artifacts.add(executable.name, executableJar) {
