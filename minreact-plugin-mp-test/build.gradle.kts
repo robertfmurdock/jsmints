@@ -15,8 +15,8 @@ kotlin {
                 customField("mocha", mapOf("require" to "global-jsdom/register"))
             }
         }
-    }
 
+    }
     targets.all {
         compilations.all {
             kotlinOptions {
@@ -24,7 +24,14 @@ kotlin {
             }
         }
     }
+    sourceSets.jsMain {
+        kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")
+    }
+    sourceSets.jsTest {
+        kotlin.srcDir("build/generated/ksp/js/jsTest/kotlin")
+    }
 }
+
 
 minreact {
     includedBuild.set(true)

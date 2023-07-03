@@ -10,6 +10,7 @@ plugins {
 val minreact = project.extensions.create<MinreactTestExtension>("minreact")
 
 afterEvaluate {
+
     dependencies {
         val processorDep = correctForLocal("minreact-processor")
         val minreactDep = correctForLocal("minreact")

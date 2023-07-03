@@ -16,7 +16,14 @@ kotlin {
             }
         }
     }
+    sourceSets.main {
+        kotlin.srcDir("build/generated/ksp/js/main/kotlin")
+    }
+    sourceSets.test {
+        kotlin.srcDir("build/generated/ksp/js/test/kotlin")
+    }
 }
+
 
 minreact {
     includedBuild.set(true)
@@ -44,13 +51,13 @@ dependencies {
 }
 
 tasks {
-    formatKotlin {
+    formatKotlinMain {
         dependsOn("kspKotlinJs")
     }
     withType(LintTask::class) {
         exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
-    lintKotlin {
+    lintKotlinMain {
         dependsOn("kspKotlinJs")
     }
 }
