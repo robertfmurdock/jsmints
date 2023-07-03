@@ -5,9 +5,10 @@ plugins {
 
 dependencies {
     constraints {
+        api(project(":minenzyme"))
         api(project(":minjson"))
         api(project(":minreact"))
-        api(project(":minenzyme"))
+        api(project(":minreact-processor"))
         api(project(":react-data-loader"))
         api(project(":react-testing-library"))
         api(project(":user-event-testing-library"))

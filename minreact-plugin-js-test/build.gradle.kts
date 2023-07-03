@@ -15,17 +15,12 @@ kotlin {
                 customField("mocha", mapOf("require" to "global-jsdom/register"))
             }
         }
-        compilations.all {
-            kotlinOptions {
-                allWarningsAsErrors = false
-            }
-        }
     }
 }
 
 dependencies {
+    implementation(platform(project(":dependency-bom")))
     implementation(kotlin("stdlib"))
-    implementation(project(":minreact"))
     implementation("io.github.microutils:kotlin-logging")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-react")

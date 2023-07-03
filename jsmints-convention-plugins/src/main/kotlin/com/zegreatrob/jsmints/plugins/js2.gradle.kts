@@ -6,6 +6,20 @@ plugins {
     id("org.jmailen.kotlinter")
 }
 
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    js {
+        compilations.all {
+            kotlinOptions {
+                allWarningsAsErrors = false
+            }
+        }
+    }
+}
+
 val jspackage = project.extensions.create<JsConstraintExtension>("jsconstraint")
 configure<JsConstraintExtension> {
     json = File(rootDir, "dependency-bom/package.json").let {
