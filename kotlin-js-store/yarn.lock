@@ -6471,7 +6471,7 @@ webdriver@8.11.1:
     ky "^0.33.0"
     ws "^8.8.0"
 
-webdriverio@8.11.2, webdriverio@^8.8.8:
+webdriverio@8.11.2, webdriverio@^8.11.2, webdriverio@^8.8.8:
   version "8.11.2"
   resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-8.11.2.tgz#1067ad038409258eb478262ed452b3f315c26446"
   integrity sha512-e/9WkdNTfWeoaSo2UzK0Giec/nQX3i7U9J8esimhozH/EpwSqIaEJ2pRRlxRVafEhe2OBG1QDhnLnDjdCC5Hxg==

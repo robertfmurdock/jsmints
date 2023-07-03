@@ -15,6 +15,7 @@ kotlin {
                 implementation("com.soywiz.korlibs.klock:klock")
                 implementation("io.github.microutils:kotlin-logging")
                 implementation(npmConstrained("@wdio/cli"))
+                implementation(npmConstrained("webdriverio"))
             }
         }
     }
