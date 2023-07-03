@@ -1,5 +1,4 @@
 import com.google.devtools.ksp.processing.CodeGenerator
-import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
@@ -24,6 +23,7 @@ import com.squareup.kotlinpoet.ksp.TypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
 import com.squareup.kotlinpoet.ksp.writeTo
+import java.io.OutputStream
 import java.io.OutputStreamWriter
 
 class MinreactProcessor(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) : SymbolProcessor {
@@ -35,15 +35,11 @@ class MinreactProcessor(private val codeGenerator: CodeGenerator, private val lo
         }
         invoked = true
 
-        codeGenerator.createNewFile(Dependencies.ALL_FILES, "", "Components", "kt").use { output ->
-            OutputStreamWriter(output).use { writer ->
-                writer.write("package com.example\n\n")
-
-                val visitor = MinreactVisitor(logger, codeGenerator)
-                resolver.getAllFiles().forEach {
-                    it.accept(visitor, writer)
-                }
-            }
+        val visitor = MinreactVisitor(logger, codeGenerator)
+        resolver.getAllFiles().forEach {
+            it.accept(visitor, OutputStreamWriter(object : OutputStream() {
+                override fun write(b: Int) = Unit
+            }))
         }
         return emptyList()
     }
@@ -160,7 +156,7 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
         }
     }
 
-    private fun isMinreact(it: KSAnnotation) = it.shortName.asString() == "Minreact"
+    private fun isMinreact(it: KSAnnotation) = it.shortName.asString() == "ReactFunc"
 }
 
 class ClassVisitor : KSTopDownVisitor<OutputStreamWriter, Unit>() {

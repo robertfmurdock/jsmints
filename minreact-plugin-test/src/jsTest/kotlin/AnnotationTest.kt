@@ -1,4 +1,4 @@
-import com.example.CoolThing
+
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
 import com.zegreatrob.testmints.async.asyncSetup
@@ -12,27 +12,9 @@ import react.create
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.useState
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class AnnotationTest {
-
-    @Test
-    @Ignore
-    fun canUseComponent() = setup(object {
-        val normal = FC<Props> {
-            CoolThing(
-                a = "Hi",
-                b = 7,
-                c = { println("DO IT") },
-            )
-        }
-    }) exercise {
-        render(normal.create())
-    } verify {
-        screen.queryByText("Cool Thing Hi")
-            .assertIsNotEqualTo(null)
-    }
 
     @Test
     fun canUseComponent2() = setup(object {

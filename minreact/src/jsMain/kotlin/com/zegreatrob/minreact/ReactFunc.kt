@@ -1,3 +1,3 @@
 package com.zegreatrob.minreact
 
-annotation class Minreact
+annotation class ReactFunc
