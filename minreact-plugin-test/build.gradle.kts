@@ -1,9 +1,9 @@
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
+    id("com.zegreatrob.jsmints.plugins.minreact")
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.js")
-    id("com.zegreatrob.jsmints.plugins.minreact")
     idea
 }
 
@@ -23,13 +23,6 @@ kotlin {
                 allWarningsAsErrors = false
             }
         }
-    }
-
-    sourceSets.jsMain {
-        kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")
-    }
-    sourceSets.jsTest {
-        kotlin.srcDir("build/generated/ksp/js/jsTest/kotlin")
     }
 }
 

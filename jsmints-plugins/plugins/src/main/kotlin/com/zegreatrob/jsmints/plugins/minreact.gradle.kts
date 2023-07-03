@@ -5,7 +5,10 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-dependencies {
-    add("kspJs", project(":minreact-processor"))
-    add("kspJsTest", project(":minreact-processor"))
+afterEvaluate {
+    dependencies {
+        add("kspJs", project(":minreact-processor"))
+        "jsMainImplementation"("com.zegreatrob.jsmints:minreact:${PluginVersions.bomVersion}")
+        add("kspJsTest", project(":minreact-processor"))
+    }
 }
