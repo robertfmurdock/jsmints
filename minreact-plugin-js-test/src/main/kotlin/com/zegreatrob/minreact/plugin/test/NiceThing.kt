@@ -1,3 +1,5 @@
+package com.zegreatrob.minreact.plugin.test
+
 import com.zegreatrob.minreact.ReactFunc
 import react.FC
 import react.Props

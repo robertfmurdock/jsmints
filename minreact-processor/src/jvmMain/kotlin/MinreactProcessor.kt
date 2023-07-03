@@ -45,7 +45,7 @@ class MinreactProcessor(private val codeGenerator: CodeGenerator, private val lo
     }
 }
 
-class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGenerator) :
+class MinreactVisitor(private val logger: KSPLogger, private val codeGenerator: CodeGenerator) :
     KSTopDownVisitor<OutputStreamWriter, Unit>() {
     override fun defaultHandler(node: KSNode, data: OutputStreamWriter) {
     }

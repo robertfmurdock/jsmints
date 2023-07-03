@@ -1,6 +1,7 @@
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
+import com.zegreatrob.minreact.plugin.test.NiceThing
 import com.zegreatrob.testmints.async.asyncSetup
 import com.zegreatrob.testmints.setup
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
