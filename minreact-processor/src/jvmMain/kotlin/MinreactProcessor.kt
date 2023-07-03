@@ -139,44 +139,7 @@ class MinreactVisitor(private val logger: KSPLogger, val codeGenerator: CodeGene
             .build()
     }
 
-    override fun visitClassDeclaration(
-        classDeclaration: KSClassDeclaration,
-        data: OutputStreamWriter
-    ) {
-        super.visitClassDeclaration(classDeclaration, data)
-
-        val parentClassDeclaration = classDeclaration.parentDeclaration as? KSClassDeclaration
-        if (parentClassDeclaration?.annotations?.any(::isMinreact) == true) {
-            val targetName = parentClassDeclaration.simpleName.getShortName()
-
-            val params = classDeclaration.primaryConstructor?.parameters
-                ?.joinToString(", ") { "${it.name?.getShortName()}: ${it.type}" }
-
-            data.write("fun react.ChildrenBuilder.$targetName( $params ) {  }\n")
-        }
-    }
-
     private fun isMinreact(it: KSAnnotation) = it.shortName.asString() == "ReactFunc"
-}
-
-class ClassVisitor : KSTopDownVisitor<OutputStreamWriter, Unit>() {
-    override fun defaultHandler(node: KSNode, data: OutputStreamWriter) {
-    }
-
-    override fun visitClassDeclaration(
-        classDeclaration: KSClassDeclaration,
-        data: OutputStreamWriter
-    ) {
-        super.visitClassDeclaration(classDeclaration, data)
-        val symbolName = classDeclaration.simpleName.asString().lowercase()
-        classDeclaration.parentDeclaration
-        val qualifiedName = classDeclaration.qualifiedName?.asString()?.lowercase()
-        val parentName = classDeclaration.parentDeclaration?.qualifiedName?.asString()?.lowercase()
-        data.write(
-            """    val $symbolName = "$qualifiedName" // parent is $parentName
-"""
-        )
-    }
 }
 
 class TestProcessorProvider : SymbolProcessorProvider {
