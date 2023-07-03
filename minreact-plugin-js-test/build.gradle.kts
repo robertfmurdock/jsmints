@@ -18,6 +18,10 @@ kotlin {
     }
 }
 
+minreact {
+    includedBuild.set(true)
+}
+
 dependencies {
     implementation(platform(project(":dependency-bom")))
     implementation(kotlin("stdlib"))

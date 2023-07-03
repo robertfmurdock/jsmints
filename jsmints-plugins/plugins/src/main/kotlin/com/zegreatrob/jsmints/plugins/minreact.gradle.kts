@@ -1,9 +1,13 @@
 package com.zegreatrob.jsmints.plugins
 
+import com.zegreatrob.jsmints.plugins.minreact.MinreactTestExtension
+
 plugins {
     base
     id("com.google.devtools.ksp")
 }
+
+val minreact = project.extensions.create<MinreactTestExtension>("minreact")
 
 afterEvaluate {
     dependencies {
@@ -29,8 +33,7 @@ afterEvaluate {
 }
 
 fun correctForLocal(library: String): Any {
-    val bomVersion: String = PluginVersions.bomVersion
-    return if (bomVersion == "unspecified") {
+    return if (minreact.includedBuild.get()) {
         project(":$library")
     } else {
         "com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}"

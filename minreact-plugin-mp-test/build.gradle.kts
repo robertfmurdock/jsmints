@@ -26,6 +26,10 @@ kotlin {
     }
 }
 
+minreact {
+    includedBuild.set(true)
+}
+
 dependencies {
     jsMainImplementation(kotlin("stdlib"))
     jsMainImplementation("io.github.microutils:kotlin-logging")
