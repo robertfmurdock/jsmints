@@ -47,16 +47,22 @@ afterEvaluate {
 
     tasks {
         val signKotlinMultiplatformPublication = findByName("signKotlinMultiplatformPublication")
-        val publishJsPublicationToSonatypeRepository = tasks.findByName("publishJsPublicationToSonatypeRepository")
         if (signKotlinMultiplatformPublication != null) {
-            publishJsPublicationToSonatypeRepository
+            tasks.findByName("publishJsPublicationToSonatypeRepository")
+                ?.dependsOn(signKotlinMultiplatformPublication)
+            tasks.findByName("publishJvmPublicationToSonatypeRepository")
                 ?.dependsOn(signKotlinMultiplatformPublication)
         }
-        val signJsPublication = tasks.findByName("signJsPublication")
-        if (signJsPublication != null) {
-            tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
-                ?.dependsOn("signJsPublication")
-        }
+        tasks.findByName("signJsPublication")
+            ?.let {
+                tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
+                    ?.dependsOn(it)
+            }
+        tasks.findByName("signJvmPublication")
+            ?.let {
+                tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
+                    ?.dependsOn(it)
+            }
     }
 }
 
