@@ -23,8 +23,6 @@ import com.squareup.kotlinpoet.ksp.TypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
 import com.squareup.kotlinpoet.ksp.writeTo
-import java.io.OutputStream
-import java.io.OutputStreamWriter
 
 class MinreactProcessor(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) : SymbolProcessor {
     var invoked = false
@@ -35,24 +33,22 @@ class MinreactProcessor(private val codeGenerator: CodeGenerator, private val lo
         }
         invoked = true
 
-        val visitor = MinreactVisitor(logger, codeGenerator)
+        val visitor = MinreactVisitor(logger)
         resolver.getAllFiles().forEach {
-            it.accept(visitor, OutputStreamWriter(object : OutputStream() {
-                override fun write(b: Int) = Unit
-            }))
+            it.accept(visitor, codeGenerator)
         }
         return emptyList()
     }
 }
 
-class MinreactVisitor(private val logger: KSPLogger, private val codeGenerator: CodeGenerator) :
-    KSTopDownVisitor<OutputStreamWriter, Unit>() {
-    override fun defaultHandler(node: KSNode, data: OutputStreamWriter) {
+class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGenerator, Unit>() {
+    override fun defaultHandler(node: KSNode, data: CodeGenerator) {
     }
 
-    override fun visitPropertyDeclaration(property: KSPropertyDeclaration, data: OutputStreamWriter) {
+    override fun visitPropertyDeclaration(property: KSPropertyDeclaration, data: CodeGenerator) {
         super.visitPropertyDeclaration(property, data)
         val targetName = property.simpleName.getShortName()
+
         if (property.annotations.any(::isMinreact)) {
             val resolvedType: KSType = property.type.resolve()
 
@@ -86,7 +82,7 @@ class MinreactVisitor(private val logger: KSPLogger, private val codeGenerator: 
                             .build()
                     )
                     .build()
-                    .writeTo(codeGenerator, false)
+                    .writeTo(data, false)
             }
         }
     }
