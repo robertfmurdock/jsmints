@@ -1,4 +1,5 @@
 import com.google.devtools.ksp.processing.CodeGenerator
+import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
@@ -82,7 +83,13 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
                             .build()
                     )
                     .build()
-                    .writeTo(data, false)
+                    .writeTo(
+                        data, Dependencies(
+                            aggregating = false,
+                            sources = setOfNotNull(property.containingFile, classDeclaration.containingFile)
+                                .toTypedArray()
+                        )
+                    )
             }
         }
     }
