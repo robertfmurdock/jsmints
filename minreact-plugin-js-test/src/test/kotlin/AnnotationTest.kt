@@ -105,4 +105,25 @@ class AnnotationTest {
         screen.queryByText("Wrapper Thing Hi")
             .assertIsNotEqualTo(null)
     }
+
+    @Test
+    fun canUseComponentWithGenericProps() = setup(object {
+        val normal = FC<Props> {
+            GenericThing(
+                a = "Hi",
+                thingo = GenericObject(
+                    object : SomeInterface {
+                        override fun doThing() = "Thing do"
+                    },
+                ),
+            )
+        }
+    }) exercise {
+        render(normal.create())
+    } verify {
+        screen.queryByText("Generic Thing Hi")
+            .assertIsNotEqualTo(null)
+        screen.queryByText("Thing do")
+            .assertIsNotEqualTo(null)
+    }
 }
