@@ -1,6 +1,7 @@
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
+import com.zegreatrob.minreact.plugin.test.DestructureThing
 import com.zegreatrob.minreact.plugin.test.NiceThing
 import com.zegreatrob.testmints.async.asyncSetup
 import com.zegreatrob.testmints.setup
@@ -46,6 +47,22 @@ class AnnotationTest {
         render(normal.create())
     } verify {
         screen.queryByText("Zany Thing Hi")
+            .assertIsNotEqualTo(null)
+    }
+
+    @Test
+    fun providesDestructuringFunctions() = setup(object {
+        val normal = FC<Props> {
+            DestructureThing(
+                a = "Hi",
+                b = 7,
+                c = { println("DO IT") },
+            )
+        }
+    }) exercise {
+        render(normal.create())
+    } verify {
+        screen.queryByText("Destructure Thing Hi")
             .assertIsNotEqualTo(null)
     }
 
