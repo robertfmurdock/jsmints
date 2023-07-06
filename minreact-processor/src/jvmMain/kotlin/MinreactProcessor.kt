@@ -141,17 +141,19 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
         return ClassName("react", "FC").parameterizedBy(propsType)
     }
 
-    private fun parameterizedClassName(classDeclaration: KSClassDeclaration) = classDeclaration.toClassName()
-        .let {
-            if (classDeclaration.typeParameters.isEmpty()) {
-                it
-            } else {
-                it.parameterizedBy(classDeclaration.typeParameters.map { it.toTypeVariableName() })
-            }
+    private fun parameterizedClassName(classDeclaration: KSClassDeclaration) = classDeclaration.toClassName().let {
+        if (classDeclaration.typeParameters.isEmpty()) {
+            it
+        } else {
+            it.parameterizedBy(classDeclaration.typeParameters.map { it.toTypeVariableName() })
         }
+    }
 
-    private fun assignPropByParameter(property: KSPropertyDeclaration) =
+    private fun assignPropByParameter(property: KSPropertyDeclaration) = if (property.type.resolve().isMarkedNullable) {
+        "${property.simpleName.getShortName()}?.let { this.${property.simpleName.getShortName()} = it }"
+    } else {
         "this.${property.simpleName.getShortName()} = ${property.simpleName.getShortName()}"
+    }
 
     private fun parameterSpecs(
         classDeclaration: KSClassDeclaration,

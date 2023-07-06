@@ -96,6 +96,36 @@ class AnnotationTest {
     }
 
     @Test
+    fun canSkipKeys() = asyncSetup(object {
+        val normal = FC<Props> {
+            ZanyThing(
+                a = "Hi1",
+                b = 7,
+                c = { },
+            )
+            ZanyThing(
+                a = "Hi2",
+                b = 7,
+                c = { },
+            )
+            ZanyThing(
+                a = "Hi3",
+                b = 7,
+                c = { },
+            )
+        }
+    }) exercise {
+        render(normal.create())
+    } verify {
+        screen.queryByText("Zany Thing Hi1")
+            .assertIsNotEqualTo(null)
+        screen.queryByText("Zany Thing Hi2")
+            .assertIsNotEqualTo(null)
+        screen.queryByText("Zany Thing Hi3")
+            .assertIsNotEqualTo(null)
+    }
+
+    @Test
     fun canUseComponentWithChildren() = setup(object {
         val normal = FC<Props> {
             WrapperThing(a = "Hi") {
