@@ -10,6 +10,7 @@ import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
 import com.zegreatrob.wrapper.testinglibrary.userevent.UserEvent
 import react.FC
 import react.Props
+import react.ReactNode
 import react.create
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
@@ -167,6 +168,25 @@ class AnnotationTest {
         }
     }) exercise {
         render(normal.create())
+    } verify {
+        screen.queryByText("Generic Thing Hi")
+            .assertIsNotEqualTo(null)
+        screen.queryByText("Thing do")
+            .assertIsNotEqualTo(null)
+    }
+
+    @Test
+    fun createFunctionWillReturnReactNode() = setup(object {
+        val node: ReactNode = GenericThing.create(
+            a = "Hi",
+            thingo = GenericObject(
+                object : SomeInterface {
+                    override fun doThing() = "Thing do"
+                },
+            ),
+        )
+    }) exercise {
+        render(node)
     } verify {
         screen.queryByText("Generic Thing Hi")
             .assertIsNotEqualTo(null)
