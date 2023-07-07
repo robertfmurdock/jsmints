@@ -8,9 +8,9 @@ plugins {
 kotlin {
     js {
         nodejs {
-            testTask {
+            testTask(Action {
                 enabled = false
-            }
+            })
         }
     }
 }
@@ -25,6 +25,7 @@ wdioTest {
 }
 
 dependencies {
+    implementation(platform(project(":dependency-bom")))
     implementation(kotlin("stdlib"))
     implementation(project(":wdio-testing-library"))
     implementation("com.soywiz.korlibs.klock:klock")
@@ -39,6 +40,7 @@ dependencies {
     e2eTestImplementation(kotlin("test"))
     e2eTestImplementation("com.zegreatrob.testmints:async")
     e2eTestImplementation("com.zegreatrob.testmints:minassert")
+    e2eTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
     e2eTestImplementation(jsconstraint("geckodriver"))
     e2eTestImplementation(jsconstraint("wdio-geckodriver-service"))
 }

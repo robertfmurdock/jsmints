@@ -1,5 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension
+
 plugins {
     kotlin("js")
     id("com.zegreatrob.jsmints.plugins.reports")
@@ -10,7 +12,7 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
+kotlin(fun KotlinJsProjectExtension.() {
     js {
         compilations.all {
             kotlinOptions {
@@ -18,7 +20,7 @@ kotlin {
             }
         }
     }
-}
+})
 
 val jspackage = project.extensions.create<JsConstraintExtension>("jsconstraint")
 configure<JsConstraintExtension> {

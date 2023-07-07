@@ -8,7 +8,7 @@ kotlin {
     js {
         compilations.named("test") {
             packageJson { customField("mocha", mapOf("require" to "global-jsdom/register")) }
-            nodejs { testTask { useMocha { timeout = "20s" } } }
+            nodejs { testTask(Action { useMocha { timeout = "20s" } } )}
         }
     }
 }

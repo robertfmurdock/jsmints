@@ -3,6 +3,8 @@ package com.zegreatrob.jsmints.plugins
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTestExtension
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
@@ -19,14 +21,14 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
+kotlin(fun KotlinJsProjectExtension.() {
     js {
-        compilations {
+        compilations(fun NamedDomainObjectContainerScope<out KotlinJsCompilation>.() {
             val e2eTest by creating
             binaries.executable(e2eTest)
-        }
+        })
     }
-}
+})
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
     if (it?.nodeVersion != "19.6.0") {
@@ -61,7 +63,7 @@ dependencies {
                 if (isIncludedBuild) {
                     targetConfiguration = "executable"
                 } else {
-                    artifact { classifier = "executable" }
+                    artifact(fun DependencyArtifact.() { classifier = "executable" })
                 }
             }
         },
@@ -109,13 +111,14 @@ tasks {
     val wdioConfDirectory = wdioConfig.parentFile.resolve("wdio.conf.d")
 
     val copyWdioConfDir by registering(Copy::class) {
+        duplicatesStrategy = DuplicatesStrategy.WARN
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
         from(projectDir.resolve("wdio.conf.d"))
         fun addPlugin(option: Property<Boolean>, pluginResource: URL) {
-            from(option.whenEnabledUseFile(pluginResource)) {
-                rename { pluginResource.path.split("/").last() }
-            }
+            from(option.whenEnabledUseFile(pluginResource), fun CopySpec.() {
+                this@from.rename { pluginResource.path.split("/").last<String>() }
+            })
         }
         addPlugin(wdioTest.useChrome, WdioTemplate.chromePlugin)
         addPlugin(wdioTest.htmlReporter, WdioTemplate.htmlReporterPlugin)
@@ -145,13 +148,13 @@ tasks {
         rename { "wdio.conf.mjs" }
     }
 
-    named("compileE2eTestKotlinJs") {
+    named("compileE2eTestKotlinJs", fun Task.() {
         dependsOn(copyWdio)
-    }
+    })
 
     val wdioTestModuleName = "wdio-dev-tests"
     val compileE2eTestDevelopmentExecutableKotlinJs =
-        named("compileE2eTestDevelopmentExecutableKotlinJs", Kotlin2JsCompile::class) {
+        named<Kotlin2JsCompile>("compileE2eTestDevelopmentExecutableKotlinJs") {
             compilerOptions { moduleName.set(wdioTestModuleName) }
         }
 
