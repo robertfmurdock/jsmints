@@ -54,7 +54,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: CodeGenerator) {
         super.visitClassDeclaration(classDeclaration, data)
-        if (classDeclaration.getAllSuperTypes().map { it.toClassName() }.contains(ClassName("react", "Props"))) {
+        if (classDeclaration.extends(ClassName("react", "Props"))) {
             val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
 
             val builder = FileSpec.builder(classDeclaration.packageName.asString(), "${classDeclaration}Extentions")
@@ -107,6 +107,10 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
                 )
         }
     }
+
+    private fun KSClassDeclaration.extends(className: ClassName) = getAllSuperTypes()
+        .mapNotNull { this@MinreactVisitor.runCatching { it.toClassName() }.getOrNull() }
+        .contains(className)
 
     override fun visitPropertyDeclaration(property: KSPropertyDeclaration, data: CodeGenerator) {
         super.visitPropertyDeclaration(property, data)
