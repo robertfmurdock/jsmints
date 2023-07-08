@@ -28,6 +28,12 @@ dependencies {
     }
 }
 
+afterEvaluate {
+    tasks {
+        "publishBomPublicationToSonatypeRepository" { dependsOn("signJsPublication") }
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("bom") {
