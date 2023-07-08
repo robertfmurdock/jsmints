@@ -38,3 +38,14 @@ publishing {
         }
     }
 }
+
+afterEvaluate {
+    tasks {
+        "publishBomPublicationToSonatypeRepository" {
+            dependsOn("signJsPublication", "signKotlinMultiplatformPublication")
+        }
+        "signBomPublication" {
+            dependsOn("publishKotlinMultiplatformPublicationToSonatypeRepository")
+        }
+    }
+}
