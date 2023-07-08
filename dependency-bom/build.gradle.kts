@@ -30,11 +30,11 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("bom") {
+        val bomPublication = create<MavenPublication>("bom") {
             from(components["javaPlatform"])
         }
         tasks.withType<AbstractPublishToMaven> {
-            enabled = named<MavenPublication>("js").map { this@withType.publication != it }.get()
+            enabled = this@withType.publication == bomPublication
         }
     }
 }
