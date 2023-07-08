@@ -38,13 +38,6 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
-          cache-dependency-path: |
-            kotlin-js-store/yarn.lock
-            jsmints-plugins/kotlin-js-store
       - name: Generate Version 🔢
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
       - name: Build 🔨
