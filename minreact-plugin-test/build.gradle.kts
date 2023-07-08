@@ -21,18 +21,11 @@ kotlin {
     targets.all {
         compilations.all {
             kotlinOptions {
-                allWarningsAsErrors = false
+                allWarningsAsErrors = true
             }
         }
     }
-    sourceSets.jsMain {
-        kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")
-    }
-    sourceSets.jsTest {
-        kotlin.srcDir("build/generated/ksp/js/jsTest/kotlin")
-    }
 }
-
 
 minreact {
     includedBuild.set(true)

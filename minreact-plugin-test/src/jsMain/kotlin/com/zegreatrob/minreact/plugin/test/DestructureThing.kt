@@ -5,7 +5,7 @@ import com.zegreatrob.minreact.nfc
 import react.useEffectOnce
 
 @ReactFunc
-val DestructureThing by nfc<NiceThingProps> { (a, b, c) ->
+val DestructureThing by nfc<NiceThingProps> { (a, _, c) ->
     +"Destructure Thing $a"
     useEffectOnce { c() }
 }
