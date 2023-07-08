@@ -23,8 +23,7 @@ include("user-event-testing-library")
 include("react-testing-library")
 include("wdio-testing-library")
 include("wdio-testing-library-test")
-include("minreact-plugin-js-test")
-include("minreact-plugin-mp-test")
+include("minreact-plugin-test")
 
 includeBuild("jsmints-plugins")
 includeBuild("jsmints-convention-plugins")
@@ -44,5 +43,3 @@ if (isCiServer) {
 buildCache {
     local { isEnabled = true }
 }
-
-enableFeaturePreview("STABLE_CONFIGURATION_CACHE")

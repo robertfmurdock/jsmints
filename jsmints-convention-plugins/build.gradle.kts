@@ -1,4 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 repositories {
     maven { url = uri("https://plugins.gradle.org/m2/") }
@@ -38,11 +40,11 @@ tasks {
                 .matches(candidate.version)
         }
     }
-    formatKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+    withType(FormatTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
-    lintKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+    withType(LintTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
     clean {
         delete(rootProject.buildDir)

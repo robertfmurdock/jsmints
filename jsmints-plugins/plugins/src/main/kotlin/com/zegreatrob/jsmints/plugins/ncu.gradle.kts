@@ -13,7 +13,7 @@ tasks {
     if (jspackage.exists) {
         kotlin.js().compilations.named("test").configure(fun KotlinJsCompilation.() {
             register<NodeExec>("ncuUpgrade") {
-                dependsOn("publicPackageJson", ":kotlinNpmInstall")
+                dependsOn("jsPublicPackageJson", ":kotlinNpmInstall")
                 setup(this@configure)
                 val packageJson = File(project.projectDir, "package.json")
                 val nodeCommand = "ncu"
@@ -37,7 +37,7 @@ tasks {
 
 dependencies {
     if (jspackage.exists) {
-        testImplementation(
+        "jsTestImplementation"(
             npm(
                 "npm-check-updates",
                 jspackage.dependencies()?.toMap()?.let { libs -> libs["npm-check-updates"]?.asText() }

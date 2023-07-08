@@ -2,20 +2,27 @@ package com.zegreatrob.jsmints.plugins
 
 import com.zegreatrob.jsmints.plugins.jspackage.JsPackageExtension
 import com.zegreatrob.jsmints.plugins.jspackage.loadPackageJson
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 
 plugins {
-    kotlin("js")
+    kotlin("multiplatform")
 }
+
+kotlin(fun KotlinMultiplatformExtension.() {
+    js(fun KotlinJsTargetDsl.() {
+    })
+})
 
 val jspackage = project.extensions.create("jspackage", JsPackageExtension::class, loadPackageJson())
 
 dependencies {
     jspackage.dependencies()?.forEach {
-        implementation(npm(it.first, it.second.asText()))
+        "jsMainImplementation"(npm(it.first, it.second.asText()))
     }
     jspackage.devDependencies()?.forEach {
-        testImplementation(npm(it.first, it.second.asText()))
+        "jsTestImplementation"(npm(it.first, it.second.asText()))
     }
 }
 

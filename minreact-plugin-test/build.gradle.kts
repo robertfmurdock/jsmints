@@ -1,3 +1,4 @@
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
@@ -64,10 +65,12 @@ tasks {
     formatKotlinJsTest {
         dependsOn("kspTestKotlinJs")
     }
+    withType(FormatTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
+    }
     withType(LintTask::class) {
         exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
-
     lintKotlinJsMain {
         dependsOn("kspKotlinJs")
     }
