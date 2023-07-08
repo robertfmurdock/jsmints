@@ -28,21 +28,13 @@ dependencies {
     }
 }
 
-afterEvaluate {
-    tasks {
-        "publishBomPublicationToSonatypeRepository" {
-            dependsOn("signJsPublication", "signKotlinMultiplatformPublication")
-        }
-        "signBomPublication" {
-            dependsOn("publishKotlinMultiplatformPublicationToSonatypeRepository")
-        }
-    }
-}
-
 publishing {
     publications {
         create<MavenPublication>("bom") {
             from(components["javaPlatform"])
+        }
+        tasks.withType<AbstractPublishToMaven> {
+            enabled = this@withType.publication != named<MavenPublication>("js")
         }
     }
 }
