@@ -61,6 +61,11 @@ tasks {
             gradle.includedBuild("jsmints-plugins").task(":kotlinNpmInstall")
         })
     }
+    "kotlinNodeJsSetup" {
+        dependsOn(provider {
+            gradle.includedBuild("jsmints-plugins").task(":kotlinNodeJsSetup")
+        })
+    }
     "kotlinUpgradeYarnLock" {
         dependsOn(provider {
             gradle.includedBuild("jsmints-plugins").task(":kotlinUpgradeYarnLock")
