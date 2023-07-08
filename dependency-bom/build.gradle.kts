@@ -33,6 +33,9 @@ afterEvaluate {
         "publishBomPublicationToSonatypeRepository" {
             dependsOn("signJsPublication", "signKotlinMultiplatformPublication")
         }
+        "signBomPublication" {
+            dependsOn("publishKotlinMultiplatformPublicationToSonatypeRepository")
+        }
     }
 }
 
