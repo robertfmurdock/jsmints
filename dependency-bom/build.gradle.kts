@@ -30,7 +30,9 @@ dependencies {
 
 afterEvaluate {
     tasks {
-        "publishBomPublicationToSonatypeRepository" { dependsOn("signJsPublication") }
+        "publishBomPublicationToSonatypeRepository" {
+            dependsOn("signJsPublication", "signKotlinMultiplatformPublication")
+        }
     }
 }
 
