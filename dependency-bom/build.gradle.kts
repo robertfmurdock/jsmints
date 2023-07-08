@@ -34,7 +34,7 @@ publishing {
             from(components["javaPlatform"])
         }
         tasks.withType<AbstractPublishToMaven> {
-            enabled = this@withType.publication != named<MavenPublication>("js")
+            enabled = named<MavenPublication>("js").map { this@withType.publication != it }.get()
         }
     }
 }
