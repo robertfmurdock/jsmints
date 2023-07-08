@@ -16,12 +16,6 @@ kotlin {
             }
         }
     }
-    sourceSets.main {
-        kotlin.srcDir("build/generated/ksp/js/main/kotlin")
-    }
-    sourceSets.test {
-        kotlin.srcDir("build/generated/ksp/js/test/kotlin")
-    }
 }
 
 
@@ -30,34 +24,34 @@ minreact {
 }
 
 dependencies {
-    implementation(platform(project(":dependency-bom")))
-    implementation(kotlin("stdlib"))
-    implementation("io.github.microutils:kotlin-logging")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-node")
+    jsMainImplementation(platform(project(":dependency-bom")))
+    jsMainImplementation(kotlin("stdlib"))
+    jsMainImplementation("io.github.microutils:kotlin-logging")
+    jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
 
-    testImplementation(project(":react-testing-library"))
-    testImplementation(project(":user-event-testing-library"))
-    testImplementation(jsconstraint("jsdom"))
-    testImplementation(jsconstraint("global-jsdom"))
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("com.zegreatrob.testmints:standard")
-    testImplementation("com.zegreatrob.testmints:async")
-    testImplementation("com.zegreatrob.testmints:minassert")
+    jsTestImplementation(project(":react-testing-library"))
+    jsTestImplementation(project(":user-event-testing-library"))
+    jsTestImplementation(jsconstraint("jsdom"))
+    jsTestImplementation(jsconstraint("global-jsdom"))
+    jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
+    jsTestImplementation("com.zegreatrob.testmints:standard")
+    jsTestImplementation("com.zegreatrob.testmints:async")
+    jsTestImplementation("com.zegreatrob.testmints:minassert")
 }
 
 tasks {
-    formatKotlinMain {
+    formatKotlinJsMain {
         dependsOn("kspKotlinJs")
     }
     withType(LintTask::class) {
         exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
-    lintKotlinMain {
+    lintKotlinJsMain {
         dependsOn("kspKotlinJs")
     }
 }

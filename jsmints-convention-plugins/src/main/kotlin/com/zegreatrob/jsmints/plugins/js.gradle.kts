@@ -21,7 +21,9 @@ kotlin {
             }
         }
     }
-    js { nodejs { useCommonJs() } }
+    js {
+        nodejs { useCommonJs() }
+    }
 }
 
 dependencies {

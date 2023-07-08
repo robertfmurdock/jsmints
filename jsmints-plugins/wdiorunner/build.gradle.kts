@@ -18,20 +18,20 @@ kotlin {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
-    implementation(platform(libs.org.jetbrains.kotlin.kotlin.bom))
-    implementation(platform(libs.org.jetbrains.kotlinx.kotlinx.coroutines.bom))
-    implementation(platform(libs.org.jetbrains.kotlin.wrappers.kotlin.wrappers.bom))
-    implementation(libs.io.github.microutils.kotlin.logging)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-node")
-    implementation(jsconstraint("@wdio/cli"))
-    implementation(jsconstraint("@wdio/dot-reporter"))
-    implementation(jsconstraint("@wdio/junit-reporter"))
-    implementation(jsconstraint("@wdio/local-runner"))
-    implementation(jsconstraint("@wdio/mocha-framework"))
+    jsMainImplementation(kotlin("stdlib"))
+    jsMainImplementation(platform(libs.org.jetbrains.kotlin.kotlin.bom))
+    jsMainImplementation(platform(libs.org.jetbrains.kotlinx.kotlinx.coroutines.bom))
+    jsMainImplementation(platform(libs.org.jetbrains.kotlin.wrappers.kotlin.wrappers.bom))
+    jsMainImplementation(libs.io.github.microutils.kotlin.logging)
+    jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
+    jsMainImplementation(jsconstraint("@wdio/cli"))
+    jsMainImplementation(jsconstraint("@wdio/dot-reporter"))
+    jsMainImplementation(jsconstraint("@wdio/junit-reporter"))
+    jsMainImplementation(jsconstraint("@wdio/local-runner"))
+    jsMainImplementation(jsconstraint("@wdio/mocha-framework"))
 }
 
 val executable: Configuration by configurations.creating
@@ -59,12 +59,4 @@ tasks {
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
     it?.nodeVersion = "19.6.0"
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("js") {
-            from(components["kotlin"])
-        }
-    }
 }

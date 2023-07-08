@@ -25,24 +25,24 @@ wdioTest {
 }
 
 dependencies {
-    implementation(platform(project(":dependency-bom")))
-    implementation(kotlin("stdlib"))
-    implementation(project(":wdio-testing-library"))
-    implementation("com.soywiz.korlibs.klock:klock")
-    implementation("io.github.microutils:kotlin-logging")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-node")
+    jsMainImplementation(platform(project(":dependency-bom")))
+    jsMainImplementation(kotlin("stdlib"))
+    jsMainImplementation(project(":wdio-testing-library"))
+    jsMainImplementation("com.soywiz.korlibs.klock:klock")
+    jsMainImplementation("io.github.microutils:kotlin-logging")
+    jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
 
-    e2eTestImplementation(platform(project(":dependency-bom")))
-    e2eTestImplementation(project(":wdio-testing-library"))
-    e2eTestImplementation(kotlin("test"))
-    e2eTestImplementation("com.zegreatrob.testmints:async")
-    e2eTestImplementation("com.zegreatrob.testmints:minassert")
-    e2eTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
-    e2eTestImplementation(jsconstraint("geckodriver"))
-    e2eTestImplementation(jsconstraint("wdio-geckodriver-service"))
+    "jsE2eTestImplementation"(platform(project(":dependency-bom")))
+    "jsE2eTestImplementation"(project(":wdio-testing-library"))
+    "jsE2eTestImplementation"(kotlin("test"))
+    "jsE2eTestImplementation"("com.zegreatrob.testmints:async")
+    "jsE2eTestImplementation"("com.zegreatrob.testmints:minassert")
+    "jsE2eTestImplementation"("org.jetbrains.kotlin-wrappers:kotlin-node")
+    "jsE2eTestImplementation"(jsconstraint("geckodriver"))
+    "jsE2eTestImplementation"(jsconstraint("wdio-geckodriver-service"))
 }
 
 dockerCompose {

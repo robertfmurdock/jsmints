@@ -3,8 +3,8 @@ package com.zegreatrob.jsmints.plugins
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTestExtension
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import java.net.URL
 
 plugins {
-    kotlin("js")
+    kotlin("multiplatform")
     base
 }
 
@@ -21,13 +21,11 @@ repositories {
     mavenCentral()
 }
 
-kotlin(fun KotlinJsProjectExtension.() {
-    js {
-        compilations(fun NamedDomainObjectContainerScope<out KotlinJsCompilation>.() {
-            val e2eTest by creating
-            binaries.executable(e2eTest)
-        })
-    }
+kotlin(fun KotlinMultiplatformExtension.() {
+    js(fun KotlinJsTargetDsl.() {
+        val e2eTest by compilations.creating
+        binaries.executable(e2eTest)
+    })
 })
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
@@ -55,8 +53,8 @@ val runnerConfiguration: Configuration by configurations.creating {
 }
 
 dependencies {
-    "e2eTestImplementation"("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
-    "e2eTestImplementation"("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
+    "jsE2eTestImplementation"("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
+    "jsE2eTestImplementation"("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
     runnerConfiguration(
         wdioTest.includedBuild.map { isIncludedBuild ->
             create("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}") {
@@ -72,19 +70,19 @@ dependencies {
 afterEvaluate {
     dependencies {
         if (wdioTest.htmlReporter.get()) {
-            "e2eTestImplementation"(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
+            "jsE2eTestImplementation"(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
         }
         if (wdioTest.timelineReporter.get()) {
-            "e2eTestImplementation"(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion))
+            "jsE2eTestImplementation"(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion))
         }
         if (wdioTest.allureReporter.get()) {
-            "e2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion))
-            "e2eTestImplementation"(npm("allure-commandline", PluginVersions.allureCLIVersion))
+            "jsE2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion))
+            "jsE2eTestImplementation"(npm("allure-commandline", PluginVersions.allureCLIVersion))
         }
 
         if (wdioTest.useChrome.get()) {
-            "e2eTestImplementation"(npm("chromedriver", PluginVersions.chromedriverVersion))
-            "e2eTestImplementation"(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
+            "jsE2eTestImplementation"(npm("chromedriver", PluginVersions.chromedriverVersion))
+            "jsE2eTestImplementation"(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
         }
     }
 }
@@ -158,7 +156,7 @@ tasks {
             compilerOptions { moduleName.set(wdioTestModuleName) }
         }
 
-    val e2eTestProcessResources = named<ProcessResources>("e2eTestProcessResources")
+    val e2eTestProcessResources = named<ProcessResources>("jsE2eTestProcessResources")
 
     val e2eRun by registering(WdioTest::class) {
         group = "Verification"

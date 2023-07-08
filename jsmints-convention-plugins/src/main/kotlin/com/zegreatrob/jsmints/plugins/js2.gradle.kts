@@ -1,9 +1,9 @@
 package com.zegreatrob.jsmints.plugins
 
-import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
-    kotlin("js")
+    kotlin("multiplatform")
     id("com.zegreatrob.jsmints.plugins.reports")
     id("org.jmailen.kotlinter")
 }
@@ -12,7 +12,7 @@ repositories {
     mavenCentral()
 }
 
-kotlin(fun KotlinJsProjectExtension.() {
+kotlin(fun KotlinMultiplatformExtension.() {
     js {
         compilations.all {
             kotlinOptions {
