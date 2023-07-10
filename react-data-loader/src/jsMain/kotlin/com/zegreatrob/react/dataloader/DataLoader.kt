@@ -1,47 +1,37 @@
 package com.zegreatrob.react.dataloader
 
-import com.zegreatrob.minreact.DataProps
-import com.zegreatrob.minreact.TMFC
-import com.zegreatrob.minreact.tmFC
+import com.zegreatrob.minreact.ReactFunc
+import com.zegreatrob.minreact.nfc
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import react.ChildrenBuilder
+import react.FC
+import react.Props
+import react.ReactNode
 import react.StateSetter
 import react.useState
 
 typealias DataLoadFunc<D> = suspend (DataLoaderTools) -> D
 
-@Deprecated(
-    replaceWith = ReplaceWith("DataLoaderProps"),
-    level = DeprecationLevel.WARNING,
-    message = "Name to be removed.",
-)
-typealias DataLoadWrapperProps<D> = DataLoader<D>
-typealias DataLoaderProps<D> = DataLoader<D>
-
-data class DataLoader<D>(
-    val getDataAsync: DataLoadFunc<D>,
-    val errorData: (Throwable) -> D,
-    val scope: CoroutineScope? = null,
-    val children: ChildrenBuilder.(value: DataLoadState<D>) -> Unit,
-) : DataProps<DataLoader<D>> {
-    override val component = cachedComponent.unsafeCast<TMFC>()
+external interface DataLoaderProps<D> : Props {
+    var getDataAsync: DataLoadFunc<D>
+    var errorData: (Throwable) -> D
+    var scope: CoroutineScope?
+    var child: (value: DataLoadState<D>) -> ReactNode
 }
 
-private val cachedComponent = tmFC<DataLoader<Any>> { props ->
-    val (getDataAsync, errorData, injectedScope) = props
-    val (state, setState) = useState<DataLoadState<Any>> { EmptyState() }
+@ReactFunc
+val DataLoader: FC<DataLoaderProps<Any?>> by nfc { props ->
+    val (getDataAsync, errorData, injectedScope, child) = props
+    val (state, setState) = useState<DataLoadState<Any?>> { EmptyState() }
     val scope = injectedScope ?: useScope("Data load")
 
     if (state is EmptyState) {
         startPendingJob(scope, setState, getDataAsync, errorData)
     }
 
-    props.children(this, state)
+    +child(state)
 }
-
-fun <D> dataLoader() = cachedComponent.unsafeCast<TMFC>()
 
 private fun <D> startPendingJob(
     scope: CoroutineScope,

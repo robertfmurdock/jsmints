@@ -2,7 +2,6 @@ package com.zegreatrob.react.dataloader
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
-import com.zegreatrob.minreact.create
 import com.zegreatrob.react.dataloader.external.testinglibrary.userevent.userEvent
 import com.zegreatrob.testmints.async.ScopeMint
 import com.zegreatrob.testmints.async.asyncSetup
@@ -13,7 +12,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 import react.FC
+import react.Fragment
 import react.Props
+import react.create
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.useState
@@ -27,14 +28,17 @@ class DataLoaderTest {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
     }) exercise {
         render(
-            DataLoader(
-                getDataAsync = { "DATA" },
-                errorData = { "ERROR" },
-                scope = exerciseScope,
-            ) { state ->
-                allRenderedStates.add(state)
-                div { +"state: $state" }
-            }.create(),
+            Fragment.create {
+                DataLoader(
+                    getDataAsync = { "DATA" },
+                    errorData = { "ERROR" },
+                    scope = exerciseScope,
+                    child = { state ->
+                        allRenderedStates.add(state)
+                        div.create { +"state: $state" }
+                    },
+                )
+            },
         )
     } verify {
         screen.findByText("state: ${ResolvedState("DATA")}")
@@ -51,10 +55,17 @@ class DataLoaderTest {
         }
     }) exercise {
         render(
-            DataLoader(getDataAsync, { "ERROR" }, exerciseScope) { state ->
-                allRenderedStates.add(state)
-                div { +"state: $state" }
-            }.create(),
+            Fragment.create {
+                DataLoader(
+                    getDataAsync = getDataAsync,
+                    errorData = { "ERROR" },
+                    scope = exerciseScope,
+                    child = { state ->
+                        allRenderedStates.add(state)
+                        div.create { +"state: $state" }
+                    },
+                )
+            },
         )
     } verify {
         screen.findByText("state: ${ResolvedState("ERROR")}")
@@ -68,15 +79,17 @@ class DataLoaderTest {
         val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
     }) {
         render(
-            DataLoader({ it }, { null }, exerciseScope) { state ->
-                allRenderedStates.add(state)
-                div {
-                    div { +"allStatesCount: ${allRenderedStates.size}" }
-                    whenResolvedSuccessfully(state) { tools ->
-                        button { +"Button"; this.onClick = { tools.reloadData() } }
+            Fragment.create {
+                DataLoader({ it }, { null }, exerciseScope, child = { state ->
+                    allRenderedStates.add(state)
+                    div.create {
+                        div { +"allStatesCount: ${allRenderedStates.size}" }
+                        whenResolvedSuccessfully(state) { tools ->
+                            button { +"Button"; this.onClick = { tools.reloadData() } }
+                        }
                     }
-                }
-            }.create(),
+                })
+            },
         )
     } exercise {
         userEvent.click(screen.findByText("Button"))
@@ -113,15 +126,17 @@ class DataLoaderTest {
         }
     }) {
         render(
-            DataLoader({ tools -> tools }, { null }, exerciseScope) { state ->
-                div {
-                    whenResolvedSuccessfully(state) { tools ->
-                        buttonWithAsyncAction {
-                            asDynamic()["tools"] = tools
+            Fragment.create {
+                DataLoader({ tools -> tools }, { null }, exerciseScope, child = { state ->
+                    div.create {
+                        whenResolvedSuccessfully(state) { tools ->
+                            buttonWithAsyncAction {
+                                asDynamic()["tools"] = tools
+                            }
                         }
                     }
-                }
-            }.create(),
+                })
+            },
         )
     } exercise {
         userEvent.click(screen.findByText("Button"))

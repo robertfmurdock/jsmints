@@ -6,7 +6,7 @@ plugins {
     kotlin("multiplatform")
     id("com.zegreatrob.jsmints.plugins.reports")
     id("com.zegreatrob.jsmints.plugins.lint")
-//    id("com.zegreatrob.testmints.logs.mint-logs")
+    id("com.zegreatrob.testmints.logs.mint-logs")
 }
 
 repositories {

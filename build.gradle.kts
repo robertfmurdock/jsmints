@@ -13,7 +13,7 @@ plugins {
 group = "com.zegreatrob.jsmints"
 
 nexusPublishing {
-    repositories {
+    this@nexusPublishing.repositories {
         sonatype {
             username.set(System.getenv("SONATYPE_USERNAME"))
             password.set(System.getenv("SONATYPE_PASSWORD"))
@@ -43,32 +43,36 @@ tasks {
         dependsOn(provider { (getTasksByName("publish", true) - this).toList() })
         finalizedBy(closeAndReleaseSonatypeStagingRepository)
     }
+    val jsmintsPluginsBuild = gradle.includedBuild("jsmints-plugins")
+    val jsmintsConventionPluginsBuild = gradle.includedBuild("jsmints-convention-plugins")
+    val jsmintsBuilds = listOf(jsmintsPluginsBuild, jsmintsConventionPluginsBuild)
+
     check {
         dependsOn(provider { (getTasksByName("check", true) - this).toList() })
-        dependsOn(provider { gradle.includedBuilds.map { it.task(":check") } })
+        dependsOn(provider { jsmintsBuilds.map { it.task(":check") } })
     }
     clean {
-        dependsOn(provider { gradle.includedBuilds.map { it.task(":clean") } })
+        dependsOn(provider { jsmintsBuilds.map { it.task(":clean") } })
     }
     "formatKotlin" {
-        dependsOn(provider { gradle.includedBuilds.map { it.task(":formatKotlin") } })
+        dependsOn(provider { jsmintsBuilds.map { it.task(":formatKotlin") } })
     }
     "versionCatalogUpdate" {
-        dependsOn(provider { gradle.includedBuilds.map { it.task(":versionCatalogUpdate") } })
+        dependsOn(provider { jsmintsBuilds.map { it.task(":versionCatalogUpdate") } })
     }
     "kotlinNpmInstall" {
         dependsOn(provider {
-            gradle.includedBuild("jsmints-plugins").task(":kotlinNpmInstall")
+            jsmintsPluginsBuild.task(":kotlinNpmInstall")
         })
     }
     "kotlinNodeJsSetup" {
         dependsOn(provider {
-            gradle.includedBuild("jsmints-plugins").task(":kotlinNodeJsSetup")
+            jsmintsPluginsBuild.task(":kotlinNodeJsSetup")
         })
     }
     "kotlinUpgradeYarnLock" {
         dependsOn(provider {
-            gradle.includedBuild("jsmints-plugins").task(":kotlinUpgradeYarnLock")
+            jsmintsPluginsBuild.task(":kotlinUpgradeYarnLock")
         })
     }
 }
