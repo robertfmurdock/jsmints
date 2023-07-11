@@ -9,7 +9,7 @@ plugins {
 }
 
 nexusPublishing {
-    repositories {
+    this@nexusPublishing.repositories {
         sonatype {
             username.set(System.getenv("SONATYPE_USERNAME"))
             password.set(System.getenv("SONATYPE_PASSWORD"))
