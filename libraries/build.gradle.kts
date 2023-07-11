@@ -37,7 +37,6 @@ tasks {
         mustRunAfter(check)
         finalizedBy(provider { (getTasksByName("publish", true)).toList() })
     }
-
     publish {
         mustRunAfter(check)
         dependsOn(provider { (getTasksByName("publish", true) - this).toList() })

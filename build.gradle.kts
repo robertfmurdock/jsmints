@@ -25,7 +25,6 @@ tasks {
         mustRunAfter(check)
         dependsOn(provider { publishableBuilds.map { it.task(":publish") } })
     }
-
     "versionCatalogUpdate" {
         dependsOn(provider { includedBuilds.map { it.task(":versionCatalogUpdate") } })
     }

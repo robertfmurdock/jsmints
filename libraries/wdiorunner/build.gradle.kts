@@ -1,11 +1,10 @@
 
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
-    id("com.zegreatrob.jsmints.plugins.js2")
-    id("com.zegreatrob.jsmints.plugins.lint")
+    id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
+    id("com.zegreatrob.jsmints.plugins.js")
 }
 
 kotlin {
@@ -36,8 +35,6 @@ dependencies {
 
 val executable: Configuration by configurations.creating
 
-group = "com.zegreatrob.jsmints"
-
 val compileExecutableTask = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
 
 tasks {
@@ -55,8 +52,4 @@ tasks {
     publishing.publications {
         withType<MavenPublication> { artifact(executableJar) }
     }
-}
-
-rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    it?.nodeVersion = "19.6.0"
 }
