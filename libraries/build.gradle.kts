@@ -5,9 +5,7 @@ plugins {
     alias(libs.plugins.com.zegreatrob.tools.tagger)
     `maven-publish`
     signing
-    id("com.zegreatrob.jsmints.plugins.js")
     id("com.zegreatrob.jsmints.plugins.versioning")
-    id("com.zegreatrob.jsmints.plugins.publish")
 }
 
 group = "com.zegreatrob.jsmints"
@@ -30,6 +28,12 @@ tagger {
 }
 
 tasks {
+    create("collectResults") {
+        dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
+    }
+    create("formatKotlin") {
+        dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() })
+    }
     val closeAndReleaseSonatypeStagingRepository by getting {
         mustRunAfter(publish)
     }
