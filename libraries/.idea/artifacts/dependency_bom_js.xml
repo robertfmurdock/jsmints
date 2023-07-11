@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="dependency-bom-js">
+    <output-path>$PROJECT_DIR$/dependency-bom/build/libs</output-path>
+    <root id="archive" name="dependency-bom-js.jar">
+      <element id="module-output" name="jsmints.dependency-bom.jsMain" />
+    </root>
+  </artifact>
+</component>

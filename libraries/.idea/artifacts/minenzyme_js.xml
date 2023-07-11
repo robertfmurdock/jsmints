@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="minenzyme-js">
+    <output-path>$PROJECT_DIR$/minenzyme/build/libs</output-path>
+    <root id="archive" name="minenzyme-js.jar">
+      <element id="module-output" name="jsmints.minenzyme.jsMain" />
+    </root>
+  </artifact>
+</component>

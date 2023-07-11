@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="user-event-testing-library-js">
+    <output-path>$PROJECT_DIR$/user-event-testing-library/build/libs</output-path>
+    <root id="archive" name="user-event-testing-library-js.jar">
+      <element id="module-output" name="jsmints.user-event-testing-library.jsMain" />
+    </root>
+  </artifact>
+</component>

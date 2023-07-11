@@ -1,5 +1,3 @@
-//import com.fasterxml.jackson.databind.JsonNode
-//import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.jetbrains.kotlin.com.google.gson.JsonElement
 import java.nio.charset.Charset
@@ -59,7 +57,7 @@ tasks {
             .disableHtmlEscaping()
             .serializeNulls()
             .create()
-        
+
         val packageJson: JsonElement = gson.fromJson(
             rootDir.resolve("../libraries/dependency-bom/package.json")
                 .readText(),

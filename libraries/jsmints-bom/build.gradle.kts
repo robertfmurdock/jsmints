@@ -14,8 +14,8 @@ dependencies {
         api(project(":user-event-testing-library"))
         api(project(":wdio"))
         api(project(":wdio-testing-library"))
+        api(project(":wdiorunner"))
         api("com.zegreatrob.jsmints.plugins.wdiotest:com.zegreatrob.jsmints.plugins.wdiotest.gradle.plugin")
-        api("com.zegreatrob.jsmints:wdiorunner:${rootProject.version}")
         api("com.zegreatrob.jsmints:plugins:${rootProject.version}")
     }
 }

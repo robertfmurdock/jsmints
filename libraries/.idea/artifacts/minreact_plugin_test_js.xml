@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="minreact-plugin-test-js">
+    <output-path>$PROJECT_DIR$/minreact-plugin-test/build/libs</output-path>
+    <root id="archive" name="minreact-plugin-test-js.jar">
+      <element id="module-output" name="jsmints.minreact-plugin-test.jsMain" />
+    </root>
+  </artifact>
+</component>

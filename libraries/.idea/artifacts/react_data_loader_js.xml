@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="react-data-loader-js">
+    <output-path>$PROJECT_DIR$/react-data-loader/build/libs</output-path>
+    <root id="archive" name="react-data-loader-js.jar">
+      <element id="module-output" name="jsmints.react-data-loader.jsMain" />
+    </root>
+  </artifact>
+</component>
