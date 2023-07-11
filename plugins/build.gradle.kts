@@ -1,28 +1,29 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+
 plugins {
     `maven-publish`
     alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
-//    alias(libs.plugins.org.jmailen.kotlinter)
     base
     signing
 }
 
-//tasks {
-//    withType<DependencyUpdatesTask> {
-//        checkForGradleUpdate = true
-//        outputFormatter = "json"
-//        outputDir = "build/dependencyUpdates"
-//        reportfileName = "report"
-//        revision = "release"
-//
-//        rejectVersionIf {
-//            "^[0-9.]+[0-9](-RC|-M[0-9]+|-RC[0-9]+|-beta.*|-alpha.*|-dev.*|-RC.*)\$"
-//                .toRegex(RegexOption.IGNORE_CASE)
-//                .matches(candidate.version)
-//        }
-//    }
-//}
+tasks {
+    withType<DependencyUpdatesTask> {
+        checkForGradleUpdate = true
+        outputFormatter = "json"
+        outputDir = "build/dependencyUpdates"
+        reportfileName = "report"
+        revision = "release"
+
+        rejectVersionIf {
+            "^[0-9.]+[0-9](-RC|-M[0-9]+|-RC[0-9]+|-beta.*|-alpha.*|-dev.*|-RC.*)\$"
+                .toRegex(RegexOption.IGNORE_CASE)
+                .matches(candidate.version)
+        }
+    }
+}
 
 nexusPublishing {
     this@nexusPublishing.repositories {
@@ -45,4 +46,6 @@ tasks {
     assemble { dependsOn(provider { (getTasksByName("assemble", true) - this).toList() }) }
     create("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
     publish { dependsOn(provider { (getTasksByName("publish", true) - this).toList() }) }
+    create("collectResults") { dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() }) }
+
 }

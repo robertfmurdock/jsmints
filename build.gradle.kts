@@ -31,8 +31,8 @@ tasks {
 
     create<Copy>("collectResults") {
         dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
-        dependsOn(provider { includedBuilds.map { it.task(":collectResults") } })
-        from(includedBuilds.map { it.projectDir.resolve("build/test-output") })
+        dependsOn(provider { publishableBuilds.map { it.task(":collectResults") } })
+        from(publishableBuilds.map { it.projectDir.resolve("build/test-output") })
         into("${rootProject.buildDir.path}/test-output/${project.path}".replace(":", "/"))
     }
 
