@@ -20,7 +20,4 @@ dependencyResolutionManagement {
     }
 }
 
-enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
-includeBuild("../convention-plugins")
 include(":plugins")
-

@@ -1,6 +1,7 @@
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
+//import com.fasterxml.jackson.databind.JsonNode
+//import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.jetbrains.kotlin.com.google.gson.JsonElement
 import java.nio.charset.Charset
 import java.util.Base64
 
@@ -8,7 +9,8 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     alias(libs.plugins.com.gradle.plugin.publish)
-    id("com.zegreatrob.jsmints.plugins.lint")
+    alias(libs.plugins.org.jmailen.kotlinter)
+    id("org.jetbrains.kotlin.jvm") version(embeddedKotlinVersion)
     signing
 }
 
@@ -51,8 +53,18 @@ tasks {
     val copyTemplates by registering(Copy::class) {
         inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
-        val mapper = ObjectMapper()
-        val packageJson = mapper.readTree(rootDir.resolve("../libraries/dependency-bom/package.json"))
+
+        val gson: org.jetbrains.kotlin.com.google.gson.Gson = org.jetbrains.kotlin.com.google.gson.GsonBuilder()
+            .setPrettyPrinting()
+            .disableHtmlEscaping()
+            .serializeNulls()
+            .create()
+        
+        val packageJson: JsonElement = gson.fromJson(
+            rootDir.resolve("../libraries/dependency-bom/package.json")
+                .readText(),
+            JsonElement::class.java
+        )
 
         from(project.projectDir.resolve("src/main/templates")) {
             filter<ReplaceTokens>(
@@ -130,5 +142,6 @@ afterEvaluate {
     }
 }
 
-fun JsonNode.dependency(name: String) = at("/dependencies/${name.replace("/", "~1")}")
-    .textValue()
+fun JsonElement.dependency(name: String) = this.asJsonObject.getAsJsonObject("dependencies")
+    .getAsJsonPrimitive(name)
+    .asString

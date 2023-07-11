@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-dependency-bom-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-dependency-bom/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-minenzyme-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-minjson-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-minreact-plugin-test-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-minreact-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-react-data-loader-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-react-testing-library-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-user-event-testing-library-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdio-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdio-testing-library-test-e2eTest/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdio-testing-library-test-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdio-testing-library-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdio-testing-library/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdio/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdiorunner-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/libraries/build/js/packages/jsmints-wdiorunner/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/wdio-test-plugin/build/js/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/wdio-test-plugin/build/js/packages/wdio-test-plugin-wdiorunner-test/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/wdio-test-plugin/build/js/packages/wdio-test-plugin-wdiorunner/node_modules" />
+    <excludedPredefinedLibrary name="jsmints/wdio-test-plugin/build/js/packages_imported/kotlin-wrappers-kotlin-node-js-ir/18.14.0-pre.504/node_modules" />
+  </component>
+</project>

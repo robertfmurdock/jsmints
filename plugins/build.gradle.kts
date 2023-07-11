@@ -1,12 +1,28 @@
 plugins {
-    alias(libs.plugins.nl.littlerobots.version.catalog.update)
-    alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     `maven-publish`
-    signing
+    alias(libs.plugins.com.github.ben.manes.versions)
+    alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
+    alias(libs.plugins.nl.littlerobots.version.catalog.update)
+//    alias(libs.plugins.org.jmailen.kotlinter)
     base
-    id("com.zegreatrob.jsmints.plugins.lint")
-    id("com.zegreatrob.jsmints.plugins.versioning")
+    signing
 }
+
+//tasks {
+//    withType<DependencyUpdatesTask> {
+//        checkForGradleUpdate = true
+//        outputFormatter = "json"
+//        outputDir = "build/dependencyUpdates"
+//        reportfileName = "report"
+//        revision = "release"
+//
+//        rejectVersionIf {
+//            "^[0-9.]+[0-9](-RC|-M[0-9]+|-RC[0-9]+|-beta.*|-alpha.*|-dev.*|-RC.*)\$"
+//                .toRegex(RegexOption.IGNORE_CASE)
+//                .matches(candidate.version)
+//        }
+//    }
+//}
 
 nexusPublishing {
     this@nexusPublishing.repositories {
