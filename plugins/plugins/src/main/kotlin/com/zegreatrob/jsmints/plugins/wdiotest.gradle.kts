@@ -94,7 +94,7 @@ val wdioConfig = npmProjectDir.resolve("wdio.conf.mjs")
 tasks {
     val runnerJs = provider {
         npmProjectDir.resolve("runner")
-            .resolve("jsmints-plugins-wdiorunner.js")
+            .resolve("jsmints-wdiorunner.js")
     }
     val installRunner by registering(Copy::class) {
         dependsOn(runnerConfiguration)

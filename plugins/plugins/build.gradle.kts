@@ -52,7 +52,7 @@ tasks {
         inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
         val mapper = ObjectMapper()
-        val packageJson = mapper.readTree(rootDir.resolve("../dependency-bom/package.json"))
+        val packageJson = mapper.readTree(rootDir.resolve("../libraries/dependency-bom/package.json"))
 
         from(project.projectDir.resolve("src/main/templates")) {
             filter<ReplaceTokens>(

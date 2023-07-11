@@ -9,24 +9,11 @@ plugins {
     `gradle-enterprise`
 }
 
-rootProject.name = "jsmints"
+rootProject.name = "jsmints-root"
 
-include("dependency-bom")
-include("jsmints-bom")
-include("minjson")
-include("minreact")
-include("minreact-processor")
-include("minenzyme")
-include("react-data-loader")
-include("wdio")
-include("user-event-testing-library")
-include("react-testing-library")
-include("wdio-testing-library")
-include("wdio-testing-library-test")
-include("minreact-plugin-test")
-
-includeBuild("jsmints-plugins")
-includeBuild("jsmints-convention-plugins")
+includeBuild("libraries")
+includeBuild("plugins")
+includeBuild("convention-plugins")
 
 val isCiServer = System.getenv().containsKey("CI")
 

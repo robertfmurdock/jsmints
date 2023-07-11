@@ -21,6 +21,6 @@ dependencyResolutionManagement {
 }
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
-includeBuild("../jsmints-convention-plugins")
+includeBuild("../convention-plugins")
 include(":plugins")
-include(":wdiorunner")
+
