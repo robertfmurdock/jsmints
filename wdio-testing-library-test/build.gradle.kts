@@ -58,4 +58,10 @@ tasks {
     e2eRun {
         dependsOn("composeUp")
     }
+    "kotlinNpmInstall" {
+        dependsOn(gradle.includedBuild("libraries").task(":kotlinNpmInstall"))
+    }
+    "kotlinNodeJsSetup" {
+        dependsOn(provider { gradle.includedBuild("libraries").task(":kotlinNodeJsSetup") })
+    }
 }
