@@ -19,7 +19,11 @@ tasks {
         gradle.includedBuild("libraries"),
         gradle.includedBuild("plugins"),
     )
-    val includedBuilds = publishableBuilds + gradle.includedBuild("convention-plugins")
+    val testBuilds = listOf(
+        gradle.includedBuild("libraries"),
+        gradle.includedBuild("plugins"),
+    ) + gradle.includedBuild("wdio-testing-library-test")
+    val includedBuilds = testBuilds + gradle.includedBuild("convention-plugins")
 
     val publish by creating {
         mustRunAfter(check)
@@ -31,8 +35,8 @@ tasks {
 
     create<Copy>("collectResults") {
         dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
-        dependsOn(provider { publishableBuilds.map { it.task(":collectResults") } })
-        from(publishableBuilds.map { it.projectDir.resolve("build/test-output") })
+        dependsOn(provider { testBuilds.map { it.task(":collectResults") } })
+        from(testBuilds.map { it.projectDir.resolve("build/test-output") })
         into("${rootProject.buildDir.path}/test-output/${project.path}".replace(":", "/"))
     }
 

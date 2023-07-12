@@ -23,7 +23,7 @@ include("react-testing-library")
 include("user-event-testing-library")
 include("wdio")
 include("wdio-testing-library")
-include("wdio-testing-library-test")
+//include("wdio-testing-library-test")
 include("wdiorunner")
 
 includeBuild("../plugins")

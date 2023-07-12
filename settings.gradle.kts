@@ -14,6 +14,7 @@ rootProject.name = "jsmints-root"
 includeBuild("libraries")
 includeBuild("plugins")
 includeBuild("convention-plugins")
+includeBuild("wdio-testing-library-test")
 
 val isCiServer = System.getenv().containsKey("CI")
 
