@@ -19,8 +19,6 @@ jobs:
         run: ./gradlew versionCatalogUpdate --no-configuration-cache
       - name: Clean
         run: ./gradlew clean
-      - name: Remove old stores
-        run: rm -r libraries/kotlin-js-store && rm -r plugins/kotlin-js-store
       - name: Update Yarn Lock
         run: ./gradlew kotlinUpgradeYarnLock --no-configuration-cache --no-build-cache
       - name: Create Pull Request
