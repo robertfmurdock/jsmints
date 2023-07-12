@@ -5,6 +5,7 @@ on:
       - '**'
     tags-ignore:
       - '**'
+  workflow_dispatch:
 jobs:
   build-job:
     name: "Build"
