@@ -34,13 +34,13 @@ tasks {
     create("formatKotlin") {
         dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() })
     }
-    val closeAndReleaseSonatypeStagingRepository by getting {
-        mustRunAfter(publish)
-    }
     "versionCatalogUpdate" { dependsOn(":dependency-bom:ncuUpgrade") }
     release {
         mustRunAfter(check)
         finalizedBy(provider { (getTasksByName("publish", true)).toList() })
+    }
+    val closeAndReleaseSonatypeStagingRepository by getting {
+        mustRunAfter(publish)
     }
     publish {
         mustRunAfter(check)
