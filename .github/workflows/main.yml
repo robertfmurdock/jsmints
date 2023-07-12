@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
       - name: Build 🔨
         run: ./gradlew assemble check -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
-      - name: Publish 🙏
+      - name: Release 🙏
         run: ./gradlew release -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
       - name: Push result to Testspace server
         if: always()
