@@ -51,7 +51,3 @@ tasks {
         dependsOn(provider { (getTasksByName("clean", true) - this).toList() })
     }
 }
-
-versionCatalogUpdate {
-    sortByKey.set(true)
-}

@@ -60,6 +60,7 @@ tasks {
         dependsOn(composeUp)
         finalizedBy(composeDown)
     }
+    "versionCatalogUpdate" { dependsOn(ncuUpgrade) }
     "kotlinNpmInstall" {
         dependsOn(gradle.includedBuild("libraries").task(":kotlinNpmInstall"))
     }

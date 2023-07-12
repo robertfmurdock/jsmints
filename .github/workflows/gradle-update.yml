@@ -16,7 +16,7 @@ jobs:
         with:
           cache-read-only: true
       - name: Update Deps
-        run: ./gradlew versionCatalogUpdate ncu --no-configuration-cache
+        run: ./gradlew versionCatalogUpdate --no-configuration-cache
       - name: Clean
         run: ./gradlew clean
       - name: Remove old stores

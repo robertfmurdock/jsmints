@@ -37,6 +37,7 @@ tasks {
     val closeAndReleaseSonatypeStagingRepository by getting {
         mustRunAfter(publish)
     }
+    "versionCatalogUpdate" { dependsOn(":dependency-bom:ncuUpgrade") }
     release {
         mustRunAfter(check)
         finalizedBy(provider { (getTasksByName("publish", true)).toList() })
