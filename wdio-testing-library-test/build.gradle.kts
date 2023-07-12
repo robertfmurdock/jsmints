@@ -4,6 +4,7 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.wdiotest")
     id("com.zegreatrob.jsmints.plugins.ncu")
     alias(libs.plugins.com.avast.gradle.docker.compose)
+    alias(libs.plugins.nl.littlerobots.version.catalog.update)
 }
 
 kotlin {
