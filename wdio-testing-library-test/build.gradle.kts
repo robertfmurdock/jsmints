@@ -56,7 +56,8 @@ dockerCompose {
 
 tasks {
     e2eRun {
-        dependsOn("composeUp")
+        dependsOn(composeUp)
+        finalizedBy(composeDown)
     }
     "kotlinNpmInstall" {
         dependsOn(gradle.includedBuild("libraries").task(":kotlinNpmInstall"))
