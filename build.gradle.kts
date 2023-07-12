@@ -32,7 +32,16 @@ tasks {
     "versionCatalogUpdate" {
         dependsOn(provider { includedBuilds.map { it.task(":versionCatalogUpdate") } })
     }
-
+    create("kotlinUpgradeYarnLock") {
+        dependsOn(
+            provider {
+                listOf(
+                    gradle.includedBuild("libraries"),
+                    gradle.includedBuild("wdio-testing-library-test")
+                ).map { it.task(":kotlinUpgradeYarnLock") }
+            }
+        )
+    }
     create<Copy>("collectResults") {
         dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
         dependsOn(provider { testBuilds.map { it.task(":collectResults") } })
