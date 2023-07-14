@@ -1,5 +1,5 @@
 [libraries]
-com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.8"
+com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.9"
 io-github-microutils-kotlin-logging = "io.github.microutils:kotlin-logging:3.0.5"
 
 [plugins]
