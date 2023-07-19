@@ -14,5 +14,5 @@ org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-std
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.47.0"
 com-gradle-plugin-publish = "com.gradle.plugin-publish:1.2.0"
 io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:1.3.0"
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.0"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.1"
 org-jmailen-kotlinter = "org.jmailen.kotlinter:3.15.0"

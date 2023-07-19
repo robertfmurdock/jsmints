@@ -4,4 +4,4 @@ io-github-microutils-kotlin-logging = "io.github.microutils:kotlin-logging:3.0.5
 
 [plugins]
 com-avast-gradle-docker-compose = "com.avast.gradle.docker-compose:0.16.12"
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.0"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.1"
