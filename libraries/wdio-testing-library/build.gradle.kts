@@ -4,22 +4,6 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.js")
 }
 
-kotlin {
-    sourceSets {
-        getByName("jsMain") {
-            dependencies {
-                api(project(":wdio"))
-                implementation(kotlin("stdlib"))
-                implementation("com.soywiz.korlibs.klock:klock")
-                implementation("io.github.oshai:kotlin-logging")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-                implementation(jsconstraint("@testing-library/webdriverio"))
-            }
-        }
-    }
-}
-
 tasks {
     named("jsNodeTest") {
         enabled = false
@@ -27,4 +11,14 @@ tasks {
     named("jsTestTestDevelopmentExecutableCompileSync") {
         enabled = false
     }
+}
+
+dependencies {
+    jsMainApi(project(":wdio"))
+    jsMainImplementation(kotlin("stdlib"))
+    jsMainImplementation("com.soywiz.korlibs.klock:klock")
+    jsMainImplementation("io.github.oshai:kotlin-logging")
+    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+    jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    jsMainImplementation(jsconstraint("@testing-library/webdriverio"))
 }

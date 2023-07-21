@@ -4,20 +4,11 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.js")
 }
 
-kotlin {
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib")
-                implementation("org.jetbrains.kotlin:kotlin-test")
-            }
-        }
-        commonTest {
-            dependencies {
-                implementation("com.zegreatrob.testmints:standard")
-                implementation("com.zegreatrob.testmints:minassert")
-                implementation("org.jetbrains.kotlin:kotlin-test")
-            }
-        }
-    }
+dependencies {
+    commonMainImplementation("org.jetbrains.kotlin:kotlin-stdlib")
+    commonMainImplementation("org.jetbrains.kotlin:kotlin-test")
+
+    commonTestImplementation("com.zegreatrob.testmints:standard")
+    commonTestImplementation("com.zegreatrob.testmints:minassert")
+    commonTestImplementation("org.jetbrains.kotlin:kotlin-test")
 }
