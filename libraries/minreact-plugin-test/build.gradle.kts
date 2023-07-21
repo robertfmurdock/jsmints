@@ -39,7 +39,7 @@ minreact {
 
 dependencies {
     jsMainImplementation(kotlin("stdlib"))
-    jsMainImplementation("io.github.microutils:kotlin-logging")
+    jsMainImplementation("io.github.oshai:kotlin-logging")
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")

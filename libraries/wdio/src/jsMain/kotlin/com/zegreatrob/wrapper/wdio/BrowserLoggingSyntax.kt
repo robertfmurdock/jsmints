@@ -1,7 +1,7 @@
 package com.zegreatrob.wrapper.wdio
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import korlibs.time.measureTimeWithResult
-import mu.KotlinLogging
 import kotlin.reflect.KCallable
 
 private val webdriverBrowserLogger by lazy { KotlinLogging.logger("wdio-logger") }

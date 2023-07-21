@@ -13,7 +13,7 @@ kotlin {
                 implementation(kotlin("stdlib"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
                 implementation("com.soywiz.korlibs.klock:klock")
-                implementation("io.github.microutils:kotlin-logging")
+                implementation("io.github.oshai:kotlin-logging")
                 implementation(npmConstrained("@wdio/cli"))
                 implementation(npmConstrained("webdriverio"))
             }

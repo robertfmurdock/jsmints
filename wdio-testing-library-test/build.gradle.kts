@@ -31,7 +31,7 @@ dependencies {
     jsMainImplementation(kotlin("stdlib"))
     jsMainImplementation("com.zegreatrob.jsmints:wdio-testing-library")
     jsMainImplementation("com.soywiz.korlibs.klock:klock")
-    jsMainImplementation("io.github.microutils:kotlin-logging")
+    jsMainImplementation("io.github.oshai:kotlin-logging")
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")

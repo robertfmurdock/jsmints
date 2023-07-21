@@ -21,7 +21,7 @@ dependencies {
     jsMainImplementation(platform(libs.org.jetbrains.kotlin.kotlin.bom))
     jsMainImplementation(platform(libs.org.jetbrains.kotlinx.kotlinx.coroutines.bom))
     jsMainImplementation(platform(libs.org.jetbrains.kotlin.wrappers.kotlin.wrappers.bom))
-    jsMainImplementation(libs.io.github.microutils.kotlin.logging)
+    jsMainImplementation(libs.io.github.oshai.kotlin.logging)
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")

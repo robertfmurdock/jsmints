@@ -11,7 +11,7 @@ kotlin {
                 api(project(":wdio"))
                 implementation(kotlin("stdlib"))
                 implementation("com.soywiz.korlibs.klock:klock")
-                implementation("io.github.microutils:kotlin-logging")
+                implementation("io.github.oshai:kotlin-logging")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
                 implementation(jsconstraint("@testing-library/webdriverio"))

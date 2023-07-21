@@ -22,7 +22,6 @@ dependencies {
     jsTestImplementation("com.zegreatrob.testmints:async")
     jsTestImplementation("com.zegreatrob.testmints:minassert")
     jsTestImplementation("com.zegreatrob.testmints:standard")
-    jsTestImplementation("io.github.microutils:kotlin-logging")
     jsTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
     jsTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
     jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
