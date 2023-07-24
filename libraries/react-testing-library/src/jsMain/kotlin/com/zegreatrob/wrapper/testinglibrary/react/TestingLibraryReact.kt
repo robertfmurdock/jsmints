@@ -11,7 +11,7 @@ object TestingLibraryReact : TestingLibraryFunctions by ScreenTestingLibraryFunc
 
     suspend fun <T : Any> waitFor(callback: () -> T?): Unit = reactTestingLibrary.waitFor(callback).await()
 
-    suspend fun act(block: suspend () -> Unit) = CoroutineScope(coroutineContext).run {
+    suspend fun <R> act(block: suspend () -> R) = CoroutineScope(coroutineContext).run {
         reactTestingLibrary.act { promise { block() } }.await()
     }
 

@@ -15,7 +15,7 @@ external interface ReactTestingLibrary {
     fun within(element: Element?): Screen
     fun render(node: ReactNode, options: RenderOptions = definedExternally): Result
     fun waitFor(callback: () -> Any?): Promise<Unit>
-    fun act(block: () -> Promise<Unit>): Promise<Unit>
+    fun act(block: () -> Promise<Any?>): Promise<Any?>
     val fireEvent: FireEvent
 }
 
