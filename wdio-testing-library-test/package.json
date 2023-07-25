@@ -2,7 +2,7 @@
   "name": "dependency-bom",
   "version": "1.0.0",
   "dependencies": {
-    "chromedriver": "^114.0.3",
+    "chromedriver": "^115.0.0",
     "wdio-geckodriver-service": "5.0.2"
   }
 }
