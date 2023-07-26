@@ -586,10 +586,10 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-allure-commandline@^2.23.0:
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.23.0.tgz#fdea57adee905808c0953ac51a234e474e9f5c27"
-  integrity sha512-bfAbyQzke0Gj48bxIAhHOcJ6DluYeR4uz3iQ1wJWx7TgGA1gazN1PXUtpr+wnX9eXCTRApEuggaJIduLik7Wsg==
+allure-commandline@^2.23.1:
+  version "2.23.1"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.23.1.tgz#b72ee444f586ab6ea403006960dfb4e641524c76"
+  integrity sha512-Qi1P8aFTwcD2XOYr4xqysPbgXFrl5JLY9jDBVQfOb6xkZ7/UtISfW6j0sAyVgMXyXQqYiQDSBcVS2wr1bm1Xlg==
 
 allure-js-commons@^2.0.0:
   version "2.4.0"
