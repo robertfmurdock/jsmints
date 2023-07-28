@@ -1,4 +1,5 @@
 export function configure(config, directories) {
+    const chromeBinary = "@CHROME_BINARY@";
     config.services.push(
         ['chromedriver', {outputDir: directories.logs}],
     )
@@ -10,6 +11,7 @@ export function configure(config, directories) {
             "browser": "ALL"
         },
         'goog:chromeOptions': {
+            'binary': chromeBinary,
             'args': [
                 'headless',
             ]

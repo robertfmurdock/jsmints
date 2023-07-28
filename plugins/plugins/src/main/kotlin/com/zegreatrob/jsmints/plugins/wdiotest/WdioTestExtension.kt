@@ -32,5 +32,8 @@ abstract class WdioTestExtension(val project: Project, objectFactory: ObjectFact
     var useChrome = objectFactory.property<Boolean>().convention(true)
 
     @Input
+    var chromeBinary = objectFactory.property<String?>().convention(null)
+
+    @Input
     var screenshotsOnFailure = objectFactory.property<Boolean>().convention(true)
 }

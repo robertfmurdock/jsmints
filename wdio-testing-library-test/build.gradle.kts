@@ -20,6 +20,7 @@ kotlin {
 wdioTest {
     includedBuild.set(true)
     useChrome.set(true)
+    chromeBinary.set(System.getenv("WDIO_CHROME_BINARY"))
     htmlReporter.set(true)
     allureReporter.set(true)
     allureReportHint.set("- link: http://localhost:63342/jsmints/wdio-testing-library-test/build/reports/e2e/allure/report/index.html")

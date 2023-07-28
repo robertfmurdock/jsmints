@@ -113,12 +113,18 @@ tasks {
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
         from(projectDir.resolve("wdio.conf.d"))
-        fun addPlugin(option: Property<Boolean>, pluginResource: URL) {
+        fun addPlugin(
+            option: Property<Boolean>,
+            pluginResource: URL,
+            tokens: Map<String, Property<String?>> = mapOf(),
+        ) {
             from(option.whenEnabledUseFile(pluginResource), fun CopySpec.() {
                 this@from.rename { pluginResource.path.split("/").last<String>() }
+                val stringTokens = tokens.mapValues { if (it.value.isPresent) it.value.get() else "" }
+                filter<ReplaceTokens>("tokens" to stringTokens)
             })
         }
-        addPlugin(wdioTest.useChrome, WdioTemplate.chromePlugin)
+        addPlugin(wdioTest.useChrome, WdioTemplate.chromePlugin, mapOf("CHROME_BINARY" to wdioTest.chromeBinary))
         addPlugin(wdioTest.htmlReporter, WdioTemplate.htmlReporterPlugin)
         addPlugin(wdioTest.timelineReporter, WdioTemplate.timelineReporterPlugin)
         addPlugin(wdioTest.allureReporter, WdioTemplate.allureReporterPlugin)
