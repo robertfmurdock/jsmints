@@ -122,7 +122,7 @@ tasks {
         ) {
             from(option.whenEnabledUseFile(pluginResource), fun CopySpec.() {
                 this@from.rename { pluginResource.path.split("/").last<String>() }
-                val stringTokens = tokens.mapValues { it.value.orNull }
+                val stringTokens = tokens.mapValues { it.value.orNull ?: "" }
                     .plus(mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
                 filter<ReplaceTokens>("tokens" to stringTokens)
             })
