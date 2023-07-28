@@ -112,7 +112,9 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.WARN
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
-        from(projectDir.resolve("wdio.conf.d"))
+        from(projectDir.resolve("wdio.conf.d")) {
+            filter<ReplaceTokens>("tokens" to mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
+        }
         fun addPlugin(
             option: Property<Boolean>,
             pluginResource: URL,
@@ -120,7 +122,8 @@ tasks {
         ) {
             from(option.whenEnabledUseFile(pluginResource), fun CopySpec.() {
                 this@from.rename { pluginResource.path.split("/").last<String>() }
-                val stringTokens = tokens.mapValues { if (it.value.isPresent) it.value.get() else "" }
+                val stringTokens = tokens.mapValues { it.value.orNull }
+                    .plus(mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
                 filter<ReplaceTokens>("tokens" to stringTokens)
             })
         }
