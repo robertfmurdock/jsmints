@@ -2,7 +2,7 @@
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.15.2"
 com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.13"
 com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.9"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:10.1.15"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:10.1.16"
 io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:5.0.2"
 org-jetbrains-kotlin-kotlin-bom = "org.jetbrains.kotlin:kotlin-bom:1.9.0"
 org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.605"
