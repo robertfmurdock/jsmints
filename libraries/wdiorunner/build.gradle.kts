@@ -50,11 +50,7 @@ tasks {
         from(compileExecutableTask.map { it.destinationDirectory.asFile })
     }
 
-    artifacts.add(executable.name, executableJar) {
-        classifier = executable.name
-        builtBy(executableJar)
-    }
-
+    artifacts.add(executable.name, executableJar) { builtBy(executableJar) }
     publishing.publications {
         withType<MavenPublication> { artifact(executableJar) }
     }
