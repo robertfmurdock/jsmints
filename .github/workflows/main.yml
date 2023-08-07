@@ -10,6 +10,8 @@ jobs:
   build-job:
     name: "Build"
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}
     env:
       GH_TOKEN: ${{ secrets.TESTMINTS_PAT }}
       GITHUB_TOKEN: ${{ secrets.TESTMINTS_PAT }}
