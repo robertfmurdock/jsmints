@@ -46,7 +46,6 @@ val compileExecutableTask = tasks.named("compileProductionExecutableKotlinJs", K
 tasks {
     val executableJar by registering(Jar::class) {
         dependsOn(compileExecutableTask)
-        archiveClassifier.set("executable")
         from(compileExecutableTask.map { it.destinationDirectory.asFile })
     }
 
