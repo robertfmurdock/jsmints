@@ -33,7 +33,13 @@ dependencies {
     jsMainImplementation(jsconstraint("@wdio/mocha-framework"))
 }
 
-val executable: Configuration by configurations.creating
+val executable: Configuration by configurations.creating {
+    isCanBeResolved = false
+    isCanBeConsumed = true
+    attributes {
+        attribute(Attribute.of("com.zegreatrob.executable", String::class.java), "runner")
+    }
+}
 
 val compileExecutableTask = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
 

@@ -50,23 +50,17 @@ val wdioTest = project.extensions.create<WdioTestExtension>("wdioTest")
 val runnerConfiguration: Configuration by configurations.creating {
     isCanBeResolved = true
     isCanBeConsumed = false
+    attributes {
+        attribute(Attribute.of("com.zegreatrob.executable", String::class.java), "runner")
+    }
 }
 
 dependencies {
     "jsE2eTestImplementation"("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
     "jsE2eTestImplementation"("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
-    runnerConfiguration(
-        wdioTest.includedBuild.map { isIncludedBuild ->
-            create("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}") {
-                if (isIncludedBuild) {
-                    targetConfiguration = "executable"
-                } else {
-                    artifact(fun DependencyArtifact.() { classifier = "executable" })
-                }
-            }
-        },
-    )
+    runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
 }
+
 afterEvaluate {
     dependencies {
         if (wdioTest.htmlReporter.get()) {

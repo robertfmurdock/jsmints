@@ -11,9 +11,6 @@ abstract class WdioTestExtension(val project: Project, objectFactory: ObjectFact
     val baseUrl = objectFactory.property<String>()
 
     @Input
-    var includedBuild = objectFactory.property<Boolean>().convention(false)
-
-    @Input
     var wdioConfigFile = objectFactory.fileProperty()
 
     @Input

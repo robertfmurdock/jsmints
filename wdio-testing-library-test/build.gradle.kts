@@ -18,7 +18,6 @@ kotlin {
 }
 
 wdioTest {
-    includedBuild.set(true)
     useChrome.set(true)
     chromeBinary.set(System.getenv("WDIO_CHROME_BINARY"))
     useHeadless.set(true)
