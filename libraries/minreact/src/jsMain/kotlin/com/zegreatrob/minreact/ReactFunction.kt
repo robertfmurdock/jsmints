@@ -9,15 +9,16 @@ import react.FC
 import react.Key
 import react.Props
 import react.PropsWithChildren
+import react.ReactDsl
 import react.ReactNode
 import react.create
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
-inline fun <reified T : DataProps<T>> ntmFC(noinline function: ChildrenBuilder.(T) -> Unit) =
+inline fun <reified T : DataProps<T>> ntmFC(noinline function: @ReactDsl ChildrenBuilder.(T) -> Unit) =
     NamedTmFC(T::class, function)
 
-class NamedTmFC<T : DataProps<T>>(private val clazz: KClass<T>, private val function: ChildrenBuilder.(T) -> Unit) {
+class NamedTmFC<T : DataProps<T>>(private val clazz: KClass<T>, private val function: @ReactDsl ChildrenBuilder.(T) -> Unit) {
 
     private var fc: FC<DataPropsBridge>? = null
 
@@ -31,9 +32,9 @@ class NamedTmFC<T : DataProps<T>>(private val clazz: KClass<T>, private val func
         }
 }
 
-fun <T : Props> nfc(function: ChildrenBuilder.(T) -> Unit) = NamedFC(function)
+fun <T : Props> nfc(function: @ReactDsl ChildrenBuilder.(T) -> Unit) = NamedFC(function)
 
-class NamedFC<T : Props>(private val function: ChildrenBuilder.(T) -> Unit) {
+class NamedFC<T : Props>(private val function: @ReactDsl ChildrenBuilder.(T) -> Unit) {
     private var fc: FC<T>? = null
     operator fun <A> getValue(t: A?, property: KProperty<*>): FC<T> =
         fc ?: FC(property.name, function).also { fc = it }
@@ -72,7 +73,7 @@ fun <P : DataProps<P>> create(dataProps: DataProps<P>, block: @JsoDsl Props.() -
 
 fun <D : DataProps<in D>> DataProps<in D>.create(
     key: Key? = null,
-    block: @JsoDsl
+    block: @ReactDsl
     (ChildrenBuilder.() -> Unit) = {},
 ): ReactNode {
     val dataProps = this

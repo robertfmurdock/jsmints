@@ -9,6 +9,7 @@ import react.ElementType
 import react.Props
 import react.RBuilder
 import react.RHandler
+import react.ReactDsl
 import react.buildElement
 import react.create
 import kotlin.js.Json
@@ -86,14 +87,14 @@ fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandl
 
 fun shallow(handler: RBuilder.() -> Unit) = enzyme.shallow(buildElement(handler))
 
-fun shallow(component: ElementType<*>, handler: ChildrenBuilder.() -> Unit = {}) = enzyme.shallow(
+fun shallow(component: ElementType<*>, handler: @ReactDsl ChildrenBuilder.() -> Unit = {}) = enzyme.shallow(
     component.create(handler),
 )
 
 fun <P : DataProps<P>> shallow(
     props: P,
     component: TMFC = props.component,
-    handler: ChildrenBuilder.() -> Unit = {},
+    handler: @ReactDsl ChildrenBuilder.() -> Unit = {},
 ) = enzyme.shallow(
     component.create {
         +props.unsafeCast<DataPropsBridge>()

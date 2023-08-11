@@ -1,11 +1,11 @@
 package com.zegreatrob.minreact
 
-import js.core.JsoDsl
 import org.w3c.dom.Node
 import react.ChildrenBuilder
 import react.ElementType
 import react.Props
 import react.PropsWithRef
+import react.ReactDsl
 import react.create
 
 @Deprecated("Prefer to use standard DSL")
@@ -13,7 +13,7 @@ fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
     clazz: ElementType<P>,
     props: P,
     key: String? = null,
-    handler: ChildrenBuilder.() -> Unit = {},
+    handler: @ReactDsl ChildrenBuilder.() -> Unit = {},
 ) {
     clazz {
         +props
@@ -26,7 +26,7 @@ fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
 fun <D : DataProps<D>, P> ChildrenBuilder.child(
     dataProps: D,
     key: String? = null,
-    handler: ChildrenBuilder.() -> Unit = {},
+    handler: @ReactDsl ChildrenBuilder.() -> Unit = {},
 ) where P : PropsWithRef<Node>,
       P : ChildrenBuilder {
     +dataProps.component.create {
@@ -39,7 +39,7 @@ fun <D : DataProps<D>, P> ChildrenBuilder.child(
 fun <D> ChildrenBuilder.add(
     dataProps: DataProps<in D>,
     key: String? = null,
-    handler: @JsoDsl
+    handler: @ReactDsl
     (ChildrenBuilder.() -> Unit) = {},
 ) where D : DataProps<in D> {
     +dataProps.component.create {
