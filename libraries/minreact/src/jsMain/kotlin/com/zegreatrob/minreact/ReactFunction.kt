@@ -54,7 +54,7 @@ interface DataProps<P : DataProps<P>> {
     val component: TMFC
 }
 
-external interface DataPropsBridge : Props
+external interface DataPropsBridge : PropsWithChildren
 
 typealias TMFC = ElementType<DataPropsBridge>
 
