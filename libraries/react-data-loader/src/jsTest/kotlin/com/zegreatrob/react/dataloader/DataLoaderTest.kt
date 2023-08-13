@@ -85,7 +85,10 @@ class DataLoaderTest {
                     div.create {
                         div { +"allStatesCount: ${allRenderedStates.size}" }
                         whenResolvedSuccessfully(state) { tools ->
-                            button { +"Button"; this.onClick = { tools.reloadData() } }
+                            button {
+                                +"Button"
+                                this.onClick = { tools.reloadData() }
+                            }
                         }
                     }
                 })
@@ -117,7 +120,10 @@ class DataLoaderTest {
             val tools = props.asDynamic().tools.unsafeCast<DataLoaderTools>()
             val (buttonClickValues, setValues) = useState<List<Int>?>(null)
             val onClick = { tools.performAsyncWork(::collectThreeValuesFromChannel, { throw it }, { setValues(it) }) }
-            button { +"Button"; this.onClick = { onClick() } }
+            button {
+                +"Button"
+                this.onClick = { onClick() }
+            }
             div {
                 if (buttonClickValues != null) {
                     +"Work Complete ${buttonClickValues.joinToString(separator = ", ")}"

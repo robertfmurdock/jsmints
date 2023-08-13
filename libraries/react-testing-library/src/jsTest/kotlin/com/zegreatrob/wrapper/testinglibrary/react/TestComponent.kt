@@ -28,9 +28,27 @@ val TestComponent = FC<Props> {
             div {
                 h2 { +"Cool button section" }
                 span {
-                    label { +"Chill"; button { asDynamic()["data-test-info"] = "pretty-cool"; +"Cool" } }
-                    label { +"Chill"; button { asDynamic()["data-test-info"] = "very-cool"; +"Cool" } }
-                    label { +"Chill"; button { asDynamic()["data-test-info"] = "extremely-cool"; +"Cool" } }
+                    label {
+                        +"Chill"
+                        button {
+                            asDynamic()["data-test-info"] = "pretty-cool"
+                            +"Cool"
+                        }
+                    }
+                    label {
+                        +"Chill"
+                        button {
+                            asDynamic()["data-test-info"] = "very-cool"
+                            +"Cool"
+                        }
+                    }
+                    label {
+                        +"Chill"
+                        button {
+                            asDynamic()["data-test-info"] = "extremely-cool"
+                            +"Cool"
+                        }
+                    }
                 }
             }
         }
