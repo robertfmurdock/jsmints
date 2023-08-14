@@ -1,4 +1,4 @@
 [plugins]
 com-github-sghill-distribution-sha = "com.github.sghill.distribution-sha:0.4.0"
-com-zegreatrob-tools-tagger = "com.zegreatrob.tools.tagger:0.5.8"
+com-zegreatrob-tools-tagger = "com.zegreatrob.tools.tagger:0.5.9"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.1"
