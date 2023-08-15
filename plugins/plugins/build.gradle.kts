@@ -1,4 +1,3 @@
-
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.jetbrains.kotlin.com.google.gson.JsonElement
 import java.nio.charset.Charset
@@ -26,6 +25,36 @@ dependencies {
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
 
     testImplementation(libs.junit)
+}
+gradlePlugin {
+    website.set("https://github.com/robertfmurdock/jsmints")
+    vcsUrl.set("https://github.com/robertfmurdock/jsmints")
+    plugins {
+        named("com.zegreatrob.jsmints.plugins.jspackage") {
+            displayName = "Jsmints Js Package Plugin"
+            description =
+                "This plugin will load Javascript dependencies from a package.json file and apply them to a Kotlin JS gradle project."
+            tags.addAll("javascript", "js", "package.json", "jsmints", "kotlin")
+        }
+        named("com.zegreatrob.jsmints.plugins.minreact") {
+            displayName = "Jsmints Minreact Plugin"
+            description =
+                "This plugin will generate boilerplace related to working with React in Kotlin for function components and their props."
+            tags.addAll("javascript", "js", "react", "minreact", "jsmints", "kotlin")
+        }
+        named("com.zegreatrob.jsmints.plugins.ncu") {
+            displayName = "Jsmints NCU Plugin"
+            description =
+                "This plugin provides tasks for using the npm-check-updates npm program, for updating package.json dependencies when using Kotlin JS."
+            tags.addAll("javascript", "js", "package.json", "jsmints", "kotlin", "ncu", "npm-check-updates")
+        }
+        named("com.zegreatrob.jsmints.plugins.wdiotest") {
+            displayName = "Jsmints WDIO Test Plugin"
+            description =
+                "This plugin adds support for using wdio.js with Kotlin JS, with some configuration conveniences."
+            tags.addAll("javascript", "js", "wdio.js", "jsmints", "kotlin", "wdio", "webdriver")
+        }
+    }
 }
 
 testing {

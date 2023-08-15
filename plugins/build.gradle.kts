@@ -52,7 +52,11 @@ tasks {
     publish {
         mustRunAfter(check)
         dependsOn(provider { (getTasksByName("publish", true) - this).toList() })
+        if (!isSnapshot()) {
+            dependsOn(provider { (getTasksByName("publishPlugins", true) - this).toList() })
+        }
         finalizedBy(closeAndReleaseSonatypeStagingRepository)
     }
-
 }
+
+fun Project.isSnapshot() = version.toString().contains("SNAPSHOT")
