@@ -36,6 +36,7 @@ jobs:
           ls $(ls -td $PWD/chrome/*/ | head -1)
           ls $(ls -td $PWD/chrome/*/ | head -1)chrome-linux64
           ls $(ls -td $PWD/chrome/*/ | head -1)chrome-linux64/chrome
+      - run: $WDIO_CHROME_BINARY --version
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
