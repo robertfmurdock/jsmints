@@ -27,10 +27,8 @@ jobs:
         with:
           firefox-version: latest
       - run: echo "FIREFOX_BINARY=$(which firefox)" >> $GITHUB_ENV
-      - uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
-      - run: sudo rm /usr/bin/google-chrome && sudo ln -s $(which chrome) /usr/bin/google-chrome
+      - run: npx @puppeteer/browsers install chrome@stable
+      - run: npx @puppeteer/browsers install chromedriver@stable
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
