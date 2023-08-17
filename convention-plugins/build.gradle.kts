@@ -47,7 +47,7 @@ tasks {
         exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
     clean {
-        delete(rootProject.buildDir)
+        delete(rootProject.layout.buildDirectory)
         dependsOn(provider { (getTasksByName("clean", true) - this).toList() })
     }
 }

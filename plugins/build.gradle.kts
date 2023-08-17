@@ -39,7 +39,7 @@ nexusPublishing {
 
 tasks {
     clean {
-        delete(rootProject.buildDir)
+        delete(rootProject.layout.buildDirectory)
         dependsOn(provider { (getTasksByName("clean", true) - this).toList() })
     }
     check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }

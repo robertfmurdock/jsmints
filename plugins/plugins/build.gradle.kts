@@ -107,12 +107,13 @@ tasks {
                 )
             )
         }
-        into(project.buildDir.resolve("generated-sources/templates/kotlin/main"))
+        into(project.layout.buildDirectory.dir("generated-sources/templates/kotlin/main"))
     }
     compileKotlin {
         dependsOn(copyTemplates)
     }
-    val projectResultPath = "${rootProject.buildDir.path}/test-output/${project.path}/results".replace(":", "/")
+    val projectResultPath = rootProject.layout.buildDirectory
+        .dir("test-output/${project.path}/results".replace(":", "/"))
     val copyReportsToRootDirectory by creating(Copy::class) {
         mustRunAfter(check)
         from("build/reports")
