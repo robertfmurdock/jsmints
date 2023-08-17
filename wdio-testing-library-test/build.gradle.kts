@@ -2,7 +2,6 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.js2")
     id("com.zegreatrob.jsmints.plugins.wdiotest")
-    id("com.zegreatrob.jsmints.plugins.ncu")
     alias(libs.plugins.com.avast.gradle.docker.compose)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
 }
@@ -44,10 +43,6 @@ dependencies {
     "jsE2eTestImplementation"("com.zegreatrob.testmints:async")
     "jsE2eTestImplementation"("com.zegreatrob.testmints:minassert")
     "jsE2eTestImplementation"("org.jetbrains.kotlin-wrappers:kotlin-node")
-
-    jspackage.devDependencies()?.forEach {
-        "jsE2eTestImplementation"(npm(it.first, it.second.asText()))
-    }
 }
 
 dockerCompose {
@@ -61,7 +56,6 @@ tasks {
         dependsOn(composeUp)
         finalizedBy(composeDown)
     }
-    "versionCatalogUpdate" { dependsOn(ncuUpgrade) }
     "kotlinNpmInstall" {
         dependsOn(gradle.includedBuild("libraries").task(":kotlinNpmInstall"))
     }

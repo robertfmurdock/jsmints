@@ -21,16 +21,15 @@ jobs:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     steps:
+      - run: sudo apt-get remove google-chrome-stable
+      - run: sudo rm -r /usr/bin/chromium
+      - run: sudo rm -r /usr/bin/chromium-browser
       - name: Setup firefox
         id: setup-firefox
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: latest
       - run: echo "FIREFOX_BINARY=$(which firefox)" >> $GITHUB_ENV
-      - uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
-      - run: sudo rm /usr/bin/google-chrome && sudo ln -s $(which chrome) /usr/bin/google-chrome
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0

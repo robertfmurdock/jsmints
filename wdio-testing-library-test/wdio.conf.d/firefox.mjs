@@ -15,16 +15,5 @@ export function configure(config, directories) {
             },
         },
     )
-
-    config.services.push(
-        [
-            'geckodriver',
-            {
-                args: ['--log=info'],
-                outputDir: directories.logs
-            }
-        ]
-    )
-
     return config
 }

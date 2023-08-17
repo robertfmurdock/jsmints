@@ -1,24 +1,25 @@
 export function configure(config, directories) {
     const chromeBinary = "@CHROME_BINARY@";
     const headless = @HEADLESS@;
-    config.services.push(
-        ['chromedriver', {outputDir: directories.logs}],
-    )
     let chromeArgs = [];
     if(headless){
         chromeArgs.push('headless')
+    }
+    let chromeOptions = {
+        'args': chromeArgs
+    };
+    if(chromeBinary) {
+        chromeOptions.binary = chromeBinary
     }
     config.capabilities.push({
         maxInstances: 1,
         acceptInsecureCerts: true,
         browserName: 'chrome',
+        browserVersion: 'stable',
         "goog:loggingPrefs": {
             "browser": "ALL"
         },
-        'goog:chromeOptions': {
-            'binary': chromeBinary,
-            'args': chromeArgs
-        },
+        'goog:chromeOptions': chromeOptions,
     })
     return config
 }
