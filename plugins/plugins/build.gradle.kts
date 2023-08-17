@@ -104,8 +104,6 @@ tasks {
                     "WDIO_ALLURE_REPORTER_VERSION" to (packageJson.dependency("@wdio/allure-reporter")
                         ?: throw Exception("allure reporter")),
                     "ALLURE_CLI_VERSION" to packageJson.dependency("allure-commandline")!!,
-                    "CHROMEDRIVER_VERSION" to packageJson.dependency("chromedriver"),
-                    "WDIO_CHROMEDRIVER_SERVICE_VERSION" to packageJson.dependency("wdio-chromedriver-service"),
                 )
             )
         }

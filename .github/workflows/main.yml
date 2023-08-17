@@ -27,16 +27,6 @@ jobs:
         with:
           firefox-version: latest
       - run: echo "FIREFOX_BINARY=$(which firefox)" >> $GITHUB_ENV
-      - run: rm -r /opt/google/chrome
-      - run: npx @puppeteer/browsers install chrome@stable
-      - run: npx @puppeteer/browsers install chromedriver@stable
-      - run: |
-          echo "WDIO_CHROME_BINARY=$(ls -td $PWD/chrome/*/ | head -1)chrome-linux64/chrome" >> $GITHUB_ENV
-          echo "CHROMEDRIVER_FILEPATH=$(ls -td $PWD/chromedriver/*/ | head -1)chromedriver-linux64/chromedriver" >> $GITHUB_ENV
-          ls $(ls -td $PWD/chrome/*/ | head -1)
-          ls $(ls -td $PWD/chrome/*/ | head -1)chrome-linux64
-          ls $(ls -td $PWD/chrome/*/ | head -1)chrome-linux64/chrome
-      - run: $WDIO_CHROME_BINARY --version
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0

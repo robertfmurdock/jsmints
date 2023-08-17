@@ -75,11 +75,6 @@ afterEvaluate {
             "jsE2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion))
             "jsE2eTestImplementation"(npm("allure-commandline", PluginVersions.allureCLIVersion))
         }
-
-        if (wdioTest.useChrome.get()) {
-            "jsE2eTestImplementation"(npm("chromedriver", PluginVersions.chromedriverVersion))
-            "jsE2eTestImplementation"(npm("wdio-chromedriver-service", PluginVersions.wdioChromedriverServiceVersion))
-        }
     }
 }
 
