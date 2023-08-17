@@ -31,7 +31,7 @@ jobs:
       - run: npx @puppeteer/browsers install chrome@stable
       - run: npx @puppeteer/browsers install chromedriver@stable
       - run: |
-          echo "WDIO_CHROME_BINARY=$(ls -td $PWD/chrome/*/ | head -1)chrome-linux64" >> $GITHUB_ENV
+          echo "WDIO_CHROME_BINARY=$(ls -td $PWD/chrome/*/ | head -1)chrome-linux64/chrome" >> $GITHUB_ENV
           echo "CHROMEDRIVER_FILEPATH=$(ls -td $PWD/chromedriver/*/ | head -1)chromedriver-linux64/chromedriver" >> $GITHUB_ENV
           ls $(ls -td $PWD/chrome/*/ | head -1)
           ls $(ls -td $PWD/chrome/*/ | head -1)chrome-linux64
