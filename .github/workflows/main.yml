@@ -30,6 +30,9 @@ jobs:
       - run: rm -r /opt/google/chrome
       - run: npx @puppeteer/browsers install chrome@stable
       - run: npx @puppeteer/browsers install chromedriver@stable
+      - run: |
+          echo "WDIO_CHROME_BINARY=$(ls -td $PWD/chrome/*/ | head -1)" >> $GITHUB_ENV
+          echo "CHROMEDRIVER_FILEPATH=$(ls -td $PWD/chromedriver/*/ | head -1)" >> $GITHUB_ENV
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
