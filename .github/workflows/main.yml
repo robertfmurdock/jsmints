@@ -21,7 +21,7 @@ jobs:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     steps:
-      - run: sudo apt-get remove google-chrome-stable chromium-browser -y
+      - run: sudo apt-get remove google-chrome-stable chromium
       - name: Setup firefox
         id: setup-firefox
         uses: browser-actions/setup-firefox@v1
