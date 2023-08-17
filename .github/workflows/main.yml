@@ -23,7 +23,7 @@ jobs:
     steps:
       - run: sudo apt-get remove google-chrome-stable
       - run: which chromium
-      - run: rm -r /usr/bin/chromium
+      - run: sudo rm -r /usr/bin/chromium
       - name: Setup firefox
         id: setup-firefox
         uses: browser-actions/setup-firefox@v1
