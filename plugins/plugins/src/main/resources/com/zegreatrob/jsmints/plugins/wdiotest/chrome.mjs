@@ -5,6 +5,12 @@ export function configure(config, directories) {
     if(headless){
         chromeArgs.push('headless')
     }
+    let chromeOptions = {
+        'args': chromeArgs
+    };
+    if(chromeBinary) {
+        chromeOptions.binary = chromeBinary
+    }
     config.capabilities.push({
         maxInstances: 1,
         acceptInsecureCerts: true,
@@ -13,10 +19,7 @@ export function configure(config, directories) {
         "goog:loggingPrefs": {
             "browser": "ALL"
         },
-        'goog:chromeOptions': {
-            'binary': chromeBinary,
-            'args': chromeArgs
-        },
+        'goog:chromeOptions': chromeOptions,
     })
     return config
 }
