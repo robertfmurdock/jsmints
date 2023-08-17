@@ -32,7 +32,7 @@ let incubatingConfig = {
     exclude: [],
     maxInstances: 1,
     capabilities: [],
-    logLevel: 'info',
+    logLevel: 'warn',
     bail: 0,
     baseUrl: options.baseUrl,
     waitforTimeout: 6000,
