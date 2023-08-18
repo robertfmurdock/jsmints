@@ -174,31 +174,32 @@ tasks {
         inputs.files(wdioConfig)
         inputs.files(wdioConfDirectory)
 
-        val reportDir = "${project.buildDir.absolutePath}/reports/e2e/"
-        val testResultsDir = "${project.buildDir.absolutePath}/test-results/"
+        val buildDir = project.layout.buildDirectory
+        val reportDir = buildDir.dir("reports/e2e/")
+        val testResultsDir = buildDir.dir("test-results/")
         outputs.dir(reportDir)
         outputs.dir(testResultsDir)
         outputs.cacheIf { true }
 
-        val logsDir = "${project.buildDir.absolutePath}/reports/logs/e2e/"
+        val logsDir = buildDir.dir("reports/logs/e2e/")
         val specFile = kotlinJsCompilation.npmProject.dist.resolve("$wdioTestModuleName.js")
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),
                 "SPEC_FILE" to specFile,
                 "WDIO_CONFIG" to wdioConfig.absolutePath,
-                "REPORT_DIR" to reportDir,
-                "TEST_RESULTS_DIR" to testResultsDir,
+                "REPORT_DIR" to reportDir.get().asFile.absolutePath,
+                "TEST_RESULTS_DIR" to testResultsDir.get().asFile.absolutePath,
 
-                "LOGS_DIR" to logsDir,
+                "LOGS_DIR" to logsDir.get().asFile.absolutePath,
                 "STRICT_SSL" to "false",
                 "NODE_PATH" to listOf(
-                    "${project.rootProject.buildDir.path}/js/node_modules",
+                    rootProject.layout.buildDirectory.dir("js/node_modules").get().asFile.absolutePath,
                 ).joinToString(":"),
             ),
         )
         arguments = listOf(runnerJs.get().absolutePath)
-        val logFile = file("$logsDir/run.log")
+        val logFile = logsDir.get().file("run.log").asFile
         logFile.parentFile.mkdirs()
         outputFile = logFile
 

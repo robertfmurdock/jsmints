@@ -66,6 +66,9 @@ testing {
 }
 
 kotlin {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+    }
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }

@@ -5,8 +5,9 @@ repositories {
 }
 
 tasks {
-    val projectResultPath = "${rootProject.buildDir.path}/test-output/${project.path}/results".replace(":", "/")
-
+    val projectResultPath = rootProject.layout.buildDirectory.dir(
+        "test-output/${project.path}/results".replace(":", "/"),
+    )
     val check by getting
     val copyReportsToRootDirectory by creating(Copy::class) {
         mustRunAfter(check)
@@ -24,5 +25,5 @@ tasks {
 }
 
 afterEvaluate {
-    mkdir(file(rootProject.buildDir.toPath().resolve("test-output")))
+    mkdir(rootProject.layout.buildDirectory.dir("test-output").get().asFile)
 }

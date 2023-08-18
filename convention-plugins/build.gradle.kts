@@ -16,6 +16,12 @@ plugins {
     alias(libs.plugins.org.jmailen.kotlinter)
 }
 
+kotlin {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+    }
+}
+
 dependencies {
     implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)

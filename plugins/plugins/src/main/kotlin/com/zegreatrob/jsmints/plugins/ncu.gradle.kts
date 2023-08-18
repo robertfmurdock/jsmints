@@ -48,4 +48,5 @@ dependencies {
     }
 }
 
-val Project.nodeModulesDir get() = rootProject.buildDir.resolve("js/node_modules")
+val Project.nodeModulesDir: String get() = rootProject.layout.buildDirectory
+    .dir("js/node_modules").get().asFile.absolutePath
