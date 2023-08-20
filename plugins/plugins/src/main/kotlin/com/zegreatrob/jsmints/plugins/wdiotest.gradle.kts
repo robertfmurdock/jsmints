@@ -207,12 +207,12 @@ tasks {
             listOfNotNull(
                 "e2e tests failed.",
                 if (wdioTest.htmlReporter.get()) {
-                    "- report: file://${reportDir}html/main-report.html"
+                    "- report: file://${reportDir.get().asFile.absolutePath}/html/main-report.html"
                 } else {
                     null
                 },
                 if (wdioTest.allureReporter.get()) {
-                    "- report: file://${reportDir}allure/report/index.html\n    This report must be viewed via a server in most browsers.\n    You can use IntelliJ to serve the file for viewing, or run your own server."
+                    "- report: file://${reportDir.get().asFile.absolutePath}/allure/report/index.html\n    This report must be viewed via a server in most browsers.\n    You can use IntelliJ to serve the file for viewing, or run your own server."
                 } else {
                     null
                 },

@@ -22,7 +22,7 @@ wdioTest {
     useHeadless.set(true)
     htmlReporter.set(true)
     allureReporter.set(true)
-    allureReportHint.set("- link: http://localhost:63342/jsmints/wdio-testing-library-test/build/reports/e2e/allure/report/index.html")
+    allureReportHint.set("- link: http://localhost:63342/jsmints-root/wdio-testing-library-test/build/reports/e2e/allure/report/index.html")
     baseUrl.set("https://static.localhost")
 }
 
