@@ -23,6 +23,7 @@ dependencies {
     api(platform(libs.com.zegreatrob.testmints.testmints.bom))
     constraints {
         api(libs.com.soywiz.korlibs.klock)
+        api(libs.com.squareup.kotlinpoet.ksp)
         api(libs.io.github.oshai.kotlin.logging)
         api(libs.com.fasterxml.jackson.core.jackson.databind)
     }

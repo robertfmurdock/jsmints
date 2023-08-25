@@ -1,12 +1,9 @@
+package com.zegreatrob.jsmints.processor.minreact
+
 import com.google.devtools.ksp.getAllSuperTypes
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.processing.SymbolProcessor
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.processing.SymbolProcessorProvider
-import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSNode
@@ -30,23 +27,6 @@ import com.squareup.kotlinpoet.ksp.toTypeName
 import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toTypeVariableName
 import com.squareup.kotlinpoet.ksp.writeTo
-
-class MinreactProcessor(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) : SymbolProcessor {
-    var invoked = false
-
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        if (invoked) {
-            return emptyList()
-        }
-        invoked = true
-
-        val visitor = MinreactVisitor(logger)
-        resolver.getAllFiles().forEach {
-            it.accept(visitor, codeGenerator)
-        }
-        return emptyList()
-    }
-}
 
 class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGenerator, Unit>() {
     override fun defaultHandler(node: KSNode, data: CodeGenerator) {
@@ -240,7 +220,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
         resolver: TypeParameterResolver
     ): ParameterSpec {
         val typeName = it.type.toTypeName(resolver)
-        val builder = ParameterSpec.builder(it.simpleName.getShortName(), typeName)
+        val builder = ParameterSpec.Companion.builder(it.simpleName.getShortName(), typeName)
 
         if (typeName.isNullable) {
             builder.defaultValue(CodeBlock.of("null"))
@@ -251,9 +231,4 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
     }
 
     private fun isMinreact(it: KSAnnotation) = it.shortName.asString() == "ReactFunc"
-}
-
-class TestProcessorProvider : SymbolProcessorProvider {
-    override fun create(environment: SymbolProcessorEnvironment) =
-        MinreactProcessor(environment.codeGenerator, environment.logger)
 }
