@@ -7,7 +7,7 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 
 class WrapperProcessor(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) : SymbolProcessor {
-    var invoked = false
+    private var invoked = false
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (invoked) {
