@@ -1,3 +1,5 @@
 package com.zegreatrob.wrapper.wdio.testing.library
 
-data class RoleOptions(val name: String? = null)
+sealed external interface RoleOptions {
+    var name: String?
+}

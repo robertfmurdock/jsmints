@@ -1,16 +1,24 @@
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
+
 plugins {
+    id("com.zegreatrob.jsmints.plugins.wrapper")
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
     id("com.zegreatrob.jsmints.plugins.js")
 }
 
-tasks {
-    named("jsNodeTest") {
-        enabled = false
+kotlin {
+    sourceSets.jsMain {
+        kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")
     }
-    named("jsTestTestDevelopmentExecutableCompileSync") {
-        enabled = false
+    sourceSets.jsTest {
+        kotlin.srcDir("build/generated/ksp/js/jsTest/kotlin")
     }
+}
+
+wrapper {
+    includedBuild.set(true)
 }
 
 dependencies {
@@ -22,3 +30,31 @@ dependencies {
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation(jsconstraint("@testing-library/webdriverio"))
 }
+
+tasks {
+    named("jsNodeTest") {
+        enabled = false
+    }
+    named("jsTestTestDevelopmentExecutableCompileSync") {
+        enabled = false
+    }
+    formatKotlinJsMain {
+        dependsOn("kspKotlinJs")
+    }
+    formatKotlinJsTest {
+        dependsOn("kspTestKotlinJs")
+    }
+    withType(FormatTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
+    }
+    withType(LintTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
+    }
+    lintKotlinJsMain {
+        dependsOn("kspKotlinJs")
+    }
+    lintKotlinJsTest {
+        dependsOn("kspTestKotlinJs")
+    }
+}
+

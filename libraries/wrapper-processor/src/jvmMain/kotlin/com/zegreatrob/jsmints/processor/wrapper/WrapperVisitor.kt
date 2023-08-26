@@ -3,6 +3,7 @@ package com.zegreatrob.jsmints.processor.wrapper
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
+import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSNode
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
@@ -29,7 +30,10 @@ class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGener
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: CodeGenerator) {
         super.visitClassDeclaration(classDeclaration, data)
-        if (classDeclaration.modifiers.containsAll(listOf(Modifier.SEALED, Modifier.EXTERNAL))) {
+        if (
+            classDeclaration.classKind == ClassKind.INTERFACE
+            && classDeclaration.modifiers.containsAll(listOf(Modifier.SEALED, Modifier.EXTERNAL))
+        ) {
             val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
 
             val builder = FileSpec.builder(classDeclaration.packageName.asString(), "${classDeclaration}Extentions")
