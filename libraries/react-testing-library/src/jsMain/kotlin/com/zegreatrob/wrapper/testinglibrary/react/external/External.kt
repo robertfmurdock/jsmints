@@ -1,5 +1,6 @@
 package com.zegreatrob.wrapper.testinglibrary.react.external
 
+import com.zegreatrob.wrapper.testinglibrary.react.RoleOptions
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import react.ElementType
@@ -24,11 +25,11 @@ external class FireEvent {
     fun submit(element: Element)
 }
 
-external interface RenderOptions {
+sealed external interface RenderOptions {
     var wrapper: ElementType<*>
 }
 
-interface ByTextOptions {
+sealed interface ByTextOptions {
     var selector: String
 }
 
@@ -60,15 +61,10 @@ external class Screen {
     fun queryByAltText(s: String): HTMLElement?
     fun queryAllByAltText(s: String): Array<HTMLElement>
 
-    fun getByRole(role: String, options: TestingLibraryRoleOptions = definedExternally): HTMLElement
-    fun getAllByRole(s: String, options: TestingLibraryRoleOptions = definedExternally): Array<HTMLElement>
-    fun queryByRole(s: String, options: TestingLibraryRoleOptions = definedExternally): HTMLElement?
-    fun queryAllByRole(s: String, options: TestingLibraryRoleOptions = definedExternally): Array<HTMLElement>
-    fun findByRole(text: String, options: TestingLibraryRoleOptions = definedExternally): Promise<HTMLElement>
-    fun findAllByRole(s: String, options: TestingLibraryRoleOptions): Promise<Array<HTMLElement>>
-}
-
-external interface TestingLibraryRoleOptions {
-    var name: String?
-    var selected: Boolean?
+    fun getByRole(role: String, options: RoleOptions = definedExternally): HTMLElement
+    fun getAllByRole(s: String, options: RoleOptions = definedExternally): Array<HTMLElement>
+    fun queryByRole(s: String, options: RoleOptions = definedExternally): HTMLElement?
+    fun queryAllByRole(s: String, options: RoleOptions = definedExternally): Array<HTMLElement>
+    fun findByRole(text: String, options: RoleOptions = definedExternally): Promise<HTMLElement>
+    fun findAllByRole(s: String, options: RoleOptions): Promise<Array<HTMLElement>>
 }

@@ -1,4 +1,8 @@
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
+
 plugins {
+    id("com.zegreatrob.jsmints.plugins.wrapper")
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
     id("com.zegreatrob.jsmints.plugins.js")
@@ -11,6 +15,16 @@ kotlin {
             nodejs { testTask(Action { useMocha { timeout = "20s" } } )}
         }
     }
+    sourceSets.jsMain {
+        kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")
+    }
+    sourceSets.jsTest {
+        kotlin.srcDir("build/generated/ksp/js/jsTest/kotlin")
+    }
+}
+
+wrapper {
+    includedBuild.set(true)
 }
 
 dependencies {
@@ -27,4 +41,25 @@ dependencies {
     jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
     jsTestImplementation(jsconstraint("jsdom"))
     jsTestImplementation(jsconstraint("global-jsdom"))
+}
+
+tasks {
+    formatKotlinJsMain {
+        dependsOn("kspKotlinJs")
+    }
+    formatKotlinJsTest {
+        dependsOn("kspTestKotlinJs")
+    }
+    withType(FormatTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
+    }
+    withType(LintTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
+    }
+    lintKotlinJsMain {
+        dependsOn("kspKotlinJs")
+    }
+    lintKotlinJsTest {
+        dependsOn("kspTestKotlinJs")
+    }
 }

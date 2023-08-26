@@ -30,30 +30,13 @@ class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGener
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: CodeGenerator) {
         super.visitClassDeclaration(classDeclaration, data)
         if (classDeclaration.modifiers.containsAll(listOf(Modifier.SEALED, Modifier.EXTERNAL))) {
-            logger.warn("FOUND $classDeclaration")
             val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
 
             val builder = FileSpec.builder(classDeclaration.packageName.asString(), "${classDeclaration}Extentions")
             val propsClassName = parameterizedClassName(classDeclaration)
             addComponentFunctions(classDeclaration, resolver, propsClassName, builder)
 
-            val paramsAssignments = propertiesAsParameterAssignments(classDeclaration)
-            val body = """
-                    |  return %T<%T> {
-                    |       $paramsAssignments
-                    |       }
-                """.trimMargin()
-
-            builder.addFunction(
-                FunSpec.builder(classDeclaration.simpleName.asString())
-                    .addTypeVariables(classDeclaration.typeParameters.map { it.toTypeVariableName(resolver) })
-                    .addParameters(parameterSpecs(classDeclaration, resolver))
-                    .returns(classDeclaration.toClassName())
-                    .addCode(CodeBlock.of(body, ClassName("js.core", "jso"), classDeclaration.toClassName()))
-                    .build()
-            )
-                .build()
-
+            builder.addFunction(builderFunctionSpec(classDeclaration, resolver))
 
             builder.build()
                 .writeTo(
@@ -63,6 +46,26 @@ class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGener
                     )
                 )
         }
+    }
+
+    private fun builderFunctionSpec(
+        classDeclaration: KSClassDeclaration,
+        resolver: TypeParameterResolver
+    ): FunSpec {
+        val paramsAssignments = propertiesAsParameterAssignments(classDeclaration)
+        val body = """
+                        |  return %T<%T> {
+                        |       $paramsAssignments
+                        |       }
+                    """.trimMargin()
+
+        val funSpec = FunSpec.builder(classDeclaration.simpleName.asString())
+            .addTypeVariables(classDeclaration.typeParameters.map { it.toTypeVariableName(resolver) })
+            .addParameters(parameterSpecs(classDeclaration, resolver))
+            .returns(classDeclaration.toClassName())
+            .addCode(CodeBlock.of(body, ClassName("js.core", "jso"), classDeclaration.toClassName()))
+            .build()
+        return funSpec
     }
 
     private fun addComponentFunctions(
