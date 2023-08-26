@@ -39,8 +39,14 @@ gradlePlugin {
         named("com.zegreatrob.jsmints.plugins.minreact") {
             displayName = "Jsmints Minreact Plugin"
             description =
-                "This plugin will generate boilerplace related to working with React in Kotlin for function components and their props."
+                "This plugin will generate boilerplate related to working with React in Kotlin for function components and their props."
             tags.addAll("javascript", "js", "react", "minreact", "jsmints", "kotlin")
+        }
+        named("com.zegreatrob.jsmints.plugins.wrapper") {
+            displayName = "Jsmints Wrapper Plugin"
+            description =
+                "This plugin will generate boilerplate for external types."
+            tags.addAll("javascript", "js", "typescript", "jsmints", "kotlin")
         }
         named("com.zegreatrob.jsmints.plugins.ncu") {
             displayName = "Jsmints NCU Plugin"
