@@ -29,7 +29,7 @@ sealed external interface RenderOptions {
     var wrapper: ElementType<*>
 }
 
-sealed interface ByTextOptions {
+sealed external interface ByTextOptions {
     var selector: String
 }
 
