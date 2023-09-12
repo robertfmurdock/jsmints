@@ -3,6 +3,7 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.versioning")
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
     alias(libs.plugins.com.zegreatrob.tools.tagger)
+    alias(libs.plugins.com.zegreatrob.tools.digger)
     base
 }
 
@@ -65,5 +66,9 @@ tasks {
     release {
         mustRunAfter(check)
         finalizedBy(publish)
+    }
+
+    assemble {
+        dependsOn(currentContributionData)
     }
 }
