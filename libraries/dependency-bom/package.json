@@ -19,7 +19,7 @@
     "geckodriver": "^4.2.1",
     "global-jsdom": "^9.1.0",
     "jsdom": "^22.1.0",
-    "npm-check-updates": "16.13.3",
+    "npm-check-updates": "16.14.0",
     "wdio-html-nice-reporter": "8.1.0",
     "wdio-timeline-reporter": "^5.1.4",
     "webdriverio": "^8.16.6"
