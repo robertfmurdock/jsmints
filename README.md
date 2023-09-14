@@ -19,7 +19,7 @@ Most functions are available from the "TestingLibraryReact" singleton object. Im
 
     import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact
 
-- [examples](react-testing-library/src/jsTest/kotlin/com/zegreatrob/wrapper/testinglibrary/react/ByLabelTextTest.kt)
+- [examples](libraries/react-testing-library/src/jsTest/kotlin/com/zegreatrob/wrapper/testinglibrary/react/ByLabelTextTest.kt)
 
 ### user-event-testing-library
 
