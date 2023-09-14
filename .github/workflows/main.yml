@@ -49,7 +49,7 @@ jobs:
       - name: Update Contributions
         uses: robertfmurdock/coupling-contribution-action@v1
         with:
-          cli-type: js
+#          cli-type: js
           coupling-secret: ${{ secrets.COUPLING_API_PARTY_SECRET }}
           party-id: 9df8b8ef-f10f-4b75-bde1-d691c148378c
           contribution-file: build/digger/current.json
