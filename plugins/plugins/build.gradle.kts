@@ -21,7 +21,6 @@ dependencies {
     implementation(gradleApi())
     implementation(libs.com.fasterxml.jackson.core.jackson.databind)
     implementation(libs.com.google.devtools.ksp)
-    implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
 
     testImplementation(libs.junit)

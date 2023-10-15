@@ -59,7 +59,9 @@ dependencies {
     "jsE2eTestImplementation"("com.zegreatrob.jsmints:wdio-testing-library:${PluginVersions.bomVersion}")
     "jsE2eTestImplementation"("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}")
     runnerConfiguration("com.zegreatrob.jsmints:wdiorunner:${PluginVersions.bomVersion}") {
-        artifact(fun DependencyArtifact.() { classifier = "executable" })
+        artifact(fun DependencyArtifact.() {
+            classifier = "executable"
+        })
     }
 }
 

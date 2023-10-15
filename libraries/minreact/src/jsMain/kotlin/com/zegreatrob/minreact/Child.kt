@@ -28,7 +28,7 @@ fun <D : DataProps<D>, P> ChildrenBuilder.child(
     key: String? = null,
     handler: @ReactDsl ChildrenBuilder.() -> Unit = {},
 ) where P : PropsWithRef<Node>,
-      P : ChildrenBuilder {
+        P : ChildrenBuilder {
     +dataProps.component.create {
         +dataProps.unsafeCast<Props>()
         key?.let { this.key = it }
