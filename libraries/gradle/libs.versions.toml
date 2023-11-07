@@ -4,10 +4,10 @@ com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackso
 com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:1.9.20-1.0.13"
 com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.10"
 com-squareup-kotlinpoet-ksp = "com.squareup:kotlinpoet-ksp:1.14.2"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.0.0"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.0.1"
 io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:5.1.0"
 org-jetbrains-kotlin-kotlin-bom = "org.jetbrains.kotlin:kotlin-bom:1.9.20"
-org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.638"
+org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.639"
 org-jetbrains-kotlinx-kotlinx-coroutines-bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"
 
 [plugins]
