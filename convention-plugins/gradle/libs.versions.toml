@@ -4,13 +4,13 @@ org-jetbrains-kotlin = "1.9.20"
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.15.3"
 com-github-ben-manes-gradle-versions-plugin = "com.github.ben-manes:gradle-versions-plugin:0.49.0"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.0.1"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.0.3"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.21.1"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
-org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:4.0.0"
+org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:4.0.1"
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.49.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.1"
-org-jmailen-kotlinter = "org.jmailen.kotlinter:4.0.0"
+org-jmailen-kotlinter = "org.jmailen.kotlinter:4.0.1"
