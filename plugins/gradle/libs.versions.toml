@@ -2,7 +2,7 @@
 org-jetbrains-kotlin = "1.9.20"
 
 [libraries]
-com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.15.3"
+com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.16.0"
 # @pin
 com-google-devtools-ksp = "com.google.devtools.ksp:symbol-processing-gradle-plugin:1.9.20-1.0.13"
 junit = "junit:junit:4.13.2"
