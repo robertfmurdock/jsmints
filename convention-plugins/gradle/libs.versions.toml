@@ -4,7 +4,7 @@ org-jetbrains-kotlin = "1.9.20"
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.16.0"
 com-github-ben-manes-gradle-versions-plugin = "com.github.ben-manes:gradle-versions-plugin:0.50.0"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.0.9"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.0.10"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.21.1"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
