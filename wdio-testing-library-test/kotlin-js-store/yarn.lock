@@ -275,14 +275,14 @@
     csv-stringify "^6.0.4"
     strip-ansi "^7.1.0"
 
-"@wdio/cli@8.23.3":
-  version "8.23.3"
-  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.23.3.tgz#3a8b48cb093ab40066e9b2555e0684d04b47f69f"
-  integrity sha512-iD4s8994u/nR1hZBcVY6yWBKqcyfVbwOtbjEcPoti4KcH5hs2u0ec0CpAh841NDx24fimDuPSh1znOsbrzvELw==
+"@wdio/cli@8.23.4":
+  version "8.23.4"
+  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.23.4.tgz#874d3866798ecaadc2169c057d929f9f8d3f2bfe"
+  integrity sha512-ceEALiV4zhljyrOfWInOe68VgeAgBgYu3KvFxZxsZv5RM8psZ2yvuDf77MTno9zIeqDYSBjVIFjq1UQOkt9Hgg==
   dependencies:
     "@types/node" "^20.1.1"
     "@wdio/config" "8.23.1"
-    "@wdio/globals" "8.23.3"
+    "@wdio/globals" "8.23.4"
     "@wdio/logger" "8.16.17"
     "@wdio/protocols" "8.23.0"
     "@wdio/types" "8.23.1"
@@ -302,7 +302,7 @@
     lodash.union "^4.6.0"
     read-pkg-up "^10.0.0"
     recursive-readdir "^2.2.3"
-    webdriverio "8.23.3"
+    webdriverio "8.23.4"
     yargs "^17.7.2"
 
 "@wdio/config@8.22.1":
@@ -353,13 +353,13 @@
     "@wdio/types" "8.23.1"
     chalk "^5.0.1"
 
-"@wdio/globals@8.23.3":
-  version "8.23.3"
-  resolved "https://registry.yarnpkg.com/@wdio/globals/-/globals-8.23.3.tgz#fc6ef4c98817d560265bc2c5ba5a4b757c04dbdb"
-  integrity sha512-pmsR82CvbQu2zonwsIblsvNv+wOL0hCm4eJmCzLEMQ9WBB36kO28im8B/itsh/XKzqvQ1aidhCUdSSHFwFwZsQ==
+"@wdio/globals@8.23.4":
+  version "8.23.4"
+  resolved "https://registry.yarnpkg.com/@wdio/globals/-/globals-8.23.4.tgz#17ec3eea1beec255cb5c28d52dab429b8dcfbfa3"
+  integrity sha512-Sxw1HxDexfz1WTUsVekUysbi7VZ7mjbWZ4YfU12TraBi9azuoah7pEOvBp8Rwfsz6kuLl3ac1UsdPYo8ar6/uw==
   optionalDependencies:
     expect-webdriverio "^4.5.1"
-    webdriverio "8.23.3"
+    webdriverio "8.23.4"
 
 "@wdio/globals@^8.22.1":
   version "8.23.0"
@@ -379,15 +379,15 @@
     json-stringify-safe "^5.0.1"
     junit-report-builder "^3.0.0"
 
-"@wdio/local-runner@8.23.3":
-  version "8.23.3"
-  resolved "https://registry.yarnpkg.com/@wdio/local-runner/-/local-runner-8.23.3.tgz#e86ac4e27822489cd0d1da5cce6fbac94b107abf"
-  integrity sha512-ELiD+zWR7PxvV+kIjnlIh2pUZ2dWSld7c6XeKff/e+YLnhc3AG7+/b3ml+JhLrtQqFt6X43V9IV9lfbNRiHWoQ==
+"@wdio/local-runner@8.23.4":
+  version "8.23.4"
+  resolved "https://registry.yarnpkg.com/@wdio/local-runner/-/local-runner-8.23.4.tgz#3f69d6dc4cd96d74dfeed92065687e540599dd26"
+  integrity sha512-c2R8Xe4uAlLP1ESODNuElz8kFRdnfvsURQAh1FBLVCgl7Yfyj6QF2ei25C6CThtAUoCdrTSULgp7SWBdQIRwpg==
   dependencies:
     "@types/node" "^20.1.0"
     "@wdio/logger" "8.16.17"
     "@wdio/repl" "8.23.1"
-    "@wdio/runner" "8.23.3"
+    "@wdio/runner" "8.23.4"
     "@wdio/types" "8.23.1"
     async-exit-hook "^2.0.1"
     split2 "^4.1.0"
@@ -460,14 +460,14 @@
     diff "^5.0.0"
     object-inspect "^1.12.0"
 
-"@wdio/runner@8.23.3":
-  version "8.23.3"
-  resolved "https://registry.yarnpkg.com/@wdio/runner/-/runner-8.23.3.tgz#86f90dae5e48bb93085a41e6b665006f20724c21"
-  integrity sha512-vbSNfEvgMcDdWgBoRSo2GRiV8ccsh5QJYP8b5FfRoHBAvC4OZV6ZVx9Xzh7QsEfSaXXA9G/vaUGX0PPrS0gmgQ==
+"@wdio/runner@8.23.4":
+  version "8.23.4"
+  resolved "https://registry.yarnpkg.com/@wdio/runner/-/runner-8.23.4.tgz#ea333f4f5a075d52fb6e1505837892c0205fbb29"
+  integrity sha512-rbOluDjnYAUwc7WnsKi7yLNcHn7/uFUdc3oFEB46nwyNQpVSGaduMbyvzVR6cc38DVAuVyFBmT41GM+sRqA/PA==
   dependencies:
     "@types/node" "^20.1.0"
     "@wdio/config" "8.23.1"
-    "@wdio/globals" "8.23.3"
+    "@wdio/globals" "8.23.4"
     "@wdio/logger" "8.16.17"
     "@wdio/types" "8.23.1"
     "@wdio/utils" "8.23.1"
@@ -475,7 +475,7 @@
     expect-webdriverio "^4.5.1"
     gaze "^1.1.2"
     webdriver "8.23.1"
-    webdriverio "8.23.3"
+    webdriverio "8.23.4"
 
 "@wdio/types@8.21.0":
   version "8.21.0"
@@ -3778,10 +3778,10 @@ webdriverio@8.23.0:
     serialize-error "^11.0.1"
     webdriver "8.23.0"
 
-webdriverio@8.23.3, webdriverio@^8.23.3:
-  version "8.23.3"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-8.23.3.tgz#83f0b6d1c7efb40022d4b0571e2ad0dc29faf2cc"
-  integrity sha512-kH+GAQrC6GfrF0LDX5odqn3CVvVrdIeTAYsQtji9tmb2YTJMIx57GNL1NIXhV4MFtalcEc9UjhZCwekLMemEOg==
+webdriverio@8.23.4, webdriverio@^8.23.4:
+  version "8.23.4"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-8.23.4.tgz#cd5b0f6653917eea9510dfb11e0a1053b3e33a7c"
+  integrity sha512-tlma460ls27zv5Z+WHZG99SJrgcIZi4jsFrZeCCPZTtspOvXoqImL7g6orJTOJXVMhqptkFZN16zHONuAoXV5Q==
   dependencies:
     "@types/node" "^20.1.0"
     "@wdio/config" "8.23.1"
