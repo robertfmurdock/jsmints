@@ -34,6 +34,7 @@ let incubatingConfig = {
     capabilities: [],
     logLevel: 'warn',
     bail: 0,
+    outputDir: directories.logs,
     baseUrl: options.baseUrl,
     waitforTimeout: 6000,
     waitforInterval: 15,
