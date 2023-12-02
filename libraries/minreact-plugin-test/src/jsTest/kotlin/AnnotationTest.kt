@@ -143,6 +143,18 @@ class AnnotationTest {
     }
 
     @Test
+    fun canUseComponentWithOptionalFunction() = setup(object {
+        val normal = FC<Props> {
+            OptionalFuncExample()
+        }
+    }) exercise {
+        render(normal.create())
+    } verify {
+        screen.queryByText("OptionalFuncExample")
+            .assertIsNotEqualTo(null)
+    }
+
+    @Test
     fun canUseComponentWithChildrenSkippingTheChildren() = setup(object {
         val normal = FC<Props> {
             WrapperThing(a = "Hi")
