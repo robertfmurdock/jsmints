@@ -1080,10 +1080,10 @@ airbnb-prop-types@^2.16.0:
     prop-types-exact "^1.2.0"
     react-is "^16.13.1"
 
-allure-commandline@^2.24.1:
-  version "2.24.1"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.24.1.tgz#28eb1f28c031fa2ac0742fe85798d29202db678e"
-  integrity sha512-eNto3ipBq+O2B/f8/OwiS3E8R7jYENs3qv8jT7wMZmziYLANsISC9tX/FfEqR3FDiQlEOjkP7iyTEZ3ph53FPg==
+allure-commandline@^2.25.0:
+  version "2.25.0"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.25.0.tgz#46a42b91a5fdeb70a4d2a077bed93515b1c7dd65"
+  integrity sha512-HYMQwuX/8ySTrXqgr6ZY830c6xgRbSusxVwZIBbDyNTCDb3mqK2b1ENjsD8yhl/7/8S02NZCDAwJFxt3f8qL9Q==
 
 allure-js-commons@^2.5.0:
   version "2.6.0"
