@@ -768,10 +768,10 @@
     csv-stringify "^6.0.4"
     strip-ansi "^7.1.0"
 
-"@wdio/cli@8.24.15":
-  version "8.24.15"
-  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.24.15.tgz#91a607f43a3990996ef602eef0ae32e05d346925"
-  integrity sha512-rJovQY+DxixU7A/vq6jIHoW1cQXAxcRPATmj+gPBOA99QsV3qJLp6X/aIJj1pu03pEIlLBjW7jX591CGnmcI3A==
+"@wdio/cli@8.24.16":
+  version "8.24.16"
+  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.24.16.tgz#2ef5170f7af9b0e82219c48334f3f20e56022774"
+  integrity sha512-DaXSdkWMlI0pPiTWMJRP5kBGpBrzEJfPdF1VqIw+HBC9vn4OWyZWAOlA3TZ1uKifTJQ3ydaXpclbDW0/x31YhQ==
   dependencies:
     "@types/node" "^20.1.1"
     "@wdio/config" "8.24.12"
