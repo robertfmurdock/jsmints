@@ -6,7 +6,7 @@ com-squareup-kotlinpoet-ksp = "com.squareup:kotlinpoet-ksp:1.15.3"
 com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.1.6"
 io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:5.1.1"
 org-jetbrains-kotlin-kotlin-bom = "org.jetbrains.kotlin:kotlin-bom:1.9.21"
-org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.662"
+org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.663"
 org-jetbrains-kotlinx-kotlinx-coroutines-bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3"
 
 [plugins]
