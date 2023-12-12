@@ -882,7 +882,7 @@
     loglevel-plugin-prefix "^0.8.4"
     strip-ansi "^7.1.0"
 
-"@wdio/logger@8.24.12":
+"@wdio/logger@8.24.12", "@wdio/logger@^8.24.12":
   version "8.24.12"
   resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-8.24.12.tgz#03cb8bb7ce7ee443e1dcd200a3b44270ae16a1f9"
   integrity sha512-QisOiVIWKTUCf1H7S+DOtC+gruhlpimQrUXfWMTeeh672PvAJYnTpOJDWA+BtXfsikkUYFAzAaq8SeMJk8rqKg==
@@ -2768,16 +2768,16 @@ geckodriver@^4.2.0:
     unzipper "^0.10.14"
     which "^3.0.1"
 
-geckodriver@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.2.1.tgz#03ad628241417737b962966aa8f8b13fa0f8bf75"
-  integrity sha512-4m/CRk0OI8MaANRuFIahvOxYTSjlNAO2p9JmE14zxueknq6cdtB5M9UGRQ8R9aMV0bLGNVHHDnDXmoXdOwJfWg==
+geckodriver@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.3.0.tgz#8586e80ddd23e5d5cd47382d9f6897051ca12ea3"
+  integrity sha512-QfpvxFsMORwKpvnLslkHCr3NTCczHAvkte6+pQGsiUZXKBe6mO4TTb727b+9KMVSK6XZqhR6ZwImKdP+F5vS6A==
   dependencies:
-    "@wdio/logger" "^8.11.0"
+    "@wdio/logger" "^8.24.12"
     decamelize "^6.0.0"
     http-proxy-agent "^7.0.0"
-    https-proxy-agent "^7.0.1"
-    node-fetch "^3.3.1"
+    https-proxy-agent "^7.0.2"
+    node-fetch "^3.3.2"
     tar-fs "^3.0.4"
     unzipper "^0.10.14"
     which "^4.0.0"
