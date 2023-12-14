@@ -1,6 +1,6 @@
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.16.0"
-com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:1.9.21-1.0.15"
+com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:1.9.21-1.0.16"
 com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.10"
 com-squareup-kotlinpoet-ksp = "com.squareup:kotlinpoet-ksp:1.15.3"
 com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:11.1.6"
