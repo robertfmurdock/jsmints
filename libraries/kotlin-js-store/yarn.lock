@@ -768,10 +768,10 @@
     csv-stringify "^6.0.4"
     strip-ansi "^7.1.0"
 
-"@wdio/cli@8.27.0":
-  version "8.27.0"
-  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.27.0.tgz#99eb3c0ac86eb0dd7360a8a1dd05bf8aa99ac60e"
-  integrity sha512-wdNYNvu52XxOqNHqDMGAtexBz+MM0RE2Z5U5ljyllbP3ed5vcvvK9vswURtI4cFGoqobVeoC7wif3VeD3aN+aQ==
+"@wdio/cli@8.27.1":
+  version "8.27.1"
+  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-8.27.1.tgz#3412a9a3e77a555415141197afc83ec51ee894f6"
+  integrity sha512-RY9o4h0iN6UGpU31X5c9mu/TK2FlHtKtDaRJYunm5ycZvGahQcN+naYpea1ftDr4IpI2gGGlHxvEeHkJF7urDQ==
   dependencies:
     "@types/node" "^20.1.1"
     "@wdio/config" "8.27.0"
@@ -1812,10 +1812,10 @@ copyfiles@^2.3.0:
     untildify "^4.0.0"
     yargs "^16.1.0"
 
-core-js@^3.34.0:
-  version "3.34.0"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.34.0.tgz#5705e6ad5982678612e96987d05b27c6c7c274a5"
-  integrity sha512-aDdvlDder8QmY91H88GzNi9EtQi2TjvQhpCX6B1v/dAZHU1AuLgHvRh54RiOerpEhEW46Tkf+vgAViB/CWC0ag==
+core-js@^3.35.0:
+  version "3.35.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.35.0.tgz#58e651688484f83c34196ca13f099574ee53d6b4"
+  integrity sha512-ntakECeqg81KqMueeGJ79Q5ZgQNR+6eaE8sxGCx62zMbAIj65q+uYvatToew3m6eAGdU4gNZwpZ34NMe4GYswg==
 
 core-util-is@~1.0.0:
   version "1.0.3"
