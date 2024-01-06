@@ -1,7 +1,7 @@
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.testmints.setup
-import js.core.JsoDsl
-import js.core.jso
+import js.objects.JsoDsl
+import js.objects.jso
 import kotlin.test.Test
 
 class GeneratedBuilderTest {
