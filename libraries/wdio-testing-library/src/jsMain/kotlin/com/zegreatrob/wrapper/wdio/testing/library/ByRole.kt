@@ -3,7 +3,7 @@ package com.zegreatrob.wrapper.wdio.testing.library
 import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import com.zegreatrob.wrapper.wdio.browser
-import js.core.jso
+import js.objects.jso
 import kotlinx.coroutines.await
 
 interface ByRole : BrowserProvider {

@@ -67,7 +67,7 @@ class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGener
             .addTypeVariables(classDeclaration.typeParameters.map { it.toTypeVariableName(resolver) })
             .addParameters(parameterSpecs(classDeclaration, resolver))
             .returns(classDeclaration.toClassName())
-            .addCode(CodeBlock.of(body, ClassName("js.core", "jso"), classDeclaration.toClassName()))
+            .addCode(CodeBlock.of(body, ClassName("js.objects", "jso"), classDeclaration.toClassName()))
             .build()
         return funSpec
     }
