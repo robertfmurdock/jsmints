@@ -1,6 +1,6 @@
 [libraries]
 com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.10"
-io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:6.0.1"
+io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:6.0.2"
 
 [plugins]
 com-avast-gradle-docker-compose = "com.avast.gradle.docker-compose:0.17.6"
