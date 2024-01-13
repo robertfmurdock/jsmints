@@ -9,9 +9,9 @@ plugins {
 kotlin {
     js {
         nodejs {
-            testTask(Action {
+            testTask {
                 enabled = false
-            })
+            }
         }
     }
 }
