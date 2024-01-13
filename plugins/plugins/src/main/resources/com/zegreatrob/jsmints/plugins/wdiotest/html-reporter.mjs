@@ -1,8 +1,7 @@
-import log4js from "@log4js-node/log4js-api";
+import logger from "@wdio/logger";
 import {HtmlReporter, ReportAggregator} from "wdio-html-nice-reporter"
 
 export function configure(config, directories) {
-    const logger = log4js.getLogger('default');
     const outputDir = directories.reports + "/html/";
     config.reporters.push(
         [HtmlReporter, {
@@ -13,7 +12,7 @@ export function configure(config, directories) {
             showInBrowser: true,
             useOnAfterCommandForScreenshot: false,
             linkScreenshots: true,
-            LOG: logger
+            LOG: logger('HtmlReporter')
         }]
     )
     let reportAggregator;
