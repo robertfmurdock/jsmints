@@ -12,5 +12,5 @@ org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:4.2.0
 
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.51.0"
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.3"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:0.8.4"
 org-jmailen-kotlinter = "org.jmailen.kotlinter:4.2.0"

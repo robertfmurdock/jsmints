@@ -2823,10 +2823,10 @@ geckodriver@^4.2.0:
     unzipper "^0.10.14"
     which "^3.0.1"
 
-geckodriver@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.3.0.tgz#8586e80ddd23e5d5cd47382d9f6897051ca12ea3"
-  integrity sha512-QfpvxFsMORwKpvnLslkHCr3NTCczHAvkte6+pQGsiUZXKBe6mO4TTb727b+9KMVSK6XZqhR6ZwImKdP+F5vS6A==
+geckodriver@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.3.1.tgz#e1b373ca17a9fcbcc9d4e0830f2a50dc94fc83ea"
+  integrity sha512-ol7JLsj55o5k+z7YzeSy2mdJROXMAxIa+uzr3A1yEMr5HISqQOTslE3ZeARcxR4jpAY3fxmHM+sq32qbe/eXfA==
   dependencies:
     "@wdio/logger" "^8.24.12"
     decamelize "^6.0.0"
@@ -4500,10 +4500,10 @@ npm-bundled@^3.0.0:
   dependencies:
     npm-normalize-package-bin "^3.0.0"
 
-npm-check-updates@16.14.12:
-  version "16.14.12"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.14.12.tgz#154db2d6d575bd57cc1120ad9eb3483a1ff2c95d"
-  integrity sha512-5FvqaDX8AqWWTDQFbBllgLwoRXTvzlqVIRSKl9Kg8bYZTfNwMnrp1Zlmb5e/ocf11UjPTc+ShBFjYQ7kg6FL0w==
+npm-check-updates@16.14.13:
+  version "16.14.13"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-16.14.13.tgz#83e468b27946f76fce555bffa588edacab6c13ec"
+  integrity sha512-vuRTJUoOElBDQ1Z5/UqqgNfExteSdrmwKNV6xuZtiyuKENFduYsy+IhDvCIC9fI1F+MD4zWtq9WCBwfOGfxy7Q==
   dependencies:
     chalk "^5.3.0"
     cli-table3 "^0.6.3"
