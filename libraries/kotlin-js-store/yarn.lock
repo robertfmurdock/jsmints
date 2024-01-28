@@ -2977,10 +2977,10 @@ global-dirs@^3.0.0:
   dependencies:
     ini "2.0.0"
 
-global-jsdom@^9.2.0:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/global-jsdom/-/global-jsdom-9.2.0.tgz#b41a6a2e680c7d027986b6304b83a1c5a437df07"
-  integrity sha512-mspbiuYwcl5nbl2VRvHNaF4SzSmSMCTJGXXatzHYZAf6u3rO/aLXQICbVNTVI+vN8jaq1s4QcvKYnWhVepSbFQ==
+global-jsdom@^24.0.0:
+  version "24.0.0"
+  resolved "https://registry.yarnpkg.com/global-jsdom/-/global-jsdom-24.0.0.tgz#be2a5f0392a8626fde76c4d8037618c7a0f1079c"
+  integrity sha512-CARBUWkqZ3O9VOc2PIVE5kQpdQeJh9eF9kQ7zSeNtmqx5vAFDKMr9XnDt1epVMMrz1s9uK/yFCa4HLwpa6TcPA==
 
 global@~4.4.0:
   version "4.4.0"
