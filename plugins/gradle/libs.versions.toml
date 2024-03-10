@@ -5,7 +5,7 @@ org-jetbrains-kotlin = "1.9.23"
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.16.2"
 com-google-devtools-ksp = "com.google.devtools.ksp:symbol-processing-gradle-plugin:1.9.23-1.0.19"
 junit = "junit:junit:4.13.2"
-org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.23.0"
+org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.23.1"
 org-jetbrains-annotations = "org.jetbrains:annotations:13.0"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 
