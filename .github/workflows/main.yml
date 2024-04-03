@@ -30,14 +30,14 @@ jobs:
         with:
           firefox-version: latest
       - run: echo "FIREFOX_BINARY=$(which firefox)" >> $GITHUB_ENV
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: testspace-com/setup-testspace@v1
         with:
           domain: robertfmurdock
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - name: Generate Version 🔢
@@ -61,7 +61,7 @@ jobs:
       - name: Collect Test Results
         if: ${{ always() }}
         run: ./gradlew collectResults
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: test-output
