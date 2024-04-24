@@ -585,10 +585,10 @@
     lz-string "^1.5.0"
     pretty-format "^27.0.2"
 
-"@testing-library/react@^15.0.3":
-  version "15.0.3"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-15.0.3.tgz#891f55596d8464d4db90458a99aa64fa1105ef9b"
-  integrity sha512-lrfuttDGLJbpwMZ5Staz/b2GJuyQQUHEYffK2oL9DxgoeIPxFIquv0TmzJyeI0JQkc+WJMvcRRmpP9BtWlMbgQ==
+"@testing-library/react@^15.0.4":
+  version "15.0.4"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-15.0.4.tgz#e5e83f79863c4897719ae3191af1e54617f60dea"
+  integrity sha512-Fw/LM1emOHKfCxv5R0tz+25TOtiMt0o5Np1zJmb4LbSacOagXQX4ooAaHiJfGUMe+OjUk504BX11W+9Z8CvyZA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^10.0.0"
@@ -1116,10 +1116,10 @@ airbnb-prop-types@^2.16.0:
     prop-types-exact "^1.2.0"
     react-is "^16.13.1"
 
-allure-commandline@^2.28.0:
-  version "2.28.0"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.28.0.tgz#a267da5e6bd1bdbea12781e8050c06bcc2a9d9c1"
-  integrity sha512-TZ3oxop0zseJp2bRKb8Zzkxa4/aB+RvKEMnhylbY6UiOkqhNAHovRJx03bFA9bbvE/nsR70sX+ktU5xI2WJiqQ==
+allure-commandline@^2.29.0:
+  version "2.29.0"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.29.0.tgz#4bdd67a174f48a0c429727a4b02602c8fc4e7620"
+  integrity sha512-he/oWJflViIdEmuQ4er5k+xRd//PaVVElHHTx01h6W71KM9qKiLeF5MloV93UBYoJRzjD9fgbZedSMKemCEGkQ==
 
 allure-js-commons@^2.5.0:
   version "2.6.0"
