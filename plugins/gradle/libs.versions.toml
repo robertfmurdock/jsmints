@@ -2,7 +2,7 @@
 org-jetbrains-kotlin = "1.9.23"
 
 [libraries]
-com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.17.0"
+com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.17.1"
 com-google-devtools-ksp = "com.google.devtools.ksp:symbol-processing-gradle-plugin:1.9.23-1.0.20"
 junit = "junit:junit:4.13.2"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.23.1"
