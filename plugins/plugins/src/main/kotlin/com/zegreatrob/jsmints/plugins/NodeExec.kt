@@ -6,7 +6,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.VerificationException
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
+import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrCompilation
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import java.io.File
@@ -63,9 +63,9 @@ open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     }
 }
 
-fun NodeExec.setup(compilation: KotlinJsCompilation) {
+fun NodeExec.setup(compilation: KotlinJsIrCompilation) {
     val nodeJs = NodeJsRootPlugin.apply(project.rootProject)
     nodeBinDir = nodeJs.requireConfigured().nodeBinDir
-    nodeExecPath = nodeJs.requireConfigured().nodeExecutable
-    projectNodeModulesDir = compilation.npmProject.nodeModulesDir
+    nodeExecPath = nodeJs.requireConfigured().executable
+    projectNodeModulesDir = compilation.npmProject.nodeModulesDir.get().asFile
 }

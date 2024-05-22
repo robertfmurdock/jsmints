@@ -12,8 +12,8 @@ kotlin {
     js {
         compilations.named("test") {
             packageJson { customField("mocha", mapOf("require" to "global-jsdom/register")) }
-            nodejs { testTask(Action { useMocha { timeout = "20s" } } )}
         }
+        nodejs { testTask { useMocha { timeout = "20s" } } }
     }
     sourceSets.jsMain {
         kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")

@@ -3,8 +3,6 @@ package com.zegreatrob.jsmints.plugins
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTestExtension
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
@@ -21,16 +19,16 @@ repositories {
     mavenCentral()
 }
 
-kotlin(fun KotlinMultiplatformExtension.() {
-    js(fun KotlinJsTargetDsl.() {
+kotlin {
+    js {
         val e2eTest by compilations.creating
         binaries.executable(e2eTest)
-    })
-})
+    }
+}
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    if (it?.nodeVersion != "21.5.0") {
-        it?.nodeVersion = "21.5.0"
+    if (it?.version != "21.5.0") {
+        it?.version = "21.5.0"
     }
 }
 
@@ -82,16 +80,13 @@ afterEvaluate {
 
 val npmProjectDir = kotlin.js().compilations.getByName("e2eTest").npmProject.dir
 
-val wdioConfig = npmProjectDir.resolve("wdio.conf.mjs")
+val wdioConfig = npmProjectDir.map { it.file("wdio.conf.mjs") }
 
 tasks {
-    val runnerJs = provider {
-        npmProjectDir.resolve("runner")
-            .resolve("jsmints-wdiorunner.js")
-    }
+    val runnerJs = npmProjectDir.map { it.dir("runner").file("jsmints-wdiorunner.js") }
     val installRunner by registering(Copy::class) {
         dependsOn(runnerConfiguration)
-        into(runnerJs.get().parentFile)
+        into(runnerJs.map { it.asFile.parentFile })
         from(
             zipTree(
                 runnerConfiguration.resolve()
@@ -99,7 +94,7 @@ tasks {
             ),
         )
     }
-    val wdioConfDirectory = wdioConfig.parentFile.resolve("wdio.conf.d")
+    val wdioConfDirectory = npmProjectDir.map { it.file("wdio.conf.d") }
 
     val copyWdioConfDir by registering(Copy::class) {
         duplicatesStrategy = DuplicatesStrategy.WARN
@@ -144,7 +139,7 @@ tasks {
                 ),
             )
         }
-        into(wdioConfig.parentFile)
+        into(npmProjectDir)
         rename { "wdio.conf.mjs" }
     }
 
@@ -184,12 +179,12 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = buildDir.dir("reports/logs/e2e/")
-        val specFile = kotlinJsCompilation.npmProject.dist.resolve("$wdioTestModuleName.js")
+        val specFile = kotlinJsCompilation.npmProject.dist.map { it.file("$wdioTestModuleName.js") }
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),
-                "SPEC_FILE" to specFile,
-                "WDIO_CONFIG" to wdioConfig.absolutePath,
+                "SPEC_FILE" to specFile.get().asFile.absolutePath,
+                "WDIO_CONFIG" to wdioConfig.get().asFile.absolutePath,
                 "REPORT_DIR" to reportDir.get().asFile.absolutePath,
                 "TEST_RESULTS_DIR" to testResultsDir.get().asFile.absolutePath,
 
@@ -200,7 +195,7 @@ tasks {
                 ).joinToString(":"),
             ),
         )
-        arguments = listOf(runnerJs.get().absolutePath)
+        arguments = listOf(runnerJs.get().asFile.absolutePath)
         val logFile = logsDir.get().file("run.log").asFile
         logFile.parentFile.mkdirs()
         outputFile = logFile
@@ -233,7 +228,7 @@ tasks {
     }
 }
 
-fun Property<Boolean>.whenEnabledUseFile(pluginFile: URL) = zip(
+fun Property<Boolean>.whenEnabledUseFile(pluginFile: URL): Provider<List<TextResource>> = zip(
     provider { resources.text.fromUri(pluginFile) },
 ) { shouldUse, htmlReporterFile ->
     if (shouldUse) {

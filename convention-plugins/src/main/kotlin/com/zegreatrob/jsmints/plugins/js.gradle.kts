@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
@@ -14,12 +15,9 @@ repositories {
 }
 
 kotlin {
-    targets.all {
-        compilations.all {
-            kotlinOptions {
-                allWarningsAsErrors = true
-            }
-        }
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        allWarningsAsErrors = true
     }
     js {
         nodejs { useCommonJs() }
@@ -36,7 +34,7 @@ configure<JsConstraintExtension> {
 }
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    if (it?.nodeVersion != "21.5.0") {
-        it?.nodeVersion = "21.5.0"
+    if (it?.version != "21.5.0") {
+        it?.version = "21.5.0"
     }
 }

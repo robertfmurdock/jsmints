@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
@@ -16,14 +17,10 @@ kotlin {
                 customField("mocha", mapOf("require" to "global-jsdom/register"))
             }
         }
-
     }
-    targets.all {
-        compilations.all {
-            kotlinOptions {
-                allWarningsAsErrors = true
-            }
-        }
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        allWarningsAsErrors = true
     }
     sourceSets.jsMain {
         kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")

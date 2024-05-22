@@ -1,6 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
     kotlin("multiplatform")
@@ -12,15 +12,12 @@ repositories {
     mavenCentral()
 }
 
-kotlin(fun KotlinMultiplatformExtension.() {
-    js {
-        compilations.all {
-            kotlinOptions {
-                allWarningsAsErrors = false
-            }
-        }
+kotlin {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        allWarningsAsErrors = false
     }
-})
+}
 
 val jspackage = project.extensions.create<JsConstraintExtension>("jsconstraint")
 configure<JsConstraintExtension> {

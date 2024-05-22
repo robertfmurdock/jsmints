@@ -1,5 +1,6 @@
 .cache-proxy
 .gradle
+.kotlin
 node_modules
 build
 data

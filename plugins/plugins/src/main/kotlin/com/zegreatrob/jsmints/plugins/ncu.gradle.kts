@@ -1,7 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
 import com.zegreatrob.jsmints.plugins.jspackage.JsPackageExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
 
 plugins {
     id("com.zegreatrob.jsmints.plugins.jspackage")
@@ -11,7 +10,7 @@ val jspackage = extensions.getByName("jspackage") as JsPackageExtension
 
 tasks {
     if (jspackage.exists) {
-        kotlin.js().compilations.named("test").configure(fun KotlinJsCompilation.() {
+        kotlin.js().compilations.named("test").configure {
             register<NodeExec>("ncuUpgrade") {
                 dependsOn("jsPublicPackageJson", ":kotlinNpmInstall")
                 setup(this@configure)
@@ -31,7 +30,7 @@ tasks {
                     configFile.absolutePath,
                 )
             }
-        })
+        }
     }
 }
 
@@ -48,5 +47,6 @@ dependencies {
     }
 }
 
-val Project.nodeModulesDir: String get() = rootProject.layout.buildDirectory
-    .dir("js/node_modules").get().asFile.absolutePath
+val Project.nodeModulesDir: String
+    get() = rootProject.layout.buildDirectory
+        .dir("js/node_modules").get().asFile.absolutePath
