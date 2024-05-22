@@ -288,14 +288,14 @@
     pathe "^1.1.1"
     pretty-format "^29.7.0"
 
-"@wdio/allure-reporter@^8.36.1":
-  version "8.36.1"
-  resolved "https://registry.yarnpkg.com/@wdio/allure-reporter/-/allure-reporter-8.36.1.tgz#9a37b444f812bd13012672e6068ee2cc796d5154"
-  integrity sha512-Rn84AEIrjB3y3VKmmzbCaLqvc+g/OUMyb7UMLDBlENdBf+mn7UE87542ZoaH5tXa/Ojn9s6tGmchmd23trwYdA==
+"@wdio/allure-reporter@^8.37.0":
+  version "8.37.0"
+  resolved "https://registry.yarnpkg.com/@wdio/allure-reporter/-/allure-reporter-8.37.0.tgz#cf923bde2a67a248cf4f42178edd5b85bedf4a6c"
+  integrity sha512-/QZF9LKXmMbdefjot9Rrq0maCd2lihCMKPzL0NqL5u8C1+tMyxI/D+2nsCuw8W2/I27Ys4noX9erBfFPdYjUfQ==
   dependencies:
     "@types/node" "^20.1.0"
-    "@wdio/reporter" "8.36.1"
-    "@wdio/types" "8.36.1"
+    "@wdio/reporter" "8.37.0"
+    "@wdio/types" "8.37.0"
     allure-js-commons "^2.5.0"
     csv-stringify "^6.0.4"
     strip-ansi "^7.1.0"
@@ -464,17 +464,6 @@
   dependencies:
     "@types/node" "^20.1.0"
 
-"@wdio/reporter@8.36.1":
-  version "8.36.1"
-  resolved "https://registry.yarnpkg.com/@wdio/reporter/-/reporter-8.36.1.tgz#2940ffa27c8222f1fec8329c05b00714cd1a5259"
-  integrity sha512-HcXr9XKq/6kPC9nexMRXIc/ft3Lvp0yCaW5tps01Axus9wbi5ysLHi2z5sB84F2YdpM+aRf7Lac56xkc4Jldeg==
-  dependencies:
-    "@types/node" "^20.1.0"
-    "@wdio/logger" "8.28.0"
-    "@wdio/types" "8.36.1"
-    diff "^5.0.0"
-    object-inspect "^1.12.0"
-
 "@wdio/reporter@8.37.0":
   version "8.37.0"
   resolved "https://registry.yarnpkg.com/@wdio/reporter/-/reporter-8.37.0.tgz#30a2eabdc5d4819098d4259fbd9755fa946091c9"
@@ -507,13 +496,6 @@
   version "8.30.0"
   resolved "https://registry.yarnpkg.com/@wdio/types/-/types-8.30.0.tgz#b20bab92dfcff7b4a074619d67ba6f58d21d1e63"
   integrity sha512-KkGz12glMh2whnkKpplqx1+3nRwmFh/JsPQRWHwSbIy5HuGfaRa9I+qDZQQUrhbmSACXMft/pfAGM0v05/T4EQ==
-  dependencies:
-    "@types/node" "^20.1.0"
-
-"@wdio/types@8.36.1":
-  version "8.36.1"
-  resolved "https://registry.yarnpkg.com/@wdio/types/-/types-8.36.1.tgz#5fa8dc05c0ce416b11b7a073fee0f319f533a70f"
-  integrity sha512-kKtyJbypasKo/VQuJ6dTQQwFtHE9qoygjoCZjrQCLGraRSjOEiqZHPR0497wbeCvcgHIYyImbmcylqZNGUE0CQ==
   dependencies:
     "@types/node" "^20.1.0"
 
