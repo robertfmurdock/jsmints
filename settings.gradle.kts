@@ -6,7 +6,7 @@ pluginManagement {
 }
 
 plugins {
-    `gradle-enterprise`
+    id("com.gradle.develocity") version "3.17.4"
 }
 
 rootProject.name = "jsmints-root"
@@ -18,13 +18,12 @@ includeBuild("wdio-testing-library-test")
 
 val isCiServer = System.getenv().containsKey("CI")
 
-if (isCiServer) {
-    gradleEnterprise {
-        buildScan {
-            termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            termsOfServiceAgree = "yes"
-            tag("CI")
-        }
+develocity {
+    buildScan {
+        publishing.onlyIf { isCiServer }
+        termsOfUseUrl = "https://gradle.com/help/legal-terms-of-use"
+        termsOfUseAgree = "yes"
+        tag("CI")
     }
 }
 
