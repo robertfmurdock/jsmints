@@ -25,6 +25,4 @@ abstract class JsConstraintExtension(val project: Project) {
         .let { project.dependencies.npm(name, it.second.asText()) }
 }
 
-fun loadPackageJson(file: File): JsonNode {
-    return if (file.exists()) ObjectMapper().readTree(file) else NullNode.instance
-}
+fun loadPackageJson(file: File): JsonNode = if (file.exists()) ObjectMapper().readTree(file) else NullNode.instance
