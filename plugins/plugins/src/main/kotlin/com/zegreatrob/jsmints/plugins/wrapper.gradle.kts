@@ -26,10 +26,8 @@ afterEvaluate {
     }
 }
 
-fun correctForLocal(library: String): Any {
-    return if (wrapper.includedBuild.get()) {
-        project(":$library")
-    } else {
-        "com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}"
-    }
+fun correctForLocal(library: String): Any = if (wrapper.includedBuild.get()) {
+    project(":$library")
+} else {
+    "com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}"
 }

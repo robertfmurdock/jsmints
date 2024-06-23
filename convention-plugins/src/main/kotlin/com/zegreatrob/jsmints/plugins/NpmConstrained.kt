@@ -13,12 +13,10 @@ fun KotlinDependencyHandler.npmConstrained(name: String): Dependency =
         .first { (key, _) -> key == name }
         .let { npm(name, it.second.asText()) }
 
-fun DependencyHandlerScope.npmConstrained(name: String, jsConstraintExtension: JsConstraintExtension): Dependency {
-    return jsConstraintExtension
-        .dependencies()!!
-        .first { (key, _) -> key == name }
-        .let { npm(name, it.second.asText()) }
-}
+fun DependencyHandlerScope.npmConstrained(name: String, jsConstraintExtension: JsConstraintExtension): Dependency = jsConstraintExtension
+    .dependencies()!!
+    .first { (key, _) -> key == name }
+    .let { npm(name, it.second.asText()) }
 
 val DependencyHandler.npm: NpmDependencyExtension get() =
     (this as ExtensionAware).extensions.getByName("npm") as NpmDependencyExtension

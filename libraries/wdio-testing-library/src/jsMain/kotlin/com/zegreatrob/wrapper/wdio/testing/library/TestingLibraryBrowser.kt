@@ -13,7 +13,11 @@ interface BrowserProvider {
     val extendedWdioBrowser: TestingLibraryBrowser
 }
 
-interface TestingLibraryQueries : ByRole, ByText, ByLabelText, Within
+interface TestingLibraryQueries :
+    ByRole,
+    ByText,
+    ByLabelText,
+    Within
 
 interface Within {
     suspend fun within(element: WebdriverElement): TestingLibraryQueries {

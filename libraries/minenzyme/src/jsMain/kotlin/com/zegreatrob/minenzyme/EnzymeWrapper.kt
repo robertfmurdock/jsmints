@@ -64,16 +64,14 @@ inline fun <reified P : DataProps<P>> ShallowWrapper<DataPropsBridge>.dataprops(
     ensureKotlinClassProps(props(), P::class.js)
         .unsafeCast<P>()
 
-fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: String) {
-    return findInputByName(fieldName)
-        .simulate(
-            "change",
-            json(
-                "target" to json("name" to fieldName, "value" to fieldValue),
-                "persist" to {},
-            ),
-        )
-}
+fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: String) = findInputByName(fieldName)
+    .simulate(
+        "change",
+        json(
+            "target" to json("name" to fieldName, "value" to fieldValue),
+            "persist" to {},
+        ),
+    )
 
 fun <T> ShallowWrapper<T>.findByClass(className: String) = find<T>(".$className")
 fun <T> ShallowWrapper<T>.findInputByName(inputName: String) = find<T>("input[name='$inputName']")
