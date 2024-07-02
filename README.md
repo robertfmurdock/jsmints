@@ -21,6 +21,7 @@ Most functions are available from the "TestingLibraryReact" singleton object. Im
 
 - [examples](libraries/react-testing-library/src/jsTest/kotlin/com/zegreatrob/wrapper/testinglibrary/react/ByLabelTextTest.kt)
 
+
 ### user-event-testing-library
 
 A kotlin wrapper for [user event](https://testing-library.com/docs/user-event/intro). Similar to react-testing-library, coroutine sugar included to help avoid common errors, like forgetting to "await" a returned promise.
@@ -62,3 +63,13 @@ If you choose to use this library, please share feedback! The API is strange and
 ### minenzyme
 
 A wrapper for the enzyme library. I am not actively supporting this module any more. In future versions it may be removed from the suite.
+
+## Installation
+
+All of these are either regular libraries, or gradle plugins.
+
+They're listed at https://mvnrepository.com/artifact/com.zegreatrob.jsmints
+
+Simply find the library related to the feature you want, and then follow the instructions for you build process on its mvn repository page.
+
+Sorry for the abbreviated instructions, but I wanted to get something here to help anyone who might get stuck!
