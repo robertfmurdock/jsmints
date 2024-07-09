@@ -16,11 +16,9 @@ includeBuild("plugins")
 includeBuild("convention-plugins")
 includeBuild("wdio-testing-library-test")
 
-val isCiServer = System.getenv().containsKey("CI")
-
 develocity {
     buildScan {
-        publishing.onlyIf { isCiServer }
+        publishing.onlyIf { System.getenv().containsKey("CI") }
         termsOfUseUrl = "https://gradle.com/help/legal-terms-of-use"
         termsOfUseAgree = "yes"
         tag("CI")

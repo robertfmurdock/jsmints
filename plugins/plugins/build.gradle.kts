@@ -180,7 +180,7 @@ afterEvaluate {
                 developer {
                     id.set("robertfmurdock")
                     name.set("Rob Murdock")
-                    email.set("robert.f.murdock@gmail.com")
+                    email.set("rob@continuousexcellence.io")
                 }
             }
             pom.scm {
