@@ -16,7 +16,7 @@
     "core-js": "^3.37.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.8",
-    "geckodriver": "^4.4.1",
+    "geckodriver": "^4.4.2",
     "global-jsdom": "^24.0.0",
     "jsdom": "24.1.0",
     "npm-check-updates": "16.14.20",
