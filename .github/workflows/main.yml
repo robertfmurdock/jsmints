@@ -49,11 +49,12 @@ jobs:
       - name: Update Contributions
         uses: robertfmurdock/coupling-contribution-action@v2
         with:
+          save-contribution: ${{ github.ref == 'refs/heads/master' }}
           cli-type: js
           coupling-secret: ${{ secrets.COUPLING_API_PARTY_SECRET }}
           party-id: 9df8b8ef-f10f-4b75-bde1-d691c148378c
           contribution-file: build/digger/current.json
-          save-contribution: ${{ github.ref == 'refs/heads/master' }}
+          cycle-time-from-first-commit: true
       - name: Push result to Testspace server
         if: always()
         run: |
