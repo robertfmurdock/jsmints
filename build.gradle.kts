@@ -67,4 +67,7 @@ tasks {
         mustRunAfter(check)
         finalizedBy(publish, currentContributionData)
     }
+    currentContributionData {
+        mustRunAfter(release)
+    }
 }
