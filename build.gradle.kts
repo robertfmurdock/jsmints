@@ -68,6 +68,6 @@ tasks {
         finalizedBy(publish, currentContributionData)
     }
     currentContributionData {
-        mustRunAfter(release)
+        mustRunAfter(tag)
     }
 }
