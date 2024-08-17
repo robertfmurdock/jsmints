@@ -180,6 +180,7 @@ tasks {
 
         val logsDir = buildDir.dir("reports/logs/e2e/")
         val specFile = kotlinJsCompilation.npmProject.dist.map { it.file("$wdioTestModuleName.js") }
+        val nodeModules = rootProject.layout.buildDirectory.dir("js/node_modules")
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),
@@ -191,10 +192,11 @@ tasks {
                 "LOGS_DIR" to logsDir.get().asFile.absolutePath,
                 "STRICT_SSL" to "false",
                 "NODE_PATH" to listOf(
-                    rootProject.layout.buildDirectory.dir("js/node_modules").get().asFile.absolutePath,
+                    nodeModules.get().asFile.absolutePath,
                 ).joinToString(":"),
             ),
         )
+        npmProjectDir = kotlinJsCompilation.npmProject.dir.get().asFile
         arguments = listOf(runnerJs.get().asFile.absolutePath)
         val logFile = logsDir.get().file("run.log").asFile
         logFile.parentFile.mkdirs()

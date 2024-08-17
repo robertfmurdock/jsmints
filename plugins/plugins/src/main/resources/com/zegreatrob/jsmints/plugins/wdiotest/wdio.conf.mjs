@@ -44,6 +44,7 @@ let incubatingConfig = {
     framework: 'mocha',
     reporters: reporters,
     mochaOpts: {
+        fgrep: process.env.FGREP,
         helpers: [],
         timeout: 60000,
     },
