@@ -1,3 +1,4 @@
+import external.wdio.cli.Launcher
 import kotlinx.coroutines.await
 import kotlin.js.json
 

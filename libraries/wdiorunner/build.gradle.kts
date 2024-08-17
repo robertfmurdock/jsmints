@@ -1,4 +1,3 @@
-
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 
 plugins {
@@ -9,8 +8,11 @@ plugins {
 
 kotlin {
     js {
-        nodejs {
-            useCommonJs()
+        nodejs { useEsModules() }
+        compilations.named("main") {
+            packageJson {
+                customField("type", "module")
+            }
         }
         binaries.executable()
     }

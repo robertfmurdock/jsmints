@@ -21,14 +21,19 @@ repositories {
 
 kotlin {
     js {
-        val e2eTest by compilations.creating
+        nodejs { useEsModules() }
+        val e2eTest by compilations.creating {
+            packageJson {
+                customField("type", "module")
+            }
+        }
         binaries.executable(e2eTest)
     }
 }
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    if (it?.version != "21.5.0") {
-        it?.version = "21.5.0"
+    if (it?.version != "22.5.1") {
+        it?.version = "22.5.1"
     }
 }
 
@@ -83,7 +88,7 @@ val npmProjectDir = kotlin.js().compilations.getByName("e2eTest").npmProject.dir
 val wdioConfig = npmProjectDir.map { it.file("wdio.conf.mjs") }
 
 tasks {
-    val runnerJs = npmProjectDir.map { it.dir("runner").file("jsmints-wdiorunner.js") }
+    val runnerJs = npmProjectDir.map { it.dir("runner").file("jsmints-wdiorunner.mjs") }
     val installRunner by registering(Copy::class) {
         dependsOn(runnerConfiguration)
         into(runnerJs.map { it.asFile.parentFile })
@@ -179,7 +184,7 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = buildDir.dir("reports/logs/e2e/")
-        val specFile = kotlinJsCompilation.npmProject.dist.map { it.file("$wdioTestModuleName.js") }
+        val specFile = kotlinJsCompilation.npmProject.dist.map { it.file("$wdioTestModuleName.mjs") }
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),

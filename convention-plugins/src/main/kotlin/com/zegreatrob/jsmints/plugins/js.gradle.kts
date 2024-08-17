@@ -34,7 +34,7 @@ configure<JsConstraintExtension> {
 }
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    if (it?.version != "21.5.0") {
-        it?.version = "21.5.0"
+    if (it?.version != "22.5.1") {
+        it?.version = "22.5.1"
     }
 }
