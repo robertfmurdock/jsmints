@@ -1,4 +1,11 @@
 {
   "reject": [
+    "@wdio/allure-reporter",
+    "@wdio/cli",
+    "@wdio/dot-reporter",
+    "@wdio/junit-reporter",
+    "@wdio/local-runner",
+    "@wdio/mocha-framework",
+    "webdriverio"
   ]
 }
