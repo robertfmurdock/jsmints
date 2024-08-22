@@ -3989,10 +3989,10 @@ typescript-string-operations@^1.5.0:
   resolved "https://registry.yarnpkg.com/typescript-string-operations/-/typescript-string-operations-1.5.0.tgz#7add21af652cc4ef46e9acdbcf054b4d0640a943"
   integrity sha512-96dP74lhNF4UmTbGcgjb9KELkdhbHFv/aKyRmrEg60X1e76KYDJK7V7Y91yEYWH5tfTDPqUVb2MVOnESDu81cA==
 
-typescript@5.4.3:
-  version "5.4.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.4.3.tgz#5c6fedd4c87bee01cd7a528a30145521f8e0feff"
-  integrity sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==
+typescript@5.5.4:
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.5.4.tgz#d9852d6c82bad2d2eda4fd74a5762a8f5909e9ba"
+  integrity sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==
 
 unbzip2-stream@1.4.3:
   version "1.4.3"
