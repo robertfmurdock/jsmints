@@ -5,7 +5,6 @@
 
 ![Latest Release](https://img.shields.io/github/v/release/robertfmurdock/jsmints)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/robertfmurdock/jsmints)
-![Testspace tests](https://img.shields.io/testspace/passed/robertfmurdock/robertfmurdock:jsmints/master)
 
 Jsmints is a suite of libraries and gradle plugins for working with Kotlin JS, with a focus on testing and version updating.
 
