@@ -16,10 +16,10 @@
     "core-js": "^3.38.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.8",
-    "geckodriver": "^4.4.3",
+    "geckodriver": "^4.4.4",
     "global-jsdom": "^24.0.0",
     "jsdom": "25.0.0",
-    "npm-check-updates": "17.1.0",
+    "npm-check-updates": "17.1.1",
     "wdio-html-nice-reporter": "8.1.6",
     "wdio-timeline-reporter": "^5.1.4",
     "webdriverio": "^8.40.3"
