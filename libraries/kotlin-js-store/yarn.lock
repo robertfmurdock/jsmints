@@ -2713,10 +2713,10 @@ geckodriver@^4.3.1:
     unzipper "^0.10.14"
     which "^4.0.0"
 
-geckodriver@^4.4.3:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.4.3.tgz#0f3ae367e784bb0f37df4088d3d551913df1ffde"
-  integrity sha512-79rvaq8pvKVUtuM9XBjQApb04kOVkl3TFRX+zTt1wlmL+wqpt85ocWCdqiENU/3zIzg2Me21eClUcnE7F1kL2w==
+geckodriver@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.4.4.tgz#0aad02533e8cf127573f4d86f1cc5450c913f095"
+  integrity sha512-0zaw19tcmWeluqx7+Y559JGBtidu1D0Lb8ElYKiNEQu8r3sCfrLUf5V10xypl8u29ZLbgRV7WflxCJVTCkCMFA==
   dependencies:
     "@wdio/logger" "^9.0.0"
     "@zip.js/zip.js" "^2.7.48"
@@ -4197,10 +4197,10 @@ normalize-url@^8.0.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-8.0.0.tgz#593dbd284f743e8dcf6a5ddf8fadff149c82701a"
   integrity sha512-uVFpKhj5MheNBJRTiMZ9pE/7hD1QTeEvugSJW/OmLzAp78PB5O6adfMNTvmfKhXBkvCzC+rqifWcVYpGFwTjnw==
 
-npm-check-updates@17.1.0:
-  version "17.1.0"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-17.1.0.tgz#67de181a6949301981ab7c8c9d7fa8862a147675"
-  integrity sha512-RcohCA/tdpxyPllBlYDkqGXFJQgTuEt0f2oPSL9s05pZ3hxYdleaUtvEcSxKl0XAg3ncBhVgLAxhXSjoryUU5Q==
+npm-check-updates@17.1.1:
+  version "17.1.1"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-17.1.1.tgz#9e0739af7c5240eb6c94404a22269acb79a5e23e"
+  integrity sha512-2aqIzGAEWB7xPf0hKHTkNmUM5jHbn2S5r2/z/7dA5Ij2h/sVYAg9R/uVkaUC3VORPAfBm7pKkCWo6E9clEVQ9A==
 
 npm-run-path@^5.1.0:
   version "5.1.0"
