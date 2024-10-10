@@ -1,5 +1,5 @@
 [versions]
-org-jetbrains-kotlin = "2.0.20"
+org-jetbrains-kotlin = "2.0.21"
 
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.18.0"
