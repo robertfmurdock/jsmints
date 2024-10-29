@@ -988,10 +988,10 @@ airbnb-prop-types@^2.16.0:
     prop-types-exact "^1.2.0"
     react-is "^16.13.1"
 
-allure-commandline@^2.31.0:
-  version "2.31.0"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.31.0.tgz#9ec8c2a16800700536e56003f0c38caf57db880f"
-  integrity sha512-/gwfIeMlz030fK8ZML/jSEzTtXsSRnsdx9ppfXR0jHvG+cO0pI/wZhq7YoMYgGEL8iVURIY2lDJlDyzOfHeSkw==
+allure-commandline@^2.32.0:
+  version "2.32.0"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.32.0.tgz#59826c454756563776658a829cf9732063413d71"
+  integrity sha512-W03ors+ks8uy0SgQILHQvtvR0iadAfDYmTFC3p8Pk4pi8KXUW1cF+z8FN2+7deH3FE2cuYgjhhA+CdLdJfzOMQ==
 
 allure-js-commons@^2.5.0:
   version "2.6.0"
@@ -4197,10 +4197,10 @@ normalize-url@^8.0.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-8.0.0.tgz#593dbd284f743e8dcf6a5ddf8fadff149c82701a"
   integrity sha512-uVFpKhj5MheNBJRTiMZ9pE/7hD1QTeEvugSJW/OmLzAp78PB5O6adfMNTvmfKhXBkvCzC+rqifWcVYpGFwTjnw==
 
-npm-check-updates@17.1.8:
-  version "17.1.8"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-17.1.8.tgz#9fe65cc23b04086ba6680f7a8bf77201b06383df"
-  integrity sha512-oVPYIdl4NHyz6+TXWWko7c1+cqp7bm+D2fNPjIWQxWm+plJ7cyePc2WcXRKbfuVEnR2QtvBhL58rolkk/H687g==
+npm-check-updates@17.1.9:
+  version "17.1.9"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-17.1.9.tgz#6380b8d2d320a8e6f24de1d466063f6f71e97dc0"
+  integrity sha512-Gfv5S8NNJKTilM1gesFNYka6bUaBs5LnVyPjApXPQphHijrlLFDMw1uSmwYMZbvJSkLZSOx03e8CHcG0Td5SMA==
 
 npm-run-path@^5.1.0:
   version "5.1.0"
