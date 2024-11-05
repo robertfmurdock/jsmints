@@ -39,7 +39,6 @@ dependencies {
     jsMainImplementation("io.github.oshai:kotlin-logging")
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
 
     jsTestImplementation("org.jetbrains.kotlin:kotlin-test")

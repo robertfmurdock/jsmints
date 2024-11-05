@@ -41,7 +41,6 @@ dependencies {
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
 
     jsTestImplementation(project(":react-testing-library"))

@@ -24,7 +24,6 @@ dependencies {
     jsMainImplementation(libs.io.github.oshai.kotlin.logging)
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
-    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-extensions")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
     jsMainImplementation(jsconstraint("@wdio/cli"))
     jsMainImplementation(jsconstraint("@wdio/dot-reporter"))
