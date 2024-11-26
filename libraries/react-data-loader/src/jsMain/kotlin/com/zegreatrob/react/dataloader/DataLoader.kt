@@ -62,12 +62,11 @@ private suspend fun <D> getDataOrCatchError(
     }
 }
 
-private fun <D> Job.errorOnTotalJobFailure(setResolved: (D) -> Unit, errorResult: (Throwable) -> D) =
-    invokeOnCompletion { cause ->
-        if (cause != null) {
-            setResolved(errorResult(cause))
-        }
+private fun <D> Job.errorOnTotalJobFailure(setResolved: (D) -> Unit, errorResult: (Throwable) -> D) = invokeOnCompletion { cause ->
+    if (cause != null) {
+        setResolved(errorResult(cause))
     }
+}
 
 private fun <D> StateSetter<DataLoadState<D>>.empty(): () -> Unit = {
     this(

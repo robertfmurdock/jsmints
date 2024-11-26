@@ -67,18 +67,17 @@ class ByTextTest : ByText by TestingLibraryReact.screen {
     @Test
     fun givenMultipleElementExistsErrorsOnQueryByText() = givenMultipleElementsByTextErrors(::queryByText)
 
-    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> HTMLElement?) =
-        testingLibrarySetup {
-        } exercise {
-            runCatching { query("Cool") }
-        } verify { result ->
-            result.isFailure
-                .assertIsEqualTo(true)
-            result.exceptionOrNull()?.message.apply {
-                this?.startsWith("Found multiple elements with the text: Cool")
-                    .assertIsEqualTo(true, "<$this>")
-            }
+    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> HTMLElement?) = testingLibrarySetup {
+    } exercise {
+        runCatching { query("Cool") }
+    } verify { result ->
+        result.isFailure
+            .assertIsEqualTo(true)
+        result.exceptionOrNull()?.message.apply {
+            this?.startsWith("Found multiple elements with the text: Cool")
+                .assertIsEqualTo(true, "<$this>")
         }
+    }
 
     @Test
     fun givenMultipleElementExistsSucceedsOnGetAllByText() = givenMultipleElementsByTextSucceeds(::getAllByText)
@@ -89,15 +88,14 @@ class ByTextTest : ByText by TestingLibraryReact.screen {
     @Test
     fun givenMultipleElementExistsSucceedsOnQueryAllByText() = givenMultipleElementsByTextSucceeds(::queryAllByText)
 
-    private fun givenMultipleElementsByTextSucceeds(query: suspend (text: String) -> Array<HTMLElement>) =
-        testingLibrarySetup {
-        } exercise {
-            query("Cool")
-        } verify { elements ->
-            elements.map { it.getAttribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
-            elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
-        }
+    private fun givenMultipleElementsByTextSucceeds(query: suspend (text: String) -> Array<HTMLElement>) = testingLibrarySetup {
+    } exercise {
+        query("Cool")
+    } verify { elements ->
+        elements.map { it.getAttribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
+        elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
+    }
 
     @Test
     fun givenSingleElementExistsSucceedsOnGetAllByText() = givenSingleElementsByTextSucceeds(::getAllByText)
@@ -108,13 +106,12 @@ class ByTextTest : ByText by TestingLibraryReact.screen {
     @Test
     fun givenSingleElementExistsSucceedsOnQueryAllByText() = givenSingleElementsByTextSucceeds(::queryAllByText)
 
-    private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> Array<HTMLElement>) =
-        testingLibrarySetup {
-        } exercise {
-            query("Awesome")
-        } verify { elements ->
-            elements.map { it.getAttribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool"))
-            elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
-        }
+    private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> Array<HTMLElement>) = testingLibrarySetup {
+    } exercise {
+        query("Awesome")
+    } verify { elements ->
+        elements.map { it.getAttribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool"))
+        elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
+    }
 }

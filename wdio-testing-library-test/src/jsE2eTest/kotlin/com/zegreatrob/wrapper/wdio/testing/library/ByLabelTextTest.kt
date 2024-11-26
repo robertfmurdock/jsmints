@@ -64,63 +64,53 @@ class ByLabelTextTest : ByLabelText by TestingLibraryBrowser {
     fun givenMultipleElementExistsErrorsOnFindByLabelText() = givenMultipleElementsByLabelTextErrors(::findByLabelText)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnQueryByLabelText() =
-        givenMultipleElementsByLabelTextErrors(::queryByLabelText)
+    fun givenMultipleElementExistsErrorsOnQueryByLabelText() = givenMultipleElementsByLabelTextErrors(::queryByLabelText)
 
-    private fun givenMultipleElementsByLabelTextErrors(query: suspend (text: String) -> WebdriverElement?) =
-        testingLibrarySetup {
-        } exercise {
-            kotlin.runCatching { query("Chill")?.waitToExist() }
-        } verify { result ->
-            result.isFailure
-                .assertIsEqualTo(true)
-            result.exceptionOrNull()?.message.apply {
-                this?.startsWith("Found multiple elements with the text of: Chill")
-                    .assertIsEqualTo(true, "<$this>")
-            }
+    private fun givenMultipleElementsByLabelTextErrors(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
+    } exercise {
+        kotlin.runCatching { query("Chill")?.waitToExist() }
+    } verify { result ->
+        result.isFailure
+            .assertIsEqualTo(true)
+        result.exceptionOrNull()?.message.apply {
+            this?.startsWith("Found multiple elements with the text of: Chill")
+                .assertIsEqualTo(true, "<$this>")
         }
+    }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnGetAllByLabelText() =
-        givenMultipleElementsByLabelTextSucceeds(::getAllByLabelText)
+    fun givenMultipleElementExistsSucceedsOnGetAllByLabelText() = givenMultipleElementsByLabelTextSucceeds(::getAllByLabelText)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnFindAllByLabelText() =
-        givenMultipleElementsByLabelTextSucceeds(::findAllByLabelText)
+    fun givenMultipleElementExistsSucceedsOnFindAllByLabelText() = givenMultipleElementsByLabelTextSucceeds(::findAllByLabelText)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnQueryAllByLabelText() =
-        givenMultipleElementsByLabelTextSucceeds(::queryAllByLabelText)
+    fun givenMultipleElementExistsSucceedsOnQueryAllByLabelText() = givenMultipleElementsByLabelTextSucceeds(::queryAllByLabelText)
 
-    private fun givenMultipleElementsByLabelTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
-        testingLibrarySetup {
-        } exercise {
-            query("Chill")
-        } verify { elements ->
-            elements.map { it.attribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
-            elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
-        }
+    private fun givenMultipleElementsByLabelTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) = testingLibrarySetup {
+    } exercise {
+        query("Chill")
+    } verify { elements ->
+        elements.map { it.attribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
+        elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
+    }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnGetAllByLabelText() =
-        givenSingleElementsByLabelTextSucceeds(::getAllByLabelText)
+    fun givenSingleElementExistsSucceedsOnGetAllByLabelText() = givenSingleElementsByLabelTextSucceeds(::getAllByLabelText)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnFindAllByLabelText() =
-        givenSingleElementsByLabelTextSucceeds(::findAllByLabelText)
+    fun givenSingleElementExistsSucceedsOnFindAllByLabelText() = givenSingleElementsByLabelTextSucceeds(::findAllByLabelText)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnQueryAllByLabelText() =
-        givenSingleElementsByLabelTextSucceeds(::queryAllByLabelText)
+    fun givenSingleElementExistsSucceedsOnQueryAllByLabelText() = givenSingleElementsByLabelTextSucceeds(::queryAllByLabelText)
 
-    private fun givenSingleElementsByLabelTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
-        testingLibrarySetup {
-        } exercise {
-            query("Press Me")
-        } verify { elements ->
-            elements.map { it.attribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool"))
-            elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
-        }
+    private fun givenSingleElementsByLabelTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) = testingLibrarySetup {
+    } exercise {
+        query("Press Me")
+    } verify { elements ->
+        elements.map { it.attribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool"))
+        elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
+    }
 }

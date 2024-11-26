@@ -30,12 +30,10 @@ class WithinTest : Within by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenNoElementExistsGetByText() =
-        givenNoElementByTextWillFailAsExpected { within(getCoolSection()).getByText(it) }
+    fun givenNoElementExistsGetByText() = givenNoElementByTextWillFailAsExpected { within(getCoolSection()).getByText(it) }
 
     @Test
-    fun givenNoElementExistsFindByText() =
-        givenNoElementByTextWillFailAsExpected { within(getCoolSection()).findByText(it) }
+    fun givenNoElementExistsFindByText() = givenNoElementByTextWillFailAsExpected { within(getCoolSection()).findByText(it) }
 
     private fun givenNoElementByTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?,
@@ -80,18 +78,17 @@ class WithinTest : Within by TestingLibraryBrowser {
         within(getCoolSection()).queryByText(it)
     }
 
-    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) =
-        testingLibrarySetup {
-        } exercise {
-            kotlin.runCatching { query("Cool")?.waitToExist() }
-        } verify { result ->
-            result.isFailure
-                .assertIsEqualTo(true)
-            result.exceptionOrNull()?.message.apply {
-                this?.startsWith("Found multiple elements with the text: Cool")
-                    .assertIsEqualTo(true, "<$this>")
-            }
+    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
+    } exercise {
+        kotlin.runCatching { query("Cool")?.waitToExist() }
+    } verify { result ->
+        result.isFailure
+            .assertIsEqualTo(true)
+        result.exceptionOrNull()?.message.apply {
+            this?.startsWith("Found multiple elements with the text: Cool")
+                .assertIsEqualTo(true, "<$this>")
         }
+    }
 
     @Test
     fun givenMultipleElementExistsSucceedsOnGetAllByText() = givenMultipleElementsByTextSucceeds {
@@ -108,15 +105,14 @@ class WithinTest : Within by TestingLibraryBrowser {
         within(getCoolSection()).queryAllByText(it)
     }
 
-    private fun givenMultipleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
-        testingLibrarySetup {
-        } exercise {
-            query("Cool")
-        } verify { elements ->
-            elements.map { it.attribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
-            elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
-        }
+    private fun givenMultipleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) = testingLibrarySetup {
+    } exercise {
+        query("Cool")
+    } verify { elements ->
+        elements.map { it.attribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
+        elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
+    }
 
     @Test
     fun givenSingleElementExistsSucceedsOnGetAllByText() = givenSingleElementsByTextSucceeds {
@@ -133,13 +129,12 @@ class WithinTest : Within by TestingLibraryBrowser {
         within(getAwesomeSection()).queryAllByText(it)
     }
 
-    private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) =
-        testingLibrarySetup {
-        } exercise {
-            query("Awesome")
-        } verify { elements ->
-            elements.map { it.attribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool"))
-            elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
-        }
+    private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) = testingLibrarySetup {
+    } exercise {
+        query("Awesome")
+    } verify { elements ->
+        elements.map { it.attribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool"))
+        elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
+    }
 }

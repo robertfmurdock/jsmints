@@ -12,6 +12,5 @@ internal object ScreenTestingLibraryFunctions : TestingLibraryFunctions {
     override fun render(node: ReactNode) = reactTestingLibrary.render(node)
     override fun render(node: ReactNode, options: RenderOptions) = reactTestingLibrary.render(node, options)
     override fun render(block: @ReactDsl ChildrenBuilder.() -> Unit) = render(Fragment.create(block))
-    override fun render(options: RenderOptions, block: @ReactDsl ChildrenBuilder.() -> Unit) =
-        render(Fragment.create(block), options)
+    override fun render(options: RenderOptions, block: @ReactDsl ChildrenBuilder.() -> Unit) = render(Fragment.create(block), options)
 }

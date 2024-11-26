@@ -16,16 +16,15 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     @Test
     fun givenElementExistsCanQueryByRole() = givenElementByRoleWorks(::queryByRole)
 
-    private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) =
-        testingLibrarySetup {
-        } exercise {
-            query("button", RoleOptions(name = "Press Me"))
-        } verify { element ->
-            element?.isDisplayed()
-                .assertIsEqualTo(true)
-            element?.attribute("data-test-info")
-                .assertIsEqualTo("pretty-cool")
-        }
+    private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) = testingLibrarySetup {
+    } exercise {
+        query("button", RoleOptions(name = "Press Me"))
+    } verify { element ->
+        element?.isDisplayed()
+            .assertIsEqualTo(true)
+        element?.attribute("data-test-info")
+            .assertIsEqualTo("pretty-cool")
+    }
 
     @Test
     fun givenNoElementExistsGetByRole() = givenNoElementByRoleWillFailAsExpected(::getByRole)
@@ -61,18 +60,17 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     @Test
     fun givenMultipleElementExistsErrorsOnQueryByRole() = givenMultipleElementsByRoleErrors(::queryByRole)
 
-    private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) =
-        testingLibrarySetup {
-        } exercise {
-            kotlin.runCatching { query("button", RoleOptions(name = "Chill"))?.waitToExist() }
-        } verify { result ->
-            result.isFailure
-                .assertIsEqualTo(true)
-            result.exceptionOrNull()?.message.apply {
-                this?.startsWith("Found multiple elements with the role \"button\" and name \"Chill\"")
-                    .assertIsEqualTo(true, "<$this>")
-            }
+    private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) = testingLibrarySetup {
+    } exercise {
+        kotlin.runCatching { query("button", RoleOptions(name = "Chill"))?.waitToExist() }
+    } verify { result ->
+        result.isFailure
+            .assertIsEqualTo(true)
+        result.exceptionOrNull()?.message.apply {
+            this?.startsWith("Found multiple elements with the role \"button\" and name \"Chill\"")
+                .assertIsEqualTo(true, "<$this>")
         }
+    }
 
     @Test
     fun givenMultipleElementExistsSucceedsOnGetAllByRole() = givenMultipleElementsByRoleSucceeds(::getAllByRole)
@@ -83,15 +81,14 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     @Test
     fun givenMultipleElementExistsSucceedsOnQueryAllByRole() = givenMultipleElementsByRoleSucceeds(::queryAllByRole)
 
-    private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) =
-        testingLibrarySetup {
-        } exercise {
-            query("button", RoleOptions(name = "Chill"))
-        } verify { elements ->
-            elements.map { it.attribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
-            elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
-        }
+    private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) = testingLibrarySetup {
+    } exercise {
+        query("button", RoleOptions(name = "Chill"))
+    } verify { elements ->
+        elements.map { it.attribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
+        elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
+    }
 
     @Test
     fun givenSingleElementExistsSucceedsOnGetAllByRole() = givenSingleElementsByRoleSucceeds(::getAllByRole)
@@ -102,13 +99,12 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     @Test
     fun givenSingleElementExistsSucceedsOnQueryAllByRole() = givenSingleElementsByRoleSucceeds(::queryAllByRole)
 
-    private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) =
-        testingLibrarySetup {
-        } exercise {
-            query("button", RoleOptions(name = "Press Me"))
-        } verify { elements ->
-            elements.map { it.attribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool"))
-            elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
-        }
+    private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) = testingLibrarySetup {
+    } exercise {
+        query("button", RoleOptions(name = "Press Me"))
+    } verify { elements ->
+        elements.map { it.attribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool"))
+        elements.asList().forEach { it.isDisplayed().assertIsEqualTo(true) }
+    }
 }
