@@ -7,11 +7,10 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 import org.jetbrains.kotlin.gradle.targets.js.npm.NpmDependencyExtension
 
-fun KotlinDependencyHandler.npmConstrained(name: String): Dependency =
-    (project.extensions.getByName("jsconstraint") as JsConstraintExtension)
-        .dependencies()!!
-        .first { (key, _) -> key == name }
-        .let { npm(name, it.second.asText()) }
+fun KotlinDependencyHandler.npmConstrained(name: String): Dependency = (project.extensions.getByName("jsconstraint") as JsConstraintExtension)
+    .dependencies()!!
+    .first { (key, _) -> key == name }
+    .let { npm(name, it.second.asText()) }
 
 fun DependencyHandlerScope.npmConstrained(name: String, jsConstraintExtension: JsConstraintExtension): Dependency = jsConstraintExtension
     .dependencies()!!

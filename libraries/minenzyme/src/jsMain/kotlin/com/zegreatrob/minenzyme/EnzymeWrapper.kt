@@ -60,9 +60,8 @@ external interface ShallowWrapper<T> {
     fun shallow(): ShallowWrapper<T>
 }
 
-inline fun <reified P : DataProps<P>> ShallowWrapper<DataPropsBridge>.dataprops(): P =
-    ensureKotlinClassProps(props(), P::class.js)
-        .unsafeCast<P>()
+inline fun <reified P : DataProps<P>> ShallowWrapper<DataPropsBridge>.dataprops(): P = ensureKotlinClassProps(props(), P::class.js)
+    .unsafeCast<P>()
 
 fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: String) = findInputByName(fieldName)
     .simulate(
@@ -76,12 +75,11 @@ fun <T> ShallowWrapper<T>.simulateInputChange(fieldName: String, fieldValue: Str
 fun <T> ShallowWrapper<T>.findByClass(className: String) = find<T>(".$className")
 fun <T> ShallowWrapper<T>.findInputByName(inputName: String) = find<T>("input[name='$inputName']")
 
-fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandler<P> = {}) =
-    enzyme.shallow(
-        buildElement {
-            child(reactFunction, props, handler)
-        },
-    )
+fun <P : Props> shallow(reactFunction: ElementType<P>, props: P, handler: RHandler<P> = {}) = enzyme.shallow(
+    buildElement {
+        child(reactFunction, props, handler)
+    },
+)
 
 fun shallow(handler: RBuilder.() -> Unit) = enzyme.shallow(buildElement(handler))
 

@@ -66,8 +66,7 @@ class WebdriverElement(
         })
     }
 
-    suspend fun selectByVisibleText(text: String): Unit =
-        log(::selectByVisibleText) { innerElement().selectByVisibleText(text).await() }
+    suspend fun selectByVisibleText(text: String): Unit = log(::selectByVisibleText) { innerElement().selectByVisibleText(text).await() }
 
     suspend fun setValue(value: String): Unit = log(::setValue) { innerElement().setValue(value).await() }
     suspend fun clearSetValue(value: String): Unit = log(::clearSetValue) {

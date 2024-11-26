@@ -15,16 +15,15 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     @Test
     fun givenElementExistsCanQueryByRole() = givenElementByRoleWorks(::queryByRole)
 
-    private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> HTMLElement?) =
-        testingLibrarySetup {
-        } exercise {
-            query("button", RoleOptions(name = "Press Me"))
-        } verify { element ->
-            element?.isConnected
-                .assertIsEqualTo(true)
-            element?.getAttribute("data-test-info")
-                .assertIsEqualTo("pretty-cool")
-        }
+    private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> HTMLElement?) = testingLibrarySetup {
+    } exercise {
+        query("button", RoleOptions(name = "Press Me"))
+    } verify { element ->
+        element?.isConnected
+            .assertIsEqualTo(true)
+        element?.getAttribute("data-test-info")
+            .assertIsEqualTo("pretty-cool")
+    }
 
     @Test
     fun givenNoElementExistsGetByRole() = givenNoElementByRoleWillFailAsExpected(::getByRole)
@@ -59,18 +58,17 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     @Test
     fun givenMultipleElementExistsErrorsOnQueryByRole() = givenMultipleElementsByRoleErrors(::queryByRole)
 
-    private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> HTMLElement?) =
-        testingLibrarySetup {
-        } exercise {
-            runCatching { query("button", RoleOptions(name = "Chill")) }
-        } verify { result ->
-            result.isFailure
-                .assertIsEqualTo(true)
-            result.exceptionOrNull()?.message.apply {
-                this?.startsWith("Found multiple elements with the role \"button\" and name \"Chill\"")
-                    .assertIsEqualTo(true, "<$this>")
-            }
+    private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> HTMLElement?) = testingLibrarySetup {
+    } exercise {
+        runCatching { query("button", RoleOptions(name = "Chill")) }
+    } verify { result ->
+        result.isFailure
+            .assertIsEqualTo(true)
+        result.exceptionOrNull()?.message.apply {
+            this?.startsWith("Found multiple elements with the role \"button\" and name \"Chill\"")
+                .assertIsEqualTo(true, "<$this>")
         }
+    }
 
     @Test
     fun givenMultipleElementExistsSucceedsOnGetAllByRole() = givenMultipleElementsByRoleSucceeds(::getAllByRole)
@@ -81,15 +79,14 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     @Test
     fun givenMultipleElementExistsSucceedsOnQueryAllByRole() = givenMultipleElementsByRoleSucceeds(::queryAllByRole)
 
-    private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> Array<HTMLElement>) =
-        testingLibrarySetup {
-        } exercise {
-            query("button", RoleOptions(name = "Chill"))
-        } verify { elements ->
-            elements.map { it.getAttribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
-            elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
-        }
+    private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> Array<HTMLElement>) = testingLibrarySetup {
+    } exercise {
+        query("button", RoleOptions(name = "Chill"))
+    } verify { elements ->
+        elements.map { it.getAttribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool", "very-cool", "extremely-cool"))
+        elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
+    }
 
     @Test
     fun givenSingleElementExistsSucceedsOnGetAllByRole() = givenSingleElementsByRoleSucceeds(::getAllByRole)
@@ -100,13 +97,12 @@ class ByRoleTest : ByRole by TestingLibraryReact.screen {
     @Test
     fun givenSingleElementExistsSucceedsOnQueryAllByRole() = givenSingleElementsByRoleSucceeds(::queryAllByRole)
 
-    private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> Array<HTMLElement>) =
-        testingLibrarySetup {
-        } exercise {
-            query("button", RoleOptions(name = "Press Me"))
-        } verify { elements ->
-            elements.map { it.getAttribute("data-test-info") }
-                .assertIsEqualTo(listOf("pretty-cool"))
-            elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
-        }
+    private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> Array<HTMLElement>) = testingLibrarySetup {
+    } exercise {
+        query("button", RoleOptions(name = "Press Me"))
+    } verify { elements ->
+        elements.map { it.getAttribute("data-test-info") }
+            .assertIsEqualTo(listOf("pretty-cool"))
+        elements.asList().forEach { it.isConnected.assertIsEqualTo(true) }
+    }
 }

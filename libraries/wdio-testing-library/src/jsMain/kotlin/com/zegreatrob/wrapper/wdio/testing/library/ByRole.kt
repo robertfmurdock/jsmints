@@ -7,13 +7,11 @@ import js.objects.jso
 import kotlinx.coroutines.await
 
 interface ByRole : BrowserProvider {
-    suspend fun getByRole(role: String, options: RoleOptions = RoleOptions()) =
-        WebdriverElement(finder = { extendedWdioBrowser.getByRole(role, toTestingLibraryOptions(options)).await() })
-            .apply { waitToExist() }
+    suspend fun getByRole(role: String, options: RoleOptions = RoleOptions()) = WebdriverElement(finder = { extendedWdioBrowser.getByRole(role, toTestingLibraryOptions(options)).await() })
+        .apply { waitToExist() }
 
-    suspend fun findByRole(role: String, options: RoleOptions = RoleOptions()) =
-        WebdriverElement(finder = { extendedWdioBrowser.findByRole(role, toTestingLibraryOptions(options)).await() })
-            .apply { waitToExist() }
+    suspend fun findByRole(role: String, options: RoleOptions = RoleOptions()) = WebdriverElement(finder = { extendedWdioBrowser.findByRole(role, toTestingLibraryOptions(options)).await() })
+        .apply { waitToExist() }
 
     suspend fun queryByRole(role: String, options: RoleOptions = RoleOptions()) = WebdriverElement(finder = {
         extendedWdioBrowser.queryByRole(role, toTestingLibraryOptions(options)).await()

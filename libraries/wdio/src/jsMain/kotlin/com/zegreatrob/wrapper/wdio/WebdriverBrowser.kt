@@ -50,8 +50,7 @@ object WebdriverBrowser : BrowserLoggingSyntax {
     suspend fun setUrl(url: String) = browser.url(url).await()
     suspend fun getLogs() = browser.getLogs("browser").await().toList()
 
-    suspend fun executeAsync(argument: dynamic, arg: (dynamic, () -> Unit) -> dynamic) =
-        browser.executeAsync(arg, argument).await()
+    suspend fun executeAsync(argument: dynamic, arg: (dynamic, () -> Unit) -> dynamic) = browser.executeAsync(arg, argument).await()
 
     suspend fun setLocation(location: String) {
         val currentUrl = currentUrl()
