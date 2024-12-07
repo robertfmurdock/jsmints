@@ -1,6 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import org.jmailen.gradle.kotlinter.tasks.FormatTask
-import org.jmailen.gradle.kotlinter.tasks.LintTask
+//import org.jmailen.gradle.kotlinter.tasks.FormatTask
+//import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 repositories {
     maven { url = uri("https://plugins.gradle.org/m2/") }
@@ -13,7 +13,7 @@ plugins {
     id("java-gradle-plugin")
     alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
-    alias(libs.plugins.org.jmailen.kotlinter)
+//    alias(libs.plugins.org.jmailen.kotlinter)
 }
 
 kotlin {
@@ -26,7 +26,7 @@ dependencies {
     implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
     implementation(libs.com.github.ben.manes.gradle.versions.plugin)
-    implementation(libs.org.jmailen.gradle.kotlinter.gradle)
+//    implementation(libs.org.jmailen.gradle.kotlinter.gradle)
     implementation(libs.com.fasterxml.jackson.core.jackson.databind)
     implementation(platform(libs.com.zegreatrob.testmints.testmints.bom))
     implementation("com.zegreatrob.testmints:mint-logs-plugin")
@@ -46,12 +46,12 @@ tasks {
                 .matches(candidate.version)
         }
     }
-    withType(FormatTask::class) {
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
-    withType(LintTask::class) {
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
+//    withType(FormatTask::class) {
+//        exclude { spec -> spec.file.absolutePath.contains("generated") }
+//    }
+//    withType(LintTask::class) {
+//        exclude { spec -> spec.file.absolutePath.contains("generated") }
+//    }
     clean {
         delete(rootProject.layout.buildDirectory)
         dependsOn(provider { (getTasksByName("clean", true) - this).toList() })
