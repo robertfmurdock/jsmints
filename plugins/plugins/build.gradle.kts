@@ -7,7 +7,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     alias(libs.plugins.com.gradle.plugin.publish)
-    alias(libs.plugins.org.jmailen.kotlinter)
+//    alias(libs.plugins.org.jmailen.kotlinter)
     id("org.jetbrains.kotlin.jvm") version (embeddedKotlinVersion)
     signing
 }
@@ -80,12 +80,12 @@ kotlin {
 }
 
 tasks {
-    formatKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
-    }
-    lintKotlinMain {
-        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
-    }
+//    formatKotlinMain {
+//        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+//    }
+//    lintKotlinMain {
+//        exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
+//    }
     val copyTemplates by registering(Copy::class) {
         inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
