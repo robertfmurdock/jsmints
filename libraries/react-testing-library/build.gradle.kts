@@ -1,5 +1,5 @@
-//import org.jmailen.gradle.kotlinter.tasks.FormatTask
-//import org.jmailen.gradle.kotlinter.tasks.LintTask
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
     id("com.zegreatrob.jsmints.plugins.wrapper")
@@ -43,22 +43,22 @@ dependencies {
 }
 
 tasks {
-//    formatKotlinJsMain {
-//        dependsOn("kspKotlinJs")
-//    }
-//    formatKotlinJsTest {
-//        dependsOn("kspTestKotlinJs")
-//    }
-//    withType(FormatTask::class) {
-//        exclude { spec -> spec.file.absolutePath.contains("generated") }
-//    }
-//    withType(LintTask::class) {
-//        exclude { spec -> spec.file.absolutePath.contains("generated") }
-//    }
-//    lintKotlinJsMain {
-//        dependsOn("kspKotlinJs")
-//    }
-//    lintKotlinJsTest {
-//        dependsOn("kspTestKotlinJs")
-//    }
+    formatKotlinJsMain {
+        dependsOn("kspKotlinJs")
+    }
+    formatKotlinJsTest {
+        dependsOn("kspTestKotlinJs")
+    }
+    withType(FormatTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
+    }
+    withType(LintTask::class) {
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
+    }
+    lintKotlinJsMain {
+        dependsOn("kspKotlinJs")
+    }
+    lintKotlinJsTest {
+        dependsOn("kspTestKotlinJs")
+    }
 }

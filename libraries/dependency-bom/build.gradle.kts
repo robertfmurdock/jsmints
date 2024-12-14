@@ -2,7 +2,7 @@ plugins {
     `java-platform`
     id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
-//    id("org.jmailen.kotlinter")
+    id("org.jmailen.kotlinter")
     id("com.zegreatrob.jsmints.plugins.ncu")
 }
 
