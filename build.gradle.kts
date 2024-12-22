@@ -26,14 +26,14 @@ tasks {
     ) + gradle.includedBuild("wdio-testing-library-test")
     val includedBuilds = testBuilds + gradle.includedBuild("convention-plugins")
 
-    val publish by creating {
+    val publish by registering {
         mustRunAfter(check)
         dependsOn(provider { publishableBuilds.map { it.task(":publish") } })
     }
     "versionCatalogUpdate" {
         dependsOn(provider { includedBuilds.map { it.task(":versionCatalogUpdate") } })
     }
-    create("kotlinUpgradeYarnLock") {
+    register("kotlinUpgradeYarnLock") {
         dependsOn(
             provider {
                 listOf(
@@ -43,14 +43,14 @@ tasks {
             }
         )
     }
-    create<Copy>("collectResults") {
+    register<Copy>("collectResults") {
         dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
         dependsOn(provider { testBuilds.map { it.task(":collectResults") } })
         from(testBuilds.map { it.projectDir.resolve("build/test-output") })
         into(rootProject.layout.buildDirectory.dir("test-output/${project.path}".replace(":", "/")))
     }
 
-    create("formatKotlin") {
+    register("formatKotlin") {
         dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() })
         dependsOn(provider { includedBuilds.map { it.task(":formatKotlin") } })
     }

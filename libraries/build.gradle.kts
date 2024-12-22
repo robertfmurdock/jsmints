@@ -28,10 +28,10 @@ tagger {
 }
 
 tasks {
-    create("collectResults") {
+    register("collectResults") {
         dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
     }
-    create("formatKotlin") {
+    register("formatKotlin") {
         dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() })
     }
     "versionCatalogUpdate" { dependsOn(":dependency-bom:ncuUpgrade") }

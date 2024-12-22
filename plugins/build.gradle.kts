@@ -44,8 +44,8 @@ tasks {
     }
     check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }
     assemble { dependsOn(provider { (getTasksByName("assemble", true) - this).toList() }) }
-    create("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
-    create("collectResults") { dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() }) }
+    register("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
+    register("collectResults") { dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() }) }
     val closeAndReleaseSonatypeStagingRepository by getting {
         mustRunAfter(publish)
     }
