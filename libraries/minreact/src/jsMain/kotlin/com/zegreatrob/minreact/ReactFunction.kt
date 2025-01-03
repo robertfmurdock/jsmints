@@ -2,7 +2,6 @@ package com.zegreatrob.minreact
 
 import com.zegreatrob.minreact.external.corejs.objectAssign
 import js.objects.JsoDsl
-import react.Children
 import react.ChildrenBuilder
 import react.ElementType
 import react.FC
@@ -57,9 +56,7 @@ typealias TMFC = ElementType<DataPropsBridge>
 
 val DataProps<*>.children get() = this.unsafeCast<PropsWithChildren>().children
 
-fun ChildrenBuilder.children(dataProps: DataProps<*>) {
-    Children.toArray(dataProps.children).forEach { +it }
-}
+fun ChildrenBuilder.children(dataProps: DataProps<*>) = +dataProps.children
 
 fun <P : DataProps<P>> create(dataProps: DataProps<P>, block: @JsoDsl Props.() -> Unit = {}) = dataProps.component.create {
     +dataProps.unsafeCast<Props>()
