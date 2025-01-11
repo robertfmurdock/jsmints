@@ -27,8 +27,8 @@ kotlin {
 }
 
 rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    if (it?.version != "21.5.0") {
-        it?.version = "21.5.0"
+    if (it?.version != "22.13.0") {
+        it?.version = "22.13.0"
     }
 }
 
