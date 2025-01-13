@@ -9,7 +9,7 @@ on:
 jobs:
   build-job:
     name: "Build"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     concurrency:
       group: ${{ github.ref }}
     env:
