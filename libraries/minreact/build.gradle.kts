@@ -11,7 +11,6 @@ kotlin.js().compilations.named("test") {
 }
 
 dependencies {
-    jsMainApi(jsconstraint("core-js"))
     jsMainApi("org.jetbrains.kotlin-wrappers:kotlin-react")
     jsMainApi("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
 

@@ -13,6 +13,6 @@ class UserEvent private constructor(private val innerUser: TLUserEvent) {
         .await()
 
     companion object {
-        fun setup() = UserEvent(userEvent.default.setup())
+        fun setup() = UserEvent(userEvent.setup())
     }
 }

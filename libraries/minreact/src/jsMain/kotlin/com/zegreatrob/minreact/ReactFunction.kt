@@ -1,6 +1,5 @@
 package com.zegreatrob.minreact
 
-import com.zegreatrob.minreact.external.corejs.objectAssign
 import js.objects.JsoDsl
 import react.ChildrenBuilder
 import react.ElementType
@@ -22,7 +21,7 @@ class NamedTmFC<T : DataProps<T>>(private val clazz: KClass<T>, private val func
 
     operator fun getValue(t: Any?, property: KProperty<*>): FC<DataPropsBridge> = fc ?: FC(property.name) { props: DataPropsBridge ->
         val newProps = ensureKotlinClassProps(props, clazz.js)
-        objectAssign(this@FC, newProps)
+        js.objects.Object.assign(this@FC, newProps)
         function(newProps)
     }.also {
         fc = it
@@ -42,7 +41,7 @@ fun <P : DataProps<P>> ensureKotlinClassProps(props: DataPropsBridge, jsClass: J
     @Suppress("UNUSED_VARIABLE")
     val thing = jsClass
     val newProps = js("new thing()")
-    objectAssign(newProps, props)
+    js.objects.Object.assign(newProps, props)
     newProps
 }.unsafeCast<P>()
 

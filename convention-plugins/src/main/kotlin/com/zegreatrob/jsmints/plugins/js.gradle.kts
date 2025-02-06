@@ -20,7 +20,10 @@ kotlin {
         allWarningsAsErrors = true
     }
     js {
-        nodejs { useCommonJs() }
+        nodejs {
+            useEsModules()
+            compilerOptions { target = "es2015" }
+        }
     }
 }
 
@@ -28,7 +31,8 @@ dependencies {
     "commonMainApi"(platform(project(":dependency-bom")))
 }
 
-val jspackage = project.extensions.create<JsConstraintExtension>("jsconstraint")
+project.extensions.create<JsConstraintExtension>("jsconstraint")
+
 configure<JsConstraintExtension> {
     json = File(project(":dependency-bom").projectDir, "package.json")
 }
