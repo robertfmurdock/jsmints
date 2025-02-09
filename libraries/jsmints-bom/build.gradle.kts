@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     constraints {
-        api(project(":minenzyme"))
         api(project(":minjson"))
         api(project(":minreact"))
         api(project(":minreact-processor"))

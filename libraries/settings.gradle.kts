@@ -14,7 +14,6 @@ rootProject.name = "jsmints"
 
 include("dependency-bom")
 include("jsmints-bom")
-include("minenzyme")
 include("minjson")
 include("minreact")
 include("minreact-plugin-test")

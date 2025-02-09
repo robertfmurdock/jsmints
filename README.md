@@ -59,10 +59,6 @@ Sugar for React functional components that allows them to use Kotlin data classe
 
 If you choose to use this library, please share feedback! The API is strange and could use some love regarding what's good and what stinks.
 
-### minenzyme
-
-A wrapper for the enzyme library. I am not actively supporting this module any more. In future versions it may be removed from the suite.
-
 ## Installation
 
 All of these are either regular libraries, or gradle plugins.

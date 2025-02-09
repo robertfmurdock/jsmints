@@ -14,8 +14,6 @@
     "@wdio/mocha-framework": "8.40.3",
     "allure-commandline": "^2.32.2",
     "core-js": "^3.40.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.8",
     "geckodriver": "^5.0.0",
     "global-jsdom": "^26.0.0",
     "jsdom": "26.0.0",
