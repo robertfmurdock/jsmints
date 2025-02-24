@@ -178,7 +178,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
     private fun childrenBuilderFunction(declaration: KSPropertyDeclaration): String {
         val callableRef = declaration.toCallableRef()
             ?: return CodeBlock.of(
-                format = "%T { children() }",
+                format = "this.children = %T.create { children() }",
                 args = arrayOf(ClassName("react", "Fragment"))
             ).toString()
         val parameters = callableRef.parametersOfFunctionType()
