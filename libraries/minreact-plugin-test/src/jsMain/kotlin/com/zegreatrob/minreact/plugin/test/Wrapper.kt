@@ -7,7 +7,7 @@ import react.dom.html.ReactHTML.div
 import react.useEffect
 
 external interface WrapperProps : PropsWithChildren {
-    var a: String
+    var a: String?
 }
 
 @ReactFunc

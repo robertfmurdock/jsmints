@@ -11,6 +11,7 @@ import com.zegreatrob.wrapper.testinglibrary.userevent.UserEvent
 import react.FC
 import react.Props
 import react.ReactNode
+import react.create
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span

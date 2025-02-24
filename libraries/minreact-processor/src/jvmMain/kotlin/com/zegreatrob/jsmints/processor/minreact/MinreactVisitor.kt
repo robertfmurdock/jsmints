@@ -40,6 +40,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
 
             val builder = FileSpec.builder(classDeclaration.packageName.asString(), "${classDeclaration}Extentions")
+            builder.addImport("react", "create")
             val propsClassName = parameterizedClassName(classDeclaration)
             val functions = classDeclaration.getAllProperties().mapIndexed { index, value ->
                 val component = "component${index + 1}"
@@ -113,6 +114,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
 
 
                 FileSpec.builder(property.packageName.asString(), "${targetName}Kt")
+                    .addImport("react", "create")
                     .addFunction(
                         builderFunction(
                             ClassName("react", "ChildrenBuilder"),
@@ -178,7 +180,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
     private fun childrenBuilderFunction(declaration: KSPropertyDeclaration): String {
         val callableRef = declaration.toCallableRef()
             ?: return CodeBlock.of(
-                format = "this.children = %T.create { children() }",
+                format = "this.children = %T.create(block = { children() })",
                 args = arrayOf(ClassName("react", "Fragment"))
             ).toString()
         val parameters = callableRef.parametersOfFunctionType()
@@ -191,9 +193,9 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             .addCode(
                 CodeBlock.of(
                     format = """
-                        return %T.create { children(""".trimIndent() + (0..<parameters.size).joinToString(
+                        return %T.create(block = { children(""".trimIndent() + (0..<parameters.size).joinToString(
                         ","
-                    ) { "cp$it" } + ") }",
+                    ) { "cp$it" } + ") })",
                     args = arrayOf(ClassName("react", "Fragment"))
                 )
             )
