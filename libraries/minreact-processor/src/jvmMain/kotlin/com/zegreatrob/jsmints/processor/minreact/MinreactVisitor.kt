@@ -5,6 +5,7 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotation
+import com.google.devtools.ksp.symbol.KSCallableReference
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSNode
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
@@ -20,6 +21,7 @@ import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.ksp.TypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toClassName
@@ -53,14 +55,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
 
             var paramsAssignments = propertiesAsParameterAssignments(classDeclaration)
 
-            val childrenNode = classDeclaration.getAllProperties().find(::isChildrenNode)
             var bodyArgs = listOf<Any?>(MemberName("react", "create"))
-            if (childrenNode != null) {
-                paramsAssignments += "\n%T { children() }\n"
-                bodyArgs = bodyArgs.plusElement(
-                    ClassName("react", "Fragment")
-                )
-            }
             val codeBlock = CodeBlock.of(
                 """
                     | return %M {
@@ -106,14 +101,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
                 val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
                 var paramsAssignments = propertiesAsParameterAssignments(classDeclaration)
 
-                val childrenNode = classDeclaration.getAllProperties().find(::isChildrenNode)
                 var bodyArgs = listOf<Any?>(parameterizedTypeName(classDeclaration))
-                if (childrenNode != null) {
-                    paramsAssignments += "\n%T { children() }\n"
-                    bodyArgs = bodyArgs + listOf(
-                        ClassName("react", "Fragment")
-                    )
-                }
 
                 val body = """
                     |  val component = ($targetName.unsafeCast<%T>())
@@ -149,7 +137,6 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
 
     private fun propertiesAsParameterAssignments(classDeclaration: KSClassDeclaration) =
         classDeclaration.getAllProperties()
-            .filterNot(::isChildrenNode)
             .joinToString("\n", transform = ::assignPropByParameter)
 
     private fun builderFunction(
@@ -180,10 +167,41 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
         }
     }
 
-    private fun assignPropByParameter(property: KSPropertyDeclaration) = if (property.type.resolve().isMarkedNullable) {
-        "${property.simpleName.getShortName()}?.let { this.${property.simpleName.getShortName()} = it }"
-    } else {
-        "this.${property.simpleName.getShortName()} = ${property.simpleName.getShortName()}"
+    private fun assignPropByParameter(property: KSPropertyDeclaration) = when {
+        isChildrenNode(property) -> childrenBuilderFunction(property)
+        property.type.resolve().isMarkedNullable ->
+            "${property.simpleName.getShortName()}?.let { this.${property.simpleName.getShortName()} = it }"
+
+        else -> "this.${property.simpleName.getShortName()} = ${property.simpleName.getShortName()}"
+    }
+
+    private fun childrenBuilderFunction(declaration: KSPropertyDeclaration): String {
+        val callableRef = declaration.toCallableRef()
+            ?: return CodeBlock.of(
+                format = "%T { children() }",
+                args = arrayOf(ClassName("react", "Fragment"))
+            ).toString()
+        val parameters = callableRef.parametersOfFunctionType()
+        val childrenFunc = FunSpec.builder("childrenFunc")
+            .addParameters(
+                parameters
+                    .mapIndexed { index, it -> ParameterSpec.builder("cp$index", it).build() }
+            )
+            .returns(callableRef.returnType.resolve().toTypeName())
+            .addCode(
+                CodeBlock.of(
+                    format = """
+                        return %T.create { children(""".trimIndent() + (0..<parameters.size).joinToString(
+                        ","
+                    ) { "cp$it" } + ") }",
+                    args = arrayOf(ClassName("react", "Fragment"))
+                )
+            )
+            .build()
+            .toString()
+            .replace("public fun", "fun")
+            .replace("childrenFunc", "")
+        return "this.children = ${childrenFunc};"
     }
 
     private fun parameterSpecs(
@@ -197,21 +215,32 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             .map { parameterSpec(it, resolver) }
             .let {
                 if (childrenNode == null) it else {
-                    it + childrenParameter()
+                    it + childrenParameter(childrenNode)
                 }
             }
             .asIterable()
     }
 
-    private fun childrenParameter() = ParameterSpec.builder(
-        "children", LambdaTypeName.get(
-            receiver = ClassName("react", "ChildrenBuilder"),
-            parameters = emptyList(),
-            returnType = UNIT
+    private fun childrenParameter(childrenNode: KSPropertyDeclaration): ParameterSpec {
+        val callableRef = childrenNode.toCallableRef()
+        val parameters = callableRef?.parametersOfFunctionType() ?: emptyArray()
+        return ParameterSpec.builder(
+            "children", LambdaTypeName.get(
+                receiver = ClassName("react", "ChildrenBuilder"),
+                parameters = parameters,
+                returnType = UNIT
+            )
         )
-    )
-        .defaultValue("{}")
-        .build()
+            .defaultValue("{ ${ (0..<parameters.size).joinToString(","){"_"}  } -> }")
+            .build()
+    }
+
+    private fun KSCallableReference.parametersOfFunctionType(): Array<TypeName> =
+        functionParameters.map { it.type.toTypeName() }
+            .toTypedArray()
+
+    private fun KSPropertyDeclaration.toCallableRef(): KSCallableReference? =
+        (type.element as? KSCallableReference)
 
     private fun isChildrenNode(it: KSPropertyDeclaration) = it.simpleName.asString() == "children"
 

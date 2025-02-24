@@ -1,8 +1,7 @@
+package com.zegreatrob.minreact.plugin.test
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
-import com.zegreatrob.minreact.plugin.test.DestructureThing
-import com.zegreatrob.minreact.plugin.test.NiceThing
 import com.zegreatrob.testmints.async.asyncSetup
 import com.zegreatrob.testmints.setup
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
@@ -11,9 +10,9 @@ import com.zegreatrob.wrapper.testinglibrary.userevent.UserEvent
 import react.FC
 import react.Props
 import react.ReactNode
-import react.create
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.span
 import react.useState
 import kotlin.test.Test
 
@@ -204,5 +203,26 @@ class AnnotationTest {
             .assertIsNotEqualTo(null)
         screen.queryByText("Thing do")
             .assertIsNotEqualTo(null)
+    }
+
+    @Test
+    fun canUseChildrenParameterAsChildrenBuilder() = asyncSetup(object {
+        val expectedFirstValue = "Here is a value"
+        val expectedSecondValue = 7
+        val normal = FC<Props> {
+            ParameterExample(expectedFirstValue, expectedSecondValue) { value1, value2 ->
+                span { +value1 }
+                div { +"$value2" }
+            }
+        }
+    }) exercise {
+        render(normal.create())
+    } verify { result ->
+        screen.queryByText("ParameterExample")
+            .assertIsNotEqualTo(null, "did not find component")
+        screen.queryByText(expectedFirstValue)
+            .assertIsNotEqualTo(null, "did not find first value")
+        screen.queryByText("$expectedSecondValue")
+            .assertIsNotEqualTo(null, "did not find second value")
     }
 }
