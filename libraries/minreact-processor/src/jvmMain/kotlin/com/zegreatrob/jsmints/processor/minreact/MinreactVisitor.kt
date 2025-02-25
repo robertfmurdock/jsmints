@@ -54,7 +54,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             }
             functions.forEach { builder.addFunction(it) }
 
-            var paramsAssignments = propertiesAsParameterAssignments(classDeclaration)
+            var paramsAssignments = propertiesAsParameterAssignments(classDeclaration, resolver)
 
             var bodyArgs = listOf<Any?>(MemberName("react", "create"))
             val codeBlock = CodeBlock.of(
@@ -100,7 +100,7 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
                 val classDeclaration = propsType?.declaration as? KSClassDeclaration
                     ?: return@forEach
                 val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
-                var paramsAssignments = propertiesAsParameterAssignments(classDeclaration)
+                var paramsAssignments = propertiesAsParameterAssignments(classDeclaration, resolver)
 
                 var bodyArgs = listOf<Any?>(parameterizedTypeName(classDeclaration))
 
@@ -137,9 +137,9 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
         }
     }
 
-    private fun propertiesAsParameterAssignments(classDeclaration: KSClassDeclaration) =
+    private fun propertiesAsParameterAssignments(classDeclaration: KSClassDeclaration, resolver: TypeParameterResolver) =
         classDeclaration.getAllProperties()
-            .joinToString("\n", transform = ::assignPropByParameter)
+            .joinToString("\n", transform = { property -> assignPropByParameter(property, resolver) })
 
     private fun builderFunction(
         receiver: ClassName,
@@ -169,21 +169,21 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
         }
     }
 
-    private fun assignPropByParameter(property: KSPropertyDeclaration) = when {
-        isChildrenNode(property) -> childrenBuilderFunction(property)
+    private fun assignPropByParameter(property: KSPropertyDeclaration, resolver: TypeParameterResolver) = when {
+        isChildrenNode(property) -> childrenBuilderFunction(property, resolver)
         property.type.resolve().isMarkedNullable ->
             "${property.simpleName.getShortName()}?.let { this.${property.simpleName.getShortName()} = it }"
 
         else -> "this.${property.simpleName.getShortName()} = ${property.simpleName.getShortName()}"
     }
 
-    private fun childrenBuilderFunction(declaration: KSPropertyDeclaration): String {
+    private fun childrenBuilderFunction(declaration: KSPropertyDeclaration, resolver: TypeParameterResolver): String {
         val callableRef = declaration.toCallableRef()
             ?: return CodeBlock.of(
                 format = "this.children = %T.create(block = { children() })",
                 args = arrayOf(ClassName("react", "Fragment"))
             ).toString()
-        val parameters = callableRef.parametersOfFunctionType()
+        val parameters = callableRef.parametersOfFunctionType(resolver)
         val childrenFunc = FunSpec.builder("childrenFunc")
             .addParameters(
                 parameters
@@ -217,15 +217,15 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             .map { parameterSpec(it, resolver) }
             .let {
                 if (childrenNode == null) it else {
-                    it + childrenParameter(childrenNode)
+                    it + childrenParameter(childrenNode, resolver)
                 }
             }
             .asIterable()
     }
 
-    private fun childrenParameter(childrenNode: KSPropertyDeclaration): ParameterSpec {
+    private fun childrenParameter(childrenNode: KSPropertyDeclaration, resolver: TypeParameterResolver): ParameterSpec {
         val callableRef = childrenNode.toCallableRef()
-        val parameters = callableRef?.parametersOfFunctionType() ?: emptyArray()
+        val parameters = callableRef?.parametersOfFunctionType(resolver) ?: emptyArray()
         return ParameterSpec.builder(
             "children", LambdaTypeName.get(
                 receiver = ClassName("react", "ChildrenBuilder"),
@@ -237,8 +237,8 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             .build()
     }
 
-    private fun KSCallableReference.parametersOfFunctionType(): Array<TypeName> =
-        functionParameters.map { it.type.toTypeName() }
+    private fun KSCallableReference.parametersOfFunctionType(resolver: TypeParameterResolver): Array<TypeName> =
+        functionParameters.map { it.type.toTypeName(resolver) }
             .toTypedArray()
 
     private fun KSPropertyDeclaration.toCallableRef(): KSCallableReference? =
