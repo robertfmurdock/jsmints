@@ -1,7 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 
 plugins {
     kotlin("multiplatform")
@@ -37,8 +37,6 @@ configure<JsConstraintExtension> {
     json = File(project(":dependency-bom").projectDir, "package.json")
 }
 
-rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    if (it?.version != "22.13.0") {
-        it?.version = "22.13.0"
-    }
+rootProject.extensions.findByType(NodeJsEnvSpec::class.java).let {
+    it?.version = "23.9.0"
 }

@@ -3,7 +3,7 @@ package com.zegreatrob.jsmints.plugins
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTestExtension
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
@@ -26,10 +26,8 @@ kotlin {
     }
 }
 
-rootProject.extensions.findByType(NodeJsRootExtension::class.java).let {
-    if (it?.version != "22.13.0") {
-        it?.version = "22.13.0"
-    }
+rootProject.extensions.findByType(NodeJsEnvSpec::class.java).let {
+    it?.version = "23.9.0"
 }
 
 rootProject.yarn.ignoreScripts = false
@@ -109,7 +107,7 @@ tasks {
             tokens: Map<String, Property<String?>> = mapOf(),
         ) {
             from(option.whenEnabledUseFile(pluginResource), fun CopySpec.() {
-                this@from.rename { pluginResource.path.split("/").last<String>() }
+                rename { pluginResource.path.split("/").last<String>() }
                 val stringTokens = tokens.mapValues { it.value.orNull ?: "" }
                     .plus(mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
                 filter<ReplaceTokens>("tokens" to stringTokens)
