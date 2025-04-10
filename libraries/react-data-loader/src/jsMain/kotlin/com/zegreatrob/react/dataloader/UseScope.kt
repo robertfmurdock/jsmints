@@ -9,7 +9,7 @@ import react.useEffectOnceWithCleanup
 import react.useState
 
 fun useScope(coroutineName: String): CoroutineScope {
-    val (scope) = useState { MainScope() + CoroutineName(coroutineName) }
+    val scope = useState { MainScope() + CoroutineName(coroutineName) }.component1()
     useEffectOnceWithCleanup { onCleanup { scope.cancel() } }
     return scope
 }
