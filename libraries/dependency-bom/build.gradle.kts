@@ -18,7 +18,8 @@ javaPlatform {
 
 dependencies {
     api(platform(libs.org.jetbrains.kotlin.kotlin.bom))
-    api(platform(libs.org.jetbrains.kotlinx.kotlinx.coroutines.bom))
+    api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.core)
+    api(libs.org.jetbrains.kotlinx.kotlinx.coroutines.test)
     api(platform(libs.org.jetbrains.kotlin.wrappers.kotlin.wrappers.bom))
     api(platform(libs.com.zegreatrob.testmints.testmints.bom))
     constraints {
