@@ -63,8 +63,43 @@ If you choose to use this library, please share feedback! The API is strange and
 
 All of these are either regular libraries, or gradle plugins.
 
-They're listed at https://mvnrepository.com/artifact/com.zegreatrob.jsmints
+They're listed at the [com.zegreatrob.jsmints maven repository](https://mvnrepository.com/artifact/com.zegreatrob.jsmints)
 
-Simply find the library related to the feature you want, and then follow the instructions for you build process on its mvn repository page.
+### Jspackage Gradle Plugin
+* Add the jspackage gradle plugin
+```kotlin
+plugins {
+    id("com.zegreatrob.jsmints.plugins.jspackage") version "6.4.19" // Use latest release from above
+}
+```
+### react-testing-library and user-event-testing-library-js
+Use the Jspackage plugin to install the npm dependencies specified in the [com.zegreatrob.jsmints dependency-bom](https://mvnrepository.com/artifact/com.zegreatrob.jsmints/dependency-bom) artifact.
+The specific packages provided are listed in [libraries/dependency-bom/package.json](libraries/dependency-bom/package.json)
+```kotlin
+dependencies {
+    jsTestImplementation(project.dependencies.enforcedPlatform("com.zegreatrob.jsmints:jsmints-bom:6.4.19"))
+    jsTestImplementation("com.zegreatrob.jsmints:react-testing-library")
+    jsTestImplementation("com.zegreatrob.jsmints:user-event-testing-library-js")
+}
+```
+Due to a bug, you currently have to exclude kotlinx-coroutines-debug (jvm only) from the jsTest dependencies brought in through `jsmints-bom`
+```kotlin
+configurations.named("jsTestImplementation") {
+    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-debug")
+}
+```
 
 Sorry for the abbreviated instructions, but I wanted to get something here to help anyone who might get stuck!
+
+## Using jsNodeTest instead of jsBrowserTest
+You can set up react component test suites using `node.js` and `jsdom` with `react-testing-library` instead of using 
+`Chrome` with `Karma`. This is more analogous to what the JS community is accustomed to than the tools Kotlin JS provides
+out-of-the-box.  This provides a better developer experience as you can set breakpoints and see console output while 
+running tests.  `react-testing-library` and `user-event-testing-library-js` have been preconfigured to work in this
+environment once you add dependencies for `jsdom` and `global-jsdom`
+```kotlin
+    // Rob, it seems like we should be able to activate these using jspackage as they are declared in package.json, 
+    // but I wasn't able to determine how.
+    jsTestImplementation(npm("jsdom", "26.1.0"))
+    jsTestImplementation(npm("global-jsdom", "26.0.0"))
+```
