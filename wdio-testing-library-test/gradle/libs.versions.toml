@@ -1,5 +1,4 @@
 [libraries]
-com-soywiz-korlibs-klock = "com.soywiz.korlibs.klock:klock:4.0.10"
 io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:7.0.7"
 
 [plugins]

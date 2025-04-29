@@ -24,7 +24,6 @@ wrapper {
 dependencies {
     jsMainApi(project(":wdio"))
     jsMainImplementation(kotlin("stdlib"))
-    jsMainImplementation("com.soywiz.korlibs.klock:klock")
     jsMainImplementation("io.github.oshai:kotlin-logging")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
