@@ -3,7 +3,7 @@ package com.zegreatrob.wrapper.wdio.testing.library
 import com.zegreatrob.wrapper.wdio.WebdriverElement
 import com.zegreatrob.wrapper.wdio.WebdriverElementArray
 import com.zegreatrob.wrapper.wdio.browser
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.coroutines.await
 
 interface ByRole : BrowserProvider {
@@ -33,7 +33,7 @@ interface ByRole : BrowserProvider {
             .await().map { WebdriverElement(finder = { it }) }
     })
 
-    private fun toTestingLibraryOptions(options: RoleOptions): RoleOptions = jso {
+    private fun toTestingLibraryOptions(options: RoleOptions): RoleOptions = unsafeJso {
         options.name?.let { this.name = it }
     }
 }

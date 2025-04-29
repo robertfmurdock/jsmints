@@ -10,7 +10,7 @@ abstract class JsPackageExtension(private val json: JsonNode) {
     fun dependencies() = json.get("dependencies")?.dependencyEntries()
     fun devDependencies() = json.get("devDependencies")?.dependencyEntries()
     val exists get() = json != NullNode.instance
-    private fun JsonNode.dependencyEntries() = fields().asSequence().map { entry ->
+    private fun JsonNode.dependencyEntries(): Sequence<Pair<String, JsonNode>> = properties().asSequence().map { entry ->
         entry.key to entry.value
     }
 }
