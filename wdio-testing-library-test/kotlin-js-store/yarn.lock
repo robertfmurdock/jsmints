@@ -620,10 +620,10 @@ agent-base@^7.1.1:
   dependencies:
     debug "^4.3.4"
 
-allure-commandline@^2.33.0:
-  version "2.33.0"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.33.0.tgz#140560c615ea904ff34c061c4c4b6d43858b2b68"
-  integrity sha512-oGMW1Zaqd9SqYJHUqeET1AP363guQkswnCKD+6jSX9YCK8BbttSqZJy9PeSmJtU16uW3qGB6cvgrvJwKUWG5Ew==
+allure-commandline@^2.34.0:
+  version "2.34.0"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.34.0.tgz#eab7b752908ab765578849bad8c9b8a19d90e84b"
+  integrity sha512-+SgVJ9+o7OH43KVCln0KT7VIsXCfMVEvFuYArIFNtS0fWu61UFdeiCYvrlQPC9trEoFhOe2e5i8Xhghwo46iRQ==
 
 allure-js-commons@^2.5.0:
   version "2.6.0"
