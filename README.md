@@ -82,12 +82,6 @@ dependencies {
     jsTestImplementation("com.zegreatrob.jsmints:user-event-testing-library-js")
 }
 ```
-Due to a dependency bug in `kotest-framework-engine-js`, you may have to exclude kotlinx-coroutines-debug (jvm only) from the jsTest dependencies brought in through `jsmints-bom`
-```kotlin
-configurations.named("jsTestImplementation") {
-    exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-debug")
-}
-```
 
 Sorry for the abbreviated instructions, but I wanted to get something here to help anyone who might get stuck!
 
