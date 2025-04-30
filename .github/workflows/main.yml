@@ -47,6 +47,8 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
       - name: Generate Version 🔢
+        env:
+          DISABLE_DETACHED: ${{ github.ref != 'refs/heads/master' }}
         run: ./gradlew calculateVersion -PexportToGithub=true --scan
       - name: Build 🔨
         run: ./gradlew assemble check -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan

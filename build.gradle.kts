@@ -13,6 +13,9 @@ group = "com.zegreatrob.jsmints"
 tagger {
     releaseBranch = "master"
     githubReleaseEnabled.set(true)
+    System.getenv("DISABLE_DETACHED")?.let { value ->
+        disableDetached.set(value.lowercase() == "true")
+    }
 }
 
 tasks {
