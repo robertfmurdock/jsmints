@@ -82,7 +82,7 @@ dependencies {
     jsTestImplementation("com.zegreatrob.jsmints:user-event-testing-library-js")
 }
 ```
-Due to a bug, you currently have to exclude kotlinx-coroutines-debug (jvm only) from the jsTest dependencies brought in through `jsmints-bom`
+Due to a dependency bug in `kotest-framework-engine-js`, you may have to exclude kotlinx-coroutines-debug (jvm only) from the jsTest dependencies brought in through `jsmints-bom`
 ```kotlin
 configurations.named("jsTestImplementation") {
     exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-debug")
@@ -98,8 +98,6 @@ out-of-the-box.  This provides a better developer experience as you can set brea
 running tests.  `react-testing-library` and `user-event-testing-library-js` have been preconfigured to work in this
 environment once you add dependencies for `jsdom` and `global-jsdom`
 ```kotlin
-    // Rob, it seems like we should be able to activate these using jspackage as they are declared in package.json, 
-    // but I wasn't able to determine how.
     jsTestImplementation(npm("jsdom", "26.1.0"))
     jsTestImplementation(npm("global-jsdom", "26.0.0"))
 ```
