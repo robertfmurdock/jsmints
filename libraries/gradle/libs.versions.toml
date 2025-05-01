@@ -1,11 +1,11 @@
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.19.0"
-com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:2.1.20-2.0.0"
+com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:2.1.20-2.0.1"
 com-squareup-kotlinpoet-ksp = "com.squareup:kotlinpoet-ksp:2.1.0"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.2.10"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.2.11"
 io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:7.0.7"
 org-jetbrains-kotlin-kotlin-bom = "org.jetbrains.kotlin:kotlin-bom:2.1.20"
-org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:2025.4.18"
+org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:2025.5.0"
 org-jetbrains-kotlinx-kotlinx-coroutines-bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2"
 
 [plugins]
