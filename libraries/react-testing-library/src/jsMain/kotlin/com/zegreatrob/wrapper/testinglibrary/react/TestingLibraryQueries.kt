@@ -4,4 +4,5 @@ interface TestingLibraryQueries :
     ByRole,
     ByText,
     ByLabelText,
-    ByAltText
+    ByAltText,
+    ByTestId
