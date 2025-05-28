@@ -19,6 +19,7 @@ val TestComponent = FC<Props> {
                     label {
                         +"Press Me"
                         button {
+                            asDynamic()["data-testid"] = "Awesome-testId"
                             asDynamic()["data-test-info"] = "pretty-cool"
                             +"Awesome"
                         }
@@ -31,6 +32,7 @@ val TestComponent = FC<Props> {
                     label {
                         +"Chill"
                         button {
+                            asDynamic()["data-testid"] = "Cool-testId"
                             asDynamic()["data-test-info"] = "pretty-cool"
                             +"Cool"
                         }
@@ -38,6 +40,7 @@ val TestComponent = FC<Props> {
                     label {
                         +"Chill"
                         button {
+                            asDynamic()["data-testid"] = "Cool-testId"
                             asDynamic()["data-test-info"] = "very-cool"
                             +"Cool"
                         }
@@ -45,6 +48,7 @@ val TestComponent = FC<Props> {
                     label {
                         +"Chill"
                         button {
+                            asDynamic()["data-testid"] = "Cool-testId"
                             asDynamic()["data-test-info"] = "extremely-cool"
                             +"Cool"
                         }
