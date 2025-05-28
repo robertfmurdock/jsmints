@@ -2,7 +2,7 @@
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.19.0"
 com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:2.1.21-2.0.1"
 com-squareup-kotlinpoet-ksp = "com.squareup:kotlinpoet-ksp:2.2.0"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.2.17"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.2.18"
 io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:7.0.7"
 org-jetbrains-kotlin-kotlin-bom = "org.jetbrains.kotlin:kotlin-bom:2.1.21"
 org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:2025.5.8"
@@ -10,6 +10,6 @@ org-jetbrains-kotlinx-kotlinx-coroutines-bom = "org.jetbrains.kotlinx:kotlinx-co
 
 [plugins]
 com-github-sghill-distribution-sha = "com.github.sghill.distribution-sha:0.4.0"
-com-zegreatrob-tools-tagger = "com.zegreatrob.tools.tagger:1.7.16"
+com-zegreatrob-tools-tagger = "com.zegreatrob.tools.tagger:1.7.18"
 io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:2.0.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"
