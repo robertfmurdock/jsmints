@@ -61,6 +61,13 @@ external class Screen {
     fun queryByAltText(s: String): HTMLElement?
     fun queryAllByAltText(s: String): Array<HTMLElement>
 
+    fun getByTestId(s: String): HTMLElement
+    fun getAllByTestId(s: String): Array<HTMLElement>
+    fun findByTestId(s: String): Promise<HTMLElement>
+    fun findAllByTestId(s: String): Promise<Array<HTMLElement>>
+    fun queryByTestId(s: String): HTMLElement?
+    fun queryAllByTestId(s: String): Array<HTMLElement>
+
     fun getByRole(role: String, options: RoleOptions = definedExternally): HTMLElement
     fun getAllByRole(s: String, options: RoleOptions = definedExternally): Array<HTMLElement>
     fun queryByRole(s: String, options: RoleOptions = definedExternally): HTMLElement?
