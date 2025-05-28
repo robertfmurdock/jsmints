@@ -28,6 +28,9 @@ tagger {
 }
 
 tasks {
+    calculateVersion {
+        enabled = false
+    }
     register("collectResults") {
         dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
     }
