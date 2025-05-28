@@ -12,7 +12,7 @@ jobs:
         with:
           fetch-depth: '25'
       - name: Setup Current Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: current
       - run: gradle wrapper --distribution-type all
