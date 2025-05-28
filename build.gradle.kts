@@ -14,9 +14,7 @@ tagger {
     releaseBranch = "master"
     githubReleaseEnabled.set(true)
     System.getenv("DISABLE_DETACHED")?.let { value ->
-        val shouldDisableDetached = value.lowercase() == "true"
-        println("shouldDisableDetached $shouldDisableDetached")
-        disableDetached.set(shouldDisableDetached)
+        disableDetached.set(value.lowercase() == "true")
     }
 }
 
