@@ -22,6 +22,7 @@ kotlin {
     js {
         nodejs {
             useEsModules()
+            @OptIn(ExperimentalKotlinGradlePluginApi::class)
             compilerOptions { target = "es2015" }
         }
     }
