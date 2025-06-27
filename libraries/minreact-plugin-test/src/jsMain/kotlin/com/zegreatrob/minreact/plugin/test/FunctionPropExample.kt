@@ -7,8 +7,10 @@ import react.ReactNode
 import react.dom.html.ReactHTML.div
 import react.useState
 
+typealias ReloadFunc = () -> Unit
+
 external interface FunctionPropExampleProps : Props {
-    var children: (f: () -> Unit) -> ReactNode?
+    var children: (f: ReloadFunc) -> ReactNode?
 }
 
 @ReactFunc
