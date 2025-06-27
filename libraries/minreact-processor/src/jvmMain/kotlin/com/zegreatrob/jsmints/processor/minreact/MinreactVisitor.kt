@@ -32,6 +32,7 @@ import com.squareup.kotlinpoet.ksp.writeTo
 
 class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGenerator, Unit>() {
     override fun defaultHandler(node: KSNode, data: CodeGenerator) {
+        logger.info("considering: $node")
     }
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: CodeGenerator) {
@@ -100,9 +101,9 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
                 val classDeclaration = propsType?.declaration as? KSClassDeclaration
                     ?: return@forEach
                 val resolver = classDeclaration.typeParameters.toTypeParameterResolver()
-                var paramsAssignments = propertiesAsParameterAssignments(classDeclaration, resolver)
+                val paramsAssignments = propertiesAsParameterAssignments(classDeclaration, resolver)
 
-                var bodyArgs = listOf<Any?>(parameterizedTypeName(classDeclaration))
+                val bodyArgs = listOf<Any?>(parameterizedTypeName(classDeclaration))
 
                 val body = """
                     |  val component = ($targetName.unsafeCast<%T>())

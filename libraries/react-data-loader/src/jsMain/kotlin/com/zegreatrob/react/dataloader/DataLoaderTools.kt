@@ -5,7 +5,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 
-data class DataLoaderTools(val scope: CoroutineScope, val reloadData: ReloadFunc) {
+data class DataLoaderTools(val scope: CoroutineScope, val reloadData: () -> Unit) {
 
     @ExperimentalCoroutinesApi
     fun <R> performAsyncWork(

@@ -4,6 +4,7 @@ import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
 import com.zegreatrob.testmints.async.asyncSetup
 import com.zegreatrob.testmints.setup
+import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.act
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.within
@@ -244,5 +245,22 @@ class AnnotationTest {
             .assertIsNotEqualTo(null, "did not find first value")
         screen.queryByText("$expectedSecondValue")
             .assertIsNotEqualTo(null, "did not find second value")
+    }
+
+    @Test
+    fun canUseNoArgFunctionAsParameterOfFunctionInProp() = asyncSetup(object {
+        var lastTrigger: (() -> Unit)? = null
+        val normal = FC<Props> {
+            FunctionPropExample { trigger ->
+                lastTrigger = trigger
+            }
+        }
+    }) {
+        render(normal.create())
+    } exercise {
+        act { lastTrigger?.invoke() }
+    } verify { result ->
+        screen.queryByText("Did it")
+            .assertIsNotEqualTo(null, "did not find component")
     }
 }
