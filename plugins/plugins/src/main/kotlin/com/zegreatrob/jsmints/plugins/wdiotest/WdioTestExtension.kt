@@ -29,7 +29,7 @@ abstract class WdioTestExtension(val project: Project, objectFactory: ObjectFact
     var useChrome = objectFactory.property<Boolean>().convention(true)
 
     @Input
-    var chromeBinary = objectFactory.property<String?>().convention(null)
+    var chromeBinary = objectFactory.property<String>().convention(null)
 
     @Input
     var useHeadless = objectFactory.property<Boolean>().convention(true)

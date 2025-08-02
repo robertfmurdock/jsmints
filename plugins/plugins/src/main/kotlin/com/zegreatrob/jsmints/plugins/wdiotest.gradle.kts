@@ -104,7 +104,7 @@ tasks {
         fun addPlugin(
             option: Property<Boolean>,
             pluginResource: URL,
-            tokens: Map<String, Property<String?>> = mapOf(),
+            tokens: Map<String, Property<String>> = mapOf(),
         ) {
             from(option.whenEnabledUseFile(pluginResource), fun CopySpec.() {
                 rename { pluginResource.path.split("/").last<String>() }
@@ -171,7 +171,7 @@ tasks {
 
         val buildDir = project.layout.buildDirectory
         val reportDir = buildDir.dir("reports/e2e/")
-        val testResultsDir = buildDir.dir("test-results/")
+        val testResultsDir = buildDir.dir("test-results/e2e")
         outputs.dir(reportDir)
         outputs.dir(testResultsDir)
         outputs.cacheIf { true }
@@ -222,7 +222,6 @@ tasks {
                 "- logs: file://${logFile.absolutePath}",
             ).joinToString("\n")
     }
-
     check {
         dependsOn(e2eRun)
     }

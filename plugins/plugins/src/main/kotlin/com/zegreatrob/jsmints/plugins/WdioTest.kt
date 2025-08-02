@@ -3,9 +3,8 @@ package com.zegreatrob.jsmints.plugins
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.options.Option
-import org.gradle.kotlin.dsl.environment
 
-open class WdioTest : NodeExec() {
+abstract class WdioTest : NodeExec() {
 
     @Option(option = "tests", description = "Allows test matcher to be specified")
     @Input
@@ -14,7 +13,7 @@ open class WdioTest : NodeExec() {
 
     override fun exec() {
         if (tests != null) {
-            environment("FGREP" to tests)
+            environment(mapOf("FGREP" to tests))
         }
         super.exec()
     }

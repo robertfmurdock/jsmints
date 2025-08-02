@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import java.io.File
 import java.io.FileOutputStream
 
-open class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
+abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
     @Internal
     lateinit var projectNodeModulesDir: File
