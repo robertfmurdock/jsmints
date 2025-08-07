@@ -1,5 +1,5 @@
 [libraries]
-io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:7.0.11"
+io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:7.0.12"
 
 [plugins]
 com-avast-gradle-docker-compose = "com.avast.gradle.docker-compose:0.17.12"
