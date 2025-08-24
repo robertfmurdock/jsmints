@@ -14,7 +14,7 @@
     "@wdio/mocha-framework": "8.40.3",
     "allure-commandline": "^2.34.1",
     "core-js": "^3.45.1",
-    "geckodriver": "^5.0.0",
+    "geckodriver": "^6.0.0",
     "global-jsdom": "^26.0.0",
     "jsdom": "26.1.0",
     "npm-check-updates": "18.0.2",
