@@ -2355,10 +2355,10 @@ geckodriver@^4.3.1:
     unzipper "^0.10.14"
     which "^4.0.0"
 
-geckodriver@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-6.0.0.tgz#149745c2c7e6a3647f85b8d4c9938aefc901d251"
-  integrity sha512-KakWv+0wGbENHjQfKBytue+RUCuQA3lJA7q1db0p5RHDGhWO/2kcpeznoMXedNa5TiwnuA57EckKark5Z6PKUQ==
+geckodriver@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-6.0.1.tgz#19ec4ce36502c6d497da824dcbe194b15f23027c"
+  integrity sha512-mtr5j+Bvc1QfaAsFTt3cbjOGvUihCQNP2/FqhUcIWoujjtO/SY0DVPU7Zsj2dukP2KmPMTUCqRyNP21dhBsA5Q==
   dependencies:
     "@wdio/logger" "^9.1.3"
     "@zip.js/zip.js" "^2.7.54"
