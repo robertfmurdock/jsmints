@@ -39,5 +39,5 @@ configure<JsConstraintExtension> {
 }
 
 rootProject.extensions.findByType(NodeJsEnvSpec::class.java).let {
-    it?.version = "23.9.0"
+    it?.version = "24.7.0"
 }
