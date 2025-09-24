@@ -10,7 +10,7 @@ org-jetbrains-annotations = "org.jetbrains:annotations:26.0.2-1"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 
 [plugins]
-com-github-ben-manes-versions = "com.github.ben-manes.versions:0.52.0"
+com-github-ben-manes-versions = "com.github.ben-manes.versions:0.53.0"
 com-gradle-plugin-publish = "com.gradle.plugin-publish:2.0.0"
 io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:2.0.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"
