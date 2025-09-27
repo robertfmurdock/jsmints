@@ -3,4 +3,4 @@ io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:7.0.13"
 
 [plugins]
 com-avast-gradle-docker-compose = "com.avast.gradle.docker-compose:0.17.12"
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.0"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.1"
