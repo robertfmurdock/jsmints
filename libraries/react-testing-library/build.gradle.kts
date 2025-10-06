@@ -43,22 +43,12 @@ dependencies {
 }
 
 tasks {
-    formatKotlinJsMain {
+    withType<FormatTask> {
         dependsOn("kspKotlinJs")
-    }
-    formatKotlinJsTest {
-        dependsOn("kspTestKotlinJs")
-    }
-    withType(FormatTask::class) {
         exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
-    withType(LintTask::class) {
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
-    lintKotlinJsMain {
+    withType<LintTask> {
         dependsOn("kspKotlinJs")
-    }
-    lintKotlinJsTest {
-        dependsOn("kspTestKotlinJs")
+        exclude { spec -> spec.file.absolutePath.contains("generated") }
     }
 }
