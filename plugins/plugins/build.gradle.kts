@@ -1,5 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.jetbrains.kotlin.com.google.gson.JsonElement
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
 import java.nio.charset.Charset
 import java.util.*
 
@@ -80,10 +82,10 @@ kotlin {
 }
 
 tasks {
-    formatKotlinMain {
+    withType<FormatTask> {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
-    lintKotlinMain {
+    withType<LintTask> {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
     val copyTemplates by registering(Copy::class) {

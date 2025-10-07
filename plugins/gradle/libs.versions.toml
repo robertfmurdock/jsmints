@@ -14,5 +14,4 @@ com-github-ben-manes-versions = "com.github.ben-manes.versions:0.53.0"
 com-gradle-plugin-publish = "com.gradle.plugin-publish:2.0.0"
 io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:2.0.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.1"
-# @pin
-org-jmailen-kotlinter = "org.jmailen.kotlinter:5.1.1"
+org-jmailen-kotlinter = "org.jmailen.kotlinter:5.2.0"
