@@ -238,7 +238,7 @@ class AnnotationTest {
         }
     }) exercise {
         render(normal.create())
-    } verify { result ->
+    } verify {
         screen.queryByText("ParameterExample")
             .assertIsNotEqualTo(null, "did not find component")
         screen.queryByText(expectedFirstValue)
@@ -259,7 +259,7 @@ class AnnotationTest {
         render(normal.create())
     } exercise {
         act { lastTrigger?.invoke() }
-    } verify { result ->
+    } verify {
         screen.queryByText("Did it")
             .assertIsNotEqualTo(null, "did not find component")
     }

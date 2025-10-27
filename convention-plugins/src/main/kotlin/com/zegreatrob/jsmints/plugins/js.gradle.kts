@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.js-plain-objects")
     id("com.zegreatrob.jsmints.plugins.reports")
     id("com.zegreatrob.jsmints.plugins.lint")
     id("com.zegreatrob.testmints.logs.mint-logs")

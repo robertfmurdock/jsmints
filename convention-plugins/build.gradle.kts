@@ -24,6 +24,7 @@ kotlin {
 
 dependencies {
     implementation(kotlin("stdlib", embeddedKotlinVersion))
+    implementation(libs.org.jetbrains.kotlin.plugin.js.plain.objects)
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
     implementation(libs.com.github.ben.manes.gradle.versions.plugin)
     implementation(libs.org.jmailen.gradle.kotlinter.gradle)

@@ -6,15 +6,11 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSNode
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.Modifier
 import com.google.devtools.ksp.visitor.KSTopDownVisitor
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.ksp.TypeParameterResolver
@@ -39,9 +35,6 @@ class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGener
             val builder = FileSpec.builder(classDeclaration.packageName.asString(), "${classDeclaration}Extentions")
             val propsClassName = parameterizedClassName(classDeclaration)
             addComponentFunctions(classDeclaration, resolver, propsClassName, builder)
-
-            builder.addFunction(builderFunctionSpec(classDeclaration, resolver))
-
             builder.build()
                 .writeTo(
                     data, Dependencies(
@@ -50,26 +43,6 @@ class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGener
                     )
                 )
         }
-    }
-
-    private fun builderFunctionSpec(
-        classDeclaration: KSClassDeclaration,
-        resolver: TypeParameterResolver
-    ): FunSpec {
-        val paramsAssignments = propertiesAsParameterAssignments(classDeclaration)
-        val body = """
-                        |  return %T<%T> {
-                        |       $paramsAssignments
-                        |       }
-                    """.trimMargin()
-
-        val funSpec = FunSpec.builder(classDeclaration.simpleName.asString())
-            .addTypeVariables(classDeclaration.typeParameters.map { it.toTypeVariableName(resolver) })
-            .addParameters(parameterSpecs(classDeclaration, resolver))
-            .returns(classDeclaration.toClassName())
-            .addCode(CodeBlock.of(body, ClassName("js.objects", "unsafeJso"), classDeclaration.toClassName()))
-            .build()
-        return funSpec
     }
 
     private fun addComponentFunctions(
@@ -93,45 +66,10 @@ class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGener
 
 }
 
-private fun parameterSpecs(
-    classDeclaration: KSClassDeclaration,
-    resolver: TypeParameterResolver
-): Iterable<ParameterSpec> {
-    return classDeclaration.getAllProperties()
-        .map { parameterSpec(it, resolver) }
-        .asIterable()
-}
-
-private fun propertiesAsParameterAssignments(classDeclaration: KSClassDeclaration) =
-    classDeclaration.getAllProperties()
-        .joinToString("\n", transform = ::assignPropByParameter)
-
-private fun assignPropByParameter(property: KSPropertyDeclaration) = if (property.type.resolve().isMarkedNullable) {
-    "${property.simpleName.getShortName()}?.let { this.${property.simpleName.getShortName()} = it }"
-} else {
-    "this.${property.simpleName.getShortName()} = ${property.simpleName.getShortName()}"
-}
-
-
 private fun parameterizedClassName(classDeclaration: KSClassDeclaration) = classDeclaration.toClassName().let {
     if (classDeclaration.typeParameters.isEmpty()) {
         it
     } else {
         it.parameterizedBy(classDeclaration.typeParameters.map { it.toTypeVariableName() })
     }
-}
-
-private fun parameterSpec(
-    it: KSPropertyDeclaration,
-    resolver: TypeParameterResolver
-): ParameterSpec {
-    val typeName = it.type.toTypeName(resolver)
-    val builder = ParameterSpec.Companion.builder(it.simpleName.getShortName(), typeName)
-
-    if (typeName.isNullable) {
-        builder.defaultValue(CodeBlock.of("null"))
-    }
-
-    return builder
-        .build()
 }
