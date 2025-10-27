@@ -1,6 +1,7 @@
 package com.zegreatrob.wrapper.testinglibrary.react.external
 
 import com.zegreatrob.wrapper.testinglibrary.react.RoleOptions
+import kotlinx.js.JsPlainObject
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import react.ElementType
@@ -25,12 +26,14 @@ external class FireEvent {
     fun submit(element: Element)
 }
 
+@JsPlainObject
 sealed external interface RenderOptions {
-    var wrapper: ElementType<*>
+    val wrapper: ElementType<*>
 }
 
+@JsPlainObject
 sealed external interface ByTextOptions {
-    var selector: String
+    val selector: String
 }
 
 external class Result {
