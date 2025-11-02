@@ -74,7 +74,7 @@ testing {
 
 kotlin {
     compilerOptions {
-        allWarningsAsErrors.set(true)
+        allWarningsAsErrors = true
     }
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
