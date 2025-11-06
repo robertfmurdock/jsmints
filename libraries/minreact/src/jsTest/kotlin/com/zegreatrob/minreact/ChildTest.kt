@@ -6,6 +6,7 @@ import com.zegreatrob.testmints.setup
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.within
+import react.Key
 import react.Props
 import react.create
 import react.dom.html.ReactHTML.div
@@ -51,10 +52,10 @@ class ChildTest {
     fun createSugarAlsoWorks() = setup(object {
         val outerComponent by nfc<Props> {
             div {
-                +BoringComponent("11").create(key = "1") {
+                +BoringComponent("11").create(key = Key("1")) {
                     span { +"Hello!" }
                 }
-                +BoringComponent("22").create(key = "2") {
+                +BoringComponent("22").create(key = Key("2")) {
                     span { +"Goodbye!" }
                 }
             }
@@ -74,10 +75,10 @@ class ChildTest {
     fun nfcAlwaysUsesSameReactFunction() = setup(object {
         val outerComponent by nfc<Props> {
             div {
-                +BoringComponent("11").create(key = "1") {
+                +BoringComponent("11").create(key = Key("1")) {
                     span { +"Hello!" }
                 }
-                +BoringComponent("22").create(key = "2") {
+                +BoringComponent("22").create(key = Key("2")) {
                     span { +"Goodbye!" }
                 }
             }

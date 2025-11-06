@@ -10,6 +10,7 @@ import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.within
 import com.zegreatrob.wrapper.testinglibrary.userevent.UserEvent
 import react.FC
+import react.Key
 import react.Props
 import react.ReactNode
 import react.create
@@ -84,7 +85,7 @@ class AnnotationTest {
                 a = "Hi",
                 b = 7,
                 c = counter,
-                key = "$state",
+                key = Key("$state"),
             )
         }
         val actor = UserEvent.setup()

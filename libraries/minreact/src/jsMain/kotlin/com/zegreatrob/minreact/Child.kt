@@ -3,6 +3,7 @@ package com.zegreatrob.minreact
 import org.w3c.dom.Node
 import react.ChildrenBuilder
 import react.ElementType
+import react.Key
 import react.Props
 import react.PropsWithRef
 import react.ReactDsl
@@ -17,7 +18,7 @@ fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
 ) {
     clazz {
         +props
-        this.key = key
+        this.key = key?.let { Key(it) }
         handler()
     }
 }
@@ -31,7 +32,7 @@ fun <D : DataProps<D>, P> ChildrenBuilder.child(
         P : ChildrenBuilder {
     +dataProps.component.create {
         +dataProps.unsafeCast<Props>()
-        key?.let { this.key = it }
+        key?.let { this.key = Key(key) }
         handler()
     }
 }
@@ -43,7 +44,9 @@ fun <D> ChildrenBuilder.add(
 ) where D : DataProps<in D> {
     +dataProps.component.create {
         +dataProps.unsafeCast<Props>()
-        key?.let { this.key = it }
+        key?.let {
+            this.key = Key(key)
+        }
         handler()
     }
 }
