@@ -43,7 +43,9 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             val builder = FileSpec.builder(classDeclaration.packageName.asString(), "${classDeclaration}Extentions")
             builder.addImport("react", "create")
             val propsClassName = parameterizedClassName(classDeclaration)
-            val functions = classDeclaration.getAllProperties().mapIndexed { index, value ->
+            val functions = classDeclaration.getAllProperties()
+                .filter { it.simpleName.asString() != "__children__" }
+                .mapIndexed { index, value ->
                 val component = "component${index + 1}"
                 FunSpec.builder(component)
                     .addTypeVariables(classDeclaration.typeParameters.map { it.toTypeVariableName(resolver) })
@@ -55,9 +57,9 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
             }
             functions.forEach { builder.addFunction(it) }
 
-            var paramsAssignments = propertiesAsParameterAssignments(classDeclaration, resolver)
+            val paramsAssignments = propertiesAsParameterAssignments(classDeclaration, resolver)
 
-            var bodyArgs = listOf<Any?>(MemberName("react", "create"))
+            val bodyArgs = listOf<Any?>(MemberName("react", "create"))
             val codeBlock = CodeBlock.of(
                 """
                     | return %M {
@@ -245,14 +247,14 @@ class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGene
     private fun KSPropertyDeclaration.toCallableRef(): KSCallableReference? =
         (type.element as? KSCallableReference)
 
-    private fun isChildrenNode(it: KSPropertyDeclaration) = it.simpleName.asString() == "children"
+    private fun isChildrenNode(it: KSPropertyDeclaration) = it.simpleName.asString() == "__children__" || it.simpleName.asString() == "children"
 
     private fun parameterSpec(
         it: KSPropertyDeclaration,
         resolver: TypeParameterResolver
     ): ParameterSpec {
         val typeName = it.type.toTypeName(resolver)
-        val builder = ParameterSpec.Companion.builder(it.simpleName.getShortName(), typeName)
+        val builder = ParameterSpec.builder(it.simpleName.getShortName(), typeName)
 
         if (typeName.isNullable) {
             builder.defaultValue(CodeBlock.of("null"))
