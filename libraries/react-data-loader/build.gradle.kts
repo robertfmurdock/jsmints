@@ -10,16 +10,10 @@ plugins {
 
 kotlin{
     js {
-        nodejs { testTask(Action { useMocha { timeout = "20s" } }) }
+        nodejs { testTask { useMocha { timeout = "20s" } } }
         compilations.named("test") {
             packageJson { customField("mocha", mapOf("require" to "global-jsdom/register")) }
         }
-    }
-    sourceSets.jsMain {
-        kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")
-    }
-    sourceSets.jsTest {
-        kotlin.srcDir("build/generated/ksp/js/jsTest/kotlin")
     }
 }
 

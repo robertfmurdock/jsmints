@@ -8,15 +8,6 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.js")
 }
 
-kotlin {
-    sourceSets.jsMain {
-        kotlin.srcDir("build/generated/ksp/js/jsMain/kotlin")
-    }
-    sourceSets.jsTest {
-        kotlin.srcDir("build/generated/ksp/js/jsTest/kotlin")
-    }
-}
-
 wrapper {
     includedBuild.set(true)
 }
