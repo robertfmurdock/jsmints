@@ -1,41 +1,9 @@
 package com.zegreatrob.minreact
 
-import org.w3c.dom.Node
 import react.ChildrenBuilder
-import react.ElementType
-import react.Key
 import react.Props
-import react.PropsWithRef
 import react.ReactDsl
 import react.create
-
-@Deprecated("Prefer to use standard DSL")
-fun <P : PropsWithRef<Node>> ChildrenBuilder.child(
-    clazz: ElementType<P>,
-    props: P,
-    key: String? = null,
-    handler: @ReactDsl ChildrenBuilder.() -> Unit = {},
-) {
-    clazz {
-        +props
-        this.key = key?.let { Key(it) }
-        handler()
-    }
-}
-
-@Deprecated("Prefer to use +.create")
-fun <D : DataProps<D>, P> ChildrenBuilder.child(
-    dataProps: D,
-    key: String? = null,
-    handler: @ReactDsl ChildrenBuilder.() -> Unit = {},
-) where P : PropsWithRef<Node>,
-        P : ChildrenBuilder {
-    +dataProps.component.create {
-        +dataProps.unsafeCast<Props>()
-        key?.let { this.key = Key(key) }
-        handler()
-    }
-}
 
 fun <D> ChildrenBuilder.add(
     dataProps: DataProps<in D>,
@@ -45,7 +13,7 @@ fun <D> ChildrenBuilder.add(
     +dataProps.component.create {
         +dataProps.unsafeCast<Props>()
         key?.let {
-            this.key = Key(key)
+            this.key = key
         }
         handler()
     }
