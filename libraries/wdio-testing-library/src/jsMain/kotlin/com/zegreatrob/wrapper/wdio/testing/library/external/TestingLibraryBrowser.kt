@@ -1,4 +1,4 @@
-@file:JsModule("@testing-library/webdriverio")
+@file:JsModule("@sventschui/webdriverio-testing-library")
 @file:JsNonModule
 
 package com.zegreatrob.wrapper.wdio.testing.library.external
