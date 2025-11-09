@@ -21,4 +21,10 @@ external interface Browser {
     fun execute(code: (dynamic) -> dynamic, argument: dynamic)
     fun executeAsync(arg: (dynamic, () -> Unit) -> dynamic, argument: dynamic): Promise<Unit>
     fun refresh(): Promise<Unit>
+
+    fun on(event: String, listener: (dynamic) -> Promise<Any?>)
+    fun once(event: String, listener: (dynamic) -> Promise<Any?>)
+    fun emit(event: String)
+    fun removeListener(event: String, listener: Any)
+    fun removeAllListeners(event: String)
 }
