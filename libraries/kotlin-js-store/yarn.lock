@@ -1063,7 +1063,7 @@
     split2 "^4.1.0"
     stream-buffers "^3.0.2"
 
-"@wdio/logger@9.18.0":
+"@wdio/logger@9.18.0", "@wdio/logger@^9.18.0":
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-9.18.0.tgz#4a288ae8628ba6031ebee18f9eb7375f22c23111"
   integrity sha512-HdzDrRs+ywAqbXGKqe1i/bLtCv47plz4TvsHFH3j729OooT5VH38ctFn5aLXgECmiAKDkmH/A6kOq2Zh5DIxww==
@@ -1191,10 +1191,10 @@
   resolved "https://registry.yarnpkg.com/@zip.js/zip.js/-/zip.js-2.8.10.tgz#98a0cc7fdef9d6e227236271af412db02b18a5b2"
   integrity sha512-WVywWK8HSttmFFYSih7lUjjaV4zGzMxy992y0tHrZY4Wf9x/uNBA/XJ50RvfGjuuJKti4yueEHA2ol2pOq6VDg==
 
-"@zip.js/zip.js@^2.7.54":
-  version "2.7.72"
-  resolved "https://registry.yarnpkg.com/@zip.js/zip.js/-/zip.js-2.7.72.tgz#2c53887c2a3b79e9d9f1c63f048bc0cf485703c3"
-  integrity sha512-3/A4JwrgkvGBlCxtItjxs8HrNbuTAAl/zlGkV6tC5Fb5k5nk4x2Dqxwl/YnUys5Ch+QB01eJ8Q5K/J2uXfy9Vw==
+"@zip.js/zip.js@^2.8.11":
+  version "2.8.11"
+  resolved "https://registry.yarnpkg.com/@zip.js/zip.js/-/zip.js-2.8.11.tgz#4ab1f37d367f646d09467a70febc08980b6a0443"
+  integrity sha512-0fztsk/0ryJ+2PPr9EyXS5/Co7OK8q3zY/xOoozEWaUsL5x+C0cyZ4YyMuUffOO2Dx/rAdq4JMPqW0VUtm+vzA==
 
 JSONStream@^1.3.1:
   version "1.3.5"
@@ -1911,6 +1911,11 @@ decamelize@^6.0.0:
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-6.0.0.tgz#8cad4d916fde5c41a264a43d0ecc56fe3d31749e"
   integrity sha512-Fv96DCsdOgB6mdGl67MT5JaTNKRzrzill5OH5s8bjYJXVlcXyPYGyPsUkWyGV5p1TXI5esYIYMMeDJL0hEIwaA==
 
+decamelize@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-6.0.1.tgz#e858c37870153e1f733e92347ac3a3f009081ca7"
+  integrity sha512-G7Cqgaelq68XHJNGlZ7lrNQyhZGsFqpwtGFexqUv4IQdjKoSYF7ipZ9UuTJZUSQXFj/XaoBLuEVIVqr8EJngEQ==
+
 decimal.js@^10.6.0:
   version "10.6.0"
   resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.6.0.tgz#e649a43e3ab953a72192ff5983865e509f37ed9a"
@@ -2409,17 +2414,17 @@ geckodriver@^5.0.0:
     tar-fs "^3.0.6"
     which "^5.0.0"
 
-geckodriver@^6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-6.0.2.tgz#7ac62687b466d1777e2af7eba24f3712833092fb"
-  integrity sha512-5C4cejCvcz4yFiBHP0FEWKwSZKhr3WMkshNBQ7cSb9PqfrdSNVAbe2RTNxsdBkk3Fmqcu6PNnffiJa0T+JZGFQ==
+geckodriver@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-6.1.0.tgz#a732f10779e9cde2860f75ab634a4d84bf2870d2"
+  integrity sha512-ZRXLa4ZaYTTgUO4Eefw+RsQCleugU2QLb1ME7qTYxxuRj51yAhfnXaItXNs5/vUzfIaDHuZ+YnSF005hfp07nQ==
   dependencies:
-    "@wdio/logger" "^9.1.3"
-    "@zip.js/zip.js" "^2.7.54"
-    decamelize "^6.0.0"
+    "@wdio/logger" "^9.18.0"
+    "@zip.js/zip.js" "^2.8.11"
+    decamelize "^6.0.1"
     http-proxy-agent "^7.0.2"
-    https-proxy-agent "^7.0.5"
-    modern-tar "^0.3.4"
+    https-proxy-agent "^7.0.6"
+    modern-tar "^0.7.2"
 
 get-caller-file@^2.0.5:
   version "2.0.5"
@@ -3428,10 +3433,10 @@ mocha@^10.3.0:
     yargs-parser "^20.2.9"
     yargs-unparser "^2.0.0"
 
-modern-tar@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/modern-tar/-/modern-tar-0.3.4.tgz#4723d4b0ef0e96afeab65b4c10e6c55820860877"
-  integrity sha512-BBQDjmhLJekFGhcG0C44sAl5/78UmqWa9ZJ2YqCj00NVixH3U8VjryzLIokKap0mo/pmIIJJXjZhM6bizi/6Pw==
+modern-tar@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/modern-tar/-/modern-tar-0.7.2.tgz#a2177552f2aa12aba0e2bcce50e7f53dc2d08273"
+  integrity sha512-TGG1ZRk1TAQ3neuZwahAHke3rKsSlro+ooMYtjh9sl2gGPVMLMuWiHgwC7im9T5bSM566RSo2Dko56ETgEvZcA==
 
 ms@2.1.2:
   version "2.1.2"
