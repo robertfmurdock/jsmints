@@ -613,10 +613,10 @@
     html-entities "^2.6.0"
     strip-ansi "^7.1.0"
 
-"@wdio/cli@9.21.0":
-  version "9.21.0"
-  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-9.21.0.tgz#5de11006aba8de8ceb9de929c6a9248b16f6c908"
-  integrity sha512-PfrZVMOf2dFPK7VZMgYnJwBmoCZfXeiUhLk3ivM1YT40e3VZNOMx8QJtN6POx9kD0TrQbd9MJOrt9wb9o+WHYw==
+"@wdio/cli@9.21.1":
+  version "9.21.1"
+  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-9.21.1.tgz#abd8bc876625fbddbdd7e52cc4e7927c9113a779"
+  integrity sha512-FUlufBgl44cJ20sc+YncOY+NuZVW3JZnm1LFLVSMVHHi0NCPNFbpd+MkqWvm+gVWbhcOjwtrNMFc544/W2gBpQ==
   dependencies:
     "@vitest/snapshot" "^2.1.1"
     "@wdio/config" "9.21.0"
