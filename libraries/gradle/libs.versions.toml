@@ -2,7 +2,7 @@
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.20.1"
 com-google-devtools-ksp-symbol-processing-api = "com.google.devtools.ksp:symbol-processing-api:2.3.4"
 com-squareup-kotlinpoet-ksp = "com.squareup:kotlinpoet-ksp:2.2.0"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.5.17"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.5.18"
 io-github-oshai-kotlin-logging = "io.github.oshai:kotlin-logging:7.0.13"
 org-jetbrains-kotlin-kotlin-bom = "org.jetbrains.kotlin:kotlin-bom:2.3.0"
 org-jetbrains-kotlin-wrappers-kotlin-wrappers-bom = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:2025.12.7"
