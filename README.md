@@ -66,6 +66,7 @@ All of these are either regular libraries, or gradle plugins.
 They're listed at the [com.zegreatrob.jsmints maven repository](https://mvnrepository.com/artifact/com.zegreatrob.jsmints)
 
 ### Jspackage Gradle Plugin
+
 * Add the jspackage gradle plugin
 ```kotlin
 plugins {
@@ -73,8 +74,10 @@ plugins {
 }
 ```
 ### react-testing-library and user-event-testing-library-js
+
 Use the Jspackage plugin to install the npm dependencies specified in the [com.zegreatrob.jsmints dependency-bom](https://mvnrepository.com/artifact/com.zegreatrob.jsmints/dependency-bom) artifact.
 The specific packages provided are listed in [libraries/dependency-bom/package.json](libraries/dependency-bom/package.json)
+
 ```kotlin
 dependencies {
     jsTestImplementation(project.dependencies.enforcedPlatform("com.zegreatrob.jsmints:jsmints-bom:6.4.19"))
