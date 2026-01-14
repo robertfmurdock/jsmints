@@ -3,7 +3,6 @@ import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
     id("com.zegreatrob.jsmints.plugins.minreact")
-    id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
     id("com.zegreatrob.jsmints.plugins.js")
 }

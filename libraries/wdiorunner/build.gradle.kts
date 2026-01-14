@@ -2,7 +2,6 @@
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 
 plugins {
-    id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
     id("com.zegreatrob.jsmints.plugins.js")
 }

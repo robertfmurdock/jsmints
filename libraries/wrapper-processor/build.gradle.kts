@@ -1,5 +1,4 @@
 plugins {
-    id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.publish")
     kotlin("multiplatform")
 }

@@ -1,5 +1,4 @@
 plugins {
-    alias(libs.plugins.nl.littlerobots.version.catalog.update)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.com.github.sghill.distribution.sha)
     alias(libs.plugins.com.zegreatrob.tools.tagger)

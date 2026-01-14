@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.com.github.sghill.distribution.sha)
     id("com.zegreatrob.jsmints.plugins.versioning")
-    alias(libs.plugins.nl.littlerobots.version.catalog.update)
     alias(libs.plugins.com.zegreatrob.tools.tagger)
     alias(libs.plugins.com.zegreatrob.tools.digger)
     base

@@ -1,9 +1,8 @@
 plugins {
-    id("com.zegreatrob.jsmints.plugins.versioning")
     id("com.zegreatrob.jsmints.plugins.js2")
     id("com.zegreatrob.jsmints.plugins.wdiotest")
+    id("com.zegreatrob.jsmints.plugins.versioning")
     alias(libs.plugins.com.avast.gradle.docker.compose)
-    alias(libs.plugins.nl.littlerobots.version.catalog.update)
 }
 
 kotlin {
