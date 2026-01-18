@@ -6,12 +6,12 @@
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
     "@sventschui/webdriverio-testing-library": "4.0.1",
-    "@wdio/allure-reporter": "^9.22.0",
-    "@wdio/cli": "9.23.0",
-    "@wdio/dot-reporter": "9.20.0",
-    "@wdio/junit-reporter": "9.21.0",
-    "@wdio/local-runner": "9.23.0",
-    "@wdio/mocha-framework": "9.23.0",
+    "@wdio/allure-reporter": "^9.23.2",
+    "@wdio/cli": "9.23.2",
+    "@wdio/dot-reporter": "9.23.2",
+    "@wdio/junit-reporter": "9.23.2",
+    "@wdio/local-runner": "9.23.2",
+    "@wdio/mocha-framework": "9.23.2",
     "allure-commandline": "^2.36.0",
     "core-js": "^3.47.0",
     "geckodriver": "^6.1.0",
@@ -20,6 +20,6 @@
     "npm-check-updates": "19.3.1",
     "wdio-html-nice-reporter": "8.1.7",
     "wdio-timeline-reporter": "^5.1.4",
-    "webdriverio": "^9.23.0"
+    "webdriverio": "^9.23.2"
   }
 }
