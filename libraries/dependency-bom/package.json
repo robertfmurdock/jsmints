@@ -13,7 +13,7 @@
     "@wdio/local-runner": "9.23.2",
     "@wdio/mocha-framework": "9.23.2",
     "allure-commandline": "^2.36.0",
-    "core-js": "^3.47.0",
+    "core-js": "^3.48.0",
     "geckodriver": "^6.1.0",
     "global-jsdom": "^27.0.0",
     "jsdom": "27.4.0",
