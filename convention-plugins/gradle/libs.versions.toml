@@ -3,7 +3,7 @@ org-jetbrains-kotlin = "2.3.0"
 
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.21.0"
-com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.5.28"
+com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.5.29"
 nl-littlerobots-vcu-plugin = "nl.littlerobots.vcu:plugin:1.0.1"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.25.3"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
