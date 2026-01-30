@@ -5,11 +5,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.plus
-import react.useEffectOnceWithCleanup
+import react.useEffectOnce
 import react.useState
 
 fun useScope(coroutineName: String): CoroutineScope {
     val scope = useState { MainScope() + CoroutineName(coroutineName) }.component1()
-    useEffectOnceWithCleanup { onCleanup { scope.cancel() } }
+    useEffectOnce {
+        awaitCleanup { scope.cancel() }
+    }
     return scope
 }
