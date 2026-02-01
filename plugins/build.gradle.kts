@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
+    alias(libs.plugins.com.zegreatrob.tools.fingerprint)
     base
     signing
 }

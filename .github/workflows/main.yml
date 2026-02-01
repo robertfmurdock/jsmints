@@ -51,6 +51,17 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+      - name: Check Fingerprint 🔨
+        continue-on-error: true
+        run: |
+          export PREVIOUS_VERSION=$(./gradlew previousVersion -q)
+          ./gradlew aggregateFingerprints -Pversion=$PREVIOUS_VERSION
+          gh release download "$PREVIOUS_VERSION" -p "aggregate-fingerprint.txt" -D build/prev-aggregate-fingerprint.txt || true
+          if diff -u build/prev-aggregate-fingerprint.txt build/aggregate-fingerprint.txt; then
+            echo "OK: aggregate fingerprint matches release $PREVIOUS_VERSION"
+          else
+            echo "WARNING: aggregate fingerprint differs from release $PREVIOUS_VERSION (see diff above)"
+          fi
       - name: Generate Version 🔢
         env:
           DISABLE_DETACHED: ${{ github.ref == 'refs/heads/master' }}
@@ -61,6 +72,12 @@ jobs:
         run: ./gradlew assemble check -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
       - name: Release 🙏
         run: ./gradlew release -Pversion=${{ env.TAGGER_VERSION }} -Pgradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }} -Pgradle.publish.secret=${{ secrets.GRADLE_PUBLISH_SECRET }} --no-configuration-cache --scan
+      - name: Publish Fingerprint
+        continue-on-error: true
+        run: |
+          cp libraries/build/fingerprint.txt build/libraries.txt
+          cp plugins/build/fingerprint.txt build/plugins.txt
+          gh release upload ${{ env.TAGGER_VERSION }} build/aggregate-fingerprint.txt build/libraries.txt build/plugins.txt --clobber
       - name: Update Contributions
         uses: robertfmurdock/coupling-contribution-action@v3
         with:

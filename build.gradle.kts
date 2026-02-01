@@ -3,6 +3,7 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.versioning")
     alias(libs.plugins.com.zegreatrob.tools.tagger)
     alias(libs.plugins.com.zegreatrob.tools.digger)
+    alias(libs.plugins.com.zegreatrob.tools.fingerprint)
     base
 }
 
@@ -15,6 +16,10 @@ tagger {
     System.getenv("DISABLE_DETACHED")?.let { value ->
         disableDetached.set(value.lowercase() == "true")
     }
+}
+
+fingerprintConfig {
+    includedBuilds = listOf("libraries", "plugins")
 }
 
 tasks {

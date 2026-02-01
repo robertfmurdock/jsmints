@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.com.github.sghill.distribution.sha)
     alias(libs.plugins.com.zegreatrob.tools.tagger)
+    alias(libs.plugins.com.zegreatrob.tools.fingerprint)
+
     `maven-publish`
     signing
     id("com.zegreatrob.jsmints.plugins.versioning")
