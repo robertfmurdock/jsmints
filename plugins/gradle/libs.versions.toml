@@ -12,7 +12,7 @@ org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kot
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.53.0"
 com-gradle-plugin-publish = "com.gradle.plugin-publish:2.0.0"
-com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:1.8.72"
+com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:1.8.75"
 io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:2.0.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.1"
 org-jmailen-kotlinter = "org.jmailen.kotlinter:5.4.0"

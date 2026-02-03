@@ -1,6 +1,6 @@
 [plugins]
 com-github-sghill-distribution-sha = "com.github.sghill.distribution-sha:0.4.0"
-com-zegreatrob-tools-digger = "com.zegreatrob.tools.digger:1.8.72"
-com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:1.8.72"
-com-zegreatrob-tools-tagger = "com.zegreatrob.tools.tagger:1.8.72"
+com-zegreatrob-tools-digger = "com.zegreatrob.tools.digger:1.8.75"
+com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:1.8.75"
+com-zegreatrob-tools-tagger = "com.zegreatrob.tools.tagger:1.8.75"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.0.1"
