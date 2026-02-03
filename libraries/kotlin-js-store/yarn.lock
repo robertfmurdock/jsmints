@@ -2538,10 +2538,10 @@ glob@^8.1.0:
     minimatch "^5.0.1"
     once "^1.3.0"
 
-global-jsdom@^27.0.0:
-  version "27.0.0"
-  resolved "https://registry.yarnpkg.com/global-jsdom/-/global-jsdom-27.0.0.tgz#ba075dee6381389b1b5a05144f43f6ebed04a697"
-  integrity sha512-0lIJfZACEKdBZ1VKSY2L4T2sYhnQ4VfzbULUiEMPcUa3ZWv4ywOCNZAibZyKIDwysIr+WjRyM4U9L9vM6oQQ+Q==
+global-jsdom@^28.0.0:
+  version "28.0.0"
+  resolved "https://registry.yarnpkg.com/global-jsdom/-/global-jsdom-28.0.0.tgz#1fbb2abf4abe493a189fc77ce949c71afab93a57"
+  integrity sha512-G0uJuTt17fnWWoIOxgXTANKwMzlrQehWH5qyD+mJ+C4vT1PaAhtU2UBwDD+mRZaHoMObhwXdt3kbXLgZaPHLpQ==
 
 global@~4.4.0:
   version "4.4.0"
