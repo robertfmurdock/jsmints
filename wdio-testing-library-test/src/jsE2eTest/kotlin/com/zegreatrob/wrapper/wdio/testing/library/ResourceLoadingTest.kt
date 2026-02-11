@@ -3,6 +3,7 @@ package com.zegreatrob.wrapper.wdio.testing.library
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.testmints.async.asyncSetup
 import node.buffer.BufferEncoding
+import node.buffer.utf8
 import node.fs.readFileSync
 import kotlin.test.Test
 
