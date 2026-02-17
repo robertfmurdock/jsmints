@@ -1,13 +1,14 @@
 package com.zegreatrob.minreact
 
 import react.ChildrenBuilder
+import react.Key
 import react.Props
 import react.ReactDsl
 import react.create
 
 fun <D> ChildrenBuilder.add(
     dataProps: DataProps<in D>,
-    key: String? = null,
+    key: Key? = null,
     handler: @ReactDsl (ChildrenBuilder.() -> Unit) = {},
 ) where D : DataProps<in D> {
     +dataProps.component.create {
