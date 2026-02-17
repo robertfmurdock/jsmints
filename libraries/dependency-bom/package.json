@@ -16,7 +16,7 @@
     "core-js": "^3.48.0",
     "geckodriver": "^6.1.0",
     "global-jsdom": "^28.0.0",
-    "jsdom": "28.0.0",
+    "jsdom": "28.1.0",
     "npm-check-updates": "19.3.2",
     "wdio-html-nice-reporter": "8.1.7",
     "wdio-timeline-reporter": "^5.1.4",
