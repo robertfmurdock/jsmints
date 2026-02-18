@@ -23,6 +23,9 @@ fingerprintConfig {
 }
 
 tasks {
+    assemble {
+        dependsOn(aggregateFingerprints)
+    }
     val publishableBuilds = listOf(
         gradle.includedBuild("libraries"),
         gradle.includedBuild("plugins"),
