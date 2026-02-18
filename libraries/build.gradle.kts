@@ -28,6 +28,22 @@ tagger {
     githubReleaseEnabled.set(true)
 }
 
+fingerprintConfig {
+    includedProjects.set(
+        listOf(
+            "minjson",
+            "minreact",
+            "minreact-processor",
+            "react-data-loader",
+            "react-testing-library",
+            "user-event-testing-library",
+            "wdio",
+            "wdio-testing-library",
+            "wdiorunner",
+        )
+    )
+}
+
 tasks {
     calculateVersion {
         enabled = false
