@@ -1,9 +1,11 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.options.Option
 
+@CacheableTask
 abstract class WdioTest : NodeExec() {
 
     @Option(option = "tests", description = "Allows test matcher to be specified")
