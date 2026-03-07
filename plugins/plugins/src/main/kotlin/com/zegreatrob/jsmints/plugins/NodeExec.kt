@@ -6,12 +6,14 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.VerificationException
+import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrCompilation
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import java.io.File
 import java.io.FileOutputStream
 
+@DisableCachingByDefault
 abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
     @Internal
