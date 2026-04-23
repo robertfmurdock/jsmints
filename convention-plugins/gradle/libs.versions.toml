@@ -1,5 +1,5 @@
 [versions]
-org-jetbrains-kotlin = "2.3.20"
+org-jetbrains-kotlin = "2.3.21"
 
 [libraries]
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.21.2"
@@ -13,5 +13,5 @@ org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:5.4.2
 
 [plugins]
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.1.0"
-org-jetbrains-kotlin-plugin-js-plain-objects = "org.jetbrains.kotlin.plugin.js-plain-objects:2.3.20"
+org-jetbrains-kotlin-plugin-js-plain-objects = "org.jetbrains.kotlin.plugin.js-plain-objects:2.3.21"
 org-jmailen-kotlinter = "org.jmailen.kotlinter:5.4.2"
