@@ -1261,10 +1261,10 @@ agent-base@^7.1.2:
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-7.1.3.tgz#29435eb821bc4194633a5b89e5bc4703bafc25a1"
   integrity sha512-jRR5wdylq8CkOe6hei19GGZnxM6rBGwFl3Bg0YItGDimvjGtAvdZk4Pu6Cl4u4Igsws4a1fd1Vq3ezrhn4KmFw==
 
-allure-commandline@^2.38.1:
-  version "2.38.1"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.38.1.tgz#472962e641b9351dfd01e4be3047df4bb1655a7e"
-  integrity sha512-qkoEz8/Y+K6XRlkJFmPEsT4bJFa2nHmYMkp6aEg6HaM4uewpJRI0jJsQhVWl8xZ6k6VtVr3vWnsAMPL5LPthvA==
+allure-commandline@^2.40.0:
+  version "2.40.0"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.40.0.tgz#170c4a7a1e155aa854f55cdeb9de21e488eafa2a"
+  integrity sha512-Oyv2yOx8ORBPloYmfHny4TZa9m0Bq0MAJEf5YoNMs/Ft/dbCWkIF/xNU82c5wqgn65uHSh6ka6BUXHeruXC03w==
 
 allure-js-commons@^3.3.2:
   version "3.4.2"
@@ -3529,10 +3529,10 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-npm-check-updates@22.1.0:
-  version "22.1.0"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-22.1.0.tgz#3dade24959db7362d0d6db2813a2c48d4c43c350"
-  integrity sha512-zKjYAa205S6UyHkNJGmiLFmm6M31175cvUA3OdHvVlCdtyTfkyQbPWoov/GJEc6PWVbCV5e+60c7S2eVp0ybOA==
+npm-check-updates@22.1.1:
+  version "22.1.1"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-22.1.1.tgz#439bf2086d068a8defe5929072018bb4925ca62b"
+  integrity sha512-uWSxJW25dy5ZM4SdLsi0VBgPSJlo7u+jARQ6Xql+85YYCoqXU2ZaympAZ6237/oybCq/I4nXddE9S9BTwBfBXA==
 
 npm-run-path@^6.0.0:
   version "6.0.0"
@@ -3918,10 +3918,10 @@ react-dom@^16.6.3:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
-react-dom@^19.2.5:
-  version "19.2.5"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-19.2.5.tgz#b8768b10837d0b8e9ca5b9e2d58dff3d880ea25e"
-  integrity sha512-J5bAZz+DXMMwW/wV3xzKke59Af6CHY7G4uYLN1OvBcKEsWOs4pQExj86BBKamxl/Ik5bx9whOrvBlSDfWzgSag==
+react-dom@^19.2.6:
+  version "19.2.6"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-19.2.6.tgz#44a81b0bcca22da814c00847d09d01c8615529b7"
+  integrity sha512-0prMI+hvBbPjsWnxDLxlCGyM8PN6UuWjEUCYmZhO67xIV9Xasa/r/vDnq+Xyq4Lo27g8QSbO5YzARu0D1Sps3g==
   dependencies:
     scheduler "^0.27.0"
 
@@ -3949,10 +3949,10 @@ react@^16.6.3:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-react@^19.2.5:
-  version "19.2.5"
-  resolved "https://registry.yarnpkg.com/react/-/react-19.2.5.tgz#c888ab8b8ef33e2597fae8bdb2d77edbdb42858b"
-  integrity sha512-llUJLzz1zTUBrskt2pwZgLq59AemifIftw4aB7JxOqf1HY2FDaGDxgwpAPVzHU1kdWabH7FauP4i1oEeer2WCA==
+react@^19.2.6:
+  version "19.2.6"
+  resolved "https://registry.yarnpkg.com/react/-/react-19.2.6.tgz#3dadb8e12b2a7934c1d5317973e5dce1301f9a4d"
+  integrity sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q==
 
 read-pkg-up@^10.0.0, read-pkg-up@^10.1.0:
   version "10.1.0"
