@@ -1261,10 +1261,10 @@ agent-base@^7.1.2:
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-7.1.3.tgz#29435eb821bc4194633a5b89e5bc4703bafc25a1"
   integrity sha512-jRR5wdylq8CkOe6hei19GGZnxM6rBGwFl3Bg0YItGDimvjGtAvdZk4Pu6Cl4u4Igsws4a1fd1Vq3ezrhn4KmFw==
 
-allure-commandline@^2.40.0:
-  version "2.40.0"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.40.0.tgz#170c4a7a1e155aa854f55cdeb9de21e488eafa2a"
-  integrity sha512-Oyv2yOx8ORBPloYmfHny4TZa9m0Bq0MAJEf5YoNMs/Ft/dbCWkIF/xNU82c5wqgn65uHSh6ka6BUXHeruXC03w==
+allure-commandline@^2.41.0:
+  version "2.41.0"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.41.0.tgz#ce875b27f9e76e7dbdf09edbfa411d51f37f8bbd"
+  integrity sha512-X3/zXt3i1q9k1ZMQLUKKfHRlwrxsSly6TVRtowYvcFskK5Q8FBtf1pm9h/bXQwG16f9M4ngvI77QhaWngy00og==
 
 allure-js-commons@^3.3.2:
   version "3.4.2"
