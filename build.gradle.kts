@@ -14,7 +14,7 @@ tagger {
     releaseBranch = "master"
     githubReleaseEnabled.set(true)
     System.getenv("DISABLE_DETACHED")?.let { value ->
-        disableDetached.set(value.lowercase() == "true")
+        allowDetachedHead = value.lowercase() != "true"
     }
 }
 
