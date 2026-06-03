@@ -1,8 +1,8 @@
 [versions]
-org-jetbrains-kotlin = "2.3.21"
+org-jetbrains-kotlin = "2.4.0"
 
 [libraries]
-com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.21.4"
+com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.22.0"
 com-google-devtools-ksp = "com.google.devtools.ksp:symbol-processing-gradle-plugin:2.3.9"
 junit = "junit:junit:4.13.2"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.26.0"
@@ -12,7 +12,7 @@ org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kot
 [plugins]
 com-github-ben-manes-versions = "com.github.ben-manes.versions:0.54.0"
 com-gradle-plugin-publish = "com.gradle.plugin-publish:2.1.1"
-com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:2.4.1"
+com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:3.0.0"
 io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:2.0.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.1.0"
 org-jmailen-kotlinter = "org.jmailen.kotlinter:5.5.0"
