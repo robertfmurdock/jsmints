@@ -47,7 +47,7 @@ tasks {
     assemble { dependsOn(provider { (getTasksByName("assemble", true) - this).toList() }) }
     register("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
     register("collectResults") { dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() }) }
-    val closeAndReleaseSonatypeStagingRepository by getting {
+    val closeAndReleaseSonatypeStagingRepository = named("closeAndReleaseSonatypeStagingRepository") {
         mustRunAfter(publish)
     }
     publish {

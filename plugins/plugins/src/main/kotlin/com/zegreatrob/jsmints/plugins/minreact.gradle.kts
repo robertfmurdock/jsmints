@@ -34,7 +34,7 @@ afterEvaluate {
 }
 
 fun correctForLocal(library: String): Any = if (minreact.includedBuild.get()) {
-    project(":$library")
+    dependencies.project(":$library")
 } else {
     "com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}"
 }

@@ -59,7 +59,7 @@ tasks {
         mustRunAfter(check)
         finalizedBy(provider { (getTasksByName("publish", true)).toList() })
     }
-    val closeAndReleaseSonatypeStagingRepository by getting {
+    val closeAndReleaseSonatypeStagingRepository = named("closeAndReleaseSonatypeStagingRepository") {
         mustRunAfter(publish)
     }
     publish {

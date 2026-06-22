@@ -67,8 +67,8 @@ afterEvaluate {
 }
 
 signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
+    val signingKey = project.findProperty("signingKey") as String?
+    val signingPassword = project.findProperty("signingPassword") as String?
 
     if (signingKey != null) {
         val decodedKey = Base64.getDecoder().decode(signingKey).toString(Charset.defaultCharset())
@@ -83,7 +83,7 @@ signing {
 tasks {
     publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
 
-    val javadocJar by registering(Jar::class) {
+    val javadocJar = register<Jar>("javadocJar") {
         archiveClassifier.set("javadoc")
         from("${rootDir.absolutePath}/javadocs")
     }

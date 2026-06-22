@@ -8,13 +8,13 @@ tasks {
     val projectResultPath = rootProject.layout.buildDirectory.dir(
         "test-output/${project.path}/results".replace(":", "/"),
     )
-    val check by getting
-    val copyReportsToRootDirectory by registering(Copy::class) {
+    val check = named("check")
+    val copyReportsToRootDirectory = register<Copy>("copyReportsToRootDirectory") {
         mustRunAfter(check)
         from("build/reports")
         into(projectResultPath)
     }
-    val copyTestResultsToRootDirectory by registering(Copy::class) {
+    val copyTestResultsToRootDirectory = register<Copy>("copyTestResultsToRootDirectory") {
         mustRunAfter(check)
         from("build/test-results")
         into(projectResultPath)

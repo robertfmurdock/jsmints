@@ -88,7 +88,7 @@ tasks {
     withType<LintTask> {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }
-    val copyTemplates by registering(Copy::class) {
+    val copyTemplates = register<Copy>("copyTemplates") {
         inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
 
@@ -124,12 +124,12 @@ tasks {
     }
     val projectResultPath = rootProject.layout.buildDirectory
         .dir("test-output/${project.path}/results".replace(":", "/"))
-    val copyReportsToRootDirectory by registering(Copy::class) {
+    val copyReportsToRootDirectory = register<Copy>("copyReportsToRootDirectory") {
         mustRunAfter(check)
         from("build/reports")
         into(projectResultPath)
     }
-    val copyTestResultsToRootDirectory by registering(Copy::class) {
+    val copyTestResultsToRootDirectory = register<Copy>("copyTestResultsToRootDirectory") {
         mustRunAfter(check)
         from("build/test-results")
         into(projectResultPath)
@@ -147,8 +147,8 @@ tasks {
 }
 
 signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
+    val signingKey = project.findProperty("signingKey") as String?
+    val signingPassword = project.findProperty("signingPassword") as String?
 
     if (signingKey != null) {
         val decodedKey = Base64.getDecoder().decode(signingKey).toString(Charset.defaultCharset())

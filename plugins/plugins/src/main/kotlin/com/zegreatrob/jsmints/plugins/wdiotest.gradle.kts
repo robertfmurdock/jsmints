@@ -21,7 +21,7 @@ repositories {
 
 kotlin {
     js {
-        val e2eTest by compilations.creating
+        val e2eTest = compilations.create("e2eTest")
         binaries.executable(e2eTest)
     }
 }
@@ -32,7 +32,7 @@ rootProject.extensions.findByType(NodeJsEnvSpec::class.java).let {
 
 rootProject.yarn.ignoreScripts = false
 
-val yarnAutoReplace: String? by project
+val yarnAutoReplace = project.findProperty("yarnAutoReplace") as String?
 
 rootProject.yarn.yarnLockAutoReplace = yarnAutoReplace != null
 rootProject.yarn.yarnLockMismatchReport = if (yarnAutoReplace != null) {
@@ -43,7 +43,7 @@ rootProject.yarn.yarnLockMismatchReport = if (yarnAutoReplace != null) {
 
 val wdioTest = project.extensions.create<WdioTestExtension>("wdioTest")
 
-val runnerConfiguration: Configuration by configurations.creating {
+val runnerConfiguration = configurations.create("runnerConfiguration") {
     isCanBeResolved = true
     isCanBeConsumed = false
     attributes {
@@ -82,7 +82,7 @@ val wdioConfig = npmProjectDir.map { it.file("wdio.conf.mjs") }
 
 tasks {
     val runnerJs = npmProjectDir.map { it.dir("runner").file("jsmints-wdiorunner.js") }
-    val installRunner by registering(Copy::class) {
+    val installRunner = register<Copy>("installRunner") {
         dependsOn(runnerConfiguration)
         into(runnerJs.map { it.asFile.parentFile })
         from(
@@ -94,7 +94,7 @@ tasks {
     }
     val wdioConfDirectory = npmProjectDir.map { it.file("wdio.conf.d") }
 
-    val copyWdioConfDir by registering(Copy::class) {
+    val copyWdioConfDir = register<Copy>("copyWdioConfDir") {
         duplicatesStrategy = DuplicatesStrategy.WARN
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
@@ -120,7 +120,7 @@ tasks {
         addPlugin(wdioTest.screenshotsOnFailure, WdioTemplate.screenshotsOnFailurePlugin)
         into(wdioConfDirectory)
     }
-    val copyWdio by registering(Copy::class) {
+    val copyWdio = register<Copy>("copyWdio") {
         mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
         dependsOn(copyWdioConfDir)
         val wdioConfFile = wdioTest.wdioConfigFile
@@ -153,7 +153,7 @@ tasks {
 
     val e2eTestProcessResources = named<ProcessResources>("jsE2eTestProcessResources")
 
-    val e2eRun by registering(WdioTest::class) {
+    val e2eRun = register<WdioTest>("e2eRun") {
         group = "Verification"
         description = "This task will run WDIO end to end tests."
         val kotlinJsCompilation = kotlin.js().compilations["e2eTest"]

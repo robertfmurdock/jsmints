@@ -31,7 +31,7 @@ dependencies {
     jsMainImplementation(jsconstraint("@wdio/mocha-framework"))
 }
 
-val executable: Configuration by configurations.creating {
+val executable = configurations.create("executable") {
     isCanBeResolved = false
     isCanBeConsumed = true
     attributes { attribute(Attribute.of("com.zegreatrob.executable", String::class.java), "runner") }
@@ -40,7 +40,7 @@ val executable: Configuration by configurations.creating {
 val compileExecutableTask = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
 
 tasks {
-    val executableJar by registering(Jar::class) {
+    val executableJar = register<Jar>("executableJar") {
         dependsOn(compileExecutableTask)
         archiveClassifier.set("executable")
         from(compileExecutableTask.map { it.destinationDirectory.asFile })

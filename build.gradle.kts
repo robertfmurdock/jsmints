@@ -36,7 +36,7 @@ tasks {
     ) + gradle.includedBuild("wdio-testing-library-test")
     val includedBuilds = testBuilds + gradle.includedBuild("convention-plugins")
 
-    val publish by registering {
+    val publish = register("publish") {
         mustRunAfter(check)
         dependsOn(provider { publishableBuilds.map { it.task(":publish") } })
     }
