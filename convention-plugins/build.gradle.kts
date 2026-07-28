@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.org.jetbrains.kotlin.kotlin.gradle.plugin)
     implementation(libs.org.jmailen.gradle.kotlinter.gradle)
     implementation(libs.com.fasterxml.jackson.core.jackson.databind)
+    implementation(libs.io.github.turansky.kfc.latest.tools)
     implementation(libs.nl.littlerobots.vcu.plugin)
     implementation(platform(libs.com.zegreatrob.testmints.testmints.bom))
     implementation("com.zegreatrob.testmints:mint-logs-plugin")

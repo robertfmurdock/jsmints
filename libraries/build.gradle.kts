@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.com.github.sghill.distribution.sha)
     alias(libs.plugins.com.zegreatrob.tools.tagger)
     alias(libs.plugins.com.zegreatrob.tools.fingerprint)
-    alias(libs.plugins.io.github.turansky.kfc.application)
     `maven-publish`
     signing
     id("com.zegreatrob.jsmints.plugins.versioning")
