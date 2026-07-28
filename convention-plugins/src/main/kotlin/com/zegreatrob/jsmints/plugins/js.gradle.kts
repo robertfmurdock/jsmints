@@ -38,7 +38,3 @@ project.extensions.create<JsConstraintExtension>("jsconstraint")
 configure<JsConstraintExtension> {
     json = File(project(":dependency-bom").projectDir, "package.json")
 }
-
-rootProject.extensions.findByType(NodeJsEnvSpec::class.java).let {
-    it?.version = "24.7.0"
-}
