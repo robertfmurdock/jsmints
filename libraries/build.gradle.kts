@@ -11,6 +11,14 @@ plugins {
 
 group = "com.zegreatrob.jsmints"
 
+allprojects {
+    tasks.matching { it.name == "kotlinNodeJsSetup" }.configureEach {
+        doNotTrackState(
+            "The Kotlin-managed Node.js distribution can contain unreadable files Gradle cannot snapshot."
+        )
+    }
+}
+
 nexusPublishing {
     this@nexusPublishing.repositories {
         sonatype {

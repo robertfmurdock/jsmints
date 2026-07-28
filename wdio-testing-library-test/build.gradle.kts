@@ -58,5 +58,8 @@ tasks {
     }
     "kotlinNodeJsSetup" {
         dependsOn(provider { gradle.includedBuild("libraries").task(":kotlinNodeJsSetup") })
+        doNotTrackState(
+            "The Kotlin-managed Node.js distribution can contain unreadable files Gradle cannot snapshot."
+        )
     }
 }
