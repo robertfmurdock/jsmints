@@ -87,7 +87,7 @@ jobs:
             build/aggregate-fingerprint-manifest.log \
             --clobber
       - name: Update Contributions
-        uses: robertfmurdock/coupling-contribution-action@v3
+        uses: robertfmurdock/coupling-contribution-action@v4
         with:
           save-contribution: ${{ github.ref == 'refs/heads/master' }}
           cli-type: js
