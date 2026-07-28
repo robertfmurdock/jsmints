@@ -26,10 +26,6 @@ kotlin {
     }
 }
 
-rootProject.extensions.findByType(NodeJsEnvSpec::class.java).let {
-    it?.version = "24.7.0"
-}
-
 rootProject.yarn.ignoreScripts = false
 
 val yarnAutoReplace = project.findProperty("yarnAutoReplace") as String?
