@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.com.github.sghill.distribution.sha)
     alias(libs.plugins.com.zegreatrob.tools.tagger)
     alias(libs.plugins.com.zegreatrob.tools.fingerprint)
-    id("io.github.turansky.kfc.application") version "19.13.0"
+    alias(libs.plugins.io.github.turansky.kfc.application)
     `maven-publish`
     signing
     id("com.zegreatrob.jsmints.plugins.versioning")
@@ -53,6 +53,9 @@ tasks {
     }
     register("formatKotlin") {
         dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() })
+    }
+    check {
+        dependsOn(provider { (getTasksByName("check", true) - this).toList() })
     }
     "versionCatalogUpdate" { dependsOn(":dependency-bom:ncuUpgrade") }
     release {

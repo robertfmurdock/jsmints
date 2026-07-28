@@ -2,9 +2,12 @@ package com.zegreatrob.jsmints.plugins
 
 import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.VerificationException
 import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrCompilation
@@ -36,6 +39,10 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     @Optional
     var nodeCommand: String? = null
 
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    var nodeCommandDirectories: List<File> = emptyList()
+
     @Input
     @Optional
     var verificationErrorMessage: String? = null
@@ -45,7 +52,15 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
     override fun exec() {
         npmProjectDir?.let { workingDir = it }
-        val commandFromBin = nodeCommand?.let { listOf("$projectNodeModulesDir/.bin/$nodeCommand") } ?: emptyList()
+        val commandFromBin = nodeCommand?.let { command ->
+            val orderedDirectories = (nodeCommandDirectories + projectNodeModulesDir.resolve(".bin")).distinct()
+            val commandPath = orderedDirectories
+                .asSequence()
+                .map { it.resolve(command) }
+                .firstOrNull { it.exists() }
+                ?: projectNodeModulesDir.resolve(".bin").resolve(command)
+            listOf(commandPath.absolutePath)
+        } ?: emptyList()
         commandLine = listOf(nodeExecPath) + commandFromBin + arguments
 
         outputFile?.let {
@@ -72,4 +87,8 @@ fun NodeExec.setup(compilation: KotlinJsIrCompilation) {
     @Suppress("DEPRECATION")
     nodeExecPath = nodeJs.requireConfigured().executable
     projectNodeModulesDir = compilation.npmProject.nodeModulesDir.get().asFile
+    nodeCommandDirectories = listOf(
+        compilation.npmProject.dir.get().asFile.resolve("node_modules/.bin"),
+        projectNodeModulesDir.resolve(".bin"),
+    )
 }

@@ -1,6 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
 import com.zegreatrob.jsmints.plugins.jspackage.JsPackageExtension
+import java.io.File
 
 plugins {
     id("com.zegreatrob.jsmints.plugins.jspackage")
@@ -15,14 +16,12 @@ tasks {
                 dependsOn("jsPublicPackageJson", ":kotlinNpmInstall")
                 setup(this@configure)
                 val packageJson = File(project.projectDir, "package.json")
-                val nodeCommand = "ncu"
-                val nodeCommandBin = "${project.nodeModulesDir}/.bin/$nodeCommand"
                 val configFile = file("$rootDir/.ncurc.json")
                 inputs.files(provider { listOf(configFile, packageJson).filter { it.exists() } })
                 outputs.file(packageJson)
+                nodeCommand = "ncu"
 
                 arguments = listOf(
-                    nodeCommandBin,
                     "-u",
                     "--packageFile",
                     packageJson.absolutePath,
@@ -46,7 +45,3 @@ dependencies {
         )
     }
 }
-
-val Project.nodeModulesDir: String
-    get() = rootProject.layout.buildDirectory
-        .dir("js/node_modules").get().asFile.absolutePath

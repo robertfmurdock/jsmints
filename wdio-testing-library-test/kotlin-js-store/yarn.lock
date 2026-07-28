@@ -610,7 +610,7 @@
     convert-source-map "^2.0.0"
     tinyrainbow "^3.0.3"
 
-"@wdio/allure-reporter@^9.29.1":
+"@wdio/allure-reporter@^9.30.0":
   version "9.30.0"
   resolved "https://registry.yarnpkg.com/@wdio/allure-reporter/-/allure-reporter-9.30.0.tgz#eba7800cdd6506c658868fb49e43847f324b3e19"
   integrity sha512-hV/TNy7x1ENkX5cfWLN4CyVczfqBQYWqGdNhRdtX6+8nZFwRBtMRcC770MABFJyeVZzwAvyliZNgJMphxtEPMQ==

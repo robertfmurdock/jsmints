@@ -22,6 +22,7 @@ class NamedTmFC<T : DataProps<T>>(private val clazz: KClass<T>, private val func
     operator fun getValue(t: Any?, property: KProperty<*>): FC<DataPropsBridge> = fc ?: FC(property.name) { props: DataPropsBridge ->
         val newProps = ensureKotlinClassProps(props, clazz.js)
         js.objects.Object.assign(this@FC, newProps)
+        this@FC.asDynamic().children = null
         function(newProps)
     }.also {
         fc = it
