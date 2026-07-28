@@ -10,7 +10,7 @@ plugins {
 
 kotlin {
     js {
-        nodejs()
+        nodejs { testTask { useMocha { timeout = "20s" } } }
         compilations.named("test") {
             packageJson {
                 customField("mocha", mapOf("require" to "global-jsdom/register"))

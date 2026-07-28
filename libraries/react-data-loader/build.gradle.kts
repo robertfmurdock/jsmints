@@ -27,7 +27,7 @@ dependencies {
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
     jsTestImplementation(project(":react-testing-library"))
-    jsTestImplementation(jsconstraint("@testing-library/user-event"))
+    jsTestImplementation(project(":user-event-testing-library"))
     jsTestImplementation(jsconstraint("jsdom"))
     jsTestImplementation(jsconstraint("global-jsdom"))
     jsTestImplementation("com.zegreatrob.testmints:async")

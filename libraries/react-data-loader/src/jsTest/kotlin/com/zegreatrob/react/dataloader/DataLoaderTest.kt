@@ -2,12 +2,12 @@ package com.zegreatrob.react.dataloader
 
 import com.zegreatrob.minassert.assertIsEqualTo
 import com.zegreatrob.minassert.assertIsNotEqualTo
-import com.zegreatrob.react.dataloader.external.testinglibrary.userevent.userEvent
 import com.zegreatrob.testmints.async.ScopeMint
 import com.zegreatrob.testmints.async.asyncSetup
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.render
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.screen
 import com.zegreatrob.wrapper.testinglibrary.react.TestingLibraryReact.waitFor
+import com.zegreatrob.wrapper.testinglibrary.userevent.UserEvent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
@@ -77,6 +77,7 @@ class DataLoaderTest {
     @Test
     fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
+        val actor = UserEvent.setup()
     }) {
         render(
             Fragment.create {
@@ -95,7 +96,7 @@ class DataLoaderTest {
             },
         )
     } exercise {
-        userEvent.click(screen.findByText("Button"))
+        actor.click(screen.findByText("Button"))
     } verify {
         screen.findByText("allStatesCount: 6")
 
@@ -108,6 +109,7 @@ class DataLoaderTest {
     @Test
     fun childrenCanPerformAsyncWorkUsingDataLoaderScopeViaDataLoadTools() = asyncSetup(object : ScopeMint() {
         val channel = Channel<Int>()
+        val actor = UserEvent.setup()
 
         suspend fun collectThreeValuesFromChannel(): List<Int> {
             val e1 = channel.receive()
@@ -145,7 +147,7 @@ class DataLoaderTest {
             },
         )
     } exercise {
-        userEvent.click(screen.findByText("Button"))
+        actor.click(screen.findByText("Button"))
 
         channel.send(99)
         channel.send(87)
