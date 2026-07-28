@@ -28,7 +28,7 @@ jobs:
         run: ./gradlew :wdio-testing-library-test:kotlinUpgradeYarnLock --no-configuration-cache --no-build-cache
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           branch: "cpr-gradle-update/${{github.job}}/${{github.run_id}}"
           commit-message: "[patch] ${{github.workflow}}"
