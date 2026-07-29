@@ -9,7 +9,7 @@ nl-littlerobots-vcu-plugin = "nl.littlerobots.vcu:plugin:1.1.0"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.26.1"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
-org-jetbrains-kotlin-plugin-js-plain-objects = { module = "org.jetbrains.kotlin.plugin.js-plain-objects:org.jetbrains.kotlin.plugin.js-plain-objects.gradle.plugin", version.ref = "org-jetbrains-kotlin" }
+org-jetbrains-kotlin-plugin-js-plain-objects = { module = "org.jetbrains.kotlin:js-plain-objects", version.ref = "org-jetbrains-kotlin" }
 org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:5.6.0"
 
 [plugins]
