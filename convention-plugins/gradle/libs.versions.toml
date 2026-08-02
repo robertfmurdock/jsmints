@@ -5,7 +5,7 @@ org-jetbrains-kotlin = "2.4.10"
 com-fasterxml-jackson-core-jackson-databind = "com.fasterxml.jackson.core:jackson-databind:2.22.1"
 com-zegreatrob-testmints-testmints-bom = "com.zegreatrob.testmints:testmints-bom:12.6.39"
 io-github-turansky-kfc-latest-tools = "io.github.turansky.kfc:kfc-gradle-plugin:19.13.0"
-nl-littlerobots-vcu-plugin = "nl.littlerobots.vcu:plugin:1.1.0"
+nl-littlerobots-vcu-plugin = "nl.littlerobots.vcu:plugin:1.1.1"
 org-apache-logging-log4j-log4j-core = "org.apache.logging.log4j:log4j-core:2.26.1"
 org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "org-jetbrains-kotlin" }
 org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "org-jetbrains-kotlin" }
@@ -14,6 +14,6 @@ org-jmailen-gradle-kotlinter-gradle = "org.jmailen.gradle:kotlinter-gradle:5.6.0
 
 [plugins]
 io-github-turansky-kfc-latest-tools = "io.github.turansky.kfc.latest-tools:19.13.0"
-nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.1.0"
+nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.1.1"
 org-jetbrains-kotlin-plugin-js-plain-objects = "org.jetbrains.kotlin.plugin.js-plain-objects:2.4.10"
 org-jmailen-kotlinter = "org.jmailen.kotlinter:5.6.0"
