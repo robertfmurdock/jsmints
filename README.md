@@ -1,4 +1,4 @@
-# jsmints ![Build](https://github.com/robertfmurdock/jsmints/actions/workflows/main.yml/badge.svg?branch=master) [![Maven Central](https://maven-badges.sml.io/maven-central/com.zegreatrob.jsmints/jsmints-bom/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.zegreatrob/jsmints)
+# jsmints ![Build](https://github.com/robertfmurdock/jsmints/actions/workflows/main.yml/badge.svg?branch=master) [![Maven Central](https://img.shields.io/maven-central/v/com.zegreatrob.jsmints/jsmints-bom.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.zegreatrob.jsmints%22%20AND%20a:%22jsmints-bom%22)
 
 [![Gradle Lib Updates](https://github.com/robertfmurdock/jsmints/actions/workflows/gradle-update.yml/badge.svg?branch=master)](https://github.com/robertfmurdock/jsmints/actions/workflows/gradle-update.yml)
 [![Gradle Wrapper Update](https://github.com/robertfmurdock/jsmints/actions/workflows/update-gradle-wrapper.yml/badge.svg?branch=master)](https://github.com/robertfmurdock/jsmints/actions/workflows/update-gradle-wrapper.yml)
