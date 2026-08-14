@@ -13,7 +13,6 @@ plugins {
 
 group = "com.zegreatrob.jsmints"
 
-
 tagger {
     releaseBranch = "master"
     githubReleaseEnabled.set(true)
@@ -129,13 +128,15 @@ tasks {
     val includedBuilds = testBuilds + gradle.includedBuild("convention-plugins")
 
     val publish = register("publish") {
+        description = "publishAggregate"
         mustRunAfter(check)
         dependsOn(provider { publishableBuilds.map { it.task(":publish") } })
     }
-    "versionCatalogUpdate" {
+    named("versionCatalogUpdate") {
         dependsOn(provider { includedBuilds.map { it.task(":versionCatalogUpdate") } })
     }
     register("kotlinUpgradeYarnLock") {
+        description = "kotlinUpgradeYarnLockAggregate"
         dependsOn(
             provider {
                 listOf(
@@ -146,6 +147,7 @@ tasks {
         )
     }
     register<Copy>("collectResults") {
+        description = "collectResultsAggregate"
         dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
         dependsOn(provider { testBuilds.map { it.task(":collectResults") } })
         from(testBuilds.map { it.projectDir.resolve("build/test-output") })
@@ -153,6 +155,7 @@ tasks {
     }
 
     register("formatKotlin") {
+        description = "formatKotlinAggregate"
         dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() })
         dependsOn(provider { includedBuilds.map { it.task(":formatKotlin") } })
     }

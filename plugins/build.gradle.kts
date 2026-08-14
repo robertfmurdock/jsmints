@@ -1,29 +1,12 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import nl.littlerobots.vcu.plugin.versionSelector
 
 plugins {
     `maven-publish`
-    alias(libs.plugins.com.github.ben.manes.versions)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
     alias(libs.plugins.com.zegreatrob.tools.fingerprint)
     base
     signing
-}
-
-tasks {
-    withType<DependencyUpdatesTask> {
-        checkForGradleUpdate = true
-        outputFormatter = "json"
-        outputDir = "build/dependencyUpdates"
-        reportfileName = "report"
-        revision = "release"
-
-        rejectVersionIf {
-            "^[0-9.]+[0-9](-RC|-M[0-9]+|-RC[0-9]+|-beta.*|-alpha.*|-dev.*|-RC.*)$"
-                .toRegex(RegexOption.IGNORE_CASE)
-                .matches(candidate.version)
-        }
-    }
 }
 
 nexusPublishing {
@@ -38,6 +21,13 @@ nexusPublishing {
     }
 }
 
+versionCatalogUpdate {
+    val rejectRegex = "^[0-9.]+[0-9](-RC|-M[0-9]*|-RC[0-9]*.*|-beta.*|-Beta.*|-alpha.*|-dev.*)$".toRegex()
+    versionSelector { versionCandidate ->
+        !rejectRegex.matches(versionCandidate.candidate.version)
+    }
+}
+
 tasks {
     clean {
         delete(rootProject.layout.buildDirectory)
@@ -45,8 +35,14 @@ tasks {
     }
     check { dependsOn(provider { (getTasksByName("check", true) - this).toList() }) }
     assemble { dependsOn(provider { (getTasksByName("assemble", true) - this).toList() }) }
-    register("formatKotlin") { dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() }) }
-    register("collectResults") { dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() }) }
+    register("formatKotlin") {
+        description = "formatKotlinAggregate"
+        dependsOn(provider { (getTasksByName("formatKotlin", true) - this).toList() })
+    }
+    register("collectResults") {
+        description = "collectResultsAggregate"
+        dependsOn(provider { (getTasksByName("collectResults", true) - this).toList() })
+    }
     val closeAndReleaseSonatypeStagingRepository = named("closeAndReleaseSonatypeStagingRepository") {
         mustRunAfter(publish)
     }
