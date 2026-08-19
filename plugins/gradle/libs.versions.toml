@@ -9,7 +9,7 @@ org-jetbrains-kotlin-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kot
 
 [plugins]
 com-gradle-plugin-publish = "com.gradle.plugin-publish:2.1.1"
-com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:3.6.14"
+com-zegreatrob-tools-fingerprint = "com.zegreatrob.tools.fingerprint:3.6.16"
 io-github-gradle-nexus-publish-plugin = "io.github.gradle-nexus.publish-plugin:2.0.0"
 nl-littlerobots-version-catalog-update = "nl.littlerobots.version-catalog-update:1.1.1"
 org-jmailen-kotlinter = "org.jmailen.kotlinter:5.7.0"
