@@ -4,7 +4,7 @@
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.5",
+    "@testing-library/user-event": "^14.6.6",
     "@sventschui/webdriverio-testing-library": "4.0.1",
     "@wdio/allure-reporter": "^9.31.2",
     "@wdio/cli": "9.31.2",
