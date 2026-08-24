@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
+
 plugins {
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.com.github.sghill.distribution.sha)
@@ -15,6 +17,12 @@ allprojects {
         doNotTrackState(
             "The Kotlin-managed Node.js distribution can contain unreadable files Gradle cannot snapshot."
         )
+    }
+
+    if (System.getenv().containsKey("CI")) {
+        afterEvaluate {
+            extensions.findByType(NodeJsEnvSpec::class)?.download?.set(false)
+        }
     }
 }
 

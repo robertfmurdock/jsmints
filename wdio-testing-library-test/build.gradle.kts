@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
+
 plugins {
     id("com.zegreatrob.jsmints.plugins.js2")
     id("com.zegreatrob.jsmints.plugins.wdiotest")
@@ -12,6 +14,12 @@ kotlin {
                 enabled = false
             }
         }
+    }
+}
+
+if (System.getenv().containsKey("CI")) {
+    extensions.configure<NodeJsEnvSpec> {
+        download.set(false)
     }
 }
 
