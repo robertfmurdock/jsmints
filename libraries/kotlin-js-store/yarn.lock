@@ -787,10 +787,10 @@
     picocolors "1.1.1"
     pretty-format "^27.0.2"
 
-"@testing-library/react@^16.3.2":
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-16.3.2.tgz#672883b7acb8e775fc0492d9e9d25e06e89786d0"
-  integrity sha512-XU5/SytQM+ykqMnAnvB2umaJNIOsLF3PVv//1Ew4CTcpz0/BRyy/af40qqrt7SjKpDdT1saBMc42CUok5gaw+g==
+"@testing-library/react@^16.3.3":
+  version "16.3.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-16.3.3.tgz#426907e7716f37038dab8aa69d8f0459f9ec24b2"
+  integrity sha512-Uo193NgQbPMz6lrrhtRQQFcMC6Re/ELLFbbuVL30WDlZxlpZf9/lMHTAVxPRLw1q1iu9OJmR1c2BLiENRstdBg==
   dependencies:
     "@babel/runtime" "^7.12.5"
 
@@ -940,23 +940,23 @@
     convert-source-map "^2.0.0"
     tinyrainbow "^3.1.0"
 
-"@wdio/allure-reporter@^9.31.2":
-  version "9.31.2"
-  resolved "https://registry.yarnpkg.com/@wdio/allure-reporter/-/allure-reporter-9.31.2.tgz#057d01147518bee318b3fa0a4364d690f9929ddb"
-  integrity sha512-VK1FvlyouljUZITJ9Vgpll/ZB9pPRFujwA0xNvlsK4Edl7Gqzpc6uzuDPwHujT41KIc7HznR+QlfZxcjOjYuaw==
+"@wdio/allure-reporter@^9.31.4":
+  version "9.31.4"
+  resolved "https://registry.yarnpkg.com/@wdio/allure-reporter/-/allure-reporter-9.31.4.tgz#26d9e6efd1585c9a7e3b278d46467c4e07246e40"
+  integrity sha512-SqDuzDJPL01Iw3stdGPPlDwo4szwTi3ltpkUPSxDE2AwBk5FSzdYAx4QoQ+5ggS7+HMsfbcKmILuPgoHzYDRjQ==
   dependencies:
     "@types/node" "^20.1.0"
     "@wdio/reporter" "9.31.2"
     "@wdio/types" "9.31.2"
-    allure-js-commons "^3.3.2"
+    allure-js-commons "^3.10.0"
     csv-stringify "^6.0.4"
     html-entities "^2.6.0"
     strip-ansi "^7.1.0"
 
-"@wdio/cli@9.31.3":
-  version "9.31.3"
-  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-9.31.3.tgz#7d5e3c285665deac9dc44ccdccf1f742375cce2b"
-  integrity sha512-FBdxaIqCg7g9d5BKU7tqmKXJHtjDICcS9dD0akowVvqE4ce/dL12bSK6F99K4E9BFle6xk3FzILqQ5gFKKcq7w==
+"@wdio/cli@9.31.4":
+  version "9.31.4"
+  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-9.31.4.tgz#fcda5c675e1740d1cd8dbd9c35dd16a755a557a8"
+  integrity sha512-OSDKrDHus5NP1VZJ9RqWXd/P79pcTTSDey6c9lBekbJTGu1TE2vBFzyU7Rsw98GvLNeLfh7tlr6llmGJ5WqJvA==
   dependencies:
     "@vitest/snapshot" "^2.1.1"
     "@wdio/config" "9.31.2"
@@ -976,7 +976,7 @@
     lodash.union "^4.6.0"
     read-pkg-up "^10.0.0"
     tsx "^4.7.2"
-    webdriverio "9.31.3"
+    webdriverio "9.31.4"
     yargs "^17.7.2"
 
 "@wdio/config@9.31.2":
@@ -1016,15 +1016,15 @@
     json-stringify-safe "^5.0.1"
     junit-report-builder "^5.1.1"
 
-"@wdio/local-runner@9.31.3":
-  version "9.31.3"
-  resolved "https://registry.yarnpkg.com/@wdio/local-runner/-/local-runner-9.31.3.tgz#30b3cb6cc20e559228b9b6bf893ae713d5999846"
-  integrity sha512-JxZ6ReXy8xOMq3UrjR7SFQLHgmflnP7h28CXqW1iG5XK31pHOrlGGS1Ob6DRg5CdEHpByw0h3tXlvQP0eaJIGQ==
+"@wdio/local-runner@9.31.4":
+  version "9.31.4"
+  resolved "https://registry.yarnpkg.com/@wdio/local-runner/-/local-runner-9.31.4.tgz#1a5f08ab6ff6bff5c2cd002b7223afa1175bcf90"
+  integrity sha512-gQ1wWwZiANyDo4i20mAZ5FsYYujRw1VOXUr3WjcBA1f4y1reZYU/XOnSXq9VwRvau8XYRXHzQ9ZIsVY75DPmDw==
   dependencies:
     "@types/node" "^20.1.0"
     "@wdio/logger" "9.29.1"
     "@wdio/repl" "9.16.2"
-    "@wdio/runner" "9.31.3"
+    "@wdio/runner" "9.31.4"
     "@wdio/types" "9.31.2"
     "@wdio/xvfb" "9.31.2"
     exit-hook "^4.0.0"
@@ -1095,10 +1095,10 @@
   dependencies:
     fs-extra "^8.0.1"
 
-"@wdio/runner@9.31.3":
-  version "9.31.3"
-  resolved "https://registry.yarnpkg.com/@wdio/runner/-/runner-9.31.3.tgz#ed8b7baa966d32bd327d1f0aff6423c3eccaca76"
-  integrity sha512-HNZobhoMbxEyjimg93PtSW6/+2IkCUh5MCoOw5LfT+N78m/SFJVA7Qm//tn3uOpHkc/CAH75x6nArEFaPQG4PQ==
+"@wdio/runner@9.31.4":
+  version "9.31.4"
+  resolved "https://registry.yarnpkg.com/@wdio/runner/-/runner-9.31.4.tgz#e91141f59fb6aae3dd13966ffbf9ae9c1cb8ffe5"
+  integrity sha512-WyVltb1W2pLVSxyYF50UgVv7OntCV2zR9Fu+T1Cbi71JRbNa1f0Hw4McNaZhGWrASiGm3iPUVVrMuAOxyHtfzQ==
   dependencies:
     "@types/node" "^20.11.28"
     "@wdio/config" "9.31.2"
@@ -1108,8 +1108,8 @@
     "@wdio/types" "9.31.2"
     "@wdio/utils" "9.31.2"
     deepmerge-ts "^7.0.3"
-    webdriver "9.31.2"
-    webdriverio "9.31.3"
+    webdriver "9.31.4"
+    webdriverio "9.31.4"
 
 "@wdio/types@9.31.2":
   version "9.31.2"
@@ -1180,10 +1180,10 @@ allure-commandline@^2.43.0:
   resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.43.0.tgz#e9670a61492e949251e5132972ed846508ae85e7"
   integrity sha512-nsqccDOgi80fi9WjvBapZjlFlugodVWudotNtWx6XKiSI7NuN6oTWEkXnkxQBzNg02Yf9lZLtCFlKvjAlcpu6Q==
 
-allure-js-commons@^3.3.2:
-  version "3.10.2"
-  resolved "https://registry.yarnpkg.com/allure-js-commons/-/allure-js-commons-3.10.2.tgz#c0f762b0d79a2a1bc85a2e2a83ff104d7a7d71d0"
-  integrity sha512-5nAjUF1iNPSQMwKtEsadclSta8C3L705/k/pIzGb9M6P9krgfRaCyaEHt8pkLlCP9NFj5xk3grjtnAhiLeT+Kg==
+allure-js-commons@^3.10.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/allure-js-commons/-/allure-js-commons-3.11.0.tgz#9a9713ec67d54df4ec007a457e36ec02f8a6697c"
+  integrity sha512-dYThkDhru7u7sgwhxRoE9uaxffFXcwnL2+zE0CnmgGebvFmCP8yAZieCHc44MRathtXt44xym9UuVaKSaaJfzw==
   dependencies:
     md5 "^2.3.0"
 
@@ -4402,10 +4402,10 @@ wdio-timeline-reporter@^5.1.4:
     react "^16.6.3"
     react-dom "^16.6.3"
 
-webdriver@9.31.2:
-  version "9.31.2"
-  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-9.31.2.tgz#5ac0ac6171b027ba56e55fbbc32f8a7a29672453"
-  integrity sha512-ivGDN0NvuLu27hKM02QWnXqVJfxAc4HpnP4GvXrrlURX3thN2DHZFRZ22B9lbvWDsSRjBc7XryUdvfuvYNfZtA==
+webdriver@9.31.4:
+  version "9.31.4"
+  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-9.31.4.tgz#46c98edd3b5f1b78e6bb4cd79fb59376683a65c0"
+  integrity sha512-M5pInGMY5eUBWStnvw+YPGzGXAUnVhRxFq4LuY5w2j1pi8cP04scj+otVgiAXCt62lS7vqzN3nE7zt4oPgZZtw==
   dependencies:
     "@types/node" "^20.1.0"
     "@types/ws" "^8.5.3"
@@ -4419,10 +4419,10 @@ webdriver@9.31.2:
     undici "^6.27.0"
     ws "^8.21.0"
 
-webdriverio@9.31.3, webdriverio@^9.31.3:
-  version "9.31.3"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-9.31.3.tgz#defb084a893f63bc95d75c5be8cb1ca9f3886289"
-  integrity sha512-V8+H/KrQSPun4slMXZZFroKw2cHDTyJIv0qPxeDveBVU4CX65Y0tfr6g4YG/IpOl91rNv2fY3pklUSESQ2DaZQ==
+webdriverio@9.31.4, webdriverio@^9.31.4:
+  version "9.31.4"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-9.31.4.tgz#cfe01788fc2b2cac4b6be52af3664bfd778d7afb"
+  integrity sha512-INCbsUk85JnAmcIlYGUaeWbGVbo5k+mPW87JpwfvshjBCwjlkm3SSgHtPBfBpRzXZnVLIN5YOc5DVNpOhCqu6Q==
   dependencies:
     "@types/node" "^20.11.30"
     "@types/sinonjs__fake-timers" "^8.1.5"
@@ -4448,7 +4448,7 @@ webdriverio@9.31.3, webdriverio@^9.31.3:
     rgb2hex "0.2.5"
     serialize-error "^12.0.0"
     urlpattern-polyfill "^10.0.0"
-    webdriver "9.31.2"
+    webdriver "9.31.4"
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
