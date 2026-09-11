@@ -1,5 +1,7 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import java.nio.charset.Charset
 import java.util.Base64
 
@@ -13,6 +15,15 @@ repositories {
 }
 
 group = "com.zegreatrob.jsmints"
+
+pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
+    extensions.configure<KotlinMultiplatformExtension> {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            allWarningsAsErrors = true
+        }
+    }
+}
 
 afterEvaluate {
     publishing.publications.withType<MavenPublication>().forEach {

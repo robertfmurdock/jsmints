@@ -20,7 +20,7 @@ import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toTypeVariableName
 import com.squareup.kotlinpoet.ksp.writeTo
 
-class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGenerator, Unit>() {
+class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGenerator, Unit>(enableNewFeatures = true) {
     override fun defaultHandler(node: KSNode, data: CodeGenerator) {
     }
 

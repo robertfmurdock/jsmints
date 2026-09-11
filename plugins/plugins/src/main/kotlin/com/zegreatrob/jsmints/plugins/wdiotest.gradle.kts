@@ -26,12 +26,11 @@ kotlin {
     }
 }
 
-rootProject.yarn.ignoreScripts = false
-
+rootProject.yarn.ignoreScriptsProperty = false
 val yarnAutoReplace = project.findProperty("yarnAutoReplace") as String?
 
-rootProject.yarn.yarnLockAutoReplace = yarnAutoReplace != null
-rootProject.yarn.yarnLockMismatchReport = if (yarnAutoReplace != null) {
+rootProject.yarn.yarnLockAutoReplaceProperty = yarnAutoReplace != null
+rootProject.yarn.yarnLockMismatchReportProperty = if (yarnAutoReplace != null) {
     YarnLockMismatchReport.WARNING
 } else {
     YarnLockMismatchReport.FAIL
