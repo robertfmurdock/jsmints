@@ -172,7 +172,10 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = buildDir.dir("reports/logs/e2e/")
-        val specFile = kotlinJsCompilation.npmProject.dist.map { it.file("$wdioTestModuleName.js") }
+        val specFile = kotlinJsCompilation.npmProject.dir.map { npmProjectDirectory ->
+            val npmProjectName = npmProjectDirectory.asFile.name
+            npmProjectDirectory.dir("kotlin").file("$npmProjectName.js")
+        }
         val nodeModules = rootProject.layout.buildDirectory.dir("js/node_modules")
         environment(
             mapOf(
