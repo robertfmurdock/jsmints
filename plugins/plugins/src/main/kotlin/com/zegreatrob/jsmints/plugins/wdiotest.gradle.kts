@@ -56,19 +56,30 @@ dependencies {
     }
 }
 
-afterEvaluate {
-    dependencies {
-        if (wdioTest.htmlReporter.get()) {
-            "jsE2eTestImplementation"(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion))
-        }
-        if (wdioTest.timelineReporter.get()) {
-            "jsE2eTestImplementation"(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion))
-        }
-        if (wdioTest.allureReporter.get()) {
-            "jsE2eTestImplementation"(npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion))
-            "jsE2eTestImplementation"(npm("allure-commandline", PluginVersions.allureCLIVersion))
-        }
-    }
+dependencies {
+    val e2eDependencies = configurations.named("jsE2eTestImplementation").get().dependencies
+    e2eDependencies.addAllLater(
+        wdioTest.htmlReporter.map { enabled ->
+            if (enabled) listOf(npm("wdio-html-nice-reporter", PluginVersions.wdioNiceReporterVersion)) else emptyList()
+        },
+    )
+    e2eDependencies.addAllLater(
+        wdioTest.timelineReporter.map { enabled ->
+            if (enabled) listOf(npm("wdio-timeline-reporter", PluginVersions.wdioTimelineReporterVersion)) else emptyList()
+        },
+    )
+    e2eDependencies.addAllLater(
+        wdioTest.allureReporter.map { enabled ->
+            if (enabled) {
+                listOf(
+                    npm("@wdio/allure-reporter", PluginVersions.wdioAllureReporterVersion),
+                    npm("allure-commandline", PluginVersions.allureCLIVersion),
+                )
+            } else {
+                emptyList()
+            }
+        },
+    )
 }
 
 val npmProjectDir = kotlin.js().compilations.getByName("e2eTest").npmProject.dir
@@ -80,18 +91,13 @@ tasks {
     val installRunner = register<Copy>("installRunner") {
         dependsOn(runnerConfiguration)
         into(runnerJs.map { it.asFile.parentFile })
-        from(
-            zipTree(
-                runnerConfiguration.resolve()
-                    .first(),
-            ),
-        )
+        from(provider { zipTree(runnerConfiguration.singleFile) })
     }
     val wdioConfDirectory = npmProjectDir.map { it.file("wdio.conf.d") }
 
     val copyWdioConfDir = register<Copy>("copyWdioConfDir") {
         duplicatesStrategy = DuplicatesStrategy.WARN
-        mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
+        dependsOn("kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
         from(projectDir.resolve("wdio.conf.d")) {
             filter<ReplaceTokens>("tokens" to mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
@@ -116,7 +122,7 @@ tasks {
         into(wdioConfDirectory)
     }
     val copyWdio = register<Copy>("copyWdio") {
-        mustRunAfter(":rootPackageJson", ":kotlinNpmInstall")
+        dependsOn("kotlinNpmInstall")
         dependsOn(copyWdioConfDir)
         val wdioConfFile = wdioTest.wdioConfigFile
             .map { it.asFile.toURI().toURL() }
@@ -144,9 +150,14 @@ tasks {
     val compileE2eTestDevelopmentExecutableKotlinJs =
         named<Kotlin2JsCompile>("compileE2eTestDevelopmentExecutableKotlinJs") {
             compilerOptions { moduleName.set(wdioTestModuleName) }
+            inputs.property("wdioTestModuleName", wdioTestModuleName)
         }
 
     val e2eTestProcessResources = named<ProcessResources>("jsE2eTestProcessResources")
+    val e2eTestDevelopmentExecutableCompileSync =
+        named("jsE2eTestE2eTestDevelopmentExecutableCompileSync") {
+            inputs.property("wdioTestModuleName", wdioTestModuleName)
+        }
 
     val e2eRun = register<WdioTest>("e2eRun") {
         group = "Verification"
@@ -154,13 +165,15 @@ tasks {
         val kotlinJsCompilation = kotlin.js().compilations["e2eTest"]
         setup(kotlinJsCompilation)
         dependsOn(
+            "kotlinNpmInstall",
             copyWdio,
             installRunner,
             e2eTestProcessResources,
             compileE2eTestDevelopmentExecutableKotlinJs,
+            e2eTestDevelopmentExecutableCompileSync,
         )
 
-        inputs.files(compileE2eTestDevelopmentExecutableKotlinJs.map { it.outputs.files })
+        inputs.files(e2eTestDevelopmentExecutableCompileSync)
         inputs.files(wdioConfig)
         inputs.files(wdioConfDirectory)
 
@@ -172,15 +185,18 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = buildDir.dir("reports/logs/e2e/")
-        val specFile = kotlinJsCompilation.npmProject.dir.map { npmProjectDirectory ->
-            val npmProjectName = npmProjectDirectory.asFile.name
-            npmProjectDirectory.dir("kotlin").file("$npmProjectName.js")
+        val specFiles = kotlinJsCompilation.npmProject.dir.map { npmProjectDirectory ->
+            val kotlinDirectory = npmProjectDirectory.dir("kotlin")
+            listOf(
+                kotlinDirectory.file("$wdioTestModuleName.js"),
+                kotlinDirectory.file("${npmProjectDirectory.asFile.name}.js"),
+            )
         }
         val nodeModules = rootProject.layout.buildDirectory.dir("js/node_modules")
         environment(
             mapOf(
                 "BASEURL" to wdioTest.baseUrl.get(),
-                "SPEC_FILE" to specFile.get().asFile.absolutePath,
+                "SPEC_FILE" to specFiles.get().first().asFile.absolutePath,
                 "WDIO_CONFIG" to wdioConfig.get().asFile.absolutePath,
                 "REPORT_DIR" to reportDir.get().asFile.absolutePath,
                 "TEST_RESULTS_DIR" to testResultsDir.get().asFile.absolutePath,
@@ -192,6 +208,11 @@ tasks {
                 ).joinToString(":"),
             ),
         )
+        doFirst {
+            val specFile = specFiles.get().firstOrNull { it.asFile.isFile }
+                ?: error("WDIO spec output was not created: ${specFiles.get().joinToString()}")
+            environment("SPEC_FILE", specFile.asFile.absolutePath)
+        }
         npmProjectDir = kotlinJsCompilation.npmProject.dir.get().asFile
         arguments = listOf(runnerJs.get().asFile.absolutePath)
         val logFile = logsDir.get().file("run.log").asFile
