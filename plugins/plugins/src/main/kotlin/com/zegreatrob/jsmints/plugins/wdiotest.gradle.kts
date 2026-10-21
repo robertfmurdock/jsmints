@@ -97,7 +97,7 @@ tasks {
 
     val copyWdioConfDir = register<Copy>("copyWdioConfDir") {
         duplicatesStrategy = DuplicatesStrategy.WARN
-        dependsOn("kotlinNpmInstall")
+        dependsOn(":kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
         from(projectDir.resolve("wdio.conf.d")) {
             filter<ReplaceTokens>("tokens" to mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
@@ -122,7 +122,7 @@ tasks {
         into(wdioConfDirectory)
     }
     val copyWdio = register<Copy>("copyWdio") {
-        dependsOn("kotlinNpmInstall")
+        dependsOn(":kotlinNpmInstall")
         dependsOn(copyWdioConfDir)
         val wdioConfFile = wdioTest.wdioConfigFile
             .map { it.asFile.toURI().toURL() }
@@ -165,7 +165,7 @@ tasks {
         val kotlinJsCompilation = kotlin.js().compilations["e2eTest"]
         setup(kotlinJsCompilation)
         dependsOn(
-            "kotlinNpmInstall",
+            ":kotlinNpmInstall",
             copyWdio,
             installRunner,
             e2eTestProcessResources,

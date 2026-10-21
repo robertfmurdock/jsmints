@@ -67,9 +67,15 @@ gradlePlugin {
 testing {
     suites {
         register("functionalTest", JvmTestSuite::class) {
+            useJUnit()
             gradlePlugin.testSourceSets(sources)
         }
     }
+}
+
+dependencies {
+    add("functionalTestImplementation", gradleTestKit())
+    add("functionalTestImplementation", libs.junit)
 }
 
 kotlin {
