@@ -18,8 +18,7 @@ external interface Browser {
 
     fun getLogs(s: String): Promise<Array<Json>>
     fun isAlertOpen(): Promise<Boolean>
-    fun execute(code: (dynamic) -> dynamic, argument: dynamic)
-    fun executeAsync(arg: (dynamic, () -> Unit) -> dynamic, argument: dynamic): Promise<Unit>
+    fun execute(code: (dynamic) -> dynamic, argument: dynamic): Promise<dynamic>
     fun refresh(): Promise<Unit>
 
     fun on(event: String, listener: (dynamic) -> Promise<Any?>)

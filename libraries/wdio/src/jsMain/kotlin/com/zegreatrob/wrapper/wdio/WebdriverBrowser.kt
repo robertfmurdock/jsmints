@@ -50,7 +50,7 @@ object WebdriverBrowser : BrowserLoggingSyntax {
     suspend fun setUrl(url: String) = browser.url(url).await()
     suspend fun getLogs() = browser.getLogs("browser").await().toList()
 
-    suspend fun executeAsync(argument: dynamic, arg: (dynamic, () -> Unit) -> dynamic) = browser.executeAsync(arg, argument).await()
+    suspend fun execute(argument: dynamic, arg: (dynamic) -> dynamic): dynamic = browser.execute(arg, argument).await()
 
     suspend fun setLocation(location: String) {
         val currentUrl = currentUrl()
@@ -67,25 +67,26 @@ object WebdriverBrowser : BrowserLoggingSyntax {
     private suspend fun alternateImplementation(@Suppress("UNUSED_PARAMETER") location: String) {
         js(
             """
-                    browser.executeAsync(function(loc, done) {
-                        var wait = function() {
-                            window.setTimeout(function() {
-                                if (window.location.pathname.endsWith(loc)) {
-                                    done()
-                                } else {
-                                    wait()
-                                }
-                            }, 5)
-                        }
-                        
+                    browser.execute(function(loc) {
                         if(window.pathSetter){
                             window.pathSetter(loc)
-                            wait()
+                            return new Promise(function(resolve) {
+                                var wait = function() {
+                                    window.setTimeout(function() {
+                                        if (window.location.pathname.endsWith(loc)) {
+                                            resolve()
+                                        } else {
+                                            wait()
+                                        }
+                                    }, 5)
+                                }
+                                wait()
+                            })
                         } else {
-                            done()
                             window.location.pathname = loc
+                            return Promise.resolve()
                         }
-                        }, location);
+                    }, location);
             """,
         ).unsafeCast<Promise<Unit>>()
             .await()
