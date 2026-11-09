@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin
 
 plugins {
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
@@ -12,6 +13,9 @@ plugins {
 
 group = "com.zegreatrob.jsmints"
 
+val nodeVersion = providers.fileContents(layout.projectDirectory.file("../.nvmrc")).asText.map { it.trim() }
+val isCi = providers.environmentVariable("CI").isPresent
+
 allprojects {
     tasks.matching { it.name == "kotlinNodeJsSetup" }.configureEach {
         doNotTrackState(
@@ -19,9 +23,12 @@ allprojects {
         )
     }
 
-    if (System.getenv().containsKey("CI")) {
-        afterEvaluate {
-            extensions.findByType(NodeJsEnvSpec::class)?.download?.set(false)
+    plugins.withType<NodeJsPlugin> {
+        extensions.configure<NodeJsEnvSpec> {
+            version.set(nodeVersion)
+            if (isCi) {
+                download.set(false)
+            }
         }
     }
 }

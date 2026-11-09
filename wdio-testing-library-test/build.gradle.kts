@@ -17,8 +17,9 @@ kotlin {
     }
 }
 
-if (System.getenv().containsKey("CI")) {
-    extensions.configure<NodeJsEnvSpec> {
+extensions.configure<NodeJsEnvSpec> {
+    version.set(providers.fileContents(layout.projectDirectory.file("../.nvmrc")).asText.map { it.trim() })
+    if (providers.environmentVariable("CI").isPresent) {
         download.set(false)
     }
 }

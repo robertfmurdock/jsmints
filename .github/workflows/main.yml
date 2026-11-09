@@ -37,7 +37,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: 24.10.0
+          node-version-file: .nvmrc
       - name: Set Up Git User
         run: |
           git config user.name "github-actions[bot]"
