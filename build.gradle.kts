@@ -130,7 +130,13 @@ tasks {
     val publish = register("publish") {
         description = "publishAggregate"
         mustRunAfter(check)
-        dependsOn(provider { publishableBuilds.map { it.task(":publish") } })
+        // Temporarily pause snapshot publication through Sunday, November 15, 2026.
+        // Checks and other release work can continue while publishing is paused.
+        val snapshotPublishingPaused = version.toString().contains("SNAPSHOT") &&
+            java.time.LocalDate.now() < java.time.LocalDate.of(2026, 11, 16)
+        if (!snapshotPublishingPaused) {
+            dependsOn(provider { publishableBuilds.map { it.task(":publish") } })
+        }
     }
     named("versionCatalogUpdate") {
         dependsOn(provider { includedBuilds.map { it.task(":versionCatalogUpdate") } })
