@@ -127,11 +127,17 @@ tasks {
         gradle.includedBuild("plugins"),
     ) + gradle.includedBuild("wdio-testing-library-test")
     val includedBuilds = testBuilds + gradle.includedBuild("convention-plugins")
+    val includedTestReports = files(includedBuilds.map { build ->
+        fileTree(build.projectDir) {
+            include("**/build/test-results/**/*.xml")
+        }
+    })
     dashboardTestSummary {
-        includedCounts.from(includedBuilds.map { it.projectDir.resolve("build/dashboard/build-test-counts.json") })
+        // Read reports from tests that ran, without scheduling tests from the finalizer.
+        reports.from(includedTestReports)
     }
     named("dashboardTestSummary") {
-        dependsOn(includedBuilds.map { it.task(":dashboardTestSummaryCounts") })
+        onlyIf("At least one included build produced a JUnit report") { !includedTestReports.isEmpty }
     }
 
     val publish = register("publish") {

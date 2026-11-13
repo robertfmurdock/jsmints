@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.processor.minreact
 
+import com.google.devtools.ksp.buildApiFeatures
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
@@ -7,6 +8,8 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 
 class MinreactProcessor(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) : SymbolProcessor {
+    override val apiFeatures = buildApiFeatures { enableBackingFields = true }
+
     var invoked = false
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
@@ -15,7 +18,7 @@ class MinreactProcessor(private val codeGenerator: CodeGenerator, private val lo
         }
         invoked = true
 
-        val visitor = MinreactVisitor(logger)
+        val visitor = MinreactVisitor(logger, apiFeatures)
         resolver.getAllFiles().forEach {
             it.accept(visitor, codeGenerator)
         }
