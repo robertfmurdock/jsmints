@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.processor.wrapper
 
+import com.google.devtools.ksp.ApiFeatures
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
@@ -20,7 +21,8 @@ import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toTypeVariableName
 import com.squareup.kotlinpoet.ksp.writeTo
 
-class WrapperVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGenerator, Unit>(enableNewFeatures = true) {
+class WrapperVisitor(private val logger: KSPLogger, apiFeatures: ApiFeatures) :
+    KSTopDownVisitor<CodeGenerator, Unit>(apiFeatures) {
     override fun defaultHandler(node: KSNode, data: CodeGenerator) {
     }
 

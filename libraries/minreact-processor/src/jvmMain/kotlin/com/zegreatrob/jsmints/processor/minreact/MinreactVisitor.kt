@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.processor.minreact
 
+import com.google.devtools.ksp.ApiFeatures
 import com.google.devtools.ksp.getAllSuperTypes
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
@@ -30,7 +31,8 @@ import com.squareup.kotlinpoet.ksp.toTypeParameterResolver
 import com.squareup.kotlinpoet.ksp.toTypeVariableName
 import com.squareup.kotlinpoet.ksp.writeTo
 
-class MinreactVisitor(private val logger: KSPLogger) : KSTopDownVisitor<CodeGenerator, Unit>(enableNewFeatures = true) {
+class MinreactVisitor(private val logger: KSPLogger, apiFeatures: ApiFeatures) :
+    KSTopDownVisitor<CodeGenerator, Unit>(apiFeatures) {
     override fun defaultHandler(node: KSNode, data: CodeGenerator) {
         logger.info("considering: $node")
     }
