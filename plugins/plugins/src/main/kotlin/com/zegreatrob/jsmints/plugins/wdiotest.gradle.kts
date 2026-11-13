@@ -212,6 +212,7 @@ tasks {
         doFirst {
             val specFile = specFiles.get().firstOrNull { it.asFile.isFile }
                 ?: error("WDIO spec output was not created: ${specFiles.get().joinToString()}")
+            testResultsDir.get().asFile.deleteRecursively()
             environment("SPEC_FILE", specFile.asFile.absolutePath)
         }
         npmProjectDir = kotlinJsCompilation.npmProject.dir.get().asFile

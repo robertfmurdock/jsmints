@@ -3,6 +3,7 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 plugins {
+    alias(libs.plugins.com.zegreatrob.tools.dashboard.test.summary)
     alias(libs.plugins.com.github.sghill.distribution.sha)
     id("com.zegreatrob.jsmints.plugins.versioning")
     alias(libs.plugins.com.zegreatrob.tools.tagger)
@@ -126,6 +127,12 @@ tasks {
         gradle.includedBuild("plugins"),
     ) + gradle.includedBuild("wdio-testing-library-test")
     val includedBuilds = testBuilds + gradle.includedBuild("convention-plugins")
+    dashboardTestSummary {
+        includedCounts.from(includedBuilds.map { it.projectDir.resolve("build/dashboard/build-test-counts.json") })
+    }
+    named("dashboardTestSummary") {
+        dependsOn(includedBuilds.map { it.task(":dashboardTestSummaryCounts") })
+    }
 
     val publish = register("publish") {
         description = "publishAggregate"
@@ -166,6 +173,7 @@ tasks {
         dependsOn(provider { includedBuilds.map { it.task(":formatKotlin") } })
     }
     check {
+        finalizedBy(named("dashboardTestSummary"))
         if (!providers.gradleProperty("skipCheckAggregationVerification").isPresent) {
             dependsOn(verifyCheckAggregation)
         }

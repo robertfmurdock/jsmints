@@ -19,7 +19,7 @@ const reporters = [
     'dot',
     ['junit', {
         outputDir: testResultsDir,
-        outputFileFormat: (options) => `results.xml`
+        outputFileFormat: ({cid}) => `results-${cid}.xml`
     }],
 ];
 

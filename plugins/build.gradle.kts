@@ -1,6 +1,7 @@
 import nl.littlerobots.vcu.plugin.versionSelector
 
 plugins {
+    alias(rootLibs.plugins.com.zegreatrob.tools.dashboard.test.summary)
     `maven-publish`
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.nl.littlerobots.version.catalog.update)

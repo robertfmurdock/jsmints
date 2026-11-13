@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 
 plugins {
+    alias(rootLibs.plugins.com.zegreatrob.tools.dashboard.test.summary)
     id("com.zegreatrob.jsmints.plugins.js2")
     id("com.zegreatrob.jsmints.plugins.wdiotest")
     id("com.zegreatrob.jsmints.plugins.versioning")
@@ -55,6 +56,10 @@ dockerCompose {
     setProjectName("wdio-testing-library-test")
     containerLogToDir.set(project.file("build/test-output/containers-logs"))
     waitForTcpPorts.set(false)
+}
+
+dashboardTestSummary {
+    reports.from(files(layout.buildDirectory.dir("test-results/e2e")).builtBy(tasks.named("e2eRun")))
 }
 
 tasks {

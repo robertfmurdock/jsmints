@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin
 
 plugins {
+    alias(rootLibs.plugins.com.zegreatrob.tools.dashboard.test.summary)
     alias(libs.plugins.io.github.gradle.nexus.publish.plugin)
     alias(libs.plugins.com.github.sghill.distribution.sha)
     alias(libs.plugins.com.zegreatrob.tools.tagger)

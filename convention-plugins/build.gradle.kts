@@ -9,6 +9,7 @@ repositories {
 }
 
 plugins {
+    alias(rootLibs.plugins.com.zegreatrob.tools.dashboard.test.summary)
     `kotlin-dsl`
     id("java-gradle-plugin")
     alias(libs.plugins.nl.littlerobots.version.catalog.update)
