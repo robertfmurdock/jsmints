@@ -218,7 +218,6 @@ tasks {
         npmProjectDir = kotlinJsCompilation.npmProject.dir.get().asFile
         arguments = listOf(runnerJs.get().asFile.absolutePath)
         val logFile = logsDir.get().file("run.log").asFile
-        logFile.parentFile.mkdirs()
         outputFile = logFile
 
         verificationErrorMessage =

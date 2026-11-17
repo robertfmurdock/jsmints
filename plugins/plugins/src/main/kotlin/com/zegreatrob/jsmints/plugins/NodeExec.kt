@@ -64,6 +64,7 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
         commandLine = listOf(nodeExecPath) + commandFromBin + arguments
 
         outputFile?.let {
+            it.parentFile?.mkdirs()
             standardOutput = FileOutputStream(it)
             errorOutput = standardOutput
         }
