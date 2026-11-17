@@ -25,3 +25,7 @@ The Gradle audit found deferred configuration, eager task configuration, and wra
 - Follow the existing commit and version conventions (`[none]` for non-release work and `[patch]` for backward-compatible fixes where appropriate). Let the existing fingerprint, version calculation, and release workflow determine and publish releases. Keep publishing on the existing isolated CI path with scoped credentials.
 
 The audit was static. Runtime behavior and wrapper binary integrity are verification work for the relevant changes.
+
+## Verification checkpoints
+
+- November 17, 2026 — Java 21 and Gradle 9.9.1 passed `assemble check` and the two WDIO TestKit cases. The WDIO fixture passed in Chrome and Firefox with Gradle running outside the restricted environment. After switching from Java 22, rerunning convention-plugin validation with `--rerun-tasks --no-build-cache -Pkotlin.compiler.execution.strategy=in-process` rebuilt the generated classes for Java 21. Run `clean` separately from `assemble check` to avoid the composite task scheduling failure observed when combining them.
