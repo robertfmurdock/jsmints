@@ -25,37 +25,35 @@ pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
     }
 }
 
-afterEvaluate {
-    publishing.publications.withType<MavenPublication>().forEach {
-        with(it) {
-            val scmUrl = "https://github.com/robertfmurdock/jsmints"
+publishing.publications.withType<MavenPublication>().configureEach {
+    val scmUrl = "https://github.com/robertfmurdock/jsmints"
 
-            pom.name.set(project.name)
-            pom.description.set(project.name)
-            pom.url.set(scmUrl)
+    pom.name.set(project.name)
+    pom.description.set(project.name)
+    pom.url.set(scmUrl)
 
-            pom.licenses {
-                license {
-                    name.set("MIT License")
-                    url.set(scmUrl)
-                    distribution.set("repo")
-                }
-            }
-            pom.developers {
-                developer {
-                    id.set("robertfmurdock")
-                    name.set("Rob Murdock")
-                    email.set("rob@continuousexcellence.io")
-                }
-            }
-            pom.scm {
-                url.set(scmUrl)
-                connection.set("git@github.com:robertfmurdock/jsmints.git")
-                developerConnection.set("git@github.com:robertfmurdock/jsmints.git")
-            }
+    pom.licenses {
+        license {
+            name.set("MIT License")
+            url.set(scmUrl)
+            distribution.set("repo")
         }
     }
+    pom.developers {
+        developer {
+            id.set("robertfmurdock")
+            name.set("Rob Murdock")
+            email.set("rob@continuousexcellence.io")
+        }
+    }
+    pom.scm {
+        url.set(scmUrl)
+        connection.set("git@github.com:robertfmurdock/jsmints.git")
+        developerConnection.set("git@github.com:robertfmurdock/jsmints.git")
+    }
+}
 
+afterEvaluate {
     tasks {
         val signKotlinMultiplatformPublication = findByName("signKotlinMultiplatformPublication")
         if (signKotlinMultiplatformPublication != null) {
