@@ -20,7 +20,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: current
-      - run: gradle wrapper --distribution-type all
+      - run: gradle wrapper --distribution-type bin
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v7
