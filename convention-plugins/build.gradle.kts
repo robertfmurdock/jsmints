@@ -2,12 +2,6 @@ import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 import nl.littlerobots.vcu.plugin.versionSelector
 
-repositories {
-    maven { url = uri("https://plugins.gradle.org/m2/") }
-    mavenCentral()
-    gradlePluginPortal()
-}
-
 plugins {
     alias(rootLibs.plugins.com.zegreatrob.tools.dashboard.test.summary)
     `kotlin-dsl`

@@ -12,10 +12,6 @@ plugins {
     id("com.zegreatrob.testmints.logs.mint-logs")
 }
 
-repositories {
-    mavenCentral()
-}
-
 kotlin {
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {

@@ -14,10 +14,6 @@ plugins {
     signing
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())

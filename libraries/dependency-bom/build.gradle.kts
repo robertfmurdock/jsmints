@@ -5,10 +5,6 @@ plugins {
     id("com.zegreatrob.jsmints.plugins.ncu")
 }
 
-repositories {
-    mavenCentral()
-}
-
 kotlin { js { nodejs() } }
 
 javaPlatform {

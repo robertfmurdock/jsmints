@@ -1,9 +1,5 @@
 package com.zegreatrob.jsmints.plugins
 
-repositories {
-    mavenCentral()
-}
-
 tasks {
     val projectResultPath = rootProject.layout.buildDirectory.dir(
         "test-output/${project.path}/results".replace(":", "/"),

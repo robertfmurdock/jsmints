@@ -46,6 +46,9 @@ buildCache {
 }
 
 dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
     versionCatalogs {
         create("rootLibs") {
             from(files("../gradle/libs.versions.toml"))

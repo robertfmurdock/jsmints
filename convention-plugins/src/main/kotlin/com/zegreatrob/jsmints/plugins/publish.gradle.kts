@@ -10,10 +10,6 @@ plugins {
     signing
 }
 
-repositories {
-    mavenCentral()
-}
-
 group = "com.zegreatrob.jsmints"
 
 pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {

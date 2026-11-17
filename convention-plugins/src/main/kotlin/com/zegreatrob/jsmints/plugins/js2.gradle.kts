@@ -8,10 +8,6 @@ plugins {
     id("org.jmailen.kotlinter")
 }
 
-repositories {
-    mavenCentral()
-}
-
 kotlin {
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
