@@ -1,3 +1,6 @@
+rootProject.name = "wdio-testing-library-test"
+
+
 includeBuild("../libraries")
 includeBuild("../plugins")
 includeBuild("../convention-plugins")
