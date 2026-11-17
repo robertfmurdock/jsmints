@@ -1,0 +1,25 @@
+# Gradle maintenance backlog
+
+## Problem
+
+The Gradle audit found deferred configuration, eager task configuration, and wrapper and repository maintenance work across the JSMints composite. Each change can be reviewed, verified, and released independently.
+
+## Expected changes
+
+- [ ] **High — remove six `afterEvaluate` callbacks.** Migrate the dependency BOM, plugin publishing build, reports and publishing conventions, and MinReact and wrapper KSP plugins one at a time. Use plugin or configuration callbacks and providers. Check publication metadata, report wiring, and local and published processor resolution as applicable. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_general.html#avoid_after_evaluate)
+- [ ] **High — keep WDIO configuration lazy.** Model environment values, paths, arguments, and reporter flags through task properties. Resolve concrete values when the task needs them and preserve input tracking for values that affect results. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_tasks.html#avoid_provider_get_outside_task_action)
+- [ ] **High — move WDIO log directory creation to execution.** Declare the log output and create its parent in the action. Check that task discovery and dry runs leave the log directory untouched. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_performance.html#avoid_computations_in_configuration_phase)
+- [ ] **Medium — declare the WDIO fixture root name.** Set `rootProject.name = "wdio-testing-library-test"` in the fixture settings. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_general.html#name_your_root_project)
+- [ ] **Medium — centralize dependency repositories.** Start with the dependency BOM and the plugin and convention-plugin builds. Preserve repository order and scope. Review processor projects and published conventions separately, since moving their repositories can affect consumers. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_dependencies.html#set_up_repositories_in_settings)
+- [ ] **Medium — declare WDIO task cacheability on the type.** Replace `outputs.cacheIf { true }` with `@CacheableTask` only once all result-affecting inputs are modeled and reuse is verified. Otherwise use `@DisableCachingByDefault` with the reason. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_tasks.html#use_cacheability_annotations)
+- [ ] **Medium — align the checked-in wrappers.** The audit found Gradle 9.6.0 in `libraries/` and 9.9.1 at the root. Recheck both pins when starting, test the libraries build independently and from the composite, and regenerate the wrappers with pinned distribution checksums. Validate the wrapper JARs as part of the upgrade. [Version guidance](https://docs.gradle.org/current/userguide/best_practices_general.html#use_latest_minor_versions) · [Wrapper validation](https://docs.gradle.org/current/userguide/best_practices_security.html#validate_wrapper_checksum)
+- [ ] **Recommendation — switch the root wrapper to `bin`.** Update the scheduled wrapper workflow as part of the change. It currently requests `all`, so it would otherwise restore that choice. Pin the checksum for the selected distribution. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_performance.html#prefer_bin_distribution)
+- [ ] **Recommendation — reduce reliance on generated Kotlin task names in WDIO.** Use public Kotlin compilation APIs or task providers where available. Verify that invoking `e2eRun` directly still schedules every prerequisite. [Gradle guidance](https://docs.gradle.org/current/userguide/best_practices_tasks.html#dont_hardcode_task_names)
+
+## Verification and release
+
+- Keep commits focused on one independently verifiable change. Update this checklist in the same change as the fix. Check off an item after verification and record the check that passed. For partial work, record what remains under the open item. Split the six callbacks across commits where possible.
+- Run focused checks first, then the repository’s normal `assemble check` CI path on Java 21. For WDIO task changes, exercise the existing TestKit suite and fixture, and check configuration-cache behavior separately since the main build and release steps pass `--no-configuration-cache`. For publishing changes, compare generated metadata and verify consumer resolution before merging.
+- Follow the existing commit and version conventions (`[none]` for non-release work and `[patch]` for backward-compatible fixes where appropriate). Let the existing fingerprint, version calculation, and release workflow determine and publish releases. Keep publishing on the existing isolated CI path with scoped credentials.
+
+The audit was static. Runtime behavior and wrapper binary integrity are verification work for the relevant changes.
