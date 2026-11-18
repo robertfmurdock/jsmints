@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.NullNode
 import org.gradle.api.Project
-import java.io.File
 
 abstract class JsPackageExtension(private val json: JsonNode) {
     fun dependencies() = json.get("dependencies")?.dependencyEntries()
@@ -16,7 +15,6 @@ abstract class JsPackageExtension(private val json: JsonNode) {
 }
 
 fun Project.loadPackageJson(): JsonNode {
-    val packageJsonPath = "${projectDir.path}/package.json"
-    val file = File(packageJsonPath)
-    return if (file.exists()) ObjectMapper().readTree(file) else NullNode.instance
+    val contents = providers.fileContents(layout.projectDirectory.file("package.json")).asText.orNull
+    return contents?.let { ObjectMapper().readTree(it) } ?: NullNode.instance
 }

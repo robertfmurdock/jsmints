@@ -95,30 +95,31 @@ tasks {
         inputs.property("version", rootProject.version)
         filteringCharset = "UTF-8"
 
-        val gson: org.jetbrains.kotlin.com.google.gson.Gson = org.jetbrains.kotlin.com.google.gson.GsonBuilder()
-            .setPrettyPrinting()
-            .disableHtmlEscaping()
-            .serializeNulls()
-            .create()
-
-        val packageJson: JsonElement = gson.fromJson(
-            rootDir.resolve("../libraries/dependency-bom/package.json")
-                .readText(),
-            JsonElement::class.java
-        )
+        val packageFile = rootProject.layout.projectDirectory.file("../libraries/dependency-bom/package.json")
+        val packageContents = providers.fileContents(packageFile).asText
+        val bomVersion = rootProject.version.toString()
+        inputs.file(packageFile)
+        val templateTokens = packageContents.map { contents ->
+            val gson = org.jetbrains.kotlin.com.google.gson.GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .serializeNulls()
+                .create()
+            val packageJson = gson.fromJson(contents, JsonElement::class.java)
+            mapOf(
+                "JSMINTS_BOM_VERSION" to bomVersion,
+                "NCU_VERSION" to packageJson.dependency("npm-check-updates"),
+                "WDIO_NICE_HTML_REPORTER_VERSION" to packageJson.dependency("wdio-html-nice-reporter"),
+                "WDIO_TIMELINE_REPORTER_VERSION" to packageJson.dependency("wdio-timeline-reporter"),
+                "WDIO_ALLURE_REPORTER_VERSION" to packageJson.dependency("@wdio/allure-reporter"),
+                "ALLURE_CLI_VERSION" to packageJson.dependency("allure-commandline"),
+            )
+        }
 
         from(project.projectDir.resolve("src/main/templates")) {
-            filter<ReplaceTokens>(
-                "tokens" to mapOf(
-                    "JSMINTS_BOM_VERSION" to rootProject.version,
-                    "NCU_VERSION" to packageJson.dependency("npm-check-updates"),
-                    "WDIO_NICE_HTML_REPORTER_VERSION" to packageJson.dependency("wdio-html-nice-reporter"),
-                    "WDIO_TIMELINE_REPORTER_VERSION" to packageJson.dependency("wdio-timeline-reporter"),
-                    "WDIO_ALLURE_REPORTER_VERSION" to (packageJson.dependency("@wdio/allure-reporter")
-                        ?: throw Exception("allure reporter")),
-                    "ALLURE_CLI_VERSION" to packageJson.dependency("allure-commandline")!!,
-                )
-            )
+            eachFile {
+                filter<ReplaceTokens>("tokens" to templateTokens.get())
+            }
         }
         into(project.layout.buildDirectory.dir("generated-sources/templates/kotlin/main"))
     }
