@@ -1,5 +1,6 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.gradle.plugins.signing.Sign
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import java.nio.charset.Charset
@@ -49,25 +50,13 @@ publishing.publications.withType<MavenPublication>().configureEach {
     }
 }
 
-afterEvaluate {
-    tasks {
-        val signKotlinMultiplatformPublication = findByName("signKotlinMultiplatformPublication")
-        if (signKotlinMultiplatformPublication != null) {
-            tasks.findByName("publishJsPublicationToSonatypeRepository")
-                ?.dependsOn(signKotlinMultiplatformPublication)
-            tasks.findByName("publishJvmPublicationToSonatypeRepository")
-                ?.dependsOn(signKotlinMultiplatformPublication)
-        }
-        tasks.findByName("signJsPublication")
-            ?.let {
-                tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
-                    ?.dependsOn(it)
-            }
-        tasks.findByName("signJvmPublication")
-            ?.let {
-                tasks.findByName("publishKotlinMultiplatformPublicationToSonatypeRepository")
-                    ?.dependsOn(it)
-            }
+val signingTasks = tasks.withType<Sign>()
+tasks.withType<PublishToMavenRepository>().configureEach {
+    when (name) {
+        "publishJsPublicationToSonatypeRepository", "publishJvmPublicationToSonatypeRepository" ->
+            dependsOn(signingTasks.matching { it.name == "signKotlinMultiplatformPublication" })
+        "publishKotlinMultiplatformPublicationToSonatypeRepository" ->
+            dependsOn(signingTasks.matching { it.name == "signJsPublication" || it.name == "signJvmPublication" })
     }
 }
 

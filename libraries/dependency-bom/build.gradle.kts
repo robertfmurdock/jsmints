@@ -1,3 +1,5 @@
+import org.gradle.plugins.signing.Sign
+
 plugins {
     `java-platform`
     id("com.zegreatrob.jsmints.plugins.publish")
@@ -34,13 +36,15 @@ publishing {
     }
 }
 
-afterEvaluate {
-    tasks {
-        "publishBomPublicationToSonatypeRepository" {
-            dependsOn("signJsPublication", "signKotlinMultiplatformPublication")
-        }
-        "signBomPublication" {
-            dependsOn("publishKotlinMultiplatformPublicationToSonatypeRepository")
-        }
+val signingTasks = tasks.withType<Sign>()
+val sonatypePublishTasks = tasks.withType<PublishToMavenRepository>()
+sonatypePublishTasks.configureEach {
+    if (name == "publishBomPublicationToSonatypeRepository") {
+        dependsOn(signingTasks.matching { it.name == "signJsPublication" || it.name == "signKotlinMultiplatformPublication" })
+    }
+}
+signingTasks.configureEach {
+    if (name == "signBomPublication") {
+        dependsOn(sonatypePublishTasks.matching { it.name == "publishKotlinMultiplatformPublicationToSonatypeRepository" })
     }
 }
