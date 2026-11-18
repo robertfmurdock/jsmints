@@ -8,20 +8,18 @@ buildCache {
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
+val pluginPortalGroups = listOf("org.jmailen.gradle", "nl.littlerobots.vcu", "io.github.turansky.kfc")
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral {
             content {
-                excludeGroup("org.jmailen.gradle")
-                excludeGroup("nl.littlerobots.vcu")
-                excludeGroup("io.github.turansky.kfc")
+                pluginPortalGroups.forEach { excludeGroup(it) }
             }
         }
         gradlePluginPortal {
             content {
-                includeGroup("org.jmailen.gradle")
-                includeGroup("nl.littlerobots.vcu")
-                includeGroup("io.github.turansky.kfc")
+                pluginPortalGroups.forEach { includeGroup(it) }
             }
         }
     }
