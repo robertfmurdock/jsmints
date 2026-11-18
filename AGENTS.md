@@ -8,5 +8,8 @@ Before changing Gradle build logic, check the [Gradle maintenance backlog](GRADL
 for related work. When addressing an item, update the checklist in the same
 change with what you verified and any work that remains.
 
+For the follow-up Gradle refactors, see the [refactoring initiative](GRADLE-REFACTORING.md)
+and log decisions, verification, and changes of direction alongside the work.
+
 Run `git add` and `git commit` as separate, standalone commands so Codex
 can match their saved approvals. Run file edits and verification separately.
