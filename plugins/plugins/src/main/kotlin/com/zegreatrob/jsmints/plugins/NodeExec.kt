@@ -83,7 +83,7 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     }
 
     override fun exec() {
-        npmProjectDir?.let { workingDir = it }
+        npmWorkingDirectory.asFile.orNull?.let { workingDir = it }
         val commandFromBin = nodeCommand?.let { command ->
             val orderedDirectories = (nodeCommandDirectories + projectNodeModulesDir.resolve(".bin")).distinct()
             val commandPath = orderedDirectories
@@ -93,9 +93,9 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
                 ?: projectNodeModulesDir.resolve(".bin").resolve(command)
             listOf(commandPath.absolutePath)
         } ?: emptyList()
-        commandLine = listOf(nodeExecPath) + commandFromBin + arguments
+        commandLine = listOf(nodeExecPath) + commandFromBin + argumentList.get()
 
-        outputFile?.let {
+        logOutputFile.asFile.orNull?.let {
             it.parentFile?.mkdirs()
             standardOutput = FileOutputStream(it)
             errorOutput = standardOutput
@@ -103,7 +103,7 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
         kotlin.runCatching { super.exec() }
             .getOrElse { exception ->
-                val message = verificationErrorMessage
+                val message = verificationMessage.orNull
                 if (message != null) {
                     throw VerificationException(message)
                 } else {
@@ -114,14 +114,15 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 }
 
 fun NodeExec.setup(compilation: KotlinJsIrCompilation) {
-    val nodeJs = NodeJsRootPlugin.apply(project.rootProject)
     @Suppress("DEPRECATION")
-    nodeBinDir = nodeJs.requireConfigured().nodeBinDir
-    @Suppress("DEPRECATION")
-    nodeExecPath = nodeJs.requireConfigured().executable
-    projectNodeModulesDir = compilation.npmProject.nodeModulesDir.get().asFile
+    val nodeEnvironment = NodeJsRootPlugin.apply(project.rootProject).requireConfigured()
+    nodeBinDir = nodeEnvironment.nodeBinDir
+    nodeExecPath = nodeEnvironment.executable
+
+    val npmProject = compilation.npmProject
+    projectNodeModulesDir = npmProject.nodeModulesDir.get().asFile
     nodeCommandDirectories = listOf(
-        compilation.npmProject.dir.get().asFile.resolve("node_modules/.bin"),
+        npmProject.dir.get().asFile.resolve("node_modules/.bin"),
         projectNodeModulesDir.resolve(".bin"),
     )
 }

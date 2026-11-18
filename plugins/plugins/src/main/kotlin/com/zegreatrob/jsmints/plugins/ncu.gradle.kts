@@ -21,12 +21,14 @@ tasks {
                 outputs.file(packageJson)
                 nodeCommand = "ncu"
 
-                arguments = listOf(
-                    "-u",
-                    "--packageFile",
-                    packageJson.absolutePath,
-                    "--configFilePath",
-                    configFile.absolutePath,
+                argumentList.set(
+                    listOf(
+                        "-u",
+                        "--packageFile",
+                        packageJson.absolutePath,
+                        "--configFilePath",
+                        configFile.absolutePath,
+                    ),
                 )
             }
         }
