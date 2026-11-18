@@ -26,7 +26,7 @@ The Gradle audit found deferred configuration, eager task configuration, and wra
 ## Verification and release
 
 - Keep commits focused on one independently verifiable change. Update this checklist in the same change as the fix. Check off an item after verification and record the check that passed. For partial work, record what remains under the open item. Split the six callbacks across commits where possible.
-- Run focused checks first, then the repository’s normal `assemble check` CI path on Java 21. For WDIO task changes, exercise the existing TestKit suite and fixture, and check configuration-cache behavior separately since the main build and release steps pass `--no-configuration-cache`. For publishing changes, compare generated metadata and verify consumer resolution before merging.
+- Run focused checks first, then the repository’s normal `assemble check` CI path on Java 21. For WDIO task changes, exercise the existing TestKit suite and fixture and verify configuration-cache behavior. The main CI build uses the configuration cache; the release step retains its explicit opt-out. For publishing changes, compare generated metadata and verify consumer resolution before merging.
 - Follow the existing commit and version conventions (`[none]` for non-release work and `[patch]` for backward-compatible fixes where appropriate). Let the existing fingerprint, version calculation, and release workflow determine and publish releases. Keep publishing on the existing isolated CI path with scoped credentials.
 
 The audit was static. Runtime behavior and wrapper binary integrity are verification work for the relevant changes.
@@ -51,3 +51,36 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 - [x] Filter dependency repositories and remove the duplicate Plugin Portal declaration. Google is scoped to Android coordinates. The convention build uses the Plugin Portal for its three plugin implementation groups and Maven Central for other dependencies. Compile and runtime dependency coordinates matched the baseline in both builds.
 - [x] Remove the redundant convention-build Kotlin stdlib declaration. Both final compile and runtime dependency graphs matched the baseline. Retained and documented the published plugin build declaration because removing it downgraded runtime stdlib from 2.4.21 to 2.4.0.
 - [x] Describe and group NCU and WDIO preparation tasks. The disposable NCU consumer showed its description and dependency-management group in task help. All three WDIO preparation tasks appeared in the verification task listing. Final Java 21 `assemble check` and the three TestKit cases passed with configuration caching enabled; Chrome and Firefox passed.
+
+## Remaining provider and library cleanup
+
+These items are investigations from the static follow-up audit. Confirm the
+supported Kotlin Multiplatform APIs and required dependency metadata before
+settling on an implementation.
+
+- [ ] Defer Node/npm directory resolution in `NodeExec.setup` where the Kotlin plugin supports it. Inspect the pinned Kotlin plugin's public Node and npm APIs and preserve the published setters and both NCU and WDIO entry points. Verify task configuration, actual executable paths, and configuration-cache reuse. If a value must be queried during configuration, record the specific API and lifecycle constraint.
+- [ ] Track and reuse parsed package metadata. Review `JsConstraintExtension`, `JsPackageExtension`, and template version generation for repeated configuration-time file reads. Use tracked file-content providers and reuse parsed data where possible. Dependency declarations can need metadata during configuration, so preserve dependency selection and compare resolved coordinates, generated templates, and package outputs.
+- [ ] Wire the WDIO runner archive from its compiler output with `flatMap`. Check the public compilation and binary APIs before changing the existing named lookup. Remove the explicit prerequisite only after verifying that the output provider schedules compilation on a fresh build. Compare the executable archive contents and run direct WDIO execution.
+- [ ] Extract focused conventions for repeated library test setup and generated-source lint handling. Compare the repeated Mocha/jsdom blocks first. Check whether lint and format still need KSP prerequisites when generated sources are excluded. Verify generated-source exclusions, test behavior, and generated package configuration.
+- [ ] Review React dependencies declared by `react-data-loader` that `minreact` exports through its API. Inspect source usage and public API ownership before removing declarations. Compare resolved dependencies, generated POMs, and Gradle module metadata, then run the affected tests.
+
+### Testmints precedent and investigation notes
+
+- The sibling checkout's `GRADLE_BUILD_IMPROVEMENTS.md` checkpoints 10 and 12
+  describe moving Mint Logs hooks through Kotlin/JS test resources. Commit
+  `9197667` uses the compilation's `processResourcesTaskName` to supply those
+  files and removes direct configuration of `DefaultIncrementalSyncTask`.
+  The same commit removes explicit KSP prerequisites from fixture lint and
+  format tasks that exclude generated sources. Use those public integration
+  points as precedent when reviewing this build's runner and lint wiring.
+- Testmints checkpoint 16 retains a direct `:report` API dependency in
+  `:async` because its public types use that API, despite transitive exposure
+  through `:standard`. Apply that reasoning when assessing the React
+  declarations here. A matching runtime classpath alone does not establish
+  that removing a direct dependency preserves the intended publication contract.
+- Checkpoint 15 keeps dashboard and lifecycle setup local to avoid making the
+  convention build apply its own build logic. Consider that build boundary
+  before extracting additional conventions.
+- The reviewed Testmints tracker and commits did not document a deferral for
+  Node/npm directory providers equivalent to `NodeExec.setup`. Investigate
+  the actual pinned KMP API before deciding whether to defer that item.
