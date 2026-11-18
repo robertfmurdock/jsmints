@@ -50,6 +50,8 @@ publishing.publications.withType<MavenPublication>().configureEach {
     }
 }
 
+// The target and multiplatform publications sign the same Javadoc JAR.
+// Each Sonatype publication waits for the signers that can write that signature.
 val signingTasks = tasks.withType<Sign>()
 tasks.withType<PublishToMavenRepository>().configureEach {
     when (name) {
