@@ -1,19 +1,8 @@
-import org.jmailen.gradle.kotlinter.tasks.FormatTask
-import org.jmailen.gradle.kotlinter.tasks.LintTask
-
 plugins {
+    id("com.zegreatrob.jsmints.plugins.generated-source-lint")
     id("com.zegreatrob.jsmints.plugins.wrapper")
     id("com.zegreatrob.jsmints.plugins.publish")
-    id("com.zegreatrob.jsmints.plugins.js")
-}
-
-kotlin {
-    js {
-        compilations.named("test") {
-            packageJson { customField("mocha", mapOf("require" to "global-jsdom/register")) }
-        }
-        nodejs { testTask { useMocha { timeout = "20s" } } }
-    }
+    id("com.zegreatrob.jsmints.plugins.jsdom-test")
 }
 
 wrapper {
@@ -31,17 +20,4 @@ dependencies {
     jsTestImplementation("com.zegreatrob.testmints:standard")
     jsTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
     jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
-    jsTestImplementation(jsconstraint("jsdom"))
-    jsTestImplementation(jsconstraint("global-jsdom"))
-}
-
-tasks {
-    withType<FormatTask> {
-        dependsOn("kspKotlinJs")
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
-    withType<LintTask> {
-        dependsOn("kspKotlinJs")
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
 }

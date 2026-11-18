@@ -1,22 +1,13 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jmailen.gradle.kotlinter.tasks.FormatTask
-import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
+    id("com.zegreatrob.jsmints.plugins.generated-source-lint")
     id("com.zegreatrob.jsmints.plugins.minreact")
-    id("com.zegreatrob.jsmints.plugins.js")
+    id("com.zegreatrob.jsmints.plugins.jsdom-test")
     idea
 }
 
 kotlin {
-    js {
-        nodejs { testTask { useMocha { timeout = "20s" } } }
-        compilations.named("test") {
-            packageJson {
-                customField("mocha", mapOf("require" to "global-jsdom/register"))
-            }
-        }
-    }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         allWarningsAsErrors = true
@@ -38,21 +29,8 @@ dependencies {
 
     jsTestImplementation(project(":react-testing-library"))
     jsTestImplementation(project(":user-event-testing-library"))
-    jsTestImplementation(jsconstraint("jsdom"))
-    jsTestImplementation(jsconstraint("global-jsdom"))
     jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
     jsTestImplementation("com.zegreatrob.testmints:standard")
     jsTestImplementation("com.zegreatrob.testmints:async")
     jsTestImplementation("com.zegreatrob.testmints:minassert")
-}
-
-tasks {
-    withType<FormatTask> {
-        dependsOn("kspKotlinJs")
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
-    withType<LintTask> {
-        dependsOn("kspKotlinJs")
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
 }

@@ -1,8 +1,7 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jmailen.gradle.kotlinter.tasks.FormatTask
-import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
+    id("com.zegreatrob.jsmints.plugins.generated-source-lint")
     id("com.zegreatrob.jsmints.plugins.wrapper")
     id("com.zegreatrob.jsmints.plugins.js")
     idea
@@ -38,15 +37,4 @@ dependencies {
     jsTestImplementation("com.zegreatrob.testmints:standard")
     jsTestImplementation("com.zegreatrob.testmints:async")
     jsTestImplementation("com.zegreatrob.testmints:minassert")
-}
-
-tasks {
-    withType<FormatTask> {
-        dependsOn("kspKotlinJs")
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
-    withType<LintTask> {
-        dependsOn("kspKotlinJs")
-        exclude { spec -> spec.file.absolutePath.contains("generated") }
-    }
 }

@@ -1,15 +1,6 @@
 plugins {
     id("com.zegreatrob.jsmints.plugins.publish")
-    id("com.zegreatrob.jsmints.plugins.js")
-}
-
-kotlin {
-    js {
-        compilations.named("test") {
-            packageJson { customField("mocha", mapOf("require" to "global-jsdom/register")) }
-        }
-        nodejs { testTask { useMocha { timeout = "20s" } } }
-    }
+    id("com.zegreatrob.jsmints.plugins.jsdom-test")
 }
 
 dependencies {
@@ -25,6 +16,4 @@ dependencies {
     jsTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-react")
     jsTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
     jsTestImplementation("org.jetbrains.kotlin:kotlin-test")
-    jsTestImplementation(jsconstraint("jsdom"))
-    jsTestImplementation(jsconstraint("global-jsdom"))
 }
