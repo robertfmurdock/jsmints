@@ -4,7 +4,7 @@ Make the WDIO, KSP, and publishing build logic easier to change in small steps w
 
 ## Planned slices
 
-- [ ] Share KSP processor selection between MinReact and Wrapper. Verify local processor execution and published processor coordinates. Keep MinReact's runtime dependency visible in its own script.
+- [x] Share KSP processor selection between MinReact and Wrapper. Verify local processor execution and published processor coordinates. Keep MinReact's runtime dependency visible in its own script.
 - [ ] Add a WDIO regression test for a caller's environment override and the transition back to defaults. Exercise the task through its normal entry point and verify that a changed effective value causes a new run.
 - [ ] Move WDIO spec selection, environment assembly, result cleanup, and failure diagnostics into the task. Keep provider wiring in the plugin script. Verify Chrome, Firefox, and configuration-cache reuse with the existing report paths.
 - [ ] Migrate internal Node task callers to typed properties and isolate Kotlin's Node/npm setup. Retain legacy setters for published consumers and verify both the npm upgrade and WDIO entry points.
@@ -17,3 +17,5 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 ## Decision log
 
 - Start with KSP because the duplicated behavior is small and both selection paths have existing verification. Establish durable WDIO override coverage before moving launch behavior.
+
+- Shared the configuration names and lazy local-versus-published selection. The helper accepts a callback so it reads the consumer's current `includedBuild` property when Gradle needs the dependency. Both local fixture checks and the external-coordinate probe passed.

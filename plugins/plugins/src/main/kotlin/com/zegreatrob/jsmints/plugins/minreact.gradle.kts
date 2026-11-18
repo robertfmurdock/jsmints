@@ -9,18 +9,5 @@ plugins {
 
 val minreact = project.extensions.create<MinreactTestExtension>("minreact")
 
-configurations.configureEach {
-    val library = when (name) {
-        "kspJs", "kspTestJs", "kspJsTest" -> "minreact-processor"
-        "implementation", "jsMainImplementation" -> "minreact"
-        else -> return@configureEach
-    }
-    val dependency = providers.provider {
-        if (minreact.includedBuild.get()) {
-            project.dependencies.project(":$library")
-        } else {
-            project.dependencies.create("com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}")
-        }
-    }
-    dependencies.addLater(dependency)
-}
+project.addJsmintsDependency("minreact-processor", jsKspConfigurations) { minreact.includedBuild.get() }
+project.addJsmintsDependency("minreact", setOf("implementation", "jsMainImplementation")) { minreact.includedBuild.get() }
