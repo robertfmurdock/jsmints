@@ -80,18 +80,18 @@ dependencies {
     )
 }
 
-val npmProjectDir = e2eCompilation.npmProject.dir
+val wdioNpmProjectDir = e2eCompilation.npmProject.dir
 
-val wdioConfig = npmProjectDir.map { it.file("wdio.conf.mjs") }
+val wdioConfig = wdioNpmProjectDir.map { it.file("wdio.conf.mjs") }
 
 tasks {
-    val runnerJs = npmProjectDir.map { it.dir("runner").file("jsmints-wdiorunner.js") }
+    val runnerJs = wdioNpmProjectDir.map { it.dir("runner").file("jsmints-wdiorunner.js") }
     val installRunner = register<Copy>("installRunner") {
         dependsOn(runnerConfiguration)
         into(runnerJs.map { it.asFile.parentFile })
         from(provider { zipTree(runnerConfiguration.singleFile) })
     }
-    val wdioConfDirectory = npmProjectDir.map { it.file("wdio.conf.d") }
+    val wdioConfDirectory = wdioNpmProjectDir.map { it.file("wdio.conf.d") }
 
     val copyWdioConfDir = register<Copy>("copyWdioConfDir") {
         duplicatesStrategy = DuplicatesStrategy.WARN
@@ -136,7 +136,7 @@ tasks {
                 ),
             )
         }
-        into(npmProjectDir)
+        into(wdioNpmProjectDir)
         rename { "wdio.conf.mjs" }
     }
 
@@ -204,32 +204,30 @@ tasks {
             testResultsDir.get().asFile.deleteRecursively()
             environment("SPEC_FILE", specFile.asFile.absolutePath)
         }
-        npmProjectDir = e2eCompilation.npmProject.dir.get().asFile
-        arguments = listOf(runnerJs.get().asFile.absolutePath)
-        val logFile = logsDir.get().file("run.log").asFile
-        outputFile = logFile
+        npmWorkingDirectory.set(wdioNpmProjectDir)
+        argumentList.set(runnerJs.map { listOf(it.asFile.absolutePath) })
+        val logFile = logsDir.map { it.file("run.log") }
+        logOutputFile.set(logFile)
 
-        verificationErrorMessage =
+        val htmlReporter = wdioTest.htmlReporter
+        val allureReporter = wdioTest.allureReporter
+        val allureReportHint = wdioTest.allureReportHint
+        val failureMessage = providers.provider {
+            val reportPath = reportDir.get().asFile.absolutePath
+            val includeAllure = allureReporter.get()
             listOfNotNull(
                 "e2e tests failed.",
-                if (wdioTest.htmlReporter.get()) {
-                    "- report: file://${reportDir.get().asFile.absolutePath}/html/main-report.html"
+                if (htmlReporter.get()) "- report: file://$reportPath/html/main-report.html" else null,
+                if (includeAllure) {
+                    "- report: file://$reportPath/allure/report/index.html\n    This report must be viewed via a server in most browsers. You can use IntelliJ to serve the file for viewing, or run your own server."
                 } else {
                     null
                 },
-                if (wdioTest.allureReporter.get()) {
-                    "- report: file://${reportDir.get().asFile.absolutePath}/allure/report/index.html\n    This report must be viewed via a server in most browsers.\n    You can use IntelliJ to serve the file for viewing, or run your own server."
-                } else {
-                    null
-                },
-                if (wdioTest.allureReporter.get()) {
-                    wdioTest.allureReportHint.get()
-                        .ifEmpty { null }
-                } else {
-                    null
-                },
-                "- logs: file://${logFile.absolutePath}",
+                if (includeAllure) allureReportHint.get().ifEmpty { null } else null,
+                "- logs: file://${logFile.get().asFile.absolutePath}",
             ).joinToString("\n")
+        }
+        verificationMessage.set(failureMessage)
     }
     check {
         dependsOn(e2eRun)

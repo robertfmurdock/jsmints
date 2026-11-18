@@ -1,5 +1,9 @@
 package com.zegreatrob.jsmints.plugins
 
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
@@ -28,12 +32,26 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     @Internal
     lateinit var nodeExecPath: String
 
-    @Internal
-    var npmProjectDir: File? = null
+    @get:Internal
+    abstract val npmWorkingDirectory: DirectoryProperty
 
-    @OutputFile
-    @Optional
-    var outputFile: File? = null
+    @get:Internal
+    var npmProjectDir: File?
+        get() = npmWorkingDirectory.asFile.orNull
+        set(value) {
+            npmWorkingDirectory.fileValue(value)
+        }
+
+    @get:OutputFile
+    @get:Optional
+    abstract val logOutputFile: RegularFileProperty
+
+    @get:Internal
+    var outputFile: File?
+        get() = logOutputFile.asFile.orNull
+        set(value) {
+            logOutputFile.fileValue(value)
+        }
 
     @Input
     @Optional
@@ -43,12 +61,26 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     @PathSensitive(PathSensitivity.RELATIVE)
     var nodeCommandDirectories: List<File> = emptyList()
 
-    @Input
-    @Optional
-    var verificationErrorMessage: String? = null
+    @get:Input
+    @get:Optional
+    abstract val verificationMessage: Property<String>
 
-    @Input
-    var arguments: List<String> = emptyList()
+    @get:Internal
+    var verificationErrorMessage: String?
+        get() = verificationMessage.orNull
+        set(value) = verificationMessage.set(value)
+
+    @get:Input
+    abstract val argumentList: ListProperty<String>
+
+    @get:Internal
+    var arguments: List<String>
+        get() = argumentList.get()
+        set(value) = argumentList.set(value)
+
+    init {
+        argumentList.convention(emptyList())
+    }
 
     override fun exec() {
         npmProjectDir?.let { workingDir = it }
