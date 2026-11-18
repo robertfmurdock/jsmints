@@ -1,5 +1,5 @@
 
-import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
 
 plugins {
     id("com.zegreatrob.jsmints.plugins.publish")
@@ -11,7 +11,6 @@ kotlin {
         nodejs {
             useCommonJs()
         }
-        binaries.executable()
     }
 }
 
@@ -37,13 +36,13 @@ val executable = configurations.create("executable") {
     attributes { attribute(Attribute.of("com.zegreatrob.executable", String::class.java), "runner") }
 }
 
-val compileExecutableTask = tasks.named("compileProductionExecutableKotlinJs", KotlinJsIrLink::class)
+val productionBinary = kotlin.js().binaries.executable()
+    .single { it.mode == KotlinJsBinaryMode.PRODUCTION }
 
 tasks {
     val executableJar = register<Jar>("executableJar") {
-        dependsOn(compileExecutableTask)
         archiveClassifier.set("executable")
-        from(compileExecutableTask.map { it.destinationDirectory.asFile })
+        from(productionBinary.linkTask.flatMap { it.destinationDirectory })
     }
 
     artifacts.add(executable.name, executableJar) { builtBy(executableJar) }

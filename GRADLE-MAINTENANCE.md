@@ -60,7 +60,7 @@ settling on an implementation.
 
 - [ ] Defer Node/npm directory resolution in `NodeExec.setup` where the Kotlin plugin supports it. Inspect the pinned Kotlin plugin's public Node and npm APIs and preserve the published setters and both NCU and WDIO entry points. Verify task configuration, actual executable paths, and configuration-cache reuse. If a value must be queried during configuration, record the specific API and lifecycle constraint.
 - [ ] Track and reuse parsed package metadata. Review `JsConstraintExtension`, `JsPackageExtension`, and template version generation for repeated configuration-time file reads. Use tracked file-content providers and reuse parsed data where possible. Dependency declarations can need metadata during configuration, so preserve dependency selection and compare resolved coordinates, generated templates, and package outputs.
-- [ ] Wire the WDIO runner archive from its compiler output with `flatMap`. Check the public compilation and binary APIs before changing the existing named lookup. Remove the explicit prerequisite only after verifying that the output provider schedules compilation on a fresh build. Compare the executable archive contents and run direct WDIO execution.
+- [x] Wire the WDIO runner archive from its compiler output with `flatMap`. Check the public compilation and binary APIs before changing the existing named lookup. Remove the explicit prerequisite only after verifying that the output provider schedules compilation on a fresh build. Compare the executable archive contents and run direct WDIO execution.
 - [ ] Extract focused conventions for repeated library test setup and generated-source lint handling. Compare the repeated Mocha/jsdom blocks first. Check whether lint and format still need KSP prerequisites when generated sources are excluded. Verify generated-source exclusions, test behavior, and generated package configuration.
 - [ ] Review React dependencies declared by `react-data-loader` that `minreact` exports through its API. Inspect source usage and public API ownership before removing declarations. Compare resolved dependencies, generated POMs, and Gradle module metadata, then run the affected tests.
 
@@ -84,3 +84,5 @@ settling on an implementation.
 - The reviewed Testmints tracker and commits did not document a deferral for
   Node/npm directory providers equivalent to `NodeExec.setup`. Investigate
   the actual pinned KMP API before deciding whether to defer that item.
+
+- Runner wiring uses the public production binary link-task provider. After clearing the compiler and archive outputs, invoking only `executableJar` scheduled compilation through its output provider. Archive entries and runner code matched the baseline. The fresh link reordered three interface metadata arrays in generated Kotlin stdlib code; normalizing that order made the entire archive content comparison pass. Direct browser verification is included in the combined gate.
