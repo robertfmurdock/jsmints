@@ -81,7 +81,7 @@ jobs:
         id: build
         env:
           DISABLE_DETACHED: ${{ github.ref == 'refs/heads/master' }}
-        run: ./gradlew assemble check -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache --scan
+        run: ./gradlew assemble check -Pversion=${{ env.TAGGER_VERSION }} --scan
       - name: Finalize dashboard test summary after build failure
         if: ${{ failure() && steps.build.outcome == 'failure' }}
         run: ./gradlew dashboardTestSummary -Pversion=${{ env.TAGGER_VERSION }} --no-configuration-cache

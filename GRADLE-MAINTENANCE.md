@@ -41,5 +41,5 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 
 - [x] Pin the convention-plugin Java 21 toolchain. Rebuilding with Java 22 as the Gradle launcher generated 254 classes, all at Java 21 class-file version 65. Plugin validation then passed on Java 21.
 - [x] Give generated WDIO fragments a single directory owner. Changed the copy task to `Sync` and removed its explicit clean-task dependency. Disabling the HTML reporter removed its fragment while preserving fixture and Allure fragments. Restoring it passed in Chrome and Firefox.
-- [ ] Exercise the full CI build with the configuration cache. Run twice with the same version input, check reuse and dashboard reports, and assess release separately.
+- [x] Enable configuration caching for the CI build and check. Three local Java 21 runs used the same version input. The second invalidated the cache after an included plugin compiler input changed, and the third reused it. The dashboard summaries matched byte-for-byte with 224 passing tests. The release dry run reported incompatible Sonatype publishing tasks, so the release step keeps its explicit opt-out.
 - [ ] Investigate publication-specific signing outputs. Use a disposable Maven repository to verify signed artifacts before changing Sonatype task ordering.
