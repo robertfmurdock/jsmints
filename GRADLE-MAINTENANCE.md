@@ -44,3 +44,10 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 - [x] Enable configuration caching for the CI build and check. Three local Java 21 runs used the same version input. The second invalidated the cache after an included plugin compiler input changed, and the third reused it. The dashboard summaries matched byte-for-byte with 224 passing tests. The release dry run reported incompatible Sonatype publishing tasks, so the release step keeps its explicit opt-out.
 - [x] Investigate publication-specific signing outputs. The shared Javadoc signature reproduced Gradle's implicit-dependency error when publishing both wrapper processor variants to a disposable Maven repository. A probe with one Javadoc archive path per publication published the BOM and both processor variants locally. GPG verified all 14 detached signatures. Production publication wiring stays in place.
   - The Nexus plugin attached its staging initializer to the disposable repository tasks. Sonatype rejected that initial unauthenticated request with HTTP 401. Subsequent runs excluded the initializer and the BOM's disabled Sonatype publication, and a dry run verified the local graph. The probe replaced publication artifacts after Kotlin had finished configuring them.
+
+## Additional build cleanup
+
+- [ ] Pin both KSP processor toolchains. Inspect the current class target and preserve consumer compatibility. Run both processor fixtures.
+- [ ] Filter dependency repositories and remove the duplicate Plugin Portal declaration. Compare resolved dependencies before and after.
+- [ ] Remove redundant Kotlin standard-library declarations. Confirm resolved dependency versions stay identical.
+- [ ] Describe and group NCU and WDIO preparation tasks. Verify their task help and discovery.
