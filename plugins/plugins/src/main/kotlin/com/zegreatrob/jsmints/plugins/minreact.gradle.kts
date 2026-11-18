@@ -9,32 +9,17 @@ plugins {
 
 val minreact = project.extensions.create<MinreactTestExtension>("minreact")
 
-afterEvaluate {
-
-    dependencies {
-        val processorDep = correctForLocal("minreact-processor")
-        val minreactDep = correctForLocal("minreact")
-
-        if (configurations.names.contains("kspJs")) {
-            add("kspJs", processorDep)
-        }
-        if (configurations.names.contains("kspTestJs")) {
-            add("kspTestJs", processorDep)
-        }
-        if (configurations.names.contains("kspJsTest")) {
-            add("kspJsTest", processorDep)
-        }
-        if (configurations.names.contains("implementation")) {
-            "implementation"(minreactDep)
-        }
-        if (configurations.names.contains("jsMainImplementation")) {
-            "jsMainImplementation"(minreactDep)
-        }
+configurations.configureEach {
+    val library = when (name) {
+        "kspJs", "kspTestJs", "kspJsTest" -> "minreact-processor"
+        "implementation", "jsMainImplementation" -> "minreact"
+        else -> return@configureEach
     }
-}
-
-fun correctForLocal(library: String): Any = if (minreact.includedBuild.get()) {
-    dependencies.project(":$library")
-} else {
-    "com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}"
+    dependencies.addLater(providers.provider {
+        if (minreact.includedBuild.get()) {
+            project.dependencies.project(":$library")
+        } else {
+            project.dependencies.create("com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}")
+        }
+    })
 }

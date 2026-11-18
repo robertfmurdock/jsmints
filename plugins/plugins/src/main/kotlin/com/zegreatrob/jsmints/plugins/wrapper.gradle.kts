@@ -9,25 +9,16 @@ plugins {
 
 val wrapper = project.extensions.create<WrapperTestExtension>("wrapper")
 
-afterEvaluate {
-
-    dependencies {
-        val processorDep = correctForLocal("wrapper-processor")
-
-        if (configurations.names.contains("kspJs")) {
-            add("kspJs", processorDep)
-        }
-        if (configurations.names.contains("kspTestJs")) {
-            add("kspTestJs", processorDep)
-        }
-        if (configurations.names.contains("kspJsTest")) {
-            add("kspJsTest", processorDep)
-        }
+configurations.configureEach {
+    val library = when (name) {
+        "kspJs", "kspTestJs", "kspJsTest" -> "wrapper-processor"
+        else -> return@configureEach
     }
-}
-
-fun correctForLocal(library: String): Any = if (wrapper.includedBuild.get()) {
-    dependencies.project(":$library")
-} else {
-    "com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}"
+    dependencies.addLater(providers.provider {
+        if (wrapper.includedBuild.get()) {
+            project.dependencies.project(":$library")
+        } else {
+            project.dependencies.create("com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}")
+        }
+    })
 }
