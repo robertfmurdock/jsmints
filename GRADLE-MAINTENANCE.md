@@ -85,7 +85,7 @@ settling on an implementation.
   Node/npm directory providers equivalent to `NodeExec.setup`. Investigate
   the actual pinned KMP API before deciding whether to defer that item.
 
-- Runner wiring uses the public production binary link-task provider. After clearing the compiler and archive outputs, invoking only `executableJar` scheduled compilation through its output provider. Archive entries and runner code matched the baseline. The fresh link reordered three interface metadata arrays in generated Kotlin stdlib code; normalizing that order made the entire archive content comparison pass. Direct browser verification is included in the combined gate.
+- Runner wiring uses the public production binary link-task provider. After clearing the compiler and archive outputs, invoking only `executableJar` scheduled compilation through its output provider. Archive entries and runner code matched the baseline. The fresh link reordered three interface metadata arrays in generated Kotlin stdlib code; normalizing that order made the entire archive content comparison pass. Direct browser execution passed in the combined gate.
 
 - Node executable and npm paths now use the public executable and directory providers, retaining existing setters. The pinned KMP binary makes `NodeJsEnvSpec.env` internal, so populating the legacy `nodeBinDir` field still uses `requireConfigured()`; that field is retained for compatibility. Chrome, Firefox, the three TestKit cases, and the disposable NCU task passed. Plugin checks passed after a lint spacing correction. Configuration-cache entries were stored for WDIO and NCU.
 
@@ -94,3 +94,5 @@ settling on an implementation.
 - Added shared jsdom/Mocha test setup and generated-source lint conventions. After clearing two consumer outputs, lint and format passed with generated sources excluded. Removed the redundant explicit KSP edges; the lint tasks still infer KSP prerequisites from their source inputs, as the dry-run graph confirms. All 26 generated package/template files matched the baseline, and convention checks passed.
 
 - Retained direct React because `DataLoaderProps` and `DataLoader` expose React types. Moved the direct React DOM declaration from main to test, where its imports occur. Compile/test dependency graphs matched the baseline. The POM and module metadata changed only by removing the direct runtime React DOM edge; `minreact` still exports it transitively. DataLoader tests passed.
+
+- Combined gate for the five remaining cleanup items passed on Java 21 and Gradle 9.9.1 with two workers and configuration caching enabled. `assemble check`, four TestKit cases, and fresh Chrome and Firefox runs passed. The working tree contains no temporary probes or generated-source formatting changes.

@@ -43,3 +43,11 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 - The local baseline reproduced the shared signature collision because the prior workaround covered Sonatype task names. The baseline probe mirrored those prerequisites for its disposable repository. The production refactor then published the BOM and both processor variants without that probe workaround. All 14 detached signatures verified. Published artifact contents matched, excluding Gradle's generated build ID in module metadata.
 - The representative Sonatype dry-run graph shrank from 48 tasks to 20, retaining each selected publication's own signing task and removing unrelated Kotlin publication prerequisites. Enabled publication tasks in the signed probe were restricted to local file repositories. The temporary signing key was deleted after verification.
 - Final Java 21 `assemble check` and all three TestKit cases passed with the configuration cache enabled. Chrome and Firefox passed on alternate fixture ports.
+
+
+## Further audit decisions
+
+- Public Node executable and npm directory providers support lazy wiring. Kotlin 2.4.21 makes the complete Node environment provider internal, so populating the legacy `nodeBinDir` field still uses the existing compatibility lookup.
+- Package metadata needed by Kotlin npm dependency declarations remains available during configuration. File contents are tracked, parsed constraint data is reused, and template tokens are resolved during copying. A TestKit regression verifies package-file invalidation after configuration-cache reuse.
+- Generated-source lint conventions remove explicit KSP prerequisites, but KMP/KSP still supplies inferred source dependencies. Those relationships remain intact.
+- Retained direct React ownership for DataLoader's public types and narrowed direct React DOM usage to its test scope. Resolved dependency graphs matched; publication metadata lost only the redundant direct runtime React DOM edge.
