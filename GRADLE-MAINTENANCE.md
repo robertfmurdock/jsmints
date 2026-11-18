@@ -36,3 +36,10 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 - November 17, 2026 — Java 21 and Gradle 9.9.1 passed `assemble check` and the two WDIO TestKit cases. The WDIO fixture passed in Chrome and Firefox with Gradle running outside the restricted environment. After switching from Java 22, rerunning convention-plugin validation with `--rerun-tasks --no-build-cache -Pkotlin.compiler.execution.strategy=in-process` rebuilt the generated classes for Java 21. Run `clean` separately from `assemble check` to avoid the composite task scheduling failure observed when combining them.
 
 - November 18, 2026 — Java 21 `assemble check` and both WDIO TestKit cases passed after the repository, publication, KSP, and WDIO changes. The browser fixture passed with `JSMINTS_WDIO_HTTP_PORT=28080` and `JSMINTS_WDIO_HTTPS_PORT=28443` while another local stack held 80 and 443. Two separate WDIO dry runs stored and reused the configuration cache.
+
+## Follow-up investigations
+
+- [ ] Pin the convention-plugin Java 21 toolchain. Rebuild with Java 22 as the Gradle launcher, inspect generated class versions, and validate the plugin on Java 21.
+- [ ] Give generated WDIO fragments a single directory owner. Verify that disabling a reporter removes its generated fragment, fixture fragments survive, and direct browser runs still pass.
+- [ ] Exercise the full CI build with the configuration cache. Run twice with the same version input, check reuse and dashboard reports, and assess release separately.
+- [ ] Investigate publication-specific signing outputs. Use a disposable Maven repository to verify signed artifacts before changing Sonatype task ordering.
