@@ -3,11 +3,10 @@ package com.zegreatrob.jsmints.plugins
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTemplate
 import com.zegreatrob.jsmints.plugins.wdiotest.WdioTestExtension
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import java.net.URL
 
 plugins {
@@ -19,12 +18,10 @@ repositories {
     mavenCentral()
 }
 
-kotlin {
-    js {
-        val e2eTest = compilations.create("e2eTest")
-        binaries.executable(e2eTest)
-    }
-}
+val jsTarget = kotlin.js()
+val e2eCompilation = jsTarget.compilations.create("e2eTest")
+val developmentBinary = jsTarget.binaries.executable(e2eCompilation)
+    .single { it.mode == KotlinJsBinaryMode.DEVELOPMENT }
 
 rootProject.yarn.ignoreScriptsProperty = false
 val yarnAutoReplace = project.findProperty("yarnAutoReplace") as String?
@@ -83,7 +80,7 @@ dependencies {
     )
 }
 
-val npmProjectDir = kotlin.js().compilations.getByName("e2eTest").npmProject.dir
+val npmProjectDir = e2eCompilation.npmProject.dir
 
 val wdioConfig = npmProjectDir.map { it.file("wdio.conf.mjs") }
 
@@ -143,38 +140,31 @@ tasks {
         rename { "wdio.conf.mjs" }
     }
 
-    named("compileE2eTestKotlinJs", fun Task.() {
+    e2eCompilation.compileTaskProvider.configure {
         dependsOn(copyWdio)
-    })
+    }
 
     val wdioTestModuleName = "wdio-dev-tests"
-    val compileE2eTestDevelopmentExecutableKotlinJs =
-        named<Kotlin2JsCompile>("compileE2eTestDevelopmentExecutableKotlinJs") {
-            compilerOptions { moduleName.set(wdioTestModuleName) }
-            inputs.property("wdioTestModuleName", wdioTestModuleName)
-        }
-
-    val e2eTestProcessResources = named<ProcessResources>("jsE2eTestProcessResources")
-    val e2eTestDevelopmentExecutableCompileSync =
-        named("jsE2eTestE2eTestDevelopmentExecutableCompileSync") {
-            inputs.property("wdioTestModuleName", wdioTestModuleName)
-        }
+    developmentBinary.linkTask.configure {
+        compilerOptions { moduleName.set(wdioTestModuleName) }
+        inputs.property("wdioTestModuleName", wdioTestModuleName)
+    }
+    val developmentSync = developmentBinary.linkSyncTask
+    developmentSync.configure {
+        inputs.property("wdioTestModuleName", wdioTestModuleName)
+    }
 
     val e2eRun = register<WdioTest>("e2eRun") {
         group = "Verification"
         description = "This task will run WDIO end to end tests."
-        val kotlinJsCompilation = kotlin.js().compilations["e2eTest"]
-        setup(kotlinJsCompilation)
+        setup(e2eCompilation)
         dependsOn(
             ":kotlinNpmInstall",
             copyWdio,
             installRunner,
-            e2eTestProcessResources,
-            compileE2eTestDevelopmentExecutableKotlinJs,
-            e2eTestDevelopmentExecutableCompileSync,
         )
 
-        inputs.files(e2eTestDevelopmentExecutableCompileSync)
+        inputs.files(developmentSync)
         inputs.files(wdioConfig)
         inputs.files(wdioConfDirectory)
 
@@ -186,7 +176,7 @@ tasks {
         outputs.cacheIf { true }
 
         val logsDir = buildDir.dir("reports/logs/e2e/")
-        val specFiles = kotlinJsCompilation.npmProject.dir.map { npmProjectDirectory ->
+        val specFiles = e2eCompilation.npmProject.dir.map { npmProjectDirectory ->
             val kotlinDirectory = npmProjectDirectory.dir("kotlin")
             listOf(
                 kotlinDirectory.file("$wdioTestModuleName.js"),
@@ -215,7 +205,7 @@ tasks {
             testResultsDir.get().asFile.deleteRecursively()
             environment("SPEC_FILE", specFile.asFile.absolutePath)
         }
-        npmProjectDir = kotlinJsCompilation.npmProject.dir.get().asFile
+        npmProjectDir = e2eCompilation.npmProject.dir.get().asFile
         arguments = listOf(runnerJs.get().asFile.absolutePath)
         val logFile = logsDir.get().file("run.log").asFile
         outputFile = logFile
