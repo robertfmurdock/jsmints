@@ -25,6 +25,15 @@ extensions.configure<NodeJsEnvSpec> {
     }
 }
 
+val wdioHttpsPort = providers.environmentVariable("JSMINTS_WDIO_HTTPS_PORT")
+    .filter { it.isNotEmpty() }
+    .map { it.toInt() }
+    .orElse(443)
+
+val wdioBaseUrl = wdioHttpsPort.map { port ->
+    if (port == 443) "https://static.localhost" else "https://static.localhost:$port"
+}
+
 wdioTest {
     useChrome.set(true)
     chromeBinary.set(System.getenv("WDIO_CHROME_BINARY"))
@@ -32,7 +41,7 @@ wdioTest {
     htmlReporter.set(true)
     allureReporter.set(true)
     allureReportHint.set("- link: http://localhost:63342/jsmints-root/wdio-testing-library-test/build/reports/e2e/allure/report/index.html")
-    baseUrl.set("https://static.localhost")
+    baseUrl.set(wdioBaseUrl)
 }
 
 dependencies {

@@ -39,6 +39,17 @@ This is a one-stop-shop for setting up WDIO for your kotlin project.
 
 Intended to be usable without configuration, but allow the full flexibility of the tool, it comes bundled with defaults that can be changed, including use of the ["nice html reporter"](https://github.com/rpii/wdio-html-reporter), screenshot capture, and chrome operation.
 
+#### Running the repository’s WDIO fixture
+
+The fixture uses host ports 80 and 443 by default. If another local service uses
+either port, set `JSMINTS_WDIO_HTTP_PORT` and `JSMINTS_WDIO_HTTPS_PORT` to
+available ports. The fixture URL follows the HTTPS port automatically.
+
+```sh
+JSMINTS_WDIO_HTTP_PORT=18080 JSMINTS_WDIO_HTTPS_PORT=18443 \
+  ./gradlew :wdio-testing-library-test:e2eRun --no-configuration-cache
+```
+
 ### Jspackage Gradle Plugin
 
 A gradle plugin that allows you use a package.json file to define your Javascript dependencies.

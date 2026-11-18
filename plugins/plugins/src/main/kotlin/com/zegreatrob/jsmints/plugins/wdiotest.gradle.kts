@@ -128,6 +128,7 @@ tasks {
             .map { resources.text.fromUri(it) }
 
         inputs.dir(wdioConfDirectory)
+        inputs.property("baseUrl", wdioTest.baseUrl)
 
         from(wdioConfFile) {
             filter<ReplaceTokens>(

@@ -25,6 +25,6 @@ class BrowserTest {
         WebdriverBrowser.setLocation("/there")
     } verify {
         "${WebdriverBrowser.currentUrl()}"
-            .assertIsEqualTo("https://static.localhost/there")
+            .assertIsEqualTo("$fixtureBaseUrl/there")
     }
 }
