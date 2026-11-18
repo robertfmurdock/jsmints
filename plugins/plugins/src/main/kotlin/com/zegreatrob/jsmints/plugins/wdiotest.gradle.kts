@@ -97,20 +97,27 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.WARN
         dependsOn(":kotlinNpmInstall")
         dependsOn("cleanCopyWdioConfDir")
+        val headless = wdioTest.useHeadless.map { it.toString() }
+        inputs.property("headless", headless)
         from(projectDir.resolve("wdio.conf.d")) {
-            filter<ReplaceTokens>("tokens" to mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
+            eachFile {
+                filter<ReplaceTokens>("tokens" to mapOf("HEADLESS" to headless.get()))
+            }
         }
         fun addPlugin(
             option: Property<Boolean>,
             pluginResource: URL,
             tokens: Map<String, Property<String>> = mapOf(),
         ) {
-            from(option.whenEnabledUseFile(pluginResource), fun CopySpec.() {
-                rename { pluginResource.path.split("/").last<String>() }
-                val stringTokens = tokens.mapValues { it.value.orNull ?: "" }
-                    .plus(mapOf("HEADLESS" to wdioTest.useHeadless.get().toString()))
-                filter<ReplaceTokens>("tokens" to stringTokens)
-            })
+            val tokenValues = tokens.mapValues { (_, value) -> value.orElse("") }
+            tokenValues.forEach { (token, value) -> inputs.property(token, value) }
+            from(option.whenEnabledUseFile(pluginResource)) {
+                rename { pluginResource.path.substringAfterLast('/') }
+                eachFile {
+                    val replacements = tokenValues.mapValues { (_, value) -> value.get() }
+                    filter<ReplaceTokens>("tokens" to (replacements + ("HEADLESS" to headless.get())))
+                }
+            }
         }
         addPlugin(wdioTest.useChrome, WdioTemplate.chromePlugin, mapOf("CHROME_BINARY" to wdioTest.chromeBinary))
         addPlugin(wdioTest.htmlReporter, WdioTemplate.htmlReporterPlugin)
@@ -128,14 +135,13 @@ tasks {
             .map { resources.text.fromUri(it) }
 
         inputs.dir(wdioConfDirectory)
-        inputs.property("baseUrl", wdioTest.baseUrl)
+        val baseUrl = wdioTest.baseUrl
+        inputs.property("baseUrl", baseUrl)
 
         from(wdioConfFile) {
-            filter<ReplaceTokens>(
-                "tokens" to mapOf(
-                    "BASE_URL" to wdioTest.baseUrl.get(),
-                ),
-            )
+            eachFile {
+                filter<ReplaceTokens>("tokens" to mapOf("BASE_URL" to baseUrl.get()))
+            }
         }
         into(wdioNpmProjectDir)
         rename { "wdio.conf.mjs" }
