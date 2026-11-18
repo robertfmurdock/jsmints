@@ -1,6 +1,5 @@
 package com.zegreatrob.jsmints.plugins
 
-import org.gradle.plugins.signing.Sign
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import java.nio.charset.Charset
@@ -50,19 +49,6 @@ publishing.publications.withType<MavenPublication>().configureEach {
     }
 }
 
-// The target and multiplatform publications sign the same Javadoc JAR.
-// Each Sonatype publication waits for the signers that can write that signature.
-val signingTasks = tasks.withType<Sign>()
-tasks.withType<PublishToMavenRepository>().configureEach {
-    when (name) {
-        "publishJsPublicationToSonatypeRepository", "publishJvmPublicationToSonatypeRepository" ->
-            dependsOn(signingTasks.matching { it.name == "signKotlinMultiplatformPublication" })
-
-        "publishKotlinMultiplatformPublicationToSonatypeRepository" ->
-            dependsOn(signingTasks.matching { it.name == "signJsPublication" || it.name == "signJvmPublication" })
-    }
-}
-
 signing {
     val signingKey = project.findProperty("signingKey") as String?
     val signingPassword = project.findProperty("signingPassword") as String?
@@ -77,14 +63,18 @@ signing {
     sign(publishing.publications)
 }
 
-tasks {
-    publish { finalizedBy("::closeAndReleaseSonatypeStagingRepository") }
+tasks.publish {
+    finalizedBy("::closeAndReleaseSonatypeStagingRepository")
+}
 
-    val javadocJar = register<Jar>("javadocJar") {
+publishing.publications.withType<MavenPublication>().all {
+    val publicationName = name
+    val publicationJavadoc = tasks.register<Jar>("${publicationName}JavadocJar") {
+        group = "publishing"
+        description = "Assembles the Javadoc archive for the $publicationName publication."
         archiveClassifier.set("javadoc")
-        from("${rootDir.absolutePath}/javadocs")
+        destinationDirectory.set(layout.buildDirectory.dir("publication-javadoc/$publicationName"))
+        from(rootProject.layout.projectDirectory.dir("javadocs"))
     }
-    publishing.publications {
-        withType<MavenPublication> { artifact(javadocJar) }
-    }
+    artifact(publicationJavadoc)
 }

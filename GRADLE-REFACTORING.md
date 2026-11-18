@@ -32,8 +32,14 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 
 - [x] Extract a shared processor convention for publishing, the Java 21 toolchain, JVM target, and processor dependencies. Compare publication metadata and run both generated-code fixtures.
 - [x] Define the Plugin Portal routing groups once in convention settings. Compare compile and runtime dependency resolution.
-- [ ] Give every Maven publication its own Javadoc archive and signature path. Remove cross-publication signing dependencies, verify local Maven artifacts and detached signatures, and inspect the Sonatype dry-run graph before and after.
+- [x] Give every Maven publication its own Javadoc archive and signature path. Remove cross-publication signing dependencies, verify local Maven artifacts and detached signatures, and inspect the Sonatype dry-run graph before and after.
 
 - The processor convention reads the consuming libraries build’s KSP API catalog entry. Both generated-code fixtures and convention-plugin checks passed. The two JVM processor POMs and dependency BOM POM matched the baseline byte-for-byte.
 
 - Maven Central exclusions and Plugin Portal inclusions now use one local group list. Both plugin builds’ compile and runtime dependency graphs matched the previous baseline.
+
+
+- Production publication wiring now registers a Javadoc archive under a separate output directory for each publication. The signing plugin infers the archive dependency. Removed the cross-publication signing rules in the publishing convention and dependency BOM.
+- The local baseline reproduced the shared signature collision because the prior workaround covered Sonatype task names. The baseline probe mirrored those prerequisites for its disposable repository. The production refactor then published the BOM and both processor variants without that probe workaround. All 14 detached signatures verified. Published artifact contents matched, excluding Gradle's generated build ID in module metadata.
+- The representative Sonatype dry-run graph shrank from 48 tasks to 20, retaining each selected publication's own signing task and removing unrelated Kotlin publication prerequisites. Enabled publication tasks in the signed probe were restricted to local file repositories. The temporary signing key was deleted after verification.
+- Final Java 21 `assemble check` and all three TestKit cases passed with the configuration cache enabled. Chrome and Firefox passed on alternate fixture ports.
