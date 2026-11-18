@@ -30,6 +30,8 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 
 ## Consolidation slices
 
-- [ ] Extract a shared processor convention for publishing, the Java 21 toolchain, JVM target, and processor dependencies. Compare publication metadata and run both generated-code fixtures.
+- [x] Extract a shared processor convention for publishing, the Java 21 toolchain, JVM target, and processor dependencies. Compare publication metadata and run both generated-code fixtures.
 - [ ] Define the Plugin Portal routing groups once in convention settings. Compare compile and runtime dependency resolution.
 - [ ] Give every Maven publication its own Javadoc archive and signature path. Remove cross-publication signing dependencies, verify local Maven artifacts and detached signatures, and inspect the Sonatype dry-run graph before and after.
+
+- The processor convention reads the consuming libraries build’s KSP API catalog entry. Both generated-code fixtures and convention-plugin checks passed. The two JVM processor POMs and dependency BOM POM matched the baseline byte-for-byte.
