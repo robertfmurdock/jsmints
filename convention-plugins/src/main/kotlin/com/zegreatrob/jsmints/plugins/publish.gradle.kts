@@ -55,6 +55,7 @@ tasks.withType<PublishToMavenRepository>().configureEach {
     when (name) {
         "publishJsPublicationToSonatypeRepository", "publishJvmPublicationToSonatypeRepository" ->
             dependsOn(signingTasks.matching { it.name == "signKotlinMultiplatformPublication" })
+
         "publishKotlinMultiplatformPublicationToSonatypeRepository" ->
             dependsOn(signingTasks.matching { it.name == "signJsPublication" || it.name == "signJvmPublication" })
     }

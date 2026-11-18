@@ -15,11 +15,12 @@ configurations.configureEach {
         "implementation", "jsMainImplementation" -> "minreact"
         else -> return@configureEach
     }
-    dependencies.addLater(providers.provider {
+    val dependency = providers.provider {
         if (minreact.includedBuild.get()) {
             project.dependencies.project(":$library")
         } else {
             project.dependencies.create("com.zegreatrob.jsmints:$library:${PluginVersions.bomVersion}")
         }
-    })
+    }
+    dependencies.addLater(dependency)
 }
