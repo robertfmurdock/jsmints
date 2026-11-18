@@ -176,19 +176,21 @@ tasks {
         inputs.files(wdioConfDirectory)
 
         val buildDir = project.layout.buildDirectory
-        val reportDir = buildDir.dir("reports/e2e/")
+        val reportDir = buildDir.dir("reports/e2e")
         val testResultsDir = buildDir.dir("test-results/e2e")
-        outputs.dir(reportDir)
-        outputs.dir(testResultsDir)
+        reportDirectory.set(reportDir)
+        testResultsDirectory.set(testResultsDir)
 
-        val logsDir = buildDir.dir("reports/logs/e2e/")
-        val specFiles = e2eCompilation.npmProject.dir.map { npmProjectDirectory ->
-            val kotlinDirectory = npmProjectDirectory.dir("kotlin")
-            listOf(
-                kotlinDirectory.file("$wdioTestModuleName.js"),
-                kotlinDirectory.file("${npmProjectDirectory.asFile.name}.js"),
-            )
-        }
+        val logsDir = buildDir.dir("reports/logs/e2e")
+        specCandidates.set(
+            wdioNpmProjectDir.map { npmProjectDirectory ->
+                val kotlinDirectory = npmProjectDirectory.dir("kotlin")
+                listOf(
+                    kotlinDirectory.file("$wdioTestModuleName.js"),
+                    kotlinDirectory.file("${npmProjectDirectory.asFile.name}.js"),
+                )
+            },
+        )
         val nodeModules = rootProject.layout.buildDirectory.dir("js/node_modules")
         defaultEnvironment("BASEURL", wdioTest.baseUrl)
         defaultEnvironment("WDIO_CONFIG", wdioConfig.map { it.asFile.absolutePath })
@@ -197,36 +199,11 @@ tasks {
         defaultEnvironment("LOGS_DIR", logsDir.map { it.asFile.absolutePath })
         defaultEnvironment("NODE_PATH", nodeModules.map { it.asFile.absolutePath })
         environment("STRICT_SSL", "false")
-        doFirst {
-            val specFile = specFiles.get().firstOrNull { it.asFile.isFile }
-                ?: error("WDIO spec output was not created: ${specFiles.get().joinToString()}")
-            testResultsDir.get().asFile.deleteRecursively()
-            environment("SPEC_FILE", specFile.asFile.absolutePath)
-        }
         npmWorkingDirectory.set(wdioNpmProjectDir)
         argumentList.set(runnerJs.map { listOf(it.asFile.absolutePath) })
         val logFile = logsDir.map { it.file("run.log") }
         logOutputFile.set(logFile)
-
-        val htmlReporter = wdioTest.htmlReporter
-        val allureReporter = wdioTest.allureReporter
-        val allureReportHint = wdioTest.allureReportHint
-        val failureMessage = providers.provider {
-            val reportPath = reportDir.get().asFile.absolutePath
-            val includeAllure = allureReporter.get()
-            listOfNotNull(
-                "e2e tests failed.",
-                if (htmlReporter.get()) "- report: file://$reportPath/html/main-report.html" else null,
-                if (includeAllure) {
-                    "- report: file://$reportPath/allure/report/index.html\n    This report must be viewed via a server in most browsers. You can use IntelliJ to serve the file for viewing, or run your own server."
-                } else {
-                    null
-                },
-                if (includeAllure) allureReportHint.get().ifEmpty { null } else null,
-                "- logs: file://${logFile.get().asFile.absolutePath}",
-            ).joinToString("\n")
-        }
-        verificationMessage.set(failureMessage)
+        configureReportDiagnostics(reportDir, logFile, wdioTest.htmlReporter, wdioTest.allureReporter, wdioTest.allureReportHint)
     }
     check {
         dependsOn(e2eRun)
