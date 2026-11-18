@@ -12,9 +12,9 @@ minreact {
 dependencies {
     jsMainImplementation(project(":minreact"))
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react")
-    jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
+    jsTestImplementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
     jsTestImplementation(project(":react-testing-library"))
     jsTestImplementation(project(":user-event-testing-library"))
     jsTestImplementation("com.zegreatrob.testmints:async")
