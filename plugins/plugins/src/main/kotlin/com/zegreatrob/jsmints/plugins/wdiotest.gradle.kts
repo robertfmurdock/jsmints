@@ -93,10 +93,9 @@ tasks {
     }
     val wdioConfDirectory = wdioNpmProjectDir.map { it.file("wdio.conf.d") }
 
-    val copyWdioConfDir = register<Copy>("copyWdioConfDir") {
+    val copyWdioConfDir = register<Sync>("copyWdioConfDir") {
         duplicatesStrategy = DuplicatesStrategy.WARN
         dependsOn(":kotlinNpmInstall")
-        dependsOn("cleanCopyWdioConfDir")
         val headless = wdioTest.useHeadless.map { it.toString() }
         inputs.property("headless", headless)
         from(projectDir.resolve("wdio.conf.d")) {

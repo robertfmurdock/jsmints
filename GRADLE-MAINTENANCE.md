@@ -40,6 +40,6 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 ## Follow-up investigations
 
 - [x] Pin the convention-plugin Java 21 toolchain. Rebuilding with Java 22 as the Gradle launcher generated 254 classes, all at Java 21 class-file version 65. Plugin validation then passed on Java 21.
-- [ ] Give generated WDIO fragments a single directory owner. Verify that disabling a reporter removes its generated fragment, fixture fragments survive, and direct browser runs still pass.
+- [x] Give generated WDIO fragments a single directory owner. Changed the copy task to `Sync` and removed its explicit clean-task dependency. Disabling the HTML reporter removed its fragment while preserving fixture and Allure fragments. Restoring it passed in Chrome and Firefox.
 - [ ] Exercise the full CI build with the configuration cache. Run twice with the same version input, check reuse and dashboard reports, and assess release separately.
 - [ ] Investigate publication-specific signing outputs. Use a disposable Maven repository to verify signed artifacts before changing Sonatype task ordering.
