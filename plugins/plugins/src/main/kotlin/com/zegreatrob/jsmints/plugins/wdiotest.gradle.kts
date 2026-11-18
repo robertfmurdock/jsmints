@@ -190,21 +190,13 @@ tasks {
             )
         }
         val nodeModules = rootProject.layout.buildDirectory.dir("js/node_modules")
-        environment(
-            mapOf(
-                "BASEURL" to wdioTest.baseUrl.get(),
-                "SPEC_FILE" to specFiles.get().first().asFile.absolutePath,
-                "WDIO_CONFIG" to wdioConfig.get().asFile.absolutePath,
-                "REPORT_DIR" to reportDir.get().asFile.absolutePath,
-                "TEST_RESULTS_DIR" to testResultsDir.get().asFile.absolutePath,
-
-                "LOGS_DIR" to logsDir.get().asFile.absolutePath,
-                "STRICT_SSL" to "false",
-                "NODE_PATH" to listOf(
-                    nodeModules.get().asFile.absolutePath,
-                ).joinToString(":"),
-            ),
-        )
+        defaultEnvironment("BASEURL", wdioTest.baseUrl)
+        defaultEnvironment("WDIO_CONFIG", wdioConfig.map { it.asFile.absolutePath })
+        defaultEnvironment("REPORT_DIR", reportDir.map { it.asFile.absolutePath })
+        defaultEnvironment("TEST_RESULTS_DIR", testResultsDir.map { it.asFile.absolutePath })
+        defaultEnvironment("LOGS_DIR", logsDir.map { it.asFile.absolutePath })
+        defaultEnvironment("NODE_PATH", nodeModules.map { it.asFile.absolutePath })
+        environment("STRICT_SSL", "false")
         doFirst {
             val specFile = specFiles.get().firstOrNull { it.asFile.isFile }
                 ?: error("WDIO spec output was not created: ${specFiles.get().joinToString()}")
