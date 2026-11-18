@@ -87,6 +87,8 @@ val wdioConfig = wdioNpmProjectDir.map { it.file("wdio.conf.mjs") }
 tasks {
     val runnerJs = wdioNpmProjectDir.map { it.dir("runner").file("jsmints-wdiorunner.js") }
     val installRunner = register<Copy>("installRunner") {
+        group = "verification"
+        description = "Installs the WDIO runner for the E2E test compilation."
         dependsOn(runnerConfiguration)
         into(runnerJs.map { it.asFile.parentFile })
         from(provider { zipTree(runnerConfiguration.singleFile) })
@@ -94,6 +96,8 @@ tasks {
     val wdioConfDirectory = wdioNpmProjectDir.map { it.file("wdio.conf.d") }
 
     val copyWdioConfDir = register<Sync>("copyWdioConfDir") {
+        group = "verification"
+        description = "Synchronizes WDIO configuration fragments for the E2E test compilation."
         duplicatesStrategy = DuplicatesStrategy.WARN
         dependsOn(":kotlinNpmInstall")
         val headless = wdioTest.useHeadless.map { it.toString() }
@@ -126,6 +130,8 @@ tasks {
         into(wdioConfDirectory)
     }
     val copyWdio = register<Copy>("copyWdio") {
+        group = "verification"
+        description = "Prepares the WDIO configuration for the E2E test compilation."
         dependsOn(":kotlinNpmInstall")
         dependsOn(copyWdioConfDir)
         val wdioConfFile = wdioTest.wdioConfigFile

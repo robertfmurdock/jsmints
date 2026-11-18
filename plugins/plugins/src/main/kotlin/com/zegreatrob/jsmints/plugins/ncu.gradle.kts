@@ -13,6 +13,8 @@ tasks {
     if (jspackage.exists) {
         kotlin.js().compilations.named("test").configure {
             register<NodeExec>("ncuUpgrade") {
+                group = "dependency management"
+                description = "Updates package.json dependencies using npm-check-updates."
                 dependsOn("jsPublicPackageJson", ":kotlinNpmInstall")
                 setup(this@configure)
                 val packageJson = File(project.projectDir, "package.json")
