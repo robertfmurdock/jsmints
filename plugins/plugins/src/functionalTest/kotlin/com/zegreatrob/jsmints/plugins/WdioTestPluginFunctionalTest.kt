@@ -122,6 +122,56 @@ class WdioTestPluginFunctionalTest {
         assertEquals(TaskOutcome.SUCCESS, result.task(":e2e:installRunner")?.outcome)
     }
 
+    @Test
+    fun `changing from an environment override to its default reruns WDIO`() {
+        val root = testProjectDir.root
+        testProjectDir.newFile("settings.gradle.kts").writeText("rootProject.name = \"wdio-environment-fixture\"")
+        val source = testProjectDir.newFile("PrintEnvironment.java")
+        source.writeText(
+            """
+            class PrintEnvironment {
+                public static void main(String[] args) {
+                    System.out.print(System.getenv("REPORT_DIR"));
+                }
+            }
+            """.trimIndent(),
+        )
+        testProjectDir.newFile("build.gradle.kts").writeText(
+            """
+            import com.zegreatrob.jsmints.plugins.WdioTest
+
+            plugins {
+                id("com.zegreatrob.jsmints.plugins.wdiotest") apply false
+            }
+
+            tasks.register<WdioTest>("e2eRun") {
+                val javaBin = file(System.getProperty("java.home")).resolve("bin")
+                nodeExecPath = listOf("java", "java.exe").map(javaBin::resolve).first { it.isFile }.absolutePath
+                argumentList.set(listOf(file("PrintEnvironment.java").absolutePath))
+                logOutputFile.set(layout.buildDirectory.file("environment.txt"))
+                defaultEnvironment("REPORT_DIR", providers.provider { "default" })
+                providers.gradleProperty("reportDirectory").orNull?.let {
+                    environment("REPORT_DIR", it)
+                }
+            }
+            """.trimIndent(),
+        )
+
+        val runner = GradleRunner.create().withProjectDir(root).withPluginClasspath()
+        val report = root.resolve("build/environment.txt")
+        val overridden = runner.withArguments("e2eRun", "--configuration-cache", "-PreportDirectory=override").build()
+        assertEquals(TaskOutcome.SUCCESS, overridden.task(":e2eRun")?.outcome)
+        assertEquals("override", report.readText())
+
+        val default = runner.withArguments("e2eRun", "--configuration-cache").build()
+        assertEquals(TaskOutcome.SUCCESS, default.task(":e2eRun")?.outcome)
+        assertEquals("default", report.readText())
+
+        val repeated = runner.build()
+        assertEquals(TaskOutcome.UP_TO_DATE, repeated.task(":e2eRun")?.outcome)
+        assertTrue(repeated.output.contains("Configuration cache entry reused."))
+    }
+
     private fun writeRunnerModule(repository: File, version: String) {
         val moduleDirectory = repository.resolve("com/zegreatrob/jsmints/wdiorunner/$version")
         moduleDirectory.mkdirs()
