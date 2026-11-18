@@ -27,3 +27,9 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 - Moved internal Node execution and npm upgrade to the typed properties. Kept the existing `setup` entry point and legacy setters for published callers, and consolidated Node/npm lookup there. The standalone npm upgrade probe needed Maven Central in its settings, matching the plugin's consumer-owned repository setup. It then ran against a disposable package without modifying it. Java 21 `assemble check`, all three TestKit cases, Chrome, and Firefox passed together.
 
 - The signing probe showed one Javadoc JAR shared by the BOM and its two Kotlin publications, and another shared by the wrapper processor's JVM and multiplatform publications. The BOM's disabled Kotlin publish task still schedules its signing prerequisites. Documented the existing edges and kept them. Each publication would need its own signing output path before simplifying the ordering. The Sonatype dry runs selected the same 48 tasks in the same order before and after the comments. Signing and publishing execution were outside this slice.
+
+## Consolidation slices
+
+- [ ] Extract a shared processor convention for publishing, the Java 21 toolchain, JVM target, and processor dependencies. Compare publication metadata and run both generated-code fixtures.
+- [ ] Define the Plugin Portal routing groups once in convention settings. Compare compile and runtime dependency resolution.
+- [ ] Give every Maven publication its own Javadoc archive and signature path. Remove cross-publication signing dependencies, verify local Maven artifacts and detached signatures, and inspect the Sonatype dry-run graph before and after.
