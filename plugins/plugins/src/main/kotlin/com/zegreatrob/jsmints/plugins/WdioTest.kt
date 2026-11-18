@@ -13,7 +13,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.options.Option
 import org.gradle.work.DisableCachingByDefault
 
-@DisableCachingByDefault(because = "Results depend on the browser and the external application under test")
+@DisableCachingByDefault(because = "Consumers configure caching through the task outputs API")
 abstract class WdioTest : NodeExec() {
 
     @Option(option = "tests", description = "Allows test matcher to be specified")

@@ -73,6 +73,9 @@ dashboardTestSummary {
 
 tasks {
     e2eRun {
+        outputs.cacheIf { true }
+        inputs.files("docker-compose.yml", "Caddyfile")
+        inputs.dir("src/jsE2eTest/resources")
         dependsOn(composeUp)
         finalizedBy(composeDown)
     }

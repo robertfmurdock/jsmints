@@ -39,6 +39,23 @@ This is a one-stop-shop for setting up WDIO for your kotlin project.
 
 Intended to be usable without configuration, but allow the full flexibility of the tool, it comes bundled with defaults that can be changed, including use of the ["nice html reporter"](https://github.com/rpii/wdio-html-reporter), screenshot capture, and chrome operation.
 
+#### Caching WDIO results
+
+Configure result caching using Gradle's task API and declare the application inputs
+that should invalidate the results. The repository fixture tracks its application
+resources, Caddy configuration, and Compose definition.
+
+```kotlin
+tasks.named("e2eRun") {
+    outputs.cacheIf { true }
+    inputs.dir("src/main/resources")
+    inputs.files("docker-compose.yml", "Caddyfile")
+}
+```
+
+Run with `--build-cache` or enable `org.gradle.caching=true` to reuse cached outputs.
+The WDIO plugin tracks its generated test files, runner, and WDIO configuration.
+
 #### Running the repository’s WDIO fixture
 
 The fixture uses host ports 80 and 443 by default. If another local service uses

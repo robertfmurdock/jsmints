@@ -170,6 +170,7 @@ tasks {
             installRunner,
         )
 
+        inputs.files(installRunner)
         inputs.files(developmentSync)
         inputs.files(wdioConfig)
         inputs.files(wdioConfDirectory)
