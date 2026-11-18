@@ -15,6 +15,7 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.VerificationException
 import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrCompilation
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
 import java.io.File
@@ -23,14 +24,26 @@ import java.io.FileOutputStream
 @DisableCachingByDefault
 abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
-    @Internal
-    lateinit var projectNodeModulesDir: File
+    @get:Internal
+    abstract val projectNodeModules: DirectoryProperty
+
+    @get:Internal
+    var projectNodeModulesDir: File
+        get() = projectNodeModules.get().asFile
+        set(value) {
+            projectNodeModules.fileValue(value)
+        }
 
     @Internal
     lateinit var nodeBinDir: File
 
-    @Internal
-    lateinit var nodeExecPath: String
+    @get:Internal
+    abstract val nodeExecutable: Property<String>
+
+    @get:Internal
+    var nodeExecPath: String
+        get() = nodeExecutable.get()
+        set(value) = nodeExecutable.set(value)
 
     @get:Internal
     abstract val npmWorkingDirectory: DirectoryProperty
@@ -57,9 +70,14 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
     @Optional
     var nodeCommand: String? = null
 
-    @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
-    var nodeCommandDirectories: List<File> = emptyList()
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val commandSearchDirectories: ListProperty<File>
+
+    @get:Internal
+    var nodeCommandDirectories: List<File>
+        get() = commandSearchDirectories.get()
+        set(value) = commandSearchDirectories.set(value)
 
     @get:Input
     @get:Optional
@@ -80,6 +98,7 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 
     init {
         argumentList.convention(emptyList())
+        commandSearchDirectories.convention(emptyList())
     }
 
     override fun exec() {
@@ -114,15 +133,19 @@ abstract class NodeExec : AbstractExecTask<NodeExec>(NodeExec::class.java) {
 }
 
 fun NodeExec.setup(compilation: KotlinJsIrCompilation) {
+    val nodeEnvironment = NodeJsPlugin.apply(project.rootProject)
+
+    // NodeJsEnvSpec.env is internal in Kotlin 2.4.21. Keep this legacy field populated.
     @Suppress("DEPRECATION")
-    val nodeEnvironment = NodeJsRootPlugin.apply(project.rootProject).requireConfigured()
-    nodeBinDir = nodeEnvironment.nodeBinDir
-    nodeExecPath = nodeEnvironment.executable
+    val legacyEnvironment = NodeJsRootPlugin.apply(project.rootProject).requireConfigured()
+    nodeBinDir = legacyEnvironment.nodeBinDir
+    nodeExecutable.set(nodeEnvironment.executable)
 
     val npmProject = compilation.npmProject
-    projectNodeModulesDir = npmProject.nodeModulesDir.get().asFile
-    nodeCommandDirectories = listOf(
-        npmProject.dir.get().asFile.resolve("node_modules/.bin"),
-        projectNodeModulesDir.resolve(".bin"),
+    projectNodeModules.set(npmProject.nodeModulesDir)
+    commandSearchDirectories.set(
+        npmProject.dir.zip(npmProject.nodeModulesDir) { directory, modules ->
+            listOf(directory.asFile.resolve("node_modules/.bin"), modules.asFile.resolve(".bin"))
+        },
     )
 }
