@@ -15,6 +15,7 @@ plugins {
 }
 
 dependencies {
+    // Keep the runtime stdlib aligned with the Kotlin compiler used for this plugin.
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
     implementation(libs.com.fasterxml.jackson.core.jackson.databind)
