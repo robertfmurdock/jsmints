@@ -48,6 +48,6 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 ## Additional build cleanup
 
 - [x] Pin both KSP processor toolchains to Java 21, matching the existing class target. Launching Gradle with Java 22 still produced Java 21 class files for both processors. Both consumer fixtures passed.
-- [ ] Filter dependency repositories and remove the duplicate Plugin Portal declaration. Compare resolved dependencies before and after.
+- [x] Filter dependency repositories and remove the duplicate Plugin Portal declaration. Google is scoped to Android coordinates. The convention build uses the Plugin Portal for its three plugin implementation groups and Maven Central for other dependencies. Compile and runtime dependency coordinates matched the baseline in both builds.
 - [ ] Remove redundant Kotlin standard-library declarations. Confirm resolved dependency versions stay identical.
 - [ ] Describe and group NCU and WDIO preparation tasks. Verify their task help and discovery.

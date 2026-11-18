@@ -15,8 +15,18 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        google()
-        mavenCentral()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("androidx\\..*")
+            }
+        }
+        mavenCentral {
+            content {
+                excludeGroupByRegex("com\\.android.*")
+                excludeGroupByRegex("androidx\\..*")
+            }
+        }
     }
     versionCatalogs {
         create("rootLibs") {
