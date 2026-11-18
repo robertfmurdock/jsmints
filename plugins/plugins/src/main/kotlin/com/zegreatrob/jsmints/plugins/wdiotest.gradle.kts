@@ -173,7 +173,6 @@ tasks {
         val testResultsDir = buildDir.dir("test-results/e2e")
         outputs.dir(reportDir)
         outputs.dir(testResultsDir)
-        outputs.cacheIf { true }
 
         val logsDir = buildDir.dir("reports/logs/e2e/")
         val specFiles = e2eCompilation.npmProject.dir.map { npmProjectDirectory ->
