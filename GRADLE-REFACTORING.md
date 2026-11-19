@@ -55,6 +55,8 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 ## Lookup and filtering cleanup
 
 - [x] Give npm constraint version lookup one implementation and report the requested dependency and package file when it is missing. Verify all three dependency-creation entry points.
-- [ ] Exclude generated build directories using directory boundaries. Verify that a checkout or handwritten filename containing "generated" stays linted and that generated files stay excluded.
+- [x] Exclude generated build directories using directory boundaries. Verify that a checkout or handwritten filename containing "generated" stays linted and that generated files stay excluded.
 
 - All three npm dependency entry points now use `JsConstraintExtension.versionFor`. A disposable consumer verified each selected version and all three missing-package error paths. Every error named the dependency and configured package file. The final Java 21 aggregate build, four TestKit cases, Chrome, and Firefox passed with configuration caching enabled.
+
+- Shared lint/format filtering now matches the configured build directory’s `generated` and `generated-sources` subdirectories by path boundaries. Before the fix, a checkout named `jsmints-generated-checkout` skipped a malformed handwritten file as NO-SOURCE. Afterward lint detected the violation, format corrected only the handwritten file, and both deliberately invalid generated files stayed excluded and unchanged. The repeated fixture run reused the configuration cache. Keeping the directory providers local to the predicate avoided capturing the Gradle script in cached task state.
