@@ -100,7 +100,7 @@ class AnnotationTest {
     }
 
     @Test
-    fun canSkipKeys() = asyncSetup(object {
+    fun rendersSiblingComponentsWithoutKeys() = setup(object {
         val normal = FC<Props> {
             ZanyThing(
                 a = "Hi1",
@@ -164,7 +164,7 @@ class AnnotationTest {
     }
 
     @Test
-    fun canUseComponentWithOptionalFunction() = setup(object {
+    fun rendersWhenOptionalFunctionIsOmitted() = setup(object {
         val normal = FC<Props> {
             OptionalFuncExample()
         }
@@ -176,7 +176,7 @@ class AnnotationTest {
     }
 
     @Test
-    fun canUseComponentWithChildrenSkippingTheChildren() = setup(object {
+    fun rendersWrapperWithoutChildren() = setup(object {
         val normal = FC<Props> {
             WrapperThing(a = "Hi")
         }
@@ -228,7 +228,7 @@ class AnnotationTest {
     }
 
     @Test
-    fun canUseChildrenParameterAsChildrenBuilder() = asyncSetup(object {
+    fun rendersChildrenBuiltFromBothParameterValues() = setup(object {
         val expectedFirstValue = "Here is a value"
         val expectedSecondValue = 7
         val normal = FC<Props> {

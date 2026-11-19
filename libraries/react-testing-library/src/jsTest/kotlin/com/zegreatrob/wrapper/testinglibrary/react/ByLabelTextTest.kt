@@ -7,13 +7,13 @@ import kotlin.test.Test
 class ByLabelTextTest : ByLabelText by TestingLibraryReact.screen {
 
     @Test
-    fun givenElementExistsCanGetByLabelText() = givenElementByLabelTextWorks(::getByLabelText)
+    fun givenOneMatchGetByLabelTextReturnsMatch() = givenElementByLabelTextWorks(::getByLabelText)
 
     @Test
-    fun givenElementExistsCanFindByLabelText() = givenElementByLabelTextWorks(::findByLabelText)
+    fun givenOneMatchFindByLabelTextReturnsMatch() = givenElementByLabelTextWorks(::findByLabelText)
 
     @Test
-    fun givenElementExistsCanQueryByLabelText() = givenElementByLabelTextWorks(::queryByLabelText)
+    fun givenOneMatchQueryByLabelTextReturnsMatch() = givenElementByLabelTextWorks(::queryByLabelText)
 
     private fun givenElementByLabelTextWorks(query: suspend (text: String) -> HTMLElement?) = testingLibrarySetup {
     } exercise {
@@ -26,10 +26,10 @@ class ByLabelTextTest : ByLabelText by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenNoElementExistsGetByLabelText() = givenNoElementByLabelTextWillFailAsExpected(::getByLabelText)
+    fun givenNoMatchGetByLabelTextThrows() = givenNoElementByLabelTextWillFailAsExpected(::getByLabelText)
 
     @Test
-    fun givenNoElementExistsFindByLabelText() = givenNoElementByLabelTextWillFailAsExpected(::findByLabelText)
+    fun givenNoMatchFindByLabelTextThrows() = givenNoElementByLabelTextWillFailAsExpected(::findByLabelText)
 
     private fun givenNoElementByLabelTextWillFailAsExpected(
         query: suspend (text: String) -> HTMLElement?,
@@ -48,7 +48,7 @@ class ByLabelTextTest : ByLabelText by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenNoElementExistsQueryByLabelText() = testingLibrarySetup {
+    fun givenNoMatchQueryByLabelTextReturnsNull() = testingLibrarySetup {
     } exercise {
         queryByLabelText("Not Awesome")
     } verify { element ->
@@ -56,13 +56,13 @@ class ByLabelTextTest : ByLabelText by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnGetByLabelText() = givenMultipleElementsByLabelTextErrors(::getByLabelText)
+    fun givenMultipleMatchesGetByLabelTextThrows() = givenMultipleElementsByLabelTextErrors(::getByLabelText)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnFindByLabelText() = givenMultipleElementsByLabelTextErrors(::findByLabelText)
+    fun givenMultipleMatchesFindByLabelTextThrows() = givenMultipleElementsByLabelTextErrors(::findByLabelText)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnQueryByLabelText() = givenMultipleElementsByLabelTextErrors(::queryByLabelText)
+    fun givenMultipleMatchesQueryByLabelTextThrows() = givenMultipleElementsByLabelTextErrors(::queryByLabelText)
 
     private fun givenMultipleElementsByLabelTextErrors(query: suspend (text: String) -> HTMLElement?) = testingLibrarySetup {
     } exercise {
@@ -77,13 +77,13 @@ class ByLabelTextTest : ByLabelText by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnGetAllByLabelText() = givenMultipleElementsByLabelTextSucceeds(::getAllByLabelText)
+    fun givenMultipleMatchesGetAllByLabelTextReturnsAllMatches() = givenMultipleElementsByLabelTextSucceeds(::getAllByLabelText)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnFindAllByLabelText() = givenMultipleElementsByLabelTextSucceeds(::findAllByLabelText)
+    fun givenMultipleMatchesFindAllByLabelTextReturnsAllMatches() = givenMultipleElementsByLabelTextSucceeds(::findAllByLabelText)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnQueryAllByLabelText() = givenMultipleElementsByLabelTextSucceeds(::queryAllByLabelText)
+    fun givenMultipleMatchesQueryAllByLabelTextReturnsAllMatches() = givenMultipleElementsByLabelTextSucceeds(::queryAllByLabelText)
 
     private fun givenMultipleElementsByLabelTextSucceeds(query: suspend (text: String) -> Array<HTMLElement>) = testingLibrarySetup {
     } exercise {
@@ -95,13 +95,13 @@ class ByLabelTextTest : ByLabelText by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnGetAllByLabelText() = givenSingleElementsByLabelTextSucceeds(::getAllByLabelText)
+    fun givenOneMatchGetAllByLabelTextReturnsOnlyMatch() = givenSingleElementsByLabelTextSucceeds(::getAllByLabelText)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnFindAllByLabelText() = givenSingleElementsByLabelTextSucceeds(::findAllByLabelText)
+    fun givenOneMatchFindAllByLabelTextReturnsOnlyMatch() = givenSingleElementsByLabelTextSucceeds(::findAllByLabelText)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnQueryAllByLabelText() = givenSingleElementsByLabelTextSucceeds(::queryAllByLabelText)
+    fun givenOneMatchQueryAllByLabelTextReturnsOnlyMatch() = givenSingleElementsByLabelTextSucceeds(::queryAllByLabelText)
 
     private fun givenSingleElementsByLabelTextSucceeds(query: suspend (text: String) -> Array<HTMLElement>) = testingLibrarySetup {
     } exercise {

@@ -8,13 +8,13 @@ import kotlin.test.Test
 class ByRoleTest : ByRole by TestingLibraryBrowser {
 
     @Test
-    fun givenElementExistsCanGetByRole() = givenElementByRoleWorks(::getByRole)
+    fun givenOneMatchGetByRoleReturnsMatch() = givenElementByRoleWorks(::getByRole)
 
     @Test
-    fun givenElementExistsCanFindByRole() = givenElementByRoleWorks(::findByRole)
+    fun givenOneMatchFindByRoleReturnsMatch() = givenElementByRoleWorks(::findByRole)
 
     @Test
-    fun givenElementExistsCanQueryByRole() = givenElementByRoleWorks(::queryByRole)
+    fun givenOneMatchQueryByRoleReturnsMatch() = givenElementByRoleWorks(::queryByRole)
 
     private fun givenElementByRoleWorks(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
@@ -27,10 +27,10 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenNoElementExistsGetByRole() = givenNoElementByRoleWillFailAsExpected(::getByRole)
+    fun givenNoMatchGetByRoleThrows() = givenNoElementByRoleWillFailAsExpected(::getByRole)
 
     @Test
-    fun givenNoElementExistsFindByRole() = givenNoElementByRoleWillFailAsExpected(::findByRole)
+    fun givenNoMatchFindByRoleThrows() = givenNoElementByRoleWillFailAsExpected(::findByRole)
 
     private fun givenNoElementByRoleWillFailAsExpected(
         query: suspend (role: String, options: RoleOptions) -> WebdriverElement?,
@@ -40,10 +40,17 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     } verify { result ->
         result.isFailure
             .assertIsEqualTo(true)
+        val message = result.exceptionOrNull()?.message.orEmpty()
+        message.startsWith("Unable to find")
+            .assertIsEqualTo(true, message)
+        message.contains("button")
+            .assertIsEqualTo(true, message)
+        message.contains("Not Awesome")
+            .assertIsEqualTo(true, message)
     }
 
     @Test
-    fun givenNoElementExistsQueryByRole() = testingLibrarySetup {
+    fun givenNoMatchQueryByRoleReportsNoElement() = testingLibrarySetup {
     } exercise {
         queryByRole("button", RoleOptions(name = "Not Awesome"))
     } verify { element ->
@@ -52,13 +59,13 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnGetByRole() = givenMultipleElementsByRoleErrors(::getByRole)
+    fun givenMultipleMatchesGetByRoleThrows() = givenMultipleElementsByRoleErrors(::getByRole)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnFindByRole() = givenMultipleElementsByRoleErrors(::findByRole)
+    fun givenMultipleMatchesFindByRoleThrows() = givenMultipleElementsByRoleErrors(::findByRole)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnQueryByRole() = givenMultipleElementsByRoleErrors(::queryByRole)
+    fun givenMultipleMatchesQueryByRoleThrows() = givenMultipleElementsByRoleErrors(::queryByRole)
 
     private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
@@ -73,13 +80,13 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnGetAllByRole() = givenMultipleElementsByRoleSucceeds(::getAllByRole)
+    fun givenMultipleMatchesGetAllByRoleReturnsAllMatches() = givenMultipleElementsByRoleSucceeds(::getAllByRole)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnFindAllByRole() = givenMultipleElementsByRoleSucceeds(::findAllByRole)
+    fun givenMultipleMatchesFindAllByRoleReturnsAllMatches() = givenMultipleElementsByRoleSucceeds(::findAllByRole)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnQueryAllByRole() = givenMultipleElementsByRoleSucceeds(::queryAllByRole)
+    fun givenMultipleMatchesQueryAllByRoleReturnsAllMatches() = givenMultipleElementsByRoleSucceeds(::queryAllByRole)
 
     private fun givenMultipleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) = testingLibrarySetup {
     } exercise {
@@ -91,13 +98,13 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnGetAllByRole() = givenSingleElementsByRoleSucceeds(::getAllByRole)
+    fun givenOneMatchGetAllByRoleReturnsOnlyMatch() = givenSingleElementsByRoleSucceeds(::getAllByRole)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnFindAllByRole() = givenSingleElementsByRoleSucceeds(::findAllByRole)
+    fun givenOneMatchFindAllByRoleReturnsOnlyMatch() = givenSingleElementsByRoleSucceeds(::findAllByRole)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnQueryAllByRole() = givenSingleElementsByRoleSucceeds(::queryAllByRole)
+    fun givenOneMatchQueryAllByRoleReturnsOnlyMatch() = givenSingleElementsByRoleSucceeds(::queryAllByRole)
 
     private fun givenSingleElementsByRoleSucceeds(query: suspend (role: String, options: RoleOptions) -> WebdriverElementArray) = testingLibrarySetup {
     } exercise {

@@ -11,13 +11,13 @@ class WithinTest : Within by TestingLibraryBrowser {
     private suspend fun getCoolSection() = TestingLibraryBrowser.getByText("Cool button section").parentElement()
 
     @Test
-    fun givenElementExistsCanGetByText() = givenElementByTextWorks { within(getAwesomeSection()).getByText(it) }
+    fun givenOneMatchGetByTextReturnsMatch() = givenElementByTextWorks { within(getAwesomeSection()).getByText(it) }
 
     @Test
-    fun givenElementExistsCanFindByText() = givenElementByTextWorks { within(getAwesomeSection()).findByText(it) }
+    fun givenOneMatchFindByTextReturnsMatch() = givenElementByTextWorks { within(getAwesomeSection()).findByText(it) }
 
     @Test
-    fun givenElementExistsCanQueryByText() = givenElementByTextWorks { within(getAwesomeSection()).queryByText(it) }
+    fun givenOneMatchQueryByTextReturnsMatch() = givenElementByTextWorks { within(getAwesomeSection()).queryByText(it) }
 
     private fun givenElementByTextWorks(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
@@ -30,10 +30,10 @@ class WithinTest : Within by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenNoElementExistsGetByText() = givenNoElementByTextWillFailAsExpected { within(getCoolSection()).getByText(it) }
+    fun givenNoMatchGetByTextThrows() = givenNoElementByTextWillFailAsExpected { within(getCoolSection()).getByText(it) }
 
     @Test
-    fun givenNoElementExistsFindByText() = givenNoElementByTextWillFailAsExpected { within(getCoolSection()).findByText(it) }
+    fun givenNoMatchFindByTextThrows() = givenNoElementByTextWillFailAsExpected { within(getCoolSection()).findByText(it) }
 
     private fun givenNoElementByTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?,
@@ -55,7 +55,7 @@ class WithinTest : Within by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenNoElementExistsQueryByText() = testingLibrarySetup {
+    fun givenNoMatchQueryByTextReportsNoElement() = testingLibrarySetup {
     } exercise {
         within(getCoolSection()).queryByText("Awesome")
     } verify { element ->
@@ -64,17 +64,17 @@ class WithinTest : Within by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnGetByText() = givenMultipleElementsByTextErrors {
+    fun givenMultipleMatchesGetByTextThrows() = givenMultipleElementsByTextErrors {
         within(getCoolSection()).getByText(it)
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnFindByText() = givenMultipleElementsByTextErrors {
+    fun givenMultipleMatchesFindByTextThrows() = givenMultipleElementsByTextErrors {
         within(getCoolSection()).findByText(it)
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnQueryByText() = givenMultipleElementsByTextErrors {
+    fun givenMultipleMatchesQueryByTextThrows() = givenMultipleElementsByTextErrors {
         within(getCoolSection()).queryByText(it)
     }
 
@@ -91,17 +91,17 @@ class WithinTest : Within by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnGetAllByText() = givenMultipleElementsByTextSucceeds {
+    fun givenMultipleMatchesGetAllByTextReturnsAllMatches() = givenMultipleElementsByTextSucceeds {
         within(getCoolSection()).getAllByText(it)
     }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnFindAllByText() = givenMultipleElementsByTextSucceeds {
+    fun givenMultipleMatchesFindAllByTextReturnsAllMatches() = givenMultipleElementsByTextSucceeds {
         within(getCoolSection()).findAllByText(it)
     }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnQueryAllByText() = givenMultipleElementsByTextSucceeds {
+    fun givenMultipleMatchesQueryAllByTextReturnsAllMatches() = givenMultipleElementsByTextSucceeds {
         within(getCoolSection()).queryAllByText(it)
     }
 
@@ -115,17 +115,17 @@ class WithinTest : Within by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnGetAllByText() = givenSingleElementsByTextSucceeds {
+    fun givenOneMatchGetAllByTextReturnsOnlyMatch() = givenSingleElementsByTextSucceeds {
         within(getAwesomeSection()).getAllByText(it)
     }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnFindAllByText() = givenSingleElementsByTextSucceeds {
+    fun givenOneMatchFindAllByTextReturnsOnlyMatch() = givenSingleElementsByTextSucceeds {
         within(getAwesomeSection()).findAllByText(it)
     }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnQueryAllByText() = givenSingleElementsByTextSucceeds {
+    fun givenOneMatchQueryAllByTextReturnsOnlyMatch() = givenSingleElementsByTextSucceeds {
         within(getAwesomeSection()).queryAllByText(it)
     }
 

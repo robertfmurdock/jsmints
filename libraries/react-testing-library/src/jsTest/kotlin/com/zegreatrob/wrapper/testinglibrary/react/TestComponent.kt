@@ -6,6 +6,7 @@ import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.h2
+import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.label
 import react.dom.html.ReactHTML.span
 
@@ -13,6 +14,15 @@ val TestComponent = FC<Props> {
     div {
         div {
             h1 { +"Testing Library Test" }
+            img { alt = "A friendly image" }
+            img {
+                asDynamic()["data-test-info"] = "first-image"
+                alt = "Shared description"
+            }
+            img {
+                asDynamic()["data-test-info"] = "second-image"
+                alt = "Shared description"
+            }
             span {
                 div {
                     h2 { +"Awesome button section" }

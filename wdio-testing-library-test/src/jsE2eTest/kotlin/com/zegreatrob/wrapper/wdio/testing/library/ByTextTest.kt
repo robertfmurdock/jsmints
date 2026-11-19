@@ -8,13 +8,13 @@ import kotlin.test.Test
 class ByTextTest : ByText by TestingLibraryBrowser {
 
     @Test
-    fun givenElementExistsCanGetByText() = givenElementByTextWorks(::getByText)
+    fun givenOneMatchGetByTextReturnsMatch() = givenElementByTextWorks(::getByText)
 
     @Test
-    fun givenElementExistsCanFindByText() = givenElementByTextWorks(::findByText)
+    fun givenOneMatchFindByTextReturnsMatch() = givenElementByTextWorks(::findByText)
 
     @Test
-    fun givenElementExistsCanQueryByText() = givenElementByTextWorks(::queryByText)
+    fun givenOneMatchQueryByTextReturnsMatch() = givenElementByTextWorks(::queryByText)
 
     private fun givenElementByTextWorks(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
@@ -27,10 +27,10 @@ class ByTextTest : ByText by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenNoElementExistsGetByText() = givenNoElementByTextWillFailAsExpected(::getByText)
+    fun givenNoMatchGetByTextThrows() = givenNoElementByTextWillFailAsExpected(::getByText)
 
     @Test
-    fun givenNoElementExistsFindByText() = givenNoElementByTextWillFailAsExpected(::findByText)
+    fun givenNoMatchFindByTextThrows() = givenNoElementByTextWillFailAsExpected(::findByText)
 
     private fun givenNoElementByTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?,
@@ -52,7 +52,7 @@ class ByTextTest : ByText by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenNoElementExistsQueryByText() = testingLibrarySetup {
+    fun givenNoMatchQueryByTextReportsNoElement() = testingLibrarySetup {
     } exercise {
         queryByText("Not Awesome")
     } verify { element ->
@@ -61,13 +61,13 @@ class ByTextTest : ByText by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnGetByText() = givenMultipleElementsByTextErrors(::getByText)
+    fun givenMultipleMatchesGetByTextThrows() = givenMultipleElementsByTextErrors(::getByText)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnFindByText() = givenMultipleElementsByTextErrors(::findByText)
+    fun givenMultipleMatchesFindByTextThrows() = givenMultipleElementsByTextErrors(::findByText)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnQueryByText() = givenMultipleElementsByTextErrors(::queryByText)
+    fun givenMultipleMatchesQueryByTextThrows() = givenMultipleElementsByTextErrors(::queryByText)
 
     private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
     } exercise {
@@ -82,13 +82,13 @@ class ByTextTest : ByText by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnGetAllByText() = givenMultipleElementsByTextSucceeds(::getAllByText)
+    fun givenMultipleMatchesGetAllByTextReturnsAllMatches() = givenMultipleElementsByTextSucceeds(::getAllByText)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnFindAllByText() = givenMultipleElementsByTextSucceeds(::findAllByText)
+    fun givenMultipleMatchesFindAllByTextReturnsAllMatches() = givenMultipleElementsByTextSucceeds(::findAllByText)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnQueryAllByText() = givenMultipleElementsByTextSucceeds(::queryAllByText)
+    fun givenMultipleMatchesQueryAllByTextReturnsAllMatches() = givenMultipleElementsByTextSucceeds(::queryAllByText)
 
     private fun givenMultipleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) = testingLibrarySetup {
     } exercise {
@@ -100,13 +100,13 @@ class ByTextTest : ByText by TestingLibraryBrowser {
     }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnGetAllByText() = givenSingleElementsByTextSucceeds(::getAllByText)
+    fun givenOneMatchGetAllByTextReturnsOnlyMatch() = givenSingleElementsByTextSucceeds(::getAllByText)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnFindAllByText() = givenSingleElementsByTextSucceeds(::findAllByText)
+    fun givenOneMatchFindAllByTextReturnsOnlyMatch() = givenSingleElementsByTextSucceeds(::findAllByText)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnQueryAllByText() = givenSingleElementsByTextSucceeds(::queryAllByText)
+    fun givenOneMatchQueryAllByTextReturnsOnlyMatch() = givenSingleElementsByTextSucceeds(::queryAllByText)
 
     private fun givenSingleElementsByTextSucceeds(query: suspend (text: String) -> WebdriverElementArray) = testingLibrarySetup {
     } exercise {

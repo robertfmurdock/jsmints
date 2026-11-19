@@ -7,13 +7,13 @@ import kotlin.test.Test
 class ByTestIdTest : ByTestId by TestingLibraryReact.screen {
 
     @Test
-    fun givenElementExistsCanGetByTestId() = givenElementByTestIdWorks(::getByTestId)
+    fun givenOneMatchGetByTestIdReturnsMatch() = givenElementByTestIdWorks(::getByTestId)
 
     @Test
-    fun givenElementExistsCanFindByTestId() = givenElementByTestIdWorks(::findByTestId)
+    fun givenOneMatchFindByTestIdReturnsMatch() = givenElementByTestIdWorks(::findByTestId)
 
     @Test
-    fun givenElementExistsCanQueryByTestId() = givenElementByTestIdWorks(::queryByTestId)
+    fun givenOneMatchQueryByTestIdReturnsMatch() = givenElementByTestIdWorks(::queryByTestId)
 
     private fun givenElementByTestIdWorks(query: suspend (testId: String) -> HTMLElement?) = testingLibrarySetup {
     } exercise {
@@ -26,10 +26,10 @@ class ByTestIdTest : ByTestId by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenNoElementExistsGetByTestId() = givenNoElementByTestIdWillFailAsExpected(::getByTestId)
+    fun givenNoMatchGetByTestIdThrows() = givenNoElementByTestIdWillFailAsExpected(::getByTestId)
 
     @Test
-    fun givenNoElementExistsFindByTestId() = givenNoElementByTestIdWillFailAsExpected(::findByTestId)
+    fun givenNoMatchFindByTestIdThrows() = givenNoElementByTestIdWillFailAsExpected(::findByTestId)
 
     private fun givenNoElementByTestIdWillFailAsExpected(
         query: suspend (testId: String) -> HTMLElement?,
@@ -48,7 +48,7 @@ class ByTestIdTest : ByTestId by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenNoElementExistsQueryByTestId() = testingLibrarySetup {
+    fun givenNoMatchQueryByTestIdReturnsNull() = testingLibrarySetup {
     } exercise {
         queryByTestId("NotAwesome-testId")
     } verify { element ->
@@ -56,13 +56,13 @@ class ByTestIdTest : ByTestId by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenMultipleElementExistsErrorsOnGetByTestId() = givenMultipleElementsByTestIdErrors(::getByTestId)
+    fun givenMultipleMatchesGetByTestIdThrows() = givenMultipleElementsByTestIdErrors(::getByTestId)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnFindByTestId() = givenMultipleElementsByTestIdErrors(::findByTestId)
+    fun givenMultipleMatchesFindByTestIdThrows() = givenMultipleElementsByTestIdErrors(::findByTestId)
 
     @Test
-    fun givenMultipleElementExistsErrorsOnQueryByTestId() = givenMultipleElementsByTestIdErrors(::queryByTestId)
+    fun givenMultipleMatchesQueryByTestIdThrows() = givenMultipleElementsByTestIdErrors(::queryByTestId)
 
     private fun givenMultipleElementsByTestIdErrors(query: suspend (testId: String) -> HTMLElement?) = testingLibrarySetup {
     } exercise {
@@ -77,13 +77,13 @@ class ByTestIdTest : ByTestId by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnGetAllByTestId() = givenMultipleElementsByTestIdSucceeds(::getAllByTestId)
+    fun givenMultipleMatchesGetAllByTestIdReturnsAllMatches() = givenMultipleElementsByTestIdSucceeds(::getAllByTestId)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnFindAllByTestId() = givenMultipleElementsByTestIdSucceeds(::findAllByTestId)
+    fun givenMultipleMatchesFindAllByTestIdReturnsAllMatches() = givenMultipleElementsByTestIdSucceeds(::findAllByTestId)
 
     @Test
-    fun givenMultipleElementExistsSucceedsOnQueryAllByTestId() = givenMultipleElementsByTestIdSucceeds(::queryAllByTestId)
+    fun givenMultipleMatchesQueryAllByTestIdReturnsAllMatches() = givenMultipleElementsByTestIdSucceeds(::queryAllByTestId)
 
     private fun givenMultipleElementsByTestIdSucceeds(query: suspend (testId: String) -> Array<HTMLElement>) = testingLibrarySetup {
     } exercise {
@@ -95,13 +95,13 @@ class ByTestIdTest : ByTestId by TestingLibraryReact.screen {
     }
 
     @Test
-    fun givenSingleElementExistsSucceedsOnGetAllByTestId() = givenSingleElementsByTestIdSucceeds(::getAllByTestId)
+    fun givenOneMatchGetAllByTestIdReturnsOnlyMatch() = givenSingleElementsByTestIdSucceeds(::getAllByTestId)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnFindAllByTestId() = givenSingleElementsByTestIdSucceeds(::findAllByTestId)
+    fun givenOneMatchFindAllByTestIdReturnsOnlyMatch() = givenSingleElementsByTestIdSucceeds(::findAllByTestId)
 
     @Test
-    fun givenSingleElementExistsSucceedsOnQueryAllByTestId() = givenSingleElementsByTestIdSucceeds(::queryAllByTestId)
+    fun givenOneMatchQueryAllByTestIdReturnsOnlyMatch() = givenSingleElementsByTestIdSucceeds(::queryAllByTestId)
 
     private fun givenSingleElementsByTestIdSucceeds(query: suspend (testId: String) -> Array<HTMLElement>) = testingLibrarySetup {
     } exercise {

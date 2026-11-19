@@ -24,7 +24,7 @@ import kotlin.test.Test
 class DataLoaderTest {
 
     @Test
-    fun willStartDataPullAndTransitionThroughNormalStatesCorrectly() = asyncSetup(object : ScopeMint() {
+    fun successfulLoadRendersEmptyThenPendingThenResolved() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
     }) exercise {
         render(
@@ -48,7 +48,7 @@ class DataLoaderTest {
     }
 
     @Test
-    fun whenDataPullIsCancelledErrorDataIsPushedToChild() = asyncSetup(object : ScopeMint() {
+    fun whenLoadThrowsChildReceivesResolvedFallback() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<String>>()
         val getDataAsync: suspend (DataLoaderTools) -> Nothing = {
             withContext(exerciseScope.coroutineContext) { throw Exception("NOPE") }
@@ -75,7 +75,7 @@ class DataLoaderTest {
     }
 
     @Test
-    fun usingTheReloadFunctionWillRunStatesAgain() = asyncSetup(object : ScopeMint() {
+    fun reloadRepeatsEmptyPendingAndResolvedStates() = asyncSetup(object : ScopeMint() {
         val allRenderedStates = mutableListOf<DataLoadState<DataLoaderTools?>>()
         val actor = UserEvent.setup()
     }) {

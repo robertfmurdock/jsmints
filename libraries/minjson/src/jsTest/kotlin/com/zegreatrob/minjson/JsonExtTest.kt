@@ -9,7 +9,7 @@ import kotlin.test.Test
 class JsonExtTest {
 
     @Test
-    fun canUseJsonPathsOnJsonForTopLevelNodes() = setup(object {
+    fun topLevelPathReturnsMatchingValue() = setup(object {
         val expectedValue = "${Random.nextInt()}"
         val key = "key${Random.nextInt(10)}"
         val json = json(key to expectedValue)
@@ -20,7 +20,7 @@ class JsonExtTest {
     }
 
     @Test
-    fun canUseJsonPathsOnJsonForNextedNodes() = setup(object {
+    fun nestedPathReturnsMatchingValue() = setup(object {
         val expectedValue = "${Random.nextInt()}"
         val key1 = "key${Random.nextInt(10)}"
         val key2 = "key${Random.nextInt(10)}"
@@ -33,7 +33,7 @@ class JsonExtTest {
     }
 
     @Test
-    fun canUseJsonPathsOnJsonForArrayNodes() = setup(object {
+    fun arrayPathReturnsMatchingValue() = setup(object {
         val expectedValue = "${Random.nextInt()}"
         val key1 = "key${Random.nextInt(10)}"
         val json = json(key1 to arrayOf(null, 7, expectedValue, 99))
@@ -44,7 +44,7 @@ class JsonExtTest {
     }
 
     @Test
-    fun whenValueIsNotFoundWillReturnNull() = setup(object {
+    fun missingTopLevelValueReturnsNull() = setup(object {
         val json = json("key" to "expectedValue")
     }) exercise {
         json.at<String>("/totallyWrongPath")
@@ -53,7 +53,7 @@ class JsonExtTest {
     }
 
     @Test
-    fun whenValueIsNotFoundNestedWillReturnNull() = setup(object {
+    fun missingNestedValueReturnsNull() = setup(object {
         val json = json("key" to json("key2" to json("nope" to "expectedValue")))
     }) exercise {
         json.at<String>("/key/totallyWrongPath/nope")
