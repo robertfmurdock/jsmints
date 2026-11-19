@@ -51,3 +51,10 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 - Package metadata needed by Kotlin npm dependency declarations remains available during configuration. File contents are tracked, parsed constraint data is reused, and template tokens are resolved during copying. A TestKit regression verifies package-file invalidation after configuration-cache reuse.
 - Generated-source lint conventions remove explicit KSP prerequisites, but KMP/KSP still supplies inferred source dependencies. Those relationships remain intact.
 - Retained direct React ownership for DataLoader's public types and narrowed direct React DOM usage to its test scope. Resolved dependency graphs matched; publication metadata lost only the redundant direct runtime React DOM edge.
+
+## Lookup and filtering cleanup
+
+- [x] Give npm constraint version lookup one implementation and report the requested dependency and package file when it is missing. Verify all three dependency-creation entry points.
+- [ ] Exclude generated build directories using directory boundaries. Verify that a checkout or handwritten filename containing "generated" stays linted and that generated files stay excluded.
+
+- All three npm dependency entry points now use `JsConstraintExtension.versionFor`. A disposable consumer verified each selected version and all three missing-package error paths. Every error named the dependency and configured package file. The final Java 21 aggregate build, four TestKit cases, Chrome, and Firefox passed with configuration caching enabled.
