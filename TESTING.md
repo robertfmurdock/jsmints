@@ -10,6 +10,15 @@ the smallest change and refactor with the test passing. Keep the test and
 behavior change together. Do not add tests for documentation or purely
 mechanical edits.
 
+## Keep tests in normal checks
+
+Include every committed test in the repository's normal `check` lifecycle.
+Provision dependencies through the build so local and CI checks exercise the
+same tests. Keep the suite fast by testing each contract at the narrowest
+boundary that can observe it, reusing fixture setup and existing scenarios where
+practical, and sharing test logic across local and CI runs. Give each added test
+a distinct regression to catch.
+
 ## Choose the behavior boundary
 
 - Test Kotlin rules in the owning library's existing `commonTest` or `jsTest`

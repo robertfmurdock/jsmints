@@ -19,6 +19,7 @@ include("minreact")
 include("minreact-plugin-test")
 include("wrapper-plugin-test")
 include("minreact-processor")
+include("playwright")
 include("wrapper-processor")
 include("react-data-loader")
 include("react-testing-library")
@@ -30,11 +31,9 @@ include("wdiorunner")
 includeBuild("../plugins")
 includeBuild("../convention-plugins")
 
-val isCiServer = System.getenv().containsKey("CI")
-
 develocity {
     buildScan {
-        publishing.onlyIf { isCiServer }
+        publishing.onlyIf { System.getenv().containsKey("CI") }
         termsOfUseUrl = "https://gradle.com/help/legal-terms-of-use"
         termsOfUseAgree = "yes"
         tag("CI")

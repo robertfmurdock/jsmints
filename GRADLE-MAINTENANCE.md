@@ -27,11 +27,13 @@ The Gradle audit found deferred configuration, eager task configuration, and wra
 
 - Keep commits focused on one independently verifiable change. Update this checklist in the same change as the fix. Check off an item after verification and record the check that passed. For partial work, record what remains under the open item. Split the six callbacks across commits where possible.
 - Run focused checks first, then the repository’s normal `assemble check` CI path on Java 21. For WDIO task changes, exercise the existing TestKit suite and fixture and verify configuration-cache behavior. The main CI build uses the configuration cache; the release step retains its explicit opt-out. For publishing changes, compare generated metadata and verify consumer resolution before merging.
-- Follow the existing commit and version conventions (`[none]` for non-release work and `[patch]` for backward-compatible fixes where appropriate). Let the existing fingerprint, version calculation, and release workflow determine and publish releases. Keep publishing on the existing isolated CI path with scoped credentials.
+- Follow the existing commit and version conventions (`[none]` for non-release work and `[patch]` for backward-compatible fixes where appropriate). Use `[none]` when a commit affects only unpublished libraries. Let the existing fingerprint, version calculation, and release workflow determine and publish releases. Keep publishing on the existing isolated CI path with scoped credentials.
 
 The audit was static. Runtime behavior and wrapper binary integrity are verification work for the relevant changes.
 
 ## Verification checkpoints
+
+- [x] Include Playwright browser tests in normal checks. The library check installed Chromium from the locked npm package and passed all seven tests with configuration caching enabled. The root `assemble check` dry run included both browser installation and execution. The libraries build-scan callback now follows the root build's CI predicate so the configuration cache can store it. Linux CI provisioning is wired and remains to be verified on a hosted runner.
 
 - November 17, 2026 — Java 21 and Gradle 9.9.1 passed `assemble check` and the two WDIO TestKit cases. The WDIO fixture passed in Chrome and Firefox with Gradle running outside the restricted environment. After switching from Java 22, rerunning convention-plugin validation with `--rerun-tasks --no-build-cache -Pkotlin.compiler.execution.strategy=in-process` rebuilt the generated classes for Java 21. Run `clean` separately from `assemble check` to avoid the composite task scheduling failure observed when combining them.
 

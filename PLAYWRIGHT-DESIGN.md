@@ -68,3 +68,19 @@ Adopt generation if pinned inputs regenerate deterministically, the Kotlin compi
 3. A deliberate assertion failure produces a readable Gradle failure and a usable trace. A subsequent test starts in a fresh context and repeat runs shut down cleanly.
 4. The consumer pilot preserves its Node helpers and Kotlin test structure, and exercises one Playwright feature that motivated the migration. Record which feature justified any additional bindings.
 5. Document the chosen binding approach, browser and Node setup, and how to move a WDIO scenario. Record any reporter or browser-profile differences that affect the consumer.
+
+## First slice
+
+The `libraries/playwright` module starts with handwritten bindings to Playwright 1.64.1, pinned in the shared JavaScript dependency manifest and Yarn lockfile. It uses the existing Kotlin/JS Node test task. Its Chromium tests run during normal `check`, including on CI. The test task provisions Chromium through the project's locked Playwright package and requests Playwright's system dependencies on Linux GitHub Actions runners. For a focused run:
+
+```sh
+./gradlew -p libraries :playwright:jsNodeTest
+```
+
+The slice uses a typed, browser-serializable function and an explicit serialized argument for `evaluate`. This gives page code an explicit browser-side boundary while Kotlin awaits the result in Node.
+
+The initial Karakum 1.0.0-alpha.133 run against the published `playwright-core` declarations reached conversion, then stopped on case-insensitive filename collisions such as `request.kt` and `Request.kt`. A curated declaration probe emitted 24 Kotlin files. It split role types between `Page` and `Locator`, left `PageFunction` unresolved in the probe output, and emitted a top-level `chromium` binding. In the handwritten runtime check, that import form resolved to the module default, so the working binding reads `chromium` from the default export. Keep the handwritten slice while generation still needs curation and a verified module mapping. Generated bindings have yet to pass the browser tests or the version-bump check.
+
+## Locator coverage
+
+The next slice adds text and label locators on pages and within existing locators. The Chromium fixture covers an empty result, a labeled control and nullable attribute, ordered matches inside a section, strict resolution of duplicate text, and waiting for a scoped match to become visible. These checks exercise Playwright's locator behavior. The full WDIO query matrix and consumer-runner integration remain release criteria.
