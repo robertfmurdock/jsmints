@@ -85,6 +85,7 @@ kotlin {
 }
 
 tasks {
+    check { dependsOn(named("functionalTest")) }
     withType<FormatTask> {
         exclude { spec -> spec.file.absolutePath.contains("generated-sources") }
     }

@@ -71,16 +71,66 @@ Adopt generation if pinned inputs regenerate deterministically, the Kotlin compi
 
 ## First slice
 
-The `libraries/playwright` module starts with handwritten bindings to Playwright 1.64.1, pinned in the shared JavaScript dependency manifest and Yarn lockfile. It uses the existing Kotlin/JS Node test task. Its Chromium tests run during normal `check`, including on CI. The test task provisions Chromium through the project's locked Playwright package and requests Playwright's system dependencies on Linux GitHub Actions runners. For a focused run:
+The `libraries/playwright` module uses handwritten bindings to Playwright 1.65.1, pinned in the shared JavaScript dependency manifest and Yarn lockfile. It uses a dedicated Kotlin/JS Node test run with the standard Mocha runner. Chromium tests run during normal `check`. The test run provisions the browser from the locked Playwright package. GitHub Actions installs the Linux system dependencies once before the aggregate check. For a focused run:
 
 ```sh
-./gradlew -p libraries :playwright:jsNodeTest
+./gradlew :libraries:playwright:playwrightRun
 ```
 
 The slice uses a typed, browser-serializable function and an explicit serialized argument for `evaluate`. This gives page code an explicit browser-side boundary while Kotlin awaits the result in Node.
 
 The initial Karakum 1.0.0-alpha.133 run against the published `playwright-core` declarations reached conversion, then stopped on case-insensitive filename collisions such as `request.kt` and `Request.kt`. A curated declaration probe emitted 24 Kotlin files. It split role types between `Page` and `Locator`, left `PageFunction` unresolved in the probe output, and emitted a top-level `chromium` binding. In the handwritten runtime check, that import form resolved to the module default, so the working binding reads `chromium` from the default export. Keep the handwritten slice while generation still needs curation and a verified module mapping. Generated bindings have yet to pass the browser tests or the version-bump check.
 
-## Locator coverage
+## Fixture parity and consumer integration
 
-The next slice adds text and label locators on pages and within existing locators. The Chromium fixture covers an empty result, a labeled control and nullable attribute, ordered matches inside a section, strict resolution of duplicate text, and waiting for a scoped match to become visible. These checks exercise Playwright's locator behavior. The full WDIO query matrix and consumer-runner integration remain release criteria.
+The Playwright checks cover the 64 WDIO fixture scenarios. Fifteen query tests each exercise one lookup behavior across role, text, label, and scoped text. The checks use the same HTML fixture as WDIO. They cover immediate resolution, bounded waiting, absence, ambiguity, and ordered collections. Playwright label queries use substring matching for this fixture because the wrapping labels also contain the button text.
+
+The runner checks cover evaluation of a page promise, relative navigation against a Node HTTP server on an ephemeral port, packaged resource loading, and public HTTPS from the Node worker. The CommonJS consumer fixture resolves the Playwright library from the included libraries build. Its Playwright run and the existing WDIO run both participate in the same normal `check`.
+
+Apply `com.zegreatrob.jsmints.plugins.playwrighttest` in the local composite and put the tests in `src/jsPlaywrightTest/kotlin`. Add the Playwright library to `jsPlaywrightTestImplementation` when the project consumes it from another module. The plugin exposes `baseUrl`, `browser`, `headless`, and `timeoutMillis` through `playwrightTest`. The Gradle properties `playwrightBaseUrl`, `playwrightBrowser`, and `playwrightHeadless` override those settings for a run. Chromium and Firefox use the same test logic. The plugin wires the dedicated compilation’s linked executable into Kotlin’s standard Mocha task. Selecting the custom compilation alone leaves Kotlin’s task pointing at the ordinary unit-test executable.
+
+```sh
+./gradlew :wdio-testing-library-test:playwrightRun
+./gradlew :libraries:playwright:playwrightRun -PplaywrightBrowser=firefox
+```
+
+The fixture helper `withPlaywrightPage` applies the configured browser settings, gives each scenario an isolated context, and retains a trace under `build/reports/playwright/traces` for failures inside its block. Put assertions that need browser traces inside that block. Gradle generates its standard HTML and JUnit reports, and Playwright traces carry screenshots and DOM snapshots. WDIO's optional Allure and timeline reporters still use the WDIO run.
+
+### Testmints setup and failure traces
+
+Use the library’s `playwrightSetup` for Testmints browser scenarios. It keeps
+the phases visible at the call site. Setup receives the live page and
+returns the context used by exercise and verification.
+
+```kotlin
+@Test
+fun savedStatusAppearsAfterSubmitting() = playwrightSetup { page ->
+    page.goto("/settings")
+    page
+} exercise {
+    getByRole("button", name = "Save").click()
+} verify {
+    getByText("Saved", exact = true).waitForVisible(timeoutMillis = 1500)
+}
+```
+
+The helper delegates the phases to Testmints and runs the completed result
+through `playwrightTest`. It supports `verifyAnd { … } teardown { … }` and
+`playwrightSetup(timeoutMs = …)`. The page remains live until teardown
+finishes, and teardown failures can retain traces. Use
+`playwrightSetupFrom { page -> existingTemplate.with({ … }) }` to adapt an
+existing Testmints setup with its own shared setup, teardown, or composition.
+A browser and page are scoped to one scenario. Any `beforeAll` fixture shared
+by a native template should have its own lifetime independent of that page. The lower-level
+`playwrightTest` runner accepts any Kotlin coroutine-test result.
+
+Keep fixture actions in setup and the action under test in exercise.
+The adapter retains a trace when the completed result rejects, including
+exercise or verification failures reported after Testmints teardown. Passing
+scenarios discard their traces. Both the library and consumer browser tests
+exercise the fluent setup API. Node-only resource and HTTPS checks use
+plain Testmints setup because they have no browser interaction.
+
+The Gradle integration and library are currently used through the repository's composite build. Publishing them for external consumers is a separate release step.
+
+The Chromium and Firefox runs exercise the same query and runner tests. A configuration probe verified that removing a base URL override restores the consumer fixture’s default. Temporarily removing the duplicate-match wait caused the targeted scenario to fail with a strictness error. The runner printed the trace location and the archive contained browser operations, network data, and screenshots.

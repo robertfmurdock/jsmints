@@ -1,38 +1,24 @@
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin
-import org.jetbrains.kotlin.gradle.targets.js.npm.npmProject
-
 plugins {
     id("com.zegreatrob.jsmints.plugins.js")
+    id("com.zegreatrob.jsmints.plugins.playwrighttest")
 }
+
+group = "com.zegreatrob.jsmints"
 
 dependencies {
     jsMainImplementation(jsconstraint("playwright"))
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    jsMainApi("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+    jsMainApi("com.zegreatrob.testmints:async")
 
-    jsTestImplementation(kotlin("test"))
-    jsTestImplementation("com.zegreatrob.testmints:async")
+    "jsPlaywrightTestImplementation"("org.jetbrains.kotlin-wrappers:kotlin-node")
+    "jsPlaywrightTestImplementation"(jsconstraint("jszip"))
 }
 
-val node = NodeJsPlugin.apply(rootProject)
-val playwrightCli = kotlin.js().compilations.getByName("test").npmProject.nodeModulesDir.map {
-    it.file("playwright/cli.js")
-}
-val installSystemDependencies = providers.environmentVariable("RUNNER_OS").orNull == "Linux" &&
-    providers.environmentVariable("GITHUB_ACTIONS").orNull == "true"
+val sharedFixture = layout.projectDirectory.dir(
+    "../../wdio-testing-library-test/src/jsE2eTest/resources/com/zegreatrob/wrapper/wdio/testing/library",
+)
 
-val installPlaywrightChromium = tasks.register<Exec>("installPlaywrightChromium") {
-    group = "verification"
-    description = "Installs the Chromium version required by the locked Playwright package."
-    dependsOn(":kotlinNodeJsSetup", ":kotlinNpmInstall")
-    executable = node.executable.get()
-    args(playwrightCli.get().asFile, "install")
-    if (installSystemDependencies) {
-        args("--with-deps")
-    }
-    args("chromium")
-}
-
-tasks.named("jsNodeTest") {
-    dependsOn(installPlaywrightChromium)
-    doNotTrackState("Always exercise Playwright against the installed Chromium browser.")
+kotlin.sourceSets.named("jsPlaywrightTest") {
+    resources.srcDir(sharedFixture)
 }

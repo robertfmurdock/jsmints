@@ -77,6 +77,8 @@ jobs:
         env:
           DISABLE_DETACHED: ${{ github.ref == 'refs/heads/master' }}
         run: ./gradlew calculateVersion -PexportToGithub=true -PtaggerForceSnapshot=${{ env.FINGERPRINT_MATCHES_PREVIOUS }} --scan
+      - name: Install Playwright browser dependencies
+        run: ./gradlew :libraries:playwright:installPlaywrightBrowser -PplaywrightInstallSystemDeps=true -Pversion=${{ env.TAGGER_VERSION }} --no-scan
       - name: Build 🔨
         id: build
         env:

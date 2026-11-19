@@ -4,6 +4,7 @@ plugins {
     alias(rootLibs.plugins.com.zegreatrob.tools.dashboard.test.summary)
     id("com.zegreatrob.jsmints.plugins.js2")
     id("com.zegreatrob.jsmints.plugins.wdiotest")
+    id("com.zegreatrob.jsmints.plugins.playwrighttest")
     id("com.zegreatrob.jsmints.plugins.versioning")
     alias(libs.plugins.com.avast.gradle.docker.compose)
 }
@@ -34,6 +35,10 @@ val wdioBaseUrl = wdioHttpsPort.map { port ->
     if (port == 443) "https://static.localhost" else "https://static.localhost:$port"
 }
 
+playwrightTest {
+    baseUrl.set(wdioBaseUrl)
+}
+
 wdioTest {
     useChrome.set(true)
     chromeBinary.set(System.getenv("WDIO_CHROME_BINARY"))
@@ -52,6 +57,10 @@ dependencies {
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-js")
     jsMainImplementation("org.jetbrains.kotlin-wrappers:kotlin-node")
+
+    "jsPlaywrightTestImplementation"(platform("com.zegreatrob.jsmints:dependency-bom"))
+    "jsPlaywrightTestImplementation"("com.zegreatrob.jsmints:playwright")
+    "jsPlaywrightTestImplementation"("com.zegreatrob.testmints:async")
 
     "jsE2eTestImplementation"(platform("com.zegreatrob.jsmints:dependency-bom"))
     "jsE2eTestImplementation"("com.zegreatrob.jsmints:wdio-testing-library")

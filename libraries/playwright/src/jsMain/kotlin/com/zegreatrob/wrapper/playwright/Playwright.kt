@@ -8,10 +8,15 @@ import kotlin.js.json
 
 object Playwright {
     val chromium: BrowserType get() = BrowserType(PlaywrightModule.chromium)
+    val firefox: BrowserType get() = BrowserType(PlaywrightModule.firefox)
 }
 
 class BrowserType internal constructor(private val delegate: JsBrowserType) {
-    suspend fun launch(): Browser = Browser(delegate.launch().await())
+    suspend fun launch(headless: Boolean? = null): Browser {
+        val options = json()
+        headless?.let { options["headless"] = it }
+        return Browser(delegate.launch(options).await())
+    }
 }
 
 class Browser internal constructor(private val delegate: JsBrowser) {
@@ -27,6 +32,16 @@ class Browser internal constructor(private val delegate: JsBrowser) {
 }
 
 class BrowserContext internal constructor(private val delegate: JsBrowserContext) {
+    suspend fun startTracing() {
+        delegate.tracing.start(json("screenshots" to true, "snapshots" to true)).await()
+    }
+
+    suspend fun stopTracing(path: String? = null) {
+        val options = json()
+        path?.let { options["path"] = it }
+        delegate.tracing.stop(options).await()
+    }
+
     suspend fun newPage(): Page = Page(delegate.newPage().await())
 
     suspend fun close() {
@@ -75,6 +90,8 @@ class Locator internal constructor(private val delegate: JsLocator) {
 
     fun getByLabel(text: String, exact: Boolean? = null): Locator = Locator(delegate.getByLabel(text, matchOptions(exact)))
 
+    fun first(): Locator = Locator(delegate.first())
+
     suspend fun count(): Int = delegate.count().await()
 
     /** Returns locators for the matches currently present, in document order. */
@@ -84,8 +101,13 @@ class Locator internal constructor(private val delegate: JsLocator) {
 
     suspend fun isVisible(): Boolean = delegate.isVisible().await()
 
-    suspend fun waitForVisible(timeoutMillis: Int) {
-        delegate.waitFor(json("state" to "visible", "timeout" to timeoutMillis)).await()
+    suspend fun waitForVisible(timeoutMillis: Int) = waitFor("visible", timeoutMillis)
+
+    suspend fun waitForAttached(timeoutMillis: Int) = waitFor("attached", timeoutMillis)
+
+    private suspend fun waitFor(state: String, timeoutMillis: Int) {
+        require(timeoutMillis > 0) { "Timeout must be positive" }
+        delegate.waitFor(json("state" to state, "timeout" to timeoutMillis)).await()
     }
 
     suspend fun click() {
@@ -104,10 +126,11 @@ private fun matchOptions(exact: Boolean?) = json().apply {
 @JsModule("playwright")
 private external object PlaywrightModule {
     val chromium: JsBrowserType
+    val firefox: JsBrowserType
 }
 
 internal external interface JsBrowserType {
-    fun launch(): Promise<JsBrowser>
+    fun launch(options: Json): Promise<JsBrowser>
 }
 
 internal external interface JsBrowser {
@@ -116,8 +139,14 @@ internal external interface JsBrowser {
 }
 
 internal external interface JsBrowserContext {
+    val tracing: JsTracing
     fun newPage(): Promise<JsPage>
     fun close(): Promise<Unit>
+}
+
+internal external interface JsTracing {
+    fun start(options: Json): Promise<Unit>
+    fun stop(options: Json): Promise<Unit>
 }
 
 internal external interface JsPage {
@@ -134,6 +163,7 @@ internal external interface JsLocator {
     fun getByRole(role: String, options: Json): JsLocator
     fun getByText(text: String, options: Json): JsLocator
     fun getByLabel(text: String, options: Json): JsLocator
+    fun first(): JsLocator
     fun count(): Promise<Int>
     fun all(): Promise<Array<JsLocator>>
     fun getAttribute(name: String): Promise<String?>
