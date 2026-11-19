@@ -52,6 +52,10 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 - [x] Remove the redundant convention-build Kotlin stdlib declaration. Both final compile and runtime dependency graphs matched the baseline. Retained and documented the published plugin build declaration because removing it downgraded runtime stdlib from 2.4.21 to 2.4.0.
 - [x] Describe and group NCU and WDIO preparation tasks. The disposable NCU consumer showed its description and dependency-management group in task help. All three WDIO preparation tasks appeared in the verification task listing. Final Java 21 `assemble check` and the three TestKit cases passed with configuration caching enabled; Chrome and Firefox passed.
 
+## Release regression follow-up
+
+- [x] Isolate the WDIO runner executable archive per Maven publication. CI run 44533591837 exposed overlapping executable signature outputs when publishing both variants. Restoring the shared archive in a disposable local publication reproduced the exact implicit-dependency failure. Separate archive directories preserved the executable classifier and identical archive contents; both signed publications and runner lint passed locally, and GPG verified all 13 detached signatures. Remote release remains to be verified by CI.
+
 ## Remaining provider and library cleanup
 
 These items are investigations from the static follow-up audit. Confirm the

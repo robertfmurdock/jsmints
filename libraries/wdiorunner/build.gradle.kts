@@ -47,6 +47,14 @@ tasks {
 
     artifacts.add(executable.name, executableJar) { builtBy(executableJar) }
     publishing.publications {
-        withType<MavenPublication> { artifact(executableJar) }
+        withType<MavenPublication>().all {
+            val publicationName = name
+            val publicationExecutable = register<Jar>("${publicationName}ExecutableJar") {
+                archiveClassifier.set("executable")
+                destinationDirectory.set(layout.buildDirectory.dir("publication-executable/$publicationName"))
+                from(productionBinary.linkTask.flatMap { it.destinationDirectory })
+            }
+            artifact(publicationExecutable)
+        }
     }
 }
