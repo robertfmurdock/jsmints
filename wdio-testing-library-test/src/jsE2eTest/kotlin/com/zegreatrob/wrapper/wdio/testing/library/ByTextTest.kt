@@ -34,7 +34,7 @@ class ByTextTest : ByText by TestingLibraryBrowser {
 
     private fun givenNoElementByTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?,
-    ) = testingLibrarySetup {
+    ) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("Not Awesome") }
     } verify { result ->
@@ -69,7 +69,7 @@ class ByTextTest : ByText by TestingLibraryBrowser {
     @Test
     fun givenMultipleMatchesQueryByTextThrows() = givenMultipleElementsByTextErrors(::queryByText)
 
-    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
+    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("Cool")?.waitToExist() }
     } verify { result ->

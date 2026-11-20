@@ -37,7 +37,7 @@ class WithinTest : Within by TestingLibraryBrowser {
 
     private fun givenNoElementByTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?,
-    ) = testingLibrarySetup {
+    ) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("Awesome") }
     } verify { result ->
@@ -78,7 +78,7 @@ class WithinTest : Within by TestingLibraryBrowser {
         within(getCoolSection()).queryByText(it)
     }
 
-    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
+    private fun givenMultipleElementsByTextErrors(query: suspend (text: String) -> WebdriverElement?) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("Cool")?.waitToExist() }
     } verify { result ->

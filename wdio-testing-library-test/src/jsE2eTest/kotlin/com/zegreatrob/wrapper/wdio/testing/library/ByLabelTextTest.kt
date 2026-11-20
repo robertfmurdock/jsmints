@@ -34,7 +34,7 @@ class ByLabelTextTest : ByLabelText by TestingLibraryBrowser {
 
     private fun givenNoElementByLabelTextWillFailAsExpected(
         query: suspend (text: String) -> WebdriverElement?,
-    ) = testingLibrarySetup {
+    ) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("Not Awesome") }
     } verify { result ->
@@ -66,7 +66,7 @@ class ByLabelTextTest : ByLabelText by TestingLibraryBrowser {
     @Test
     fun givenMultipleMatchesQueryByLabelTextThrows() = givenMultipleElementsByLabelTextErrors(::queryByLabelText)
 
-    private fun givenMultipleElementsByLabelTextErrors(query: suspend (text: String) -> WebdriverElement?) = testingLibrarySetup {
+    private fun givenMultipleElementsByLabelTextErrors(query: suspend (text: String) -> WebdriverElement?) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("Chill")?.waitToExist() }
     } verify { result ->

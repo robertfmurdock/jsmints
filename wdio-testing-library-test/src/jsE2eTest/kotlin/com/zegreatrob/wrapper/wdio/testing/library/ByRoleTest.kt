@@ -34,7 +34,7 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
 
     private fun givenNoElementByRoleWillFailAsExpected(
         query: suspend (role: String, options: RoleOptions) -> WebdriverElement?,
-    ) = testingLibrarySetup {
+    ) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("button", RoleOptions(name = "Not Awesome")) }
     } verify { result ->
@@ -67,7 +67,7 @@ class ByRoleTest : ByRole by TestingLibraryBrowser {
     @Test
     fun givenMultipleMatchesQueryByRoleThrows() = givenMultipleElementsByRoleErrors(::queryByRole)
 
-    private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) = testingLibrarySetup {
+    private fun givenMultipleElementsByRoleErrors(query: suspend (role: String, options: RoleOptions) -> WebdriverElement?) = staticQueryFailureSetup {
     } exercise {
         kotlin.runCatching { query("button", RoleOptions(name = "Chill"))?.waitToExist() }
     } verify { result ->
