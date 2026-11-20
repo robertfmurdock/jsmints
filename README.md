@@ -64,7 +64,7 @@ available ports. The fixture URL follows the HTTPS port automatically.
 
 ```sh
 JSMINTS_WDIO_HTTP_PORT=18080 JSMINTS_WDIO_HTTPS_PORT=18443 \
-  ./gradlew :wdio-testing-library-test:e2eRun --no-configuration-cache
+  ./gradlew :browser-testing-fixture:e2eRun --no-configuration-cache
 ```
 
 ### Jspackage Gradle Plugin

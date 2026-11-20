@@ -125,7 +125,7 @@ tasks {
     val testBuilds = listOf(
         gradle.includedBuild("libraries"),
         gradle.includedBuild("plugins"),
-    ) + gradle.includedBuild("wdio-testing-library-test")
+    ) + gradle.includedBuild("browser-testing-fixture")
     val includedBuilds = testBuilds + gradle.includedBuild("convention-plugins")
     val includedTestReports = files(includedBuilds.map { build ->
         fileTree(build.projectDir) {
@@ -160,7 +160,7 @@ tasks {
             provider {
                 listOf(
                     gradle.includedBuild("libraries"),
-                    gradle.includedBuild("wdio-testing-library-test")
+                    gradle.includedBuild("browser-testing-fixture")
                 ).map { it.task(":kotlinUpgradeYarnLock") }
             }
         )

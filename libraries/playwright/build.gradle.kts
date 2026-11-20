@@ -23,7 +23,7 @@ dependencies {
 }
 
 val sharedFixture = layout.projectDirectory.dir(
-    "../../wdio-testing-library-test/src/jsE2eTest/resources/com/zegreatrob/wrapper/wdio/testing/library",
+    "../../browser-testing-fixture/src/jsE2eTest/resources/com/zegreatrob/wrapper/wdio/testing/library",
 )
 
 kotlin.sourceSets.named("jsPlaywrightTest") {

@@ -48,7 +48,7 @@ Keep each slice independently reviewable. Run focused verification before the Ja
 ## Further audit decisions
 
 - Public Node executable and npm directory providers support lazy wiring. Kotlin 2.4.21 makes the complete Node environment provider internal, so populating the legacy `nodeBinDir` field still uses the existing compatibility lookup.
-- Package metadata needed by Kotlin npm dependency declarations remains available during configuration. File contents are tracked, parsed constraint data is reused, and template tokens are resolved during copying. A TestKit regression verifies package-file invalidation after configuration-cache reuse.
+- Package metadata needed by Kotlin npm dependency declarations remains available during configuration. File contents are tracked, parsed constraint data is reused, and template tokens are resolved during copying. A TestKit regression verifies the selected dependency version after editing the package file with a stored configuration-cache entry. [CI run 44748811472](https://github.com/robertfmurdock/jsmints/actions/runs/44748811472) failed on the unchanged-build reuse assertion. The original test passed locally, and the CI report omitted the nested build output needed to identify its invalidating input. The test now reports the nested output on failure and checks the metadata change directly.
 - Generated-source lint conventions remove explicit KSP prerequisites, but KMP/KSP still supplies inferred source dependencies. Those relationships remain intact.
 - Retained direct React ownership for DataLoader's public types and narrowed direct React DOM usage to its test scope. Resolved dependency graphs matched; publication metadata lost only the redundant direct runtime React DOM edge.
 

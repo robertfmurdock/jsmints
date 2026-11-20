@@ -12,7 +12,7 @@ JetBrains’ experimental browser DSL can coexist in the same build for tests th
 
 ## Scenario parity
 
-The [WDIO browser fixture](wdio-testing-library-test/src/jsE2eTest/kotlin/com/zegreatrob/wrapper/wdio/testing/library) contains 64 tests. Each row below describes the behavior to carry over. Reuse the served fixture where practical. Keep the current WDIO tests as independent coverage of their own APIs.
+The [WDIO browser fixture](browser-testing-fixture/src/jsE2eTest/kotlin/com/zegreatrob/wrapper/wdio/testing/library) contains 64 tests. Each row below describes the behavior to carry over. Reuse the served fixture where practical. Keep the current WDIO tests as independent coverage of their own APIs.
 
 | Existing coverage | Playwright counterpart |
 | --- | --- |
@@ -94,7 +94,7 @@ The runner checks cover evaluation of a page promise, relative navigation agains
 Apply `com.zegreatrob.jsmints.plugins.playwrighttest` in the local composite and put the tests in `src/jsPlaywrightTest/kotlin`. Add the Playwright library to `jsPlaywrightTestImplementation` when the project consumes it from another module. The plugin exposes `baseUrl`, `browser`, `headless`, `timeoutMillis`, and `reuseBrowser` through `playwrightTest`. The Gradle properties `playwrightBaseUrl`, `playwrightBrowser`, `playwrightHeadless`, and `playwrightReuseBrowser` override those settings for a run. Chromium and Firefox use the same test logic. The plugin wires the dedicated compilation’s linked executable into Kotlin’s standard Mocha task. Selecting the custom compilation alone leaves Kotlin’s task pointing at the ordinary unit-test executable.
 
 ```sh
-./gradlew :wdio-testing-library-test:playwrightRun
+./gradlew :browser-testing-fixture:playwrightRun
 ./gradlew :libraries:playwright:playwrightRun -PplaywrightBrowser=firefox
 ```
 

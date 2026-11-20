@@ -1,4 +1,4 @@
-rootProject.name = "wdio-testing-library-test"
+rootProject.name = "browser-testing-fixture"
 
 
 includeBuild("../libraries")

@@ -49,7 +49,7 @@ wdioTest {
     useHeadless.set(true)
     htmlReporter.set(true)
     allureReporter.set(true)
-    allureReportHint.set("- link: http://localhost:63342/jsmints-root/wdio-testing-library-test/build/reports/e2e/allure/report/index.html")
+    allureReportHint.set("- link: http://localhost:63342/jsmints-root/browser-testing-fixture/build/reports/e2e/allure/report/index.html")
     baseUrl.set(wdioBaseUrl)
 }
 
@@ -75,7 +75,7 @@ dependencies {
 }
 
 dockerCompose {
-    setProjectName("wdio-testing-library-test")
+    setProjectName("browser-testing-fixture")
     containerLogToDir.set(project.file("build/test-output/containers-logs"))
     waitForTcpPorts.set(false)
 }

@@ -14,7 +14,7 @@ rootProject.name = "jsmints-root"
 includeBuild("libraries")
 includeBuild("plugins")
 includeBuild("convention-plugins")
-includeBuild("wdio-testing-library-test")
+includeBuild("browser-testing-fixture")
 
 develocity {
     buildScan {

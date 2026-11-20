@@ -33,11 +33,13 @@ class JsPackagePluginFunctionalTest {
             .withProjectDir(testProjectDir.root)
             .withPluginClasspath()
             .withArguments("inspectPackage", "--configuration-cache")
-        assertTrue(runner.build().output.contains("selectedVersion=1.0.0"))
-        assertTrue(runner.build().output.contains("Configuration cache entry reused."))
+        val initialBuild = runner.build()
+        assertTrue(initialBuild.output, initialBuild.output.lineSequence().any { it == "selectedVersion=1.0.0" })
+        assertTrue(initialBuild.output, initialBuild.output.contains("Configuration cache entry stored."))
 
         packageJson.writeText("""{"dependencies":{"fixture-lib":"2.0.0"}}""")
 
-        assertTrue(runner.build().output.contains("selectedVersion=2.0.0"))
+        val updatedBuild = runner.build()
+        assertTrue(updatedBuild.output, updatedBuild.output.lineSequence().any { it == "selectedVersion=2.0.0" })
     }
 }

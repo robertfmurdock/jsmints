@@ -25,9 +25,9 @@ a distinct regression to catch.
   source set.
 - Test React component rendering, user interactions, and React Testing Library
   wrappers in their owning `jsTest` source sets. These suites use Node and jsdom.
-- Use the WDIO fixture in `wdio-testing-library-test` when the behavior depends
-  on a real browser, the WDIO worker, or the assembled fixture. Do not move DOM
-  or wrapper cases there just because a browser runner is available.
+- Use `browser-testing-fixture` for consumer coverage that depends on a real
+  browser, the WDIO worker, or Playwright runner configuration. Keep detailed
+  wrapper coverage in its owning library when it can run there.
 - Test Gradle plugin behavior in the plugin's existing `functionalTest` suite
   with Gradle TestKit when the contract depends on applying or running the plugin.
 - Add broader-level evidence when behavior crosses module or runtime boundaries.
@@ -96,7 +96,8 @@ Run the smallest task that exercises the changed boundary. Examples:
 ```sh
 ./gradlew -p libraries :react-testing-library:jsNodeTest
 ./gradlew -p plugins :plugins:functionalTest
-./gradlew :wdio-testing-library-test:e2eRun --no-configuration-cache
+./gradlew :browser-testing-fixture:e2eRun --no-configuration-cache
+./gradlew :browser-testing-fixture:playwrightRun
 ```
 
 The WDIO fixture uses a real browser; its required ports and configuration are
