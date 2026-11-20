@@ -3,12 +3,13 @@ package com.zegreatrob.wrapper.playwright
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlin.js.Promise
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class PlaywrightBrowserTest {
     @Test
@@ -91,18 +92,20 @@ class PlaywrightBrowserTest {
         """.trimIndent(),
     ) exercise {
         val status = locator("#inside").getByText("Saved")
-        val initiallyVisible = status.isVisible()
         coroutineScope {
             val waiting = async(start = CoroutineStart.UNDISPATCHED) {
                 status.waitForVisible(timeoutMillis = 1500)
-                status.isVisible()
             }
-            delay(80)
+            val visibleBeforeReveal = status.isVisible()
+            val pendingBeforeReveal = waiting.isActive
             getByRole("button", name = "Show").click()
-            initiallyVisible to waiting.await()
+            waiting.await()
+            Triple(visibleBeforeReveal, pendingBeforeReveal, status.isVisible())
         }
-    } verify { observation ->
-        assertEquals(false to true, observation)
+    } verify { (visibleBeforeReveal, pendingBeforeReveal, visibleAfterReveal) ->
+        assertFalse(visibleBeforeReveal)
+        assertTrue(pendingBeforeReveal, "Visibility wait should still be pending while the match is hidden")
+        assertTrue(visibleAfterReveal)
     }
 
     @Test
@@ -115,13 +118,16 @@ class PlaywrightBrowserTest {
         val status = getByText("Saved", exact = true)
         coroutineScope {
             val match = async(start = CoroutineStart.UNDISPATCHED) {
-                status.findOne("saved status", timeoutMillis = 1500).getAttribute("id")
+                status.findOne("saved status", timeoutMillis = 1500)
             }
-            delay(80)
+            val countBeforeRemoval = status.count()
+            val pendingBeforeRemoval = match.isActive
             getByRole("button", name = "Remove duplicate").click()
-            match.await()
+            Triple(countBeforeRemoval, pendingBeforeRemoval, match.await().getAttribute("id"))
         }
-    } verify { id ->
+    } verify { (countBeforeRemoval, pendingBeforeRemoval, id) ->
+        assertEquals(2, countBeforeRemoval)
+        assertTrue(pendingBeforeRemoval, "Single-match lookup should still be pending while both matches exist")
         assertEquals("retained", id)
     }
 
@@ -136,13 +142,16 @@ class PlaywrightBrowserTest {
         val matches = getByText("Saved", exact = true)
         coroutineScope {
             val results = async(start = CoroutineStart.UNDISPATCHED) {
-                matches.findAll(timeoutMillis = 1500).map { it.getAttribute("id") }
+                matches.findAll(timeoutMillis = 1500)
             }
-            delay(80)
+            val countBeforeInsertion = matches.count()
+            val pendingBeforeInsertion = results.isActive
             getByRole("button", name = "Insert matches").click()
-            results.await()
+            Triple(countBeforeInsertion, pendingBeforeInsertion, results.await().map { it.getAttribute("id") })
         }
-    } verify { ids ->
+    } verify { (countBeforeInsertion, pendingBeforeInsertion, ids) ->
+        assertEquals(0, countBeforeInsertion)
+        assertTrue(pendingBeforeInsertion, "Collection lookup should still be pending while no matches exist")
         assertEquals(listOf("first", "second"), ids)
     }
 }

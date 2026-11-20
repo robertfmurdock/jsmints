@@ -53,6 +53,14 @@ class LocatorParityTest {
     fun requiringAllReturnsTheSingleton() = collectionMatches(SINGLE) { requireAll("collection") }
 
     @Test
+    fun requiringAllWithoutAMatchReportsAbsence() = documentSetup("<p>Present</p>") exercise {
+        val missing = getByText("Missing", exact = true)
+        runCatching { missing.requireAll("missing collection") }.exceptionOrNull()
+    } verify { failure ->
+        assertEquals("No matches for missing collection", failure?.message)
+    }
+
+    @Test
     fun findingAllReturnsTheSingleton() = collectionMatches(SINGLE) { findAll(MATCH_TIMEOUT_MILLIS) }
 
     @Test
