@@ -2,71 +2,80 @@ package com.zegreatrob.wrapper.playwright
 
 import kotlinx.coroutines.await
 import kotlin.js.JsModule
+import kotlin.js.JsName
 import kotlin.js.Json
 import kotlin.js.Promise
+import kotlin.js.definedExternally
 import kotlin.js.json
 
 object Playwright {
     val chromium: BrowserType get() = BrowserType(PlaywrightModule.chromium)
     val firefox: BrowserType get() = BrowserType(PlaywrightModule.firefox)
+    val webkit: BrowserType get() = BrowserType(PlaywrightModule.webkit)
 }
 
-class BrowserType internal constructor(private val delegate: JsBrowserType) {
+class BrowserType internal constructor(val native: JsBrowserType) {
     suspend fun launch(headless: Boolean? = null): Browser {
         val options = json()
         headless?.let { options["headless"] = it }
-        return Browser(delegate.launch(options).await())
+        return launchWithOptions(options)
     }
+
+    internal suspend fun launchWithOptions(options: Json): Browser = Browser(native.launch(options).await())
 }
 
-class Browser internal constructor(private val delegate: JsBrowser) {
+class Browser internal constructor(val native: JsBrowser) {
+    internal val isConnected: Boolean get() = native.isConnected()
+
     suspend fun newContext(baseUrl: String? = null): BrowserContext {
         val options = json()
         baseUrl?.let { options["baseURL"] = it }
-        return BrowserContext(delegate.newContext(options).await())
+        return newContextWithOptions(options)
     }
 
+    internal suspend fun newContextWithOptions(options: Json): BrowserContext = BrowserContext(native.newContext(options).await())
+
     suspend fun close() {
-        delegate.close().await()
+        native.close().await()
     }
 }
 
-class BrowserContext internal constructor(private val delegate: JsBrowserContext) {
+class BrowserContext internal constructor(val native: JsBrowserContext) {
     suspend fun startTracing() {
-        delegate.tracing.start(json("screenshots" to true, "snapshots" to true)).await()
+        native.tracing.start(json("screenshots" to true, "snapshots" to true)).await()
     }
 
     suspend fun stopTracing(path: String? = null) {
         val options = json()
         path?.let { options["path"] = it }
-        delegate.tracing.stop(options).await()
+        native.tracing.stop(options).await()
     }
 
-    suspend fun newPage(): Page = Page(delegate.newPage().await())
+    suspend fun newPage(): Page = Page(native.newPage().await())
 
     suspend fun close() {
-        delegate.close().await()
+        native.close().await()
     }
 }
 
-class Page internal constructor(private val delegate: JsPage) {
-    val url: String get() = delegate.url()
+class Page internal constructor(val native: JsPage) {
+    val url: String get() = native.url()
 
     suspend fun goto(url: String) {
-        delegate.goto(url).await()
+        native.goto(url).await()
     }
 
-    fun locator(selector: String): Locator = Locator(delegate.locator(selector))
+    fun locator(selector: String): Locator = Locator(native.locator(selector))
 
     fun getByRole(
         role: String,
         name: String? = null,
         exact: Boolean? = null,
-    ): Locator = Locator(delegate.getByRole(role, roleOptions(name, exact)))
+    ): Locator = Locator(native.getByRole(role, roleOptions(name, exact)))
 
-    fun getByText(text: String, exact: Boolean? = null): Locator = Locator(delegate.getByText(text, matchOptions(exact)))
+    fun getByText(text: String, exact: Boolean? = null): Locator = Locator(native.getByText(text, matchOptions(exact)))
 
-    fun getByLabel(text: String, exact: Boolean? = null): Locator = Locator(delegate.getByLabel(text, matchOptions(exact)))
+    fun getByLabel(text: String, exact: Boolean? = null): Locator = Locator(native.getByLabel(text, matchOptions(exact)))
 
     /**
      * Evaluates a function in the page with a serializable argument and awaits its result.
@@ -76,30 +85,30 @@ class Page internal constructor(private val delegate: JsPage) {
     suspend fun <A, R> evaluate(
         pageFunction: (A) -> Promise<R>,
         argument: A,
-    ): R = delegate.evaluate<A, R>(pageFunction, argument).await()
+    ): R = native.evaluateAsync(pageFunction, argument).await()
 }
 
-class Locator internal constructor(private val delegate: JsLocator) {
+class Locator internal constructor(val native: JsLocator) {
     fun getByRole(
         role: String,
         name: String? = null,
         exact: Boolean? = null,
-    ): Locator = Locator(delegate.getByRole(role, roleOptions(name, exact)))
+    ): Locator = Locator(native.getByRole(role, roleOptions(name, exact)))
 
-    fun getByText(text: String, exact: Boolean? = null): Locator = Locator(delegate.getByText(text, matchOptions(exact)))
+    fun getByText(text: String, exact: Boolean? = null): Locator = Locator(native.getByText(text, matchOptions(exact)))
 
-    fun getByLabel(text: String, exact: Boolean? = null): Locator = Locator(delegate.getByLabel(text, matchOptions(exact)))
+    fun getByLabel(text: String, exact: Boolean? = null): Locator = Locator(native.getByLabel(text, matchOptions(exact)))
 
-    fun first(): Locator = Locator(delegate.first())
+    fun first(): Locator = Locator(native.first())
 
-    suspend fun count(): Int = delegate.count().await()
+    suspend fun count(): Int = native.count().await()
 
     /** Returns locators for the matches currently present, in document order. */
-    suspend fun all(): List<Locator> = delegate.all().await().map(::Locator)
+    suspend fun all(): List<Locator> = native.all().await().map(::Locator)
 
-    suspend fun getAttribute(name: String): String? = delegate.getAttribute(name).await()
+    suspend fun getAttribute(name: String): String? = native.getAttribute(name).await()
 
-    suspend fun isVisible(): Boolean = delegate.isVisible().await()
+    suspend fun isVisible(): Boolean = native.isVisible().await()
 
     suspend fun waitForVisible(timeoutMillis: Int) = waitFor("visible", timeoutMillis)
 
@@ -107,11 +116,11 @@ class Locator internal constructor(private val delegate: JsLocator) {
 
     private suspend fun waitFor(state: String, timeoutMillis: Int) {
         require(timeoutMillis > 0) { "Timeout must be positive" }
-        delegate.waitFor(json("state" to state, "timeout" to timeoutMillis)).await()
+        native.waitFor(json("state" to state, "timeout" to timeoutMillis)).await()
     }
 
     suspend fun click() {
-        delegate.click().await()
+        native.click().await()
     }
 }
 
@@ -127,47 +136,57 @@ private fun matchOptions(exact: Boolean?) = json().apply {
 private external object PlaywrightModule {
     val chromium: JsBrowserType
     val firefox: JsBrowserType
+    val webkit: JsBrowserType
 }
 
-internal external interface JsBrowserType {
-    fun launch(options: Json): Promise<JsBrowser>
+external interface JsBrowserType {
+    fun launch(options: Json = definedExternally): Promise<JsBrowser>
 }
 
-internal external interface JsBrowser {
-    fun newContext(options: Json): Promise<JsBrowserContext>
-    fun close(): Promise<Unit>
+external interface JsBrowser {
+    fun isConnected(): Boolean
+    fun newContext(options: Json = definedExternally): Promise<JsBrowserContext>
+    fun close(options: Json = definedExternally): Promise<Unit>
 }
 
-internal external interface JsBrowserContext {
+external interface JsBrowserContext {
     val tracing: JsTracing
     fun newPage(): Promise<JsPage>
-    fun close(): Promise<Unit>
+    fun close(options: Json = definedExternally): Promise<Unit>
 }
 
-internal external interface JsTracing {
-    fun start(options: Json): Promise<Unit>
-    fun stop(options: Json): Promise<Unit>
+external interface JsTracing {
+    fun start(options: Json = definedExternally): Promise<Unit>
+    fun stop(options: Json = definedExternally): Promise<Unit>
 }
 
-internal external interface JsPage {
-    fun goto(url: String): Promise<Any?>
+external interface JsPage {
+    fun goto(url: String, options: Json = definedExternally): Promise<Any?>
     fun url(): String
-    fun locator(selector: String): JsLocator
-    fun getByRole(role: String, options: Json): JsLocator
-    fun getByText(text: String, options: Json): JsLocator
-    fun getByLabel(text: String, options: Json): JsLocator
-    fun <A, R> evaluate(pageFunction: (A) -> Promise<R>, argument: A): Promise<R>
+    fun locator(selector: String, options: Json = definedExternally): JsLocator
+    fun getByRole(role: String, options: Json = definedExternally): JsLocator
+    fun getByText(text: String, options: Json = definedExternally): JsLocator
+    fun getByLabel(text: String, options: Json = definedExternally): JsLocator
+    fun <R> evaluate(pageFunction: () -> R): Promise<R>
+    fun <A, R> evaluate(pageFunction: (A) -> R, argument: A): Promise<R>
+    fun <R> evaluate(pageFunction: String, argument: Any? = definedExternally): Promise<R>
+
+    @JsName("evaluate")
+    fun <R> evaluateAsync(pageFunction: () -> Promise<R>): Promise<R>
+
+    @JsName("evaluate")
+    fun <A, R> evaluateAsync(pageFunction: (A) -> Promise<R>, argument: A): Promise<R>
 }
 
-internal external interface JsLocator {
-    fun getByRole(role: String, options: Json): JsLocator
-    fun getByText(text: String, options: Json): JsLocator
-    fun getByLabel(text: String, options: Json): JsLocator
+external interface JsLocator {
+    fun getByRole(role: String, options: Json = definedExternally): JsLocator
+    fun getByText(text: String, options: Json = definedExternally): JsLocator
+    fun getByLabel(text: String, options: Json = definedExternally): JsLocator
     fun first(): JsLocator
     fun count(): Promise<Int>
     fun all(): Promise<Array<JsLocator>>
-    fun getAttribute(name: String): Promise<String?>
-    fun isVisible(): Promise<Boolean>
-    fun waitFor(options: Json): Promise<Unit>
-    fun click(): Promise<Unit>
+    fun getAttribute(name: String, options: Json = definedExternally): Promise<String?>
+    fun isVisible(options: Json = definedExternally): Promise<Boolean>
+    fun waitFor(options: Json = definedExternally): Promise<Unit>
+    fun click(options: Json = definedExternally): Promise<Unit>
 }

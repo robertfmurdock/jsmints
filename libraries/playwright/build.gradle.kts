@@ -5,6 +5,13 @@ plugins {
 
 group = "com.zegreatrob.jsmints"
 
+playwrightTest {
+    profiles {
+        register("chromium")
+        register("firefox")
+    }
+}
+
 dependencies {
     jsMainImplementation(jsconstraint("playwright"))
     jsMainImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")

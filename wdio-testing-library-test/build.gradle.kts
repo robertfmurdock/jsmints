@@ -36,6 +36,10 @@ val wdioBaseUrl = wdioHttpsPort.map { port ->
 }
 
 playwrightTest {
+    profiles {
+        register("chromium")
+        register("firefox")
+    }
     baseUrl.set(wdioBaseUrl)
 }
 

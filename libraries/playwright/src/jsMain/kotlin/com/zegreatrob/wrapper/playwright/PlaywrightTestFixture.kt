@@ -25,13 +25,39 @@ suspend fun <T> withPlaywrightPage(
     failureTracePath: String? = configuredTracePath(),
     test: suspend (Page) -> T,
 ): T {
-    val browser = when (val engine = NodeProcess.env["JSMINTS_PLAYWRIGHT_BROWSER"] as? String) {
-        null, "chromium" -> Playwright.chromium
-        "firefox" -> Playwright.firefox
-        else -> error("Unsupported Playwright browser: $engine")
-    }
+    val engine = configuredEngine()
+    val browser = configuredBrowserType()
     val headless = (NodeProcess.env["JSMINTS_PLAYWRIGHT_HEADLESS"] as? String)?.toBooleanStrict()
-    return browser.withPage(baseUrl, headless, failureTracePath, test)
+    val configuration = readPlaywrightRunConfiguration(
+        directory = NodeProcess.env["JSMINTS_PLAYWRIGHT_CONFIG_DIRECTORY"] as? String,
+        profile = NodeProcess.env["JSMINTS_PLAYWRIGHT_PROFILE"] as? String ?: engine,
+        browser = engine,
+    )
+    suspend fun launch(): Browser {
+        val launched = browser.launchWithOptions(configuration.launchOptions(headless))
+        try {
+            configuration.afterLaunch(launched.native)
+        } catch (failure: Throwable) {
+            withCleanup({ launched.close() }) { throw failure }
+        }
+        return launched
+    }
+    if ((NodeProcess.env["JSMINTS_PLAYWRIGHT_REUSE_BROWSER"] as? String) == "true") {
+        return runBrowser.acquire(::launch).withPageInNewContext(baseUrl, failureTracePath, configuration, test)
+    }
+    val launched = launch()
+    return withCleanup({ launched.close() }) {
+        launched.withPageInNewContext(baseUrl, failureTracePath, configuration, test)
+    }
+}
+
+private fun configuredEngine() = NodeProcess.env["JSMINTS_PLAYWRIGHT_BROWSER"] as? String ?: "chromium"
+
+internal fun configuredBrowserType() = when (val engine = configuredEngine()) {
+    "chromium" -> Playwright.chromium
+    "firefox" -> Playwright.firefox
+    "webkit" -> Playwright.webkit
+    else -> error("Unsupported Playwright browser: $engine")
 }
 
 private fun configuredTracePath() = (NodeProcess.env["JSMINTS_PLAYWRIGHT_TRACE_DIRECTORY"] as? String)?.let {

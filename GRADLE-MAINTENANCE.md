@@ -33,6 +33,10 @@ The audit was static. Runtime behavior and wrapper binary integrity are verifica
 
 ## Verification checkpoints
 
+- [x] Run named Playwright profiles as independent Mocha tasks on the same linked Kotlin test binary. Chromium and Firefox had overlapping run timestamps with configuration caching enabled. Verified named profile selection and the existing single-browser override. The CommonJS consumer fixture loads ESM and CommonJS fragments, verifies ordered context-option overrides, and exercises the native lifecycle hooks.
+
+- [x] Reuse a Playwright browser within each Mocha run and close it during run teardown. Every scenario still owns a fresh context and failure trace. Run both projects with `-PplaywrightReuseBrowser=false` to exercise the per-scenario browser option. On the local Mac, the same library test task went from 7.9 s to 4.8 s in Chromium and from 47.5 s to 14.5 s in Firefox. Both browser profiles passed in both modes. The consumer fixture verified local-storage isolation and the library tests verified browser reuse, disconnection recovery, and cleanup.
+
 - [x] Run the dedicated Playwright compilation through normal checks alongside WDIO. Verified the library and the CommonJS consumer fixture in Chromium and Firefox, the locked npm installation in both builds, and the base URL override and default restoration. The WDIO TestKit suite is now also part of normal checks. GitHub Actions installs shared Playwright system libraries once before the build. Hosted Linux execution remains to be verified.
 
 - [x] Include Playwright browser tests in normal checks. The library check installed Chromium from the locked npm package and passed all seven tests with configuration caching enabled. The root `assemble check` dry run included both browser installation and execution. The libraries build-scan callback now follows the root build's CI predicate so the configuration cache can store it. Linux CI provisioning is wired and remains to be verified on a hosted runner.

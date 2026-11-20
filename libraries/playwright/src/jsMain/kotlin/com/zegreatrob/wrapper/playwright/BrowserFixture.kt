@@ -12,32 +12,45 @@ suspend fun <T> BrowserType.withPage(
 ): T {
     val browser = launch(headless)
     return withCleanup({ browser.close() }) {
-        val context = browser.newContext(baseUrl)
-        withCleanup({ context.close() }) {
-            if (failureTracePath == null) {
-                test(context.newPage())
-            } else {
-                context.startTracing()
-                val result = try {
-                    test(context.newPage())
-                } catch (failure: Throwable) {
-                    withContext(NonCancellable) {
-                        runCatching {
-                            context.stopTracing(failureTracePath)
-                            println("Playwright trace: $failureTracePath")
-                        }
-                            .exceptionOrNull()?.let(failure::addSuppressed)
+        browser.withPageInNewContext(baseUrl, failureTracePath, test = test)
+    }
+}
+
+internal suspend fun <T> Browser.withPageInNewContext(
+    baseUrl: String?,
+    failureTracePath: String?,
+    configuration: PlaywrightRunConfiguration = PlaywrightRunConfiguration(),
+    test: suspend (Page) -> T,
+): T {
+    val context = newContextWithOptions(configuration.contextOptions(baseUrl))
+    suspend fun openPage(): Page {
+        configuration.afterContext(context.native)
+        return context.newPage().also { configuration.afterPage(it.native) }
+    }
+    return withCleanup({ context.close() }) {
+        if (failureTracePath == null) {
+            test(openPage())
+        } else {
+            context.startTracing()
+            val result = try {
+                test(openPage())
+            } catch (failure: Throwable) {
+                withContext(NonCancellable) {
+                    runCatching {
+                        context.stopTracing(failureTracePath)
+                        println("Playwright trace: $failureTracePath")
                     }
-                    throw failure
+                        .exceptionOrNull()?.let(failure::addSuppressed)
                 }
-                context.stopTracing()
-                result
+                throw failure
             }
+            context.stopTracing()
+            result
         }
     }
 }
 
-private suspend fun <T> withCleanup(cleanup: suspend () -> Unit, work: suspend () -> T): T {
+internal suspend fun <T> withCleanup(cleanup: suspend () -> Unit, work: suspend () -> T): T {
     var failure: Throwable? = null
     try {
         return work()

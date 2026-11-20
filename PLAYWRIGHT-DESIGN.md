@@ -39,6 +39,10 @@ The three [WDIO plugin functional tests](plugins/plugins/src/functionalTest/kotl
 
 ## Kotlin API
 
+`BrowserType`, `Browser`, `BrowserContext`, `Page`, and `Locator` expose a `native` property that returns the underlying Playwright object. The public `Js*` external interfaces describe the members JSMints already uses. Use `asDynamic()` on the handle for other members, or `unsafeCast<YourExternalInterface>()` to supply local types. For example, `page.native.asDynamic().title()` returns the native JavaScript promise. Use these handles inside the owning scenario so that its normal cleanup and trace capture still apply.
+
+Optional arguments on the native bindings use Playwright's defaults. `JsPage.evaluate` accepts synchronous callbacks or JavaScript source strings. `JsPage.evaluateAsync` accepts promise-returning callbacks and maps to the same JavaScript `evaluate` method, with the resolved result reflected in the Kotlin type.
+
 Follow the official Node API for names and semantics. Use the JVM binding as a reference for shared vocabulary such as `Page`, `BrowserContext`, `Locator`, and ARIA roles. Keep locator construction synchronous. Use suspending calls for operations that return Node promises. Offer Kotlin named arguments or typed options where they improve call sites. Pass JSON-compatible values explicitly into `evaluate`, which executes in the browser. Verify the Kotlin/JS callback and promise bridge before committing to its public signature. [Node Page API](https://playwright.dev/docs/api/class-page) · [Java Page API](https://playwright.dev/java/docs/api/class-page) · [Evaluating JavaScript](https://playwright.dev/docs/evaluating)
 
 Start with the types needed for browser launch, context and page lifecycle, evaluation and navigation, role/text/label queries, locator scoping, visibility and attributes, match enumeration, and trace capture. Include a minimal locator action such as `click` in the consumer pilot. Add public bindings when an explicit scenario needs them. New capabilities such as routing, popups, or downloads can be added independently when a consumer workflow calls for them.
@@ -87,7 +91,7 @@ The Playwright checks cover the 64 WDIO fixture scenarios. Fifteen query tests e
 
 The runner checks cover evaluation of a page promise, relative navigation against a Node HTTP server on an ephemeral port, packaged resource loading, and public HTTPS from the Node worker. The CommonJS consumer fixture resolves the Playwright library from the included libraries build. Its Playwright run and the existing WDIO run both participate in the same normal `check`.
 
-Apply `com.zegreatrob.jsmints.plugins.playwrighttest` in the local composite and put the tests in `src/jsPlaywrightTest/kotlin`. Add the Playwright library to `jsPlaywrightTestImplementation` when the project consumes it from another module. The plugin exposes `baseUrl`, `browser`, `headless`, and `timeoutMillis` through `playwrightTest`. The Gradle properties `playwrightBaseUrl`, `playwrightBrowser`, and `playwrightHeadless` override those settings for a run. Chromium and Firefox use the same test logic. The plugin wires the dedicated compilation’s linked executable into Kotlin’s standard Mocha task. Selecting the custom compilation alone leaves Kotlin’s task pointing at the ordinary unit-test executable.
+Apply `com.zegreatrob.jsmints.plugins.playwrighttest` in the local composite and put the tests in `src/jsPlaywrightTest/kotlin`. Add the Playwright library to `jsPlaywrightTestImplementation` when the project consumes it from another module. The plugin exposes `baseUrl`, `browser`, `headless`, `timeoutMillis`, and `reuseBrowser` through `playwrightTest`. The Gradle properties `playwrightBaseUrl`, `playwrightBrowser`, `playwrightHeadless`, and `playwrightReuseBrowser` override those settings for a run. Chromium and Firefox use the same test logic. The plugin wires the dedicated compilation’s linked executable into Kotlin’s standard Mocha task. Selecting the custom compilation alone leaves Kotlin’s task pointing at the ordinary unit-test executable.
 
 ```sh
 ./gradlew :wdio-testing-library-test:playwrightRun
@@ -95,6 +99,60 @@ Apply `com.zegreatrob.jsmints.plugins.playwrighttest` in the local composite and
 ```
 
 The fixture helper `withPlaywrightPage` applies the configured browser settings, gives each scenario an isolated context, and retains a trace under `build/reports/playwright/traces` for failures inside its block. Put assertions that need browser traces inside that block. Gradle generates its standard HTML and JUnit reports, and Playwright traces carry screenshots and DOM snapshots. WDIO's optional Allure and timeline reporters still use the WDIO run.
+
+### Browser profiles and native configuration
+
+Declare profiles in the Gradle build to run the same compiled Kotlin suite
+against multiple browsers. With configuration caching enabled, Gradle can
+run the independent profiles concurrently. Reports are separated by task
+and traces live under `build/reports/playwright/traces/<profile>`.
+
+```kotlin
+playwrightTest {
+    profiles {
+        register("chromium")
+        register("firefox")
+        register("chrome") {
+            browser.set("chromium")
+        }
+    }
+}
+```
+
+`playwrightRun` and `check` run the declared profiles. Use
+`-PplaywrightProfile=firefox` to select one. Projects without profiles still
+use the existing single-browser configuration. `-PplaywrightBrowser=firefox`
+selects an ad hoc single-browser run.
+
+The plugin loads top-level `.mjs`, `.cjs`, and `.js` files from
+`playwright.conf.d` in filename order. Set `configDirectory` to use a
+different directory. Each fragment exports a configuration object or a
+factory receiving `{ profile, browser }`. Factories and hooks can be
+asynchronous.
+
+```js
+// playwright.conf.d/20-browser-options.mjs
+export default ({ profile }) => ({
+    launchOptions: profile === "chrome" ? { channel: "chrome" } : {},
+    contextOptions: { viewport: { width: 1280, height: 720 } },
+    async afterContext(context) {
+        await context.setExtraHTTPHeaders({ "x-test-profile": profile });
+    },
+});
+```
+
+Launch and context options are passed through to the native Playwright
+library. Later fragments replace earlier values at the option-key level.
+For example, a later `viewport` replaces the whole viewport object.
+Fragment launch options override launch defaults. A base URL supplied by
+Gradle or by a scenario takes precedence over fragment context options.
+The optional `afterLaunch`, `afterContext`, and `afterPage` hooks receive
+the native Playwright objects and run in fragment order. With browser reuse,
+`afterLaunch` runs once per browser process. The context and page hooks
+run for every scenario. Errors identify the fragment and, for hooks, the
+stage. JSMints installs the bundled engine builds and manages scenario isolation
+and artifact retention. A fragment that selects an installed browser channel
+needs that channel available on the machine.
 
 ### Testmints setup and failure traces
 
@@ -120,8 +178,12 @@ through `playwrightTest`. It supports `verifyAnd { … } teardown { … }` and
 finishes, and teardown failures can retain traces. Use
 `playwrightSetupFrom { page -> existingTemplate.with({ … }) }` to adapt an
 existing Testmints setup with its own shared setup, teardown, or composition.
-A browser and page are scoped to one scenario. Any `beforeAll` fixture shared
-by a native template should have its own lifetime independent of that page. The lower-level
+Each scenario gets a fresh page and context. By default, the Gradle plugin
+reuses the browser process for the Mocha run and closes it in the run teardown.
+Use `playwrightTest { reuseBrowser.set(false) }` or
+`-PplaywrightReuseBrowser=false` for a fresh browser process per scenario.
+Standalone `BrowserType.withPage` calls own their browser. Any `beforeAll`
+fixture should have a lifetime independent of an individual scenario’s page. The lower-level
 `playwrightTest` runner accepts any Kotlin coroutine-test result.
 
 Keep fixture actions in setup and the action under test in exercise.
