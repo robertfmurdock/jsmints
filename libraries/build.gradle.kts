@@ -57,6 +57,7 @@ fingerprintConfig {
             "minjson",
             "minreact",
             "minreact-processor",
+            "playwright",
             "react-data-loader",
             "react-testing-library",
             "user-event-testing-library",

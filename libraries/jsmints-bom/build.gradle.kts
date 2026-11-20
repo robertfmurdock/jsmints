@@ -8,6 +8,8 @@ dependencies {
         api(project(":minjson"))
         api(project(":minreact"))
         api(project(":minreact-processor"))
+        api(project(":playwright"))
+        api("com.zegreatrob.jsmints.plugins.playwrighttest:com.zegreatrob.jsmints.plugins.playwrighttest.gradle.plugin:${rootProject.version}")
         api(project(":react-data-loader"))
         api(project(":react-testing-library"))
         api(project(":user-event-testing-library"))

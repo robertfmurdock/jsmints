@@ -1,4 +1,5 @@
 plugins {
+    id("com.zegreatrob.jsmints.plugins.publish")
     id("com.zegreatrob.jsmints.plugins.js")
     id("com.zegreatrob.jsmints.plugins.playwrighttest")
 }

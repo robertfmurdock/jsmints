@@ -52,6 +52,11 @@ gradlePlugin {
                 "This plugin provides tasks for using the npm-check-updates npm program, for updating package.json dependencies when using Kotlin JS."
             tags.addAll("javascript", "js", "package.json", "jsmints", "kotlin", "ncu", "npm-check-updates")
         }
+        named("com.zegreatrob.jsmints.plugins.playwrighttest") {
+            displayName = "Jsmints Playwright Test Plugin"
+            description = "Runs Kotlin/JS tests in Node with Playwright browser profiles."
+            tags.addAll("javascript", "js", "jsmints", "kotlin", "playwright", "testing")
+        }
         named("com.zegreatrob.jsmints.plugins.wdiotest") {
             displayName = "Jsmints WDIO Test Plugin"
             description =

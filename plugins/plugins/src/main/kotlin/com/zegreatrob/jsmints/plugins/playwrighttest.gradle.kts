@@ -10,6 +10,7 @@ plugins {
 }
 
 val target = kotlin.js()
+target.nodejs()
 val compilation = target.compilations.create("playwrightTest") {
     associateWith(target.compilations.getByName("main"))
     defaultSourceSet.dependencies {

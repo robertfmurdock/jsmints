@@ -29,6 +29,27 @@ A kotlin wrapper for [user event](https://testing-library.com/docs/user-event/in
 
 Kotlin wrapper + convenience functions for the wdio js project, to allow node js kotlin code to operate a web browser via wdio. This allows for writing webdriver tests with Kotlin Test.
 
+### Playwright
+
+Apply the Playwright Gradle plugin in a Kotlin Multiplatform project and add the
+library to the test source set. Replace `JSMINTS_VERSION` with the release
+version and make Maven Central available for dependencies.
+
+```kotlin
+plugins {
+    id("com.zegreatrob.jsmints.plugins.playwrighttest") version "JSMINTS_VERSION"
+}
+
+dependencies {
+    "jsPlaywrightTestImplementation"("com.zegreatrob.jsmints:playwright:JSMINTS_VERSION")
+}
+```
+
+Place Kotlin tests in `src/jsPlaywrightTest/kotlin`. Run them with
+`./gradlew playwrightRun` or as part of `./gradlew check`.
+See the [Playwright guide](PLAYWRIGHT-DESIGN.md) for Testmints setup, browser
+profiles, native configuration, and failure traces.
+
 ### wdio-testing-library
 
 Kotlin wrapper + convenience functions for [wdio testing library](https://testing-library.com/docs/webdriverio-testing-library/intro/).

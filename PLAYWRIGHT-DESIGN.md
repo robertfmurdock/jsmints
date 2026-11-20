@@ -193,6 +193,6 @@ scenarios discard their traces. Both the library and consumer browser tests
 exercise the fluent setup API. Node-only resource and HTTPS checks use
 plain Testmints setup because they have no browser interaction.
 
-The Gradle integration and library are currently used through the repository's composite build. Publishing them for external consumers is a separate release step.
+The library is published as `com.zegreatrob.jsmints:playwright` and the Gradle plugin as `com.zegreatrob.jsmints.plugins.playwrighttest`, using the same version as the rest of the JSMints release. The repository fixtures resolve both through the composite build.
 
 The Chromium and Firefox runs exercise the same query and runner tests. A configuration probe verified that removing a base URL override restores the consumer fixture’s default. Temporarily removing the duplicate-match wait caused the targeted scenario to fail with a strictness error. The runner printed the trace location and the archive contained browser operations, network data, and screenshots.
