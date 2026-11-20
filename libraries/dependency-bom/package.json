@@ -4,7 +4,7 @@
   "dependencies": {
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
-    "@testing-library/user-event": "^14.6.12",
+    "@testing-library/user-event": "^14.6.13",
     "@sventschui/webdriverio-testing-library": "4.0.1",
     "@wdio/allure-reporter": "^10.2.0",
     "@wdio/cli": "10.2.0",
@@ -17,7 +17,7 @@
     "geckodriver": "^8.0.0",
     "global-jsdom": "^31.0.0",
     "jsdom": "31.0.1",
-    "jszip": "^3.10.1",
+    "jszip": "^3.10.2",
     "npm-check-updates": "23.1.1",
     "playwright": "1.65.1",
     "wdio-html-nice-reporter": "8.1.7",
