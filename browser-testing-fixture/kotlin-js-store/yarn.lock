@@ -837,10 +837,10 @@ agent-base@9.0.0:
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-9.0.0.tgz#ec9efb08314e1e75b0852d74aabf9a387f99834e"
   integrity sha512-TQf59BsZnytt8GdJKLPfUZ54g/iaUL2OWDSFCCvMOhsHduDQxO8xC4PNeyIkVcA5KwL2phPSv0douC0fgWzmnA==
 
-allure-commandline@^2.46.1:
-  version "2.46.1"
-  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.46.1.tgz#1b578c6d990f646af852f628f2a4dd82b9c22cef"
-  integrity sha512-4HTxbXR9D2+cJV9z4MO/IUa7sfYiLLXBP3/4MWSqC63ey55wBMvXAk83yZYwJ2t+jKU1Z7QW6LgCUx0BhPy9EQ==
+allure-commandline@^2.46.2:
+  version "2.46.2"
+  resolved "https://registry.yarnpkg.com/allure-commandline/-/allure-commandline-2.46.2.tgz#9a52b814b4d1a74d0ed3b70e372e9574ec7c1d4d"
+  integrity sha512-kzC9ZpKihGwRPOZoJNNxoXUouGShDsC+IH646fMLfdLL3cLHJDw4nvjIyces1+7tnIL2noCTz268IA70QNm/7g==
 
 allure-js-commons@^3.10.0:
   version "3.11.0"
